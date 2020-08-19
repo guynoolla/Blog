@@ -1,0 +1,10 @@
+node_modules/
+public_html/assets/*
+vendor/
+
+gulpfile.js
+.babelrc
+composer.json
+composer.lock
+package.json
+package-lock.json

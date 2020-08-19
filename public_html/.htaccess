@@ -1,0 +1,10 @@
+<IfModule mod_rewrite.c>
+
+# Turn on the engine:
+RewriteEngine on
+
+RewriteRule ^(home)/?$ index.php [L]
+RewriteRule ^post/(.*)/?$ single.php?id=$1 [QSA] [L] 
+RewriteRule ^topic/(.*)/?$ index.php?id=$1 [QSA] [L]
+
+</IfModule>

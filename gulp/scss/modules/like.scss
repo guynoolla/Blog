@@ -1,0 +1,50 @@
+/* Like */
+
+.like-box {
+  position: relative;
+  display: block;
+  min-width: 65px;
+  padding: 10px 0;
+  float: right;
+  background-color: #eee;
+  border-radius: 3px;
+  box-shadow: 2px 2px 1.5px #dedede;
+  cursor: pointer;
+}
+
+.like-box .fa.fa-heart-o {
+  margin-left: 10px;
+  font-size: 1.3rem;
+  z-index: 999;
+  color: red;
+}
+
+.like-box .fa.fa-heart  {
+  font-size: 1.2rem;
+  margin-left: -25px;
+  z-index: 998 !important;
+  color: #eee;
+}
+.like-box .fa.fa-heart {
+  transform: scale(0);
+  color: transparent;
+  transition: transform .1s ease-out;
+}
+.like-box.like-red .fa.fa-heart {
+  transform: scale(1);
+  color: red;
+}
+.like-box.like-default .fa.fa-heart {
+  transform: scale(0);
+  color: red;
+}
+
+.like-box .like-count {
+  padding-left: 3px;
+  padding-right: 7px;
+  border-radius: 2px;
+  text-align: right;
+  font-size: 1.2rem;
+  font-weight: normal;
+  color: red;
+}
