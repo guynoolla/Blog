@@ -1,0 +1,167 @@
+/* =Widgets
+----------------------------------------------- */
+
+
+/* Make sure select elements fit in widgets */
+
+.widget select {
+  max-width: 100%;
+  height: 40px;
+}
+.widget input[type="text"], .widget input[type="email"], .widget input[type="tel"], .widget input[type="url"], .widget input[type="password"], .widget input[type="search"], .widget textarea, .widget select {
+  padding: 5px 10px;
+  width: 95%;
+}
+
+/* Search widget */
+
+.widget_search .search-submit {
+  display: none;
+}
+.widget input[type="text"].search-query {
+  width: 100%;
+}
+
+.widget ul li {
+  list-style: none;
+  border-bottom: 1px solid #F2F2F2;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+.widget ul {
+  padding: 0;
+  line-height: 18px;
+  font-size: 14px;
+}
+.widget ul.nav.nav-tabs {
+  padding: 0;
+}
+#secondary .widget {
+  margin-bottom: 50px;
+  overflow: hidden;
+}
+#secondary .widget:last-child {
+  margin-bottom: 0px;
+}
+.tab-content ul li {
+  list-style: none;
+}
+#secondary .widget> h3 {
+  font-size: 14px;
+  text-transform: uppercase;
+  margin-bottom: 25px;
+  margin-top: 0;
+  color: #636467;
+}
+#secondary .widget-title {
+  position: relative;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+}
+#secondary .widget-title:after {
+  position: absolute;
+  content: "";
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 40px;
+  background: #a161bf;
+}
+.widget ul ul {
+  padding: 10px;
+}
+.widget #social ul li {
+  border-bottom: 0;
+}
+.not-found-widget {
+  margin-top: 30px;
+}
+@media (max-width: 767px) {
+  #secondary {
+      clear: both;
+  }
+}
+@media (max-width: 768px) {
+.navbar-toggle {
+    display: block;
+}
+}
+ul#menu-social-items, #secondary .widget .social-icons {
+  margin-bottom: 0;
+}
+ul.children, ul.children li {
+  border: 0;
+  margin: 0;
+}
+
+/* Custom Category Widget */
+
+.cats-widget ul li span {
+  float: right;
+}
+
+/* Recent Post widgets */
+
+.recent-posts-wrapper .post {
+  float: left;
+  clear: both;
+  margin-bottom: 20px;
+}
+.recent-posts-wrapper .post .post-image {
+  width: 80px;
+  height: 80px;
+  float: left;
+  display: block;
+  background-color: #DADADA;
+  background-position: center center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+.recent-posts-wrapper .post .post-image img:hover,
+.recent-posts-wrapper .post .post-image img:focus-within {
+  opacity: 0.6 !important;
+}
+.recent-posts-wrapper .post .post-content {
+  margin-left: 100px;
+}
+.widget .post-content> span {
+  display: block;
+}
+#secondary .widget .post-content a {
+  font-style: italic;
+  font-size: 16px;
+}
+
+.widget .post-content span {
+  font-size: 12px;
+}
+.tagcloud {
+  margin-top: 25px;
+}
+.tagcloud a {
+  padding: 6px 8px;
+  margin-right: 0;
+  margin-bottom: 4px;
+  line-height: 100%;
+  display: inline-block;
+  background-color: #f2f2f2;
+  letter-spacing: 1px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 10px !important;
+  text-transform: uppercase;
+}
+.tagcloud a:hover,
+.tagcloud a:focus {
+  color: #ffffff!important;
+  background-color: #a161bf;
+  border-color: #a161bf;
+}
+#instafeed {
+  margin: -5px;
+}
+#instafeed a {
+  float: left;
+  margin: 5px;
+  height: 80px;
+  width: 80px;
+}
