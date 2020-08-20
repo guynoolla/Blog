@@ -1,0 +1,56 @@
+/* =Buttons
+----------------------------------------------- */
+
+.btn-default, .label-default, .woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button, .woocommerce #respond input#submit.alt, .woocommerce a.button.alt, .woocommerce button.button.alt, .woocommerce input.button.alt, .btn.btn-default, button, .input-group-btn:last-child>.btn, input[type=submit] {
+  background: #f2f2f2;
+  border-color: transparent;
+  color: #696969;
+  display: inline-block;
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  text-transform: uppercase;
+  -webkit-transition: background-color 0.3s linear;
+  -moz-transition: background-color 0.3s linear;
+  -o-transition: background-color 0.3s linear;
+  transition: background-color 0.3s linear;
+}
+
+.label-default[href]:hover,
+.label-default[href]:focus,
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active,
+#image-navigation .nav-previous a:hover,
+#image-navigation .nav-previous a:focus,
+#image-navigation .nav-next a:hover,
+#image-navigation .nav-next a:focus,
+
+button:hover,
+button:focus,
+.input-group-btn:last-child>.btn:hover,
+.input-group-btn:last-child>.btn:focus,
+input[type=submit]:hover,
+input[type=submit]:focus {
+  background-color: #a161bf;
+  border-color: transparent;
+  color: #fff;
+}
+.input-group-btn:last-child>.btn {
+  font-size: 12px;
+  opacity: 1;
+  padding: 8px 20px;
+  line-height: 16px;
+}
+#subscription-toggle {
+  float: right;
+}
+.woocommerce a.button, .woocommerce input.button, .woocommerce #respond input#submit.alt, .woocommerce a.button.alt, .woocommerce input.button.alt {
+  width: 100%;
+  text-align: center;
+  line-height: 20px;
+}
+.woocommerce #respond input#submit, .woocommerce button.button.alt, .woocommerce button.button, input[type=submit] {
+  padding: 0 80px;
+  text-align: center;
+  line-height: 35px;
+}

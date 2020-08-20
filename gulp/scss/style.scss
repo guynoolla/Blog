@@ -1,6 +1,13 @@
 @import './vendor/bootstrap';
 @import './vendor/templatemo';
-@import './activello';
-@import './activello-masonry.scss';
-@import './activello-widget.scss';
+@import './activello/common';
+@import './activello/button';
+@import './activello/widget';
+@import './activello/masonry';
+@import './activello/page';
+@import './activello/footer';
 @import './custom';
+
+body {
+  font-size: 14px;
+}

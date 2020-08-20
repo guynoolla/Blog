@@ -1,6 +1,5 @@
-body {
-  background-attachment: fixed;
-}
+/* Header
+-----------------------------------------*/
 
 .fixed-header {
   padding-top: 1.5rem;
@@ -14,7 +13,7 @@ body {
 
 #banner {
   display: relative;
-  height: 33.5em;
+  height: 38.5em;
   margin-top: 5.5em;
   //border-top: 1px solid #225b84;
   //border-top: 1px solid #5882b5;
@@ -22,8 +21,8 @@ body {
 
   div.logo {
     font-size: 1.7rem;
-    padding-top: 1.3rem;
-    padding-bottom: 3rem;
+    padding-top: 1rem;
+    padding-bottom: 4rem;
     a {
       display: block;
       width: 100%;
@@ -60,8 +59,8 @@ body {
       background-position: top center;
       background-size: cover;
       background-repeat: no-repeat;
-      z-index: 999;
-      height: 24.5em;
+      z-index: 101;
+      height: 27.5em;
       opacity: .9;
     }
   }
@@ -69,7 +68,7 @@ body {
 
 .main-content {
   background-color: #FFF;
-  padding-bottom: 2em;
+  padding-bottom: 4em;
   .main-title {
     margin-top: 0;
     padding-top: 2.2em;
@@ -159,14 +158,10 @@ article {
 ----------------------------------------*/
 
 .widget-area .widget {
-  a {
-    font-family: 'Lora', serif;
-    color: #7a7a7a;
-  }
   .recent-posts-wrapper .post .post-content {
     a {
       font-weight: 400;
-      color: #5a5a5a;
+      font-family: 'Lora', serif;
     }
     span {
       color: #9A9A9A;
@@ -176,7 +171,7 @@ article {
 
 /*= Social menu
 -----------------------------------------*/
-nav.social-icons {
+.social-icons {
   ul {
     position: relative;
     text-align: center;
@@ -197,7 +192,7 @@ nav.social-icons {
           top: 50px;
         }
         i {
-          font-size: 1.2em;
+          font-size: 1.2em !important;
         }
       }
     }

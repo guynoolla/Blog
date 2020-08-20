@@ -15,6 +15,10 @@
 
 /* Search widget */
 
+.widget_search .form-search .input-group-btn {
+  vertical-align: bottom;
+}
+
 .widget_search .search-submit {
   display: none;
 }
@@ -165,3 +169,6 @@ ul.children, ul.children li {
   height: 80px;
   width: 80px;
 }
+
+/*= Search
+------------------------------------------*/
