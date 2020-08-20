@@ -61,7 +61,7 @@ http://www.templatemo.com/tm-477-puzzle
 
 <body>
 
-    <div class="fixed-header">
+    <div class="fixed-header" id="scrollTop">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle">
@@ -90,7 +90,7 @@ http://www.templatemo.com/tm-477-puzzle
             <div class="tagline">Just another site by Gainulla</div>
         </div>
         <div class="slider-wrap">
-            <div class="-overlay"></div>
+            <div class="left-right-overlay"></div>
             <div class="slider" style="background-image: url(<?php echo url_for('assets/images/slider_01.jpg') ?>)"></div>
         </div>
     </section>
@@ -105,7 +105,7 @@ http://www.templatemo.com/tm-477-puzzle
                             <div class="post">
                                 <div class="blog-item-wrap">
                                     <div class="blog-item-inner">
-                                        <h2 class="main-title text-center dark-blue-text">Puzzle Bootstrap Template</h2>
+                                        <h2 class="entry-title text-center"><a href="">Puzzle Bootstrap Template</a></h2>
                                         <img src="<?php echo url_for('assets/images/1.jpg') ?>" alt="Image" class="tm-image">
                                         <div class="entry-content">
                                             <p>Puzzle is a Bootstrap (v3.3.6) HTML CSS layout provided by <span class="light-blue-text">templatemo</span>. You can download, modify and use this layout for absolutely free of charge.</p>
@@ -122,7 +122,7 @@ http://www.templatemo.com/tm-477-puzzle
                             <div class="post">
                                 <div class="blog-item-wrap">
                                     <div class="blog-item-inner">
-                                        <h2 class="main-title text-center dark-blue-text">Puzzle Bootstrap Template</h2>
+                                        <h2 class="entry-title text-center"><a href="">Puzzle Bootstrap Template</a></h2>
                                         <img src="<?php echo url_for('assets/images/2.jpg') ?>" alt="Image" class="tm-image">
                                         <div class="entry-content">
                                             <p>Puzzle is a Bootstrap (v3.3.6) HTML CSS layout provided by <span class="light-blue-text">templatemo</span>. You can download, modify and use this layout for absolutely free of charge.</p>
@@ -141,7 +141,7 @@ http://www.templatemo.com/tm-477-puzzle
                             <div class="post">
                                 <div class="blog-item-wrap">
                                     <div class="blog-item-inner">
-                                        <h2 class="main-title text-center dark-blue-text">Puzzle Bootstrap Template</h2>
+                                        <h2 class="text-center text-center">Puzzle Bootstrap Template</h2>
                                         <img src="<?php echo url_for('assets/images/3.jpg') ?>" alt="Image" class="tm-image">
                                         <div class="entry-content">
                                             <p>Puzzle is a Bootstrap (v3.3.6) HTML CSS layout provided by <span class="light-blue-text">templatemo</span>. You can download, modify and use this layout for absolutely free of charge.</p>
@@ -156,7 +156,7 @@ http://www.templatemo.com/tm-477-puzzle
                             <div class="post">
                                 <div class="blog-item-wrap">
                                     <div class="blog-item-inner">
-                                        <h2 class="main-title text-center dark-blue-text">Puzzle Bootstrap Template</h2>
+                                        <h2 class="entry-title text-center"><a href="">Puzzle Bootstrap Template</a></h2>
                                         <img src="<?php echo url_for('assets/images/4.jpg') ?>" alt="Image" class="tm-image">
                                         <div class="entry-content">
                                             <p>Puzzle is a Bootstrap (v3.3.6) HTML CSS layout provided by <span class="light-blue-text">templatemo</span>. You can download, modify and use this layout for absolutely free of charge.</p>
@@ -173,7 +173,7 @@ http://www.templatemo.com/tm-477-puzzle
                             <div class="post">
                                 <div class="blog-item-wrap">
                                     <div class="blog-item-inner">
-                                        <h2 class="main-title text-center dark-blue-text">Puzzle Bootstrap Template</h2>
+                                        <h2 class="entry-title text-center"><a href="">Puzzle Bootstrap Template</a></h2>
                                         <img src="<?php echo url_for('assets/images/3.jpg') ?>" alt="Image" class="tm-image">
                                         <div class="entry-content">
                                             <p>Puzzle is a Bootstrap (v3.3.6) HTML CSS layout provided by <span class="light-blue-text">templatemo</span>. You can download, modify and use this layout for absolutely free of charge.</p>
@@ -188,7 +188,7 @@ http://www.templatemo.com/tm-477-puzzle
                             <div class="post">
                                 <div class="blog-item-wrap">
                                     <div class="blog-item-inner">
-                                        <h2 class="main-title text-center dark-blue-text">Puzzle Bootstrap Template</h2>
+                                        <h2 class="entry-title text-center"><a href="">Puzzle Bootstrap Template</a></h2>
                                         <img src="<?php echo url_for('assets/images/4.jpg') ?>" alt="Image" class="tm-image">
                                         <div class="entry-content">
                                             <p>Puzzle is a Bootstrap (v3.3.6) HTML CSS layout provided by <span class="light-blue-text">templatemo</span>. You can download, modify and use this layout for absolutely free of charge.</p>
@@ -329,7 +329,7 @@ http://www.templatemo.com/tm-477-puzzle
             Activello. Theme by <a href="https://colorlib.com/" target="_blank">Colorlib</a> Powered by <a href="https://wordpress.org/" target="_blank">WordPress</a> </div>
             </div>
             </div>
-            <button class="scroll-to-top" style="display: block;"><i class="fa fa-angle-up"></i></button>
+            <a href="#scrollTop" class="scroll-to-top" style="display: block;"><i class="fa fa-angle-up"></i></a>
         </footer>
     </div>
 
