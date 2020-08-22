@@ -1,5 +1,7 @@
 @import './vendor/bootstrap';
 @import './vendor/templatemo';
+@import './vendor/slick';
+@import './vendor/slick-theme';
 @import './activello/common';
 @import './activello/button';
 @import './activello/widget';
@@ -7,7 +9,3 @@
 @import './activello/page';
 @import './activello/footer';
 @import './custom';
-
-body {
-  font-size: 14px;
-}

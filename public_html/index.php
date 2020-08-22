@@ -51,11 +51,11 @@ if (isset($_GET['search_term'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic|Montserrat:400,700|Maven+Pro:400,700" rel="stylesheet" type="text/css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!-- Add the slick-theme.css if you want default styling -->
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.css"/>
+    <!-- Add the slick-theme.css if you want default styling -->
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick-theme.css"/>
     <link rel="stylesheet" type="text/css" href="<?php echo url_for('/assets/css/style.css') ?>">
-<!--
-Puzzle Template
-http://www.templatemo.com/tm-477-puzzle
--->
     <title>Puzzle by templatemo</title>
 </head>
 
@@ -73,11 +73,11 @@ http://www.templatemo.com/tm-477-puzzle
             </div>
             <nav class="main-menu">
                 <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#clients">Clients</a></li>
-                    <li><a class="external" href="https://www.facebook.com/templatemo" target="_blank">External</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li class="site-nav-js"><a href="#home">Home</a></li>
+                    <li class="site-nav-js"><a href="#services">Services</a></li>
+                    <li class="site-nav-js"><a href="#clients">Clients</a></li>
+                    <li class="site-nav-js"><a class="external" href="https://www.facebook.com/templatemo" target="_blank">External</a></li>
+                    <li class="site-nav-js"><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
         </div>
@@ -91,7 +91,19 @@ http://www.templatemo.com/tm-477-puzzle
         </div>
         <div class="slider-wrap">
             <div class="left-right-overlay"></div>
-            <div class="slider" style="background-image: url(<?php echo url_for('assets/images/slider_01.jpg') ?>)"></div>
+                <div class="slider">
+                    <div><img src="<?php echo url_for('assets/images/1.jpg') ?>" /></div>
+                    <div><img src="<?php echo url_for('assets/images/2.jpg') ?>" /></div>
+                    <div><img src="<?php echo url_for('assets/images/3.jpg') ?>" /></div>
+                    <div><img src="<?php echo url_for('assets/images/4.jpg') ?>" /></div>
+                    <div><img src="<?php echo url_for('assets/images/5.jpg') ?>" /></div>
+                    <div><img src="<?php echo url_for('assets/images/6.jpg') ?>" /></div>
+                </div>
+                <div class="slider-nav">
+                    <a class="slider-btn next"><i class="fa fa-chevron-right"></i></a>
+                    <a class="slider-btn prev"><i class="fa fa-chevron-left"></i></a>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -99,9 +111,9 @@ http://www.templatemo.com/tm-477-puzzle
  
         <div class="row">
             <section class="main-content col-sm-12 col-md-8" id="home">
-                <div  class="md-one-article-row" style="background:#FFF">
-                    <article>
-                        <div class="main-content-inner">
+                <div class="main-content-inner">
+                    <div  class="md-one-article-row">
+                        <article class="article">
                             <div class="post">
                                 <div class="blog-item-wrap">
                                     <div class="blog-item-inner">
@@ -115,10 +127,8 @@ http://www.templatemo.com/tm-477-puzzle
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </article>
-                    <article>
-                        <div class="main-content-inner">
+                        </article>
+                        <article class="article">
                             <div class="post">
                                 <div class="blog-item-wrap">
                                     <div class="blog-item-inner">
@@ -132,16 +142,14 @@ http://www.templatemo.com/tm-477-puzzle
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </article>
-                </div>
-                <div class="md-two-articles-row">
-                    <article>
-                        <div class="main-content-inner">
+                        </article>
+                    </div>
+                    <div class="md-two-articles-row">
+                        <article class="article">
                             <div class="post">
                                 <div class="blog-item-wrap">
                                     <div class="blog-item-inner">
-                                        <h2 class="text-center text-center">Puzzle Bootstrap Template</h2>
+                                        <h2 class="entry-title text-center">Puzzle Bootstrap Template</h2>
                                         <img src="<?php echo url_for('assets/images/3.jpg') ?>" alt="Image" class="tm-image">
                                         <div class="entry-content">
                                             <p>Puzzle is a Bootstrap (v3.3.6) HTML CSS layout provided by <span class="light-blue-text">templatemo</span>. You can download, modify and use this layout for absolutely free of charge.</p>
@@ -149,10 +157,8 @@ http://www.templatemo.com/tm-477-puzzle
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </article>
-                    <article>
-                        <div class="main-content-inner">
+                        </article>
+                        <article class="article">
                             <div class="post">
                                 <div class="blog-item-wrap">
                                     <div class="blog-item-inner">
@@ -164,12 +170,10 @@ http://www.templatemo.com/tm-477-puzzle
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </article>
-                </div>
-                <div class="md-two-articles-row">
-                    <article>
-                        <div class="main-content-inner">
+                        </article>
+                    </div>
+                    <div class="md-two-articles-row">
+                        <article class="article">
                             <div class="post">
                                 <div class="blog-item-wrap">
                                     <div class="blog-item-inner">
@@ -181,10 +185,8 @@ http://www.templatemo.com/tm-477-puzzle
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </article>
-                    <article>
-                        <div class="main-content-inner">
+                        </article>
+                        <article class="article">
                             <div class="post">
                                 <div class="blog-item-wrap">
                                     <div class="blog-item-inner">
@@ -196,8 +198,8 @@ http://www.templatemo.com/tm-477-puzzle
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </article>
+                        </article>
+                    </div>
                 </div>
             </section>
 
@@ -303,16 +305,6 @@ http://www.templatemo.com/tm-477-puzzle
             </section>
         </div>
 
-        <!-- <footer class="col-md-12 content" id="externals">
-            <div class="col-lg-6 col-md-6 last">
-            <img src="<?php echo url_for('assets/images/1.jpg') ?>" alt="Image" class="tm-image">
-            </div>
-            <div class="col-lg-6 col-md-6 background last about-text-container">
-            <h2 class="section-title">About This Website</h2>
-            <p class="about-text">Puzzle Template is brought to you by templatemo. Sed imperdiet quis ipsum a vulputate. Suspendisse sit amet nibh mi. In quis sapien a metus interdum hendrerit.</p>       
-            </div>
-        </footer> -->
-
     </div> <!-- container -->
 
     <div id="footer-area">
@@ -334,5 +326,7 @@ http://www.templatemo.com/tm-477-puzzle
     </div>
 
   <script src="<?php echo url_for('assets/js/main.js') ?>" type="text/javascript"></script>
+  <script type="text/javascript" src="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.min.js"></script>
+
 </body>
 </html>
