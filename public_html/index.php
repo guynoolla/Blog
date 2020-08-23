@@ -49,6 +49,7 @@ if (isset($_GET['search_term'])) {
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
     <link href="//fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic|Montserrat:400,700|Maven+Pro:400,700" rel="stylesheet" type="text/css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <!-- Add the slick-theme.css if you want default styling -->
@@ -69,11 +70,11 @@ if (isset($_GET['search_term'])) {
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>                        
                 </button>
-                <!-- <a class="navbar-brand" href="#">Puzzle</a> -->
+                <a class="navbar-brand visible-xs" href="#">Acvitello</a>
             </div>
-            <nav class="main-menu">
+            <nav class="main-menu md-nav">
                 <ul>
-                    <li class="site-nav-js"><a href="#home">Home</a></li>
+                    <li class="site-nav-js"><a href="#home" class="current">Home</a></li>
                     <li class="site-nav-js"><a href="#services">Services</a></li>
                     <li class="site-nav-js"><a href="#clients">Clients</a></li>
                     <li class="site-nav-js"><a class="external" href="https://www.facebook.com/templatemo" target="_blank">External</a></li>
@@ -85,19 +86,61 @@ if (isset($_GET['search_term'])) {
 
 
     <section class="col-md-12 content" id="banner">
-        <div class="logo">
+        <div class="logo hidden-xs">
             <h1><a class="navbar-brand" href="#">Activello</a></h1>
             <div class="tagline">Just another site by Gainulla</div>
         </div>
         <div class="slider-wrap">
             <div class="left-right-overlay"></div>
                 <div class="slider">
-                    <div><img src="<?php echo url_for('assets/images/1.jpg') ?>" /></div>
-                    <div><img src="<?php echo url_for('assets/images/2.jpg') ?>" /></div>
-                    <div><img src="<?php echo url_for('assets/images/3.jpg') ?>" /></div>
-                    <div><img src="<?php echo url_for('assets/images/4.jpg') ?>" /></div>
-                    <div><img src="<?php echo url_for('assets/images/5.jpg') ?>" /></div>
-                    <div><img src="<?php echo url_for('assets/images/6.jpg') ?>" /></div>
+                    <div>
+                        <img src="<?php echo url_for('assets/images/1.jpg') ?>" />
+                        <div class="slider-post-text">
+                            <span class="category">Adventure</span>
+                            <h2><a href="">Awesome Post on Activello And it is very long</a></h2>
+                            <div class="read-more"><a href="">Read More</a></div>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="<?php echo url_for('assets/images/2.jpg') ?>" />
+                        <div class="slider-post-text">
+                            <span class="category">Nature</span>
+                            <h2><a href="">Awesome Post on Activello And it is very long</a></h2>
+                            <div class="read-more"><a href="">Read More</a></div>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="<?php echo url_for('assets/images/3.jpg') ?>" />
+                        <div class="slider-post-text">
+                            <span class="category">History</span>
+                            <h2><a href="">Awesome Post on Activello And it is very long</a></h2>
+                            <div class="read-more"><a href="">Read More</a></div>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="<?php echo url_for('assets/images/4.jpg') ?>" />
+                        <div class="slider-post-text">
+                            <span class="category">Adventure</span>
+                            <h2><a href="">Awesome Post on Activello And it is very long</a></h2>
+                            <div class="read-more"><a href="">Read More</a></div>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="<?php echo url_for('assets/images/5.jpg') ?>" />
+                        <div class="slider-post-text">
+                            <span class="category">Comedy</span>
+                            <h2><a href="">Awesome Post on Activello And it is very long</a></h2>
+                            <div class="read-more"><a href="">Read More</a></div>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="<?php echo url_for('assets/images/6.jpg') ?>" />
+                        <div class="slider-post-text">
+                            <span class="category">Life</span>
+                            <h2><a href="">Awesome Post on Activello And it is very long</a></h2>
+                            <div class="read-more"><a href="">Read More</a></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="slider-nav">
                     <a class="slider-btn next"><i class="fa fa-chevron-right"></i></a>
@@ -113,7 +156,7 @@ if (isset($_GET['search_term'])) {
             <section class="main-content col-sm-12 col-md-8" id="home">
                 <div class="main-content-inner">
                     <div  class="md-one-article-row">
-                        <article class="article">
+                        <article>
                             <div class="post">
                                 <div class="blog-item-wrap">
                                     <div class="blog-item-inner">
@@ -128,7 +171,7 @@ if (isset($_GET['search_term'])) {
                                 </div>
                             </div>
                         </article>
-                        <article class="article">
+                        <article>
                             <div class="post">
                                 <div class="blog-item-wrap">
                                     <div class="blog-item-inner">
@@ -145,7 +188,7 @@ if (isset($_GET['search_term'])) {
                         </article>
                     </div>
                     <div class="md-two-articles-row">
-                        <article class="article">
+                        <article>
                             <div class="post">
                                 <div class="blog-item-wrap">
                                     <div class="blog-item-inner">
@@ -158,7 +201,7 @@ if (isset($_GET['search_term'])) {
                                 </div>
                             </div>
                         </article>
-                        <article class="article">
+                        <article>
                             <div class="post">
                                 <div class="blog-item-wrap">
                                     <div class="blog-item-inner">
@@ -173,7 +216,7 @@ if (isset($_GET['search_term'])) {
                         </article>
                     </div>
                     <div class="md-two-articles-row">
-                        <article class="article">
+                        <article>
                             <div class="post">
                                 <div class="blog-item-wrap">
                                     <div class="blog-item-inner">
@@ -186,7 +229,7 @@ if (isset($_GET['search_term'])) {
                                 </div>
                             </div>
                         </article>
-                        <article class="article">
+                        <article>
                             <div class="post">
                                 <div class="blog-item-wrap">
                                     <div class="blog-item-inner">

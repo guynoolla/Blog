@@ -2,18 +2,37 @@
 -----------------------------------------*/
 
 .fixed-header {
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
-  z-index: 333;
+  z-index: 999;
   ul {
     float: left !important;
   }
-  background-color: #2d74a3;
+  .navbar-brand {
+    font-family: 'Open Sans';
+  }
+}
+
+@media (min-width: 768px) {
+  .fixed-header nav.main-menu.md-nav {
+    ul li {
+      padding-left: 20px;
+    a {
+      border-top: 0;
+      padding-left: 0;
+      padding-right: 0;
+      &:hover,
+      &.current {
+        padding-bottom: 10px;
+        border-bottom: 2px solid #93FAFF;
+      }
+    } 
+  }
+}
+//background-color: #2d74a3;
 }
 
 #banner {
   display: relative;
-  height: 37em;
+  height: 25em;
   margin-top: 5.5em;
 
   div.logo {
@@ -40,6 +59,7 @@
 
   .slider-wrap {
     position: relative;
+    z-index: 444;
     .left-right-overlay {
       position: absolute;
       top: 0;
@@ -63,6 +83,56 @@
         min-height: 27.5em;
         z-index: 222;
       }
+      div {
+        position: relative;
+
+        .slider-post-text {
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background-color: rgba(0, 0, 0, .4);
+          height: 27.5em;
+          padding: 6em 4em;
+          padding-bottom: 4em;
+          z-index: 333;
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          align-items: center;
+          span {
+            display: block;
+            color: #FFF;
+            font-size: 1em;
+            text-transform: uppercase;
+            border-bottom: 1px solid #FFF;
+          }
+          h2 {
+            width: 100%;
+            font-size: 1.6em;
+            line-height: 1.5em;
+            z-index: 333;
+            color: white;
+            cursor: pointer;
+            a {
+              color: #FFF;
+            }
+          }
+          .read-more {
+            a {
+              font-size: .9em;
+              border-color: #FFF;
+              color: #FFF;
+            }
+          }
+          h2 a, .read-more a {
+            font-family: 'Lora', serif;
+            &:hover, &:focus {
+              color: #a161bf;
+              text-decoration: none;
+            }
+          }
+        }
+      }
     }
     .slider-nav {
       position: relative;
@@ -77,15 +147,15 @@
         display: block;
         font-size: 2em;
         cursor: pointer;
-        z-index: 999 !important;
+        z-index: 222 !important;
         transform: translateY(-50%);
-        color: snow;
+        color: #789;
         &.prev {
-          left: 15px;
+          left: 5px;
           top: 50%;
         }
         &.next {
-          right: 15px;
+          right: 5px;
           top: 50%;
         }
       }
@@ -122,65 +192,70 @@
 /*= Article
 ----------------------------------------------------- */
 
-.article {
-  padding-left: 4px !important;
-  padding-right: 4px !important;
-  img {
-    object-fit: cover;
+.container {
+  padding-left: 0;
+  padding-right: 0;
+
+  article {
+    margin-left: 2px;
+    margin-right: 2px;
+    &:nth-child(2) {
+      margin-left: 2px;
+    }
   }
 }
 
-@media (max-width: 767px) {
-  .container {
-    padding-left: 0;
-    padding-right: 0;
+.md-one-article-row {
+  article {
+    img {
+      object-fit: cover;
+      height: 320px !important;
+    }
+  }
+}
 
-    .article {
-      margin-left: -4px !important;
-      margin-right: -4px !important;
+.md-two-articles-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  article {
+    display: flex;
+    width: 100%;
+    img {
+      display: block;
+      margin: 0 auto;
+      max-width: 340px;
+      height: 240px !important;
+      object-fit: cover;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .md-two-articles-row {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-left: -30px;
+    article {
+      width: 100%;
+      padding-left: 30px;
+      img {
+        width: 100%;
+        height: 240px !important;
+      }
     }
   }
 }
 
 @media (min-width: 992px) {
-  .article {
-    padding-left: 30px !important;
-    padding-right: 30px !important;
-  }
-}
-
-.one-article-row {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.md-two-articles-row {
-  display: flex;
-  .article {
-    img {
-      width: 300px !important;
-      height: 200px !important;
-    }
-    &:nth-child(2) {
-      margin-left: -1rem;
-    }
-  }
-}
-
-@media (max-width: 991px) {
   .md-two-articles-row {
-    flex-wrap: wrap;
-    .article {
+    article {
       img {
-        height: 300px !important;
-      }
-      &:nth-child(2) {
-        margin-left: 0;
+        height: 210px !important;
       }
     }
   }
 }
-
 
 /*= Sidebar Widgets
 ----------------------------------------*/

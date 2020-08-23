@@ -56,8 +56,8 @@ $(document).ready(function () {
     if (typeof slider.slick == "function") {
       slider.slick({
         slidesToShow: 3,
-        slidesToScroll: 2,
-        autoplay: true,
+        slidesToScroll: 1,
+        autoplay: false,
         autoplaySpeed: 15000,
         nextArrow: $('.next'),
         prevArrow: $('.prev'),
