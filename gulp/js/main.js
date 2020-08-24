@@ -45,8 +45,9 @@ $(document).ready(function () {
     scrollToEventHandler(0);
   });
 
-  $(".site-nav-js li").on("click", () => {
-    scrollToEventHandler(document.querySelector('#contact'));
+  $(".site-nav-js li").on("click", (e) => {
+    const scrollTarget = '#' + e.target.href.split('#')[1];
+    scrollToEventHandler(document.querySelector(scrollTarget));
   })
 
   // Can also be used with $(document).ready()
