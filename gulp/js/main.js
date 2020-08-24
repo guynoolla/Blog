@@ -45,7 +45,7 @@ $(document).ready(function () {
     scrollToEventHandler(0);
   });
 
-  $(".site-nav-js").on("click", () => {
+  $(".site-nav-js li").on("click", () => {
     scrollToEventHandler(document.querySelector('#contact'));
   })
 

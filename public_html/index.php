@@ -73,12 +73,12 @@ if (isset($_GET['search_term'])) {
                 <a class="navbar-brand visible-xs" href="#">Acvitello</a>
             </div>
             <nav class="main-menu md-nav">
-                <ul>
-                    <li class="site-nav-js"><a href="#home" class="current">Home</a></li>
-                    <li class="site-nav-js"><a href="#services">Services</a></li>
-                    <li class="site-nav-js"><a href="#clients">Clients</a></li>
-                    <li class="site-nav-js"><a class="external" href="https://www.facebook.com/templatemo" target="_blank">External</a></li>
-                    <li class="site-nav-js"><a href="#contact">Contact</a></li>
+                <ul class="site-nav-js">
+                    <li><a href="#home" class="current">Home</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#clients">Clients</a></li>
+                    <li><a class="external" href="https://www.facebook.com/templatemo" target="_blank">External</a></li>
+                    <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
         </div>
