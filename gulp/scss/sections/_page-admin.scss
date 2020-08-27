@@ -1,0 +1,69 @@
+/**
+ Page Admin */
+
+.page-admin .topbox {
+  margin-top: 56px;
+  color: #444;
+}
+
+/*
+ Adapt sidebar to Bootsrap Layout ----------------------*/
+
+.page-admin .main {
+  padding-left: 4rem;
+  background-color: #f7f7f7;
+}
+
+.page-admin .sidebar {
+  padding-top: .7rem;
+  .sidebar-nav {
+    .nav-item {
+      overflow: hidden;
+      .nav-link {
+        padding-left: .8rem;
+        &:hover {
+          width: 16.2rem;
+        }
+      }
+    }
+    .nav-item.logo {
+      margin-bottom: .2rem;
+    }
+  }
+  &:hover {
+    width: 16rem !important;
+    .nav-item.logo {
+      width: 16rem;
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .page-admin .sidebar {
+    position: relative;
+    .sidebar-nav {
+      .nav-item {
+        .nav-link {
+          width: 100%;
+          text-align: left;
+          padding-left: 1rem;
+          &:hover {
+            width: 18rem;
+          }
+          .link-text {
+            display: block;
+          }
+        }
+      }
+      .nav-item.logo {
+        width: 100%;
+        margin-bottom: 1rem;
+      }
+    }
+  }
+  
+  .page-admin .main {
+    padding: 1rem 2rem;
+    border-right: 1px solid #eee;
+  }
+}

@@ -1,0 +1,35 @@
+/**
+ Section Logo */
+
+.logo {
+  position: relative;
+  padding-top: 5.5rem;
+  padding-bottom: 3.5rem;
+  background-color: #f8f9fa;
+  font-size: 1rem;
+
+  .logo-content {
+    width: 100%;
+    text-align: center;
+
+    .brand {
+      display: block;
+      font-size: 1.8em;
+      font-weight: 400;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      margin-bottom: .5em;
+      a {
+        color: $blue;
+      }
+    }
+
+    .description {
+      font-size: 1em;
+      line-height: 1;
+      letter-spacing: .05em;
+      color: $dark1;
+    }
+
+  }
+}

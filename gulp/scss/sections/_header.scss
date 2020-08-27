@@ -1,0 +1,21 @@
+/**
+ Site Header */
+
+header {
+  border-bottom: 2px solid #FFF;
+
+  nav {
+    transition: padding .2s linear, opacity .2s ease-in;
+    &.scroll {
+      padding: 0;
+      opacity: 0;
+      a {
+        opacity: 0;
+      }
+      .form-inline {
+        display: none;
+      }
+    }
+  }
+
+}

@@ -265,5 +265,15 @@ class Post extends \App\Classes\DatabaseObject {
     }
   }
 
+  static public function queryRandomImage() {
+    $sql = "SELECT image FROM posts WHERE proved = 1";
+    $sql .= " ORDER BY RAND() LIMIT 1";
+    $result = self::$database->query($sql);
+    $image = $result->fetch_assoc()['image'];
+    $result->free();
+
+    return $image;
+  }
+
 }
 ?>

@@ -1,0 +1,40 @@
+/* 
+  Social Links Widget -------------------------------- */
+
+.social-links-widget {
+  ul {
+    position: relative;
+    text-align: center;
+    padding: 0;
+    padding-left: .7em;
+    
+    li.menu-item {
+      position: relative;
+      display: inline-block;
+      padding-right: .7em;
+      a {
+        position: relative;
+        display: block;
+        width: 1.5em;
+        height: 1.5em;
+        padding: 0;
+        overflow: hidden;
+        span {
+          display: block;
+          position: absolute;
+          top: 50px;
+        }
+        i.fa {
+          font-size: 1.2em !important;
+          color: #6B6B6B;
+        }
+      }
+    }
+  }
+  
+  &.more-space-between {
+    ul li {
+      padding-right: 1.8em;
+    }
+  }
+}

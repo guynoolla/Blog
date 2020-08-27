@@ -1,5 +1,5 @@
-/* =Global
------------------------------------------------ */
+/**
+  Base */
 
 body {
   color: #696969;
@@ -11,10 +11,6 @@ body {
 
   margin:0;
   padding:0;
-  // background-image:url(../images/back.jpg);
-  // background-attachment: fixed;
-  // background-repeat:no-repeat;
-  // background-size:100% 100%;
   font-family: 'Open Sans', sans-serif;
   font-weight:300;
   overflow-x: hidden;
@@ -28,63 +24,57 @@ a {
   -o-transition: all 0.3s;
   transition: all 0.3s;
 }
+
 a:hover, a:focus {
-  color: #a161bf;
-  text-decoration: none;
+  color: #a161bf !important;
+  text-decoration: none !important;
 }
+
 a:focus {
   outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
-.single .entry-content a {
-  color: #a161bf;
-}
-.single .entry-content a:hover,
-.single .entry-content a:focus {
-  background: #a161bf;
-  color: #fff;
-}
-.single .entry-content .page-links a:hover,
-.single .entry-content .page-links a:focus {
-  background-color: transparent;
-}
+
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   color: #696969;
   font-weight: 400;
   font-family: 'Montserrat', sans-serif;
   margin: 30px 0;
 }
-.container {
-  max-width: 1090px;
-}
+
 h1, .h1 {
   font-size: 28px;
 }
 h2, .h2 {
   font-size: 24px;
 }
+
 h3, .h3 {
   font-size: 20px;
 }
 h4, .h4 {
   font-size: 16px;
 }
+
 h5, .h5 {
   font-size: 14px;
 }
 h6, .h6 {
   font-size: 13px;
 }
+
 p {
   margin: 15px 0;
 }
+
 *> p:first-child {
   margin-top: 0;
 }
 *> p:last-child {
   margin-bottom: 0;
 }
+
 blockquote {
   position: relative;
   border: 0;
@@ -92,6 +82,7 @@ blockquote {
   font-style: italic;
   line-height: 1.6;
 }
+
 blockquote:before {
   content: "\201D";
   color: #a161bf;
@@ -101,9 +92,11 @@ blockquote:before {
   top: 0;
   line-height: 1;
 }
+
 blockquote p {
   margin: 0;
 }
+
 img {
   height: auto;
   /* Make sure images are scaled correctly. */
@@ -122,10 +115,12 @@ button, input, select, textarea {
   *vertical-align: middle;
   /* Improves appearance and consistency in all browsers */
 }
+
 input[type="checkbox"], input[type="radio"] {
   padding: 0;
   /* Addresses excess padding in IE8/9 */
 }
+
 input[type="search"] {
   -webkit-appearance: textfield;
   /* Addresses appearance set to searchfield in S5, Chrome */
@@ -134,24 +129,29 @@ input[type="search"] {
   -moz-box-sizing: content-box;
   box-sizing: content-box;
 }
+
 input[type="search"]::-webkit-search-decoration {
   /* Corrects inner padding displayed oddly in S5, Chrome on OSX */
   -webkit-appearance: none;
 }
+
 button::-moz-focus-inner, input::-moz-focus-inner {
   /* Corrects inner padding and border displayed oddly in FF3/4 www.sitepen.com/blog/2008/05/14/the-devils-in-the-details-fixing-dojos-toolbar-buttons/ */
   border: 0;
   padding: 0;
 }
+
 input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="password"], input[type="search"], textarea, select {
   color: #666;
   border: 1px solid #E8E8E8;
   border-radius: 3px;
 }
+
 input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, input[type="url"]:focus, input[type="password"]:focus, input[type="search"]:focus, textarea:focus {
 color: #111;
 outline: 1px solid #a161bf;
 }
+
 textarea {
   overflow: auto;
   /* Removes default vertical scrollbar in IE6/7/8/9 */
@@ -161,12 +161,14 @@ textarea {
   width: 100%;
 }
 
-/* Clearing floats */
+/*
+ Link images hover effect */
 
-.clear:before, .clear:after, .gallery:before, .gallery:after, .entry-content:before, .entry-content:after, .comment-content:before, .comment-content:after, .site-header:before, .site-header:after, .site-content:before, .site-content:after, .site-footer:before, .site-footer:after, .home-widget-area:before {
-  content: '';
-  display: table;
-}
-.clear:after, .entry-content:after, .gallery:after, .comment-content:after, .site-header:after, .site-content:after, .site-footer:after, .home-widget-area:before {
-  clear: both;
+a {
+  img {
+    transition: opacity .3s linear;
+    &:hover {
+      opacity: .7;
+    }
+  }
 }

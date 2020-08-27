@@ -1,0 +1,32 @@
+/**
+ Section Aside */
+
+.sidebar {
+  font-size: 1rem;
+
+  .sidebar-content {
+
+    .widget {
+
+      &::after {
+        content: " ";
+        clear: both;
+        display: table;
+      }
+
+      .title {
+        font-weight: 300;
+        &::after {
+          content: "";
+          clear: both;
+          display: block;
+          width: 2em;
+          border-bottom: 2px solid $plum-color;
+          padding-top: .5em;
+          margin-bottom: -.2em;
+        }
+      }
+
+    }
+  }
+}

@@ -1,0 +1,11 @@
+nav {
+  border-bottom: 1px solid #EEE;
+  
+  .navbar-nav {
+    text-transform: uppercase;
+  }
+}
+
+nav.no-border-bottom {
+  border-bottom: none;
+}

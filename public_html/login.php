@@ -31,39 +31,44 @@ if(is_post_request()) {
   }
 }
 
-if ($session->isLoggedIn()) redirect_to(url_for('index.php'));
+if ($session->isLoggedIn()) {
+  redirect_to(url_for('index.php'));
+}
 
-?>
-<!DOCTYPE html>
-<html lang="en">
+$page_title = 'User Login';
+include(SHARED_PATH . '/public_header.php');
 
-<?php
-  $page_title = 'User Login';
-  include(SHARED_PATH . '/public_header.php');
-?>
+?><div class="lg-container bg-light-lk">
 
-  <div class="auth-content">
-    <form action="login.php" method="post">
-      <h3 class="form-title">Login</h3>
-      <?php
-        if(!empty($errors)) echo display_errors($errors, '');
-      ?>
-      <div>
-        <label>Username or Email</label>
-        <input type="text" name="username" value="" class="text-input">
+  <div class="row justify-content-center h-100">
+    <div class="col col-md-8 col-lg-6 my-auto">
+
+      <div class="p-4 px-sm-5 py-5 rounded bg-white">
+        <form action="register.php" method="post">
+          <fieldset>
+
+            <legend class="mb-5 h1">Login</legend>
+            <?php
+              if (!empty($user->errors)) echo display_errors($user->errors);
+            ?>
+            <div class="form-group row">
+              <label for="username" class="col-sm-4 col-form-label pl-1 pl-sm-3">Username</label>
+              <input class="col-sm-8 form-control" id="username" type="text" name="user[username]" value="<?php echo h($username) ?>">
+            </div>
+            <div class="form-group row">
+              <label for="password" class="col-sm-4 col-form-label pl-1 pl-sm-3">Password</label>
+              <input class="col-sm-8 form-control" type="password" name="user[password]" value="" class="text-input">
+            </div>
+            <p class="text-center mb-0 font-weight-bold">Or <a href="<?php echo url_for('register.php') ?>">Sign Up</a></p>
+            <button type="submit" name="submit_button" class="btn btn-outline-default float-right">Login</button>
+
+          </fieldset>
+        </form>
       </div>
-      <div>
-        <label>Password</label>
-        <input type="password" name="password" value="" class="text-input">
-        <a href="<?php echo url_for('password/forgot.php') ?>" class="forgot-link">Forgot password?</a>
-      </div>
-      <div>
-        <button type="submit" name="submit_button" class="btn">Login</button>
-      </div>
-      <p class="auth-nav">Or <a href="register.php">Sign Up</a></p>
-    </form>
+
+    </div>
   </div>
 
-</body>
+</div>
 
-</html>
+<?php include SHARED_PATH . '/public_footer.php' ?>
