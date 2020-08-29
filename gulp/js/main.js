@@ -57,9 +57,15 @@ $(document).ready(() => {
   });
 
   $(".siteNavJS li").on("click", (e) => {
-    const scrollTarget = '#' + e.target.href.split('#')[1];
-    scrollToEventHandler(document.querySelector(scrollTarget));
+    if (e.target.href.indexOf('#') > -1) {
+      const data = '#' + e.target.href.split('#');
+      if (data.length == 2) {
+        scrollToEventHandler(document.querySelector(scrollTarget[1]));
+      }
+    }
   })
+
+  //$('.sidebar').height($('.page-admin').height());
 
 });
 
@@ -73,7 +79,7 @@ function checkScrollPosition() {
   } else {        
     $("nav#hideByScroll").removeClass("scroll");
   }
-  if ($(window).scrollTop() < 300) {
+  if ($(window).scrollTop() < 500) {
     $(".scroll-to-top").css("display", "none");
   } else {
     $(".scroll-to-top").css("display", "block");

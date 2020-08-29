@@ -48,6 +48,11 @@
         svg {
           min-width: 2rem;
         }
+
+        &.active {
+          filter: grayscale(0%) opacity(1);
+          background-color: $bg-secondary !important;
+        }
       }
     }
   }

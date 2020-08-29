@@ -11,6 +11,7 @@
 
 .page-admin .main {
   padding-left: 4rem;
+  padding-bottom: 2rem;
   background-color: #f7f7f7;
 }
 
@@ -28,6 +29,7 @@
     }
     .nav-item.logo {
       margin-bottom: .2rem;
+      background-color: #dccbb3 !important;
     }
   }
   &:hover {
@@ -64,6 +66,27 @@
   
   .page-admin .main {
     padding: 1rem 2rem;
+    padding-bottom: 3rem;
     border-right: 1px solid #eee;
+  }
+}
+
+/*
+ Heading ---------------------------------- */
+
+.page-admin {
+  h2 {
+    text-align: center;
+    background-color:#EFE4D5;
+    padding:1.5rem;
+    margin:0
+  }
+  
+  a.btn.btn-outline-primary,
+  a.btn.btn-outline-secondary,
+  a.btn.btn-outline-success {
+    &:hover {
+      color: #fff !important;
+    }
   }
 }

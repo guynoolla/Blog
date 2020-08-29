@@ -37,44 +37,26 @@ if (is_post_request()) {
   }
 }
 
+$page_title = 'Edit Post';
+include SHARED_PATH . '/staff_header.php';
+
 ?>
-<!DOCTYPE html>
-<html lang="en">
+<div class="container-xl">
+  <div class="page-admin">
 
-  <?php
-    $page_title = 'Edit Post';
-    include SHARED_PATH . '/staff_header.php';
-  ?>
-
-  <div class="admin-wrapper clearfix">
-
-    <?php include SHARED_PATH . '/staff_sidebar.php' ?>
-
-    <!-- Admin Content -->
-    <div class="admin-content clearfix">
-
-      <div class="button-group">
-        <?php echo page_back_link('Back', 'btn btn-sm') ?>
-      </div>
-
-      <div class="">
-        <h2 style="text-align: center;"><?php echo $page_title ?></h2>
-
-        <?php echo display_session_message('msg success') ?>
-
-        <?php include './_form.php' ?>
-
-      </div>
+    <div class="row">
+      <div class="topbox col-12"></div>
     </div>
-    <!-- // Admin Content -->
 
+    <div class="row">
+      <?php include SHARED_PATH . '/staff_sidebar.php' ?>
+      
+      <div class="main col-lg-9">
+        <?php include('./_form.php') ?>
+      </div>
+
+    </div>
   </div>
+</div>
 
-
-  <?php
-    $ckeditor = true;
-    include SHARED_PATH . '/staff_footer.php';
-  ?>
-</body>
-
-</html>
+<?php include SHARED_PATH . '/staff_footer.php'; ?>

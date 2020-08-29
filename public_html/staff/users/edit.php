@@ -57,7 +57,7 @@ if ($session->isAdmin() || $session->getUserId() == $user->id) {
     <div class="admin-content clearfix">
       
       <div class="button-group">
-        <?php echo page_back_link('Back', 'btn btn-sm') ?>
+        <?php echo page_back_button('Back', 'btn btn-sm') ?>
       </div>
 
       <div class="">

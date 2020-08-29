@@ -25,81 +25,72 @@ if (isset($_GET['id']) && isset($_GET['cmd'])) {
 
 $users = User::findAll();
 
+$page_title = 'List Users';
+include SHARED_PATH . '/staff_header.php';
+require '../_common-html.php';
+
 ?>
-<!DOCTYPE html>
-<html lang="en">
+<div class="container-xl">
+  <div class="page-admin">
 
-  <?php
-    $page_title = 'List Users';
-    include SHARED_PATH . '/staff_header.php';
-  ?>
-
-  <div class="admin-wrapper clearfix">
-
-    <?php include SHARED_PATH . '/staff_sidebar.php' ?>
-
-    <!-- Admin Content -->
-    <div class="admin-content clearfix">
-
-      <div class="button-group">
-        <?php echo page_back_link('Back', 'btn btn-sm') ?>
-      </div>
-
-      <div class="">
-        <h2 style="text-align: center;">Manage Users</h2>
-
-        <?php if (empty($users)): ?>
-          <p class="lead">There is no Users yet.</p>
-          <?php exit; ?>
-        <?php endif; ?>
-
-        <?php echo display_session_message('msg success') ?>
-
-        <table>
-          <thead>
-            <th>N</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th colspan="2">Actions</th>
-          </thead>
-          <tbody>
-            <?php foreach($users as $key => $user): ?>
-              <tr class="rec">
-                <td><?php echo $key + 1 ?></td>
-                <td>
-                  <a href="#"><?php echo h($user->username) ?></a>
-                  <span><?php echo $user->isAdmin() ? ' - admin' : '' ?></span>
-                </td>
-                <td>
-                  <a href="<?php echo 'mailto:' . $user->email ?>"><?php echo h($user->email) ?></a>
-                </td>
-                <td>
-                  <a href="<?php echo url_for('/staff/users/edit.php?id=' . $user->id) ?>" class="edit">
-                    Edit
-                  </a>
-                </td>
-                <td>
-                  <?php if ($user->isAdmin()): ?>
-                    <span> - </span>
-                  <?php else: ?>
-                    <a href="<?php echo url_for('/staff/users/index.php?id=' . $user->id . '&cmd=delete') ?>" class="delete">
-                      Delete
-                    </a>
-                  <?php endif; ?>
-                </td>
-              </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-
-      </div>
+    <div class="row">
+      <div class="topbox col-12"></div>
     </div>
-    <!-- // Admin Content -->
+  
+    <div class="row">
+      <?php include SHARED_PATH . '/staff_sidebar.php' ?>
 
-  </div>
+      <main class="main col-lg-9">
+        <div class="main-content">
+          <?php echo page_back_button() ?>
 
+          <h2 style="text-align: center;"><?php echo $page_title ?></h2>
 
-  <?php include SHARED_PATH . '/staff_footer.php'; ?>
-</body>
+          <?php if (empty($users)): ?>
+            <p class="lead">There is no user yet.</p>
+          
+          <?php else: ?>
+            <?php echo display_session_message('msg success') ?>
 
-</html>
+            <table class="table table-striped table-bordered table-hover table-light table-sm">
+              <thead class="bg-muted-lk text-muted">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Username</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Type</th>
+                  <th scope="colgroup" colspan="2">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach($users as $key => $user): ?>
+                  <tr>
+                    <th scope="row"><?php echo $key + 1 ?></th>
+                    <td><a href="#"><?php echo $user->username ?></a></td>
+                    <td><?php echo $user->email ?></td>
+                    <td><span class="text-primary"><?php echo $user->user_type ?></span></td>
+                    <td scope="colgroup" colspan="1">
+                      <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('/staff/users/edit.php?id=' . $topic->id) ?>">
+                        Edit
+                      </a>
+                    </td>
+                    <td scope="colgroup" colspan="1">
+                      <a class="btn-lk btn-lk--danger" href="<?php echo url_for('/staff/users/index.php?id=' . $topic->id . '&cmd=delete') ?>">
+                        Delete
+                      </a>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+      
+          <?php endif; ?>
+
+        </div>
+      </main>
+    </div><!-- row -->
+
+  </div><!--page admin-->
+</div><!--container-->
+
+<?php include SHARED_PATH . '/staff_footer.php'; ?>

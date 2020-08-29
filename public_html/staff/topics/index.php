@@ -24,75 +24,71 @@ if (isset($_GET['id'])) {
 
 $topics = Topic::findAll();
 
+$page_title = 'Topics';
+include SHARED_PATH . '/staff_header.php';
+require '../_common-html.php';
+
 ?>
-<!DOCTYPE html>
-<html lang="en">
+<div class="container-xl">
+  <div class="page-admin">
 
-  <?php
-    $page_title = 'Admin - List Topics';
-    include SHARED_PATH . '/staff_header.php'
-  ?>
-
-  <div class="admin-wrapper clearfix">
-  
-    <?php include SHARED_PATH . '/staff_sidebar.php' ?>
-
-    <!-- Admin Content -->
-    <div class="admin-content clearfix">
-
-      <div class="button-group">
-        <?php echo page_back_link('Back', 'btn btn-sm') ?>
-        <button class="btn btn-sm">
-          <a href="<?php echo url_for('staff/topics/create.php') ?>">New Topic</a>
-        </button>
-      </div>
-
-      <div class="">
-        <h2 style="text-align: center;">Manage Topics</h2>
-
-        <?php if (empty($topics)): ?>
-          <p class="lead">There is no Topics yet.</p>
-          <?php exit; ?>
-        <?php endif; ?>
-
-        <?php echo display_session_message('msg success') ?>
-
-        <table>
-          <thead>
-            <th>N</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th colspan="1">Actions</th>
-          </thead>
-          <tbody>
-            <?php foreach($topics as $key => $topic): ?>
-              <tr class="rec">
-                <td><?php echo $key + 1 ?></td>
-                <td><a href="#"><?php echo $topic->name ?></a></td>
-                <td><?php echo $topic->description ?></td>
-                <td>
-                  <a href="<?php echo url_for('/staff/topics/edit.php?id=' . $topic->id) ?>" class="edit">
-                    Edit
-                  </a>
-                </td>
-                <td>
-                  <a href="<?php echo url_for('/staff/topics/index.php?id=' . $topic->id . '&cmd=delete') ?>" class="delete">
-                    Delete
-                  </a>
-                </td>
-              </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-
-      </div>
+    <div class="row">
+      <div class="topbox col-12"></div>
     </div>
-    <!-- // Admin Content -->
+  
+    <div class="row">
+      <?php include SHARED_PATH . '/staff_sidebar.php' ?>
 
-  </div>
+      <main class="main col-lg-9">
+        <div class="main-content">
+          <?php echo page_back_button() ?>
+          <a class="btn btn-outline-secondary btn-md mb-1" href="<?php echo url_for('staff/topics/create.php') ?>">New Topic</a>
 
+          <h2 style="text-align: center;"><?php echo $page_title ?></h2>
 
-  <?php include SHARED_PATH . '/staff_footer.php' ?>
-</body>
+          <?php if (empty($topics)): ?>
+            <p class="lead">You have not topics yet.</p>
+          
+          <?php else: ?>
+            <?php echo display_session_message('msg success') ?>
 
-</html>
+            <table class="table table-striped table-bordered table-hover table-light table-sm">
+              <thead class="bg-muted-lk text-muted">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Description</th>
+                  <th scope="colgroup" colspan="2">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach($topics as $key => $topic): ?>
+                  <tr>
+                    <th scope="row"><?php echo $key + 1 ?></th>
+                    <td><a href="#"><?php echo $topic->name ?></a></td>
+                    <td><?php echo $topic->description ?></td>
+                    <td scope="colgroup" colspan="1">
+                      <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('/staff/topics/edit.php?id=' . $topic->id) ?>">
+                        Edit
+                      </a>
+                    </td>
+                    <td scope="colgroup" colspan="1">
+                      <a class="btn-lk btn-lk--danger" href="<?php echo url_for('/staff/topics/index.php?id=' . $topic->id . '&cmd=delete') ?>">
+                        Delete
+                      </a>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+      
+          <?php endif; ?>
+
+        </div>
+      </main>
+    </div><!-- row -->
+
+  </div><!--page admin-->
+</div><!--container-->
+
+<?php include SHARED_PATH . '/staff_footer.php'; ?>

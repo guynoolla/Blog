@@ -44,91 +44,73 @@ $posts = Post::findWhere(
   ['updated_at' => 'DESC']
 );
 
+$page_title = 'Unproved Posts';
+include SHARED_PATH . '/staff_header.php';
+require '_common-posts-html.php'
 ?>
-<!DOCTYPE html>
-<html lang="en">
 
-  <?php
-    $page_title = 'Unproved Posts';
-    include SHARED_PATH . '/staff_header.php';
-  ?>
+<div class="container-xl">
+  <div class="page-admin">
 
-  <div class="admin-wrapper clearfix">
-
-    <?php include SHARED_PATH . '/staff_sidebar.php'; ?>
-
-    <!-- Admin Content -->
-    <div class="admin-content clearfix">
-
-      <div class="button-group">
-        <?php echo page_back_link('Back', 'btn btn-sm') ?>
-      </div>
-
-      <div class="">
-        <h2 style="text-align: center;"><?php echo $page_title ?></h2>
-
-        <?php if (empty($posts)): ?>
-          <p class="lead">There is no Posts yet.</p>
-          <?php exit; ?>
-        <?php endif; ?>
-
-        <?php echo display_session_message('msg success') ?>
-
-        <table>
-          <thead>
-            <th>N</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Email</th>
-            <th colspan="3">Actions</th>
-          </thead>
-          <tbody>
-            <?php foreach($posts as $key => $post): ?>
-              <tr class="rec">
-                <td><?php echo $key + 1 ?></td>
-                <td>
-                  <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
-                    <?php echo $post->title ?>
-                  </a>
-                </td>
-                <?php $user = User::findById($post->user_id); ?>
-                <td><?php echo $user->username ?></td>
-                <td>
-                  <a href="mailto: <?php echo $user->email ?>">
-                    <?php echo $user->email ?>
-                  </a>
-                </td>
-                <td>
-                  <a href="<?php echo url_for('/staff/posts/edit.php?id=' . $post->id) ?>">
-                    Edit
-                  </a>
-                </td>
-                <td>
-                  <?php if ($post->proved == 0): ?>
-                    <a href="<?php echo url_for('/staff/posts/unproved.php?id=' . $post->id . '&cmd=prove') ?>" class="prove">
-                      Prove
-                    </a>
-                  <?php endif; ?>
-                </td>
-                <td>
-                  <a href="<?php echo url_for('/staff/posts/unproved.php?id=' . $post->id . '&cmd=unpublish') ?>" class="unpublish">
-                    Unpublish
-                  </a>
-                </td>
-
-              </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-
-      </div>
+    <div class="row">
+      <div class="topbox col-12"></div>
     </div>
-    <!-- // Admin Content -->
+  
+    <div class="row">
+      <?php include SHARED_PATH . '/staff_sidebar.php' ?>
 
-  </div>
+      <main class="main col-lg-9">
+        <div class="main-content">
+          <?php echo page_back_button() ?>
 
+          <h2 style="text-align: center;"><?php echo $page_title ?></h2>
 
-  <?php include SHARED_PATH . '/staff_footer.php'; ?>
-</body>
+          <?php if (empty($posts)): ?>
+            <p class="lead">You have not posts yet.</p>
+          
+          <?php else: ?>
+            <?php echo display_session_message('msg success') ?>
 
-</html>
+            <table class="table table-bordered table-hover table-light table-sm">
+              <thead class="bg-muted-lk text-muted">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Author</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Edited</th>
+                  <th scope="colgroup" colspan="2">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach($posts as $key => $post): ?>
+                  <tr>
+                    <th scope="row"><?php echo $key + 1 ?></th>
+                    <td>
+                      <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
+                        <?php echo $post->title ?>
+                      </a>
+                    </td>
+                    <td><?php echo (User::findById($post->user_id))->username ?></td>
+                      <?php echo td_post_status($post) ?>
+                    </td>
+                    <td>
+                      <span><?php echo date('M j, Y', strtotime($post->updated_at)) ?></span>
+                    </td>
+                    <?php echo td_colgroup_actions($post); ?>
+                    <?php echo td_colgroup_actions_admin($post); ?>
+                  </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+      
+          <?php endif; ?>
+
+        </div>
+      </main>
+    </div><!-- row -->
+
+  </div><!--page admin-->
+</div><!--container-->
+
+<?php include SHARED_PATH . '/staff_footer.php'; ?>

@@ -1,7 +1,12 @@
 </div> <!--Content wrapper div close-->
 
 <?php
-	$bg = $_SERVER['REQUEST_URI'] != '/' ? 'bg-light-lk' : '';
+	$bg = '';
+	$url = $_SERVER['REQUEST_URI'];
+	if ($url != '/' && !url_contain('post')) {
+		$bg = 'bg-light-lk';
+	}
+
 ?>
 <footer class="<?php echo $bg ?>" role="contentinfo" id="scrollTestContact">
 	<div class="footer-content">

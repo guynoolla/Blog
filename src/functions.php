@@ -51,24 +51,6 @@ if(!function_exists('money_format')) {
   }
 }
 
-function page_back_link($link='Back', $class_list) {
-  $url = '';
-  if (isset($_SERVER['HTTP_REFERER']) && isset($_SERVER['HTTP_HOST'])) {
-    $url = parse_url($_SERVER['HTTP_REFERER']);
-    if ($url['host'] == $_SERVER['HTTP_HOST']) {
-      $url = $_SERVER['HTTP_REFERER'];
-    } else {
-      $url = '';
-    }
-  }
-  $output = "<a href=\"" . ($url ? $url : url_for('index.php')) . "\"";
-  $output .= " class=\"" . $class_list . "\" >";
-  $output .= $link;
-  $output .= '</a>';
-  
-  return $output;
-}
-
 function url_contain($string) {
   if (strpos($_SERVER['REQUEST_URI'], $string) !== false) {
     return true;

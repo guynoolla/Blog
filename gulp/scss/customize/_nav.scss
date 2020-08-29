@@ -4,6 +4,12 @@ nav {
   .navbar-nav {
     text-transform: uppercase;
   }
+
+  .navbar-nav .nav-item .username-lk.nav-link {
+    color: $light-dark-read !important;
+    font-weight: bold;
+    letter-spacing: .05em;
+  }
 }
 
 nav.no-border-bottom {

@@ -5,15 +5,15 @@ $errors = [];
 $username = '';
 $password = '';
 
-if(is_post_request()) {
+if (is_post_request()) {
 
   $username = $_POST['username'] ?? '';
   $password = $_POST['password'] ?? '';
 
-  if(is_blank($username)) {
+  if (is_blank($username)) {
     $errors[] = 'Username cannot be blank.';
   }
-  if(is_blank($password)) {
+  if (is_blank($password)) {
     $errors[] = 'Password cannot be blank.';
   }
 
@@ -44,7 +44,7 @@ include(SHARED_PATH . '/public_header.php');
     <div class="col col-md-8 col-lg-6 my-auto">
 
       <div class="p-4 px-sm-5 py-5 rounded bg-white">
-        <form action="register.php" method="post">
+        <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
           <fieldset>
 
             <legend class="mb-5 h1">Login</legend>
@@ -53,11 +53,11 @@ include(SHARED_PATH . '/public_header.php');
             ?>
             <div class="form-group row">
               <label for="username" class="col-sm-4 col-form-label pl-1 pl-sm-3">Username</label>
-              <input class="col-sm-8 form-control" id="username" type="text" name="user[username]" value="<?php echo h($username) ?>">
+              <input class="col-sm-8 form-control" id="username" type="text" name="username" value="">
             </div>
             <div class="form-group row">
               <label for="password" class="col-sm-4 col-form-label pl-1 pl-sm-3">Password</label>
-              <input class="col-sm-8 form-control" type="password" name="user[password]" value="" class="text-input">
+              <input class="col-sm-8 form-control" type="password" name="password" value="" class="text-input">
             </div>
             <p class="text-center mb-0 font-weight-bold">Or <a href="<?php echo url_for('register.php') ?>">Sign Up</a></p>
             <button type="submit" name="submit_button" class="btn btn-outline-default float-right">Login</button>

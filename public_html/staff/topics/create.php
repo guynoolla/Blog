@@ -20,40 +20,26 @@ if(is_post_request()) {
   $topic = new Topic;
 }
 
+$page_title = 'Admin - New Topic';
+include SHARED_PATH . '/staff_header.php'
+
 ?>
-<!DOCTYPE html>
-<html lang="en">
+<div class="container-xl">
+  <div class="page-admin">
 
-  <?php
-    $page_title = 'Admin - New Topic';
-    include SHARED_PATH . '/staff_header.php'
-  ?>
-
-  <div class="admin-wrapper clearfix">
-
-    <?php include SHARED_PATH . '/staff_sidebar.php' ?>
-
-    <!-- Admin Content -->
-    <div class="admin-content clearfix">
-      <div class="button-group">
-        <a href="<?php echo url_for('/staff/topics/create.php') ?>" class="btn btn-sm">Add Topic</a>
-        <a href="<?php echo url_for('/staff/topics/index.php') ?>" class="btn btn-sm">Manage Topics</a>
-      </div>
-      <div class="">
-        <h2 style="text-align: center;">Create Topic</h2>
-
-        <?php include './_form.php'; ?>
-
-      </div>
+    <div class="row">
+      <div class="topbox col-12"></div>
     </div>
-    <!-- // Admin Content -->
 
+    <div class="row">
+      <?php include SHARED_PATH . '/staff_sidebar.php' ?>
+      
+      <div class="main col-lg-9">
+        <?php include('./_form.php') ?>
+      </div>
+
+    </div>
   </div>
+</div>
 
-
-  <?php
-    include SHARED_PATH . '/staff_footer.php'
-  ?>
-</body>
-
-</html>
+<?php include SHARED_PATH . '/staff_footer.php'; ?>

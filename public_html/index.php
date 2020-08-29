@@ -47,8 +47,8 @@ if (isset($_GET['search_term'])) {
 include SHARED_PATH . '/public_header.php';
 
 include SHARED_PATH . '/carousel.php';
-?>
 
+?>
 <div class="container-md">
   <div class="row">
     
@@ -64,7 +64,11 @@ include SHARED_PATH . '/carousel.php';
                   <div class="post">
                       <div class="post-item-wrap">
                           <div class="post-item-inner">
-                            <h2 class="entry-title text-center"><a href=""><?php echo h($post->title) ?></a></h2>
+                            <h2 class="entry-title text-center">
+                              <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
+                                <?php echo h($post->title) ?>
+                              </a>
+                            </h2>
                             <div class="entry-meta">
                               <span class="posted-on">Posted on <a href="#" rel="bookmark">
                                 <time class="entry-date published" datetime="<?php echo $post->created_at ?>">
@@ -75,7 +79,7 @@ include SHARED_PATH . '/carousel.php';
                                   <?php echo h($post->username) ?>
                                 </a></span>
                             </div>
-                            <a href="#">
+                            <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
                               <img src="<?php echo url_for('assets/images' . $post->image) ?>" alt="Image" class="tm-image">
                             </a>
                           </div>
@@ -97,7 +101,7 @@ include SHARED_PATH . '/carousel.php';
                   <div class="post">
                       <div class="post-item-wrap">
                           <div class="post-item-inner">
-                              <h2 class="entry-title text-center"><a href="#"><?php echo h($post->title) ?></a></h2>
+                              <h2 class="entry-title text-center"><a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>"><?php echo h($post->title) ?></a></h2>
                               <div class="entry-meta">
                                 <span class="posted-on">Posted on <a href="#" rel="bookmark">
                                   <time class="entry-date published" datetime="<?php echo $post->created_at ?>">
@@ -108,7 +112,7 @@ include SHARED_PATH . '/carousel.php';
                                     <?php echo h($post->username) ?>
                                   </a></span>
                               </div>
-                              <a href="#">
+                              <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
                                 <img src="<?php echo url_for('assets/images' . $post->image) ?>" alt="Image" class="tm-image">
                               </a>
                               <div class="entry-content">

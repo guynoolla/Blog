@@ -42,90 +42,45 @@ $like = $session->isLoggedIn()
 
 $likes_count = Like::countPostLikes($post->id);
 
-?>
-<!DOCTYPE html>
-<html lang="en">
+$page_title = $post->title;
+include(SHARED_PATH . '/public_header.php');
 
-<?php
-  $page_title = $post->title;
-  include(SHARED_PATH . '/public_header.php');
-?>
+?><div class="container-md">
+  <div class="row">
+    
+    <main class="main col-lg-8" role="main">
+      <div class="main-content">
+          <div class="lg-one-article-row">
+            <article>
+              <div class="post">
+                <div class="post-item-wrap">
+                    <div class="post-item-inner">
+                      <h2 class="entry-title text-center"><a href=""><?php echo h($post->title) ?></a></h2>
+                      <div class="entry-meta">
+                        <span class="posted-on">Posted on <a href="#" rel="bookmark">
+                          <time class="entry-date published" datetime="<?php echo $post->created_at ?>">
+                            <?php echo date('M j, Y', strtotime($post->created_at)) ?>
+                          </time>
+                        </a></span>by <span class="author vcard">
+                        <!-- <a class="url fn n" href="https://colorlib.com/activello/author/aigars-silkalns/">
+                          <php echo h($post->username) ?>
+                        </a></span> -->
+                      </div>
+                      <a href="#">
+                        <img src="<?php echo url_for('assets/images' . $post->image) ?>" alt="Image" class="tm-image">
+                      </a>
+                    </div>
+                    <div><?php echo $post->getBodyWithVideo() ?></div>
+                </div>
+              </div>
+            </article>
+          </div>
+      </div> <!--main content-->
+    </main> <!-- main -->
 
-  <!-- <div id="fb-root"></div>
-  <script>
-  (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s);
-    js.id = id;
-    js.src =
-      'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2&appId=285071545181837&autoLogAppEvents=1';
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
-  </script> -->
-
-  <!-- Page wrapper -->
-  <div class="page-wrapper">
-
-    <!-- content -->
-    <div class="content clearfix">
-      <div class="page-content single">
-        <img src="<?php echo url_for('/assets/images/' . $post->image) ?>" class="post-image image-wide" alt="">
-        <h2 style="text-align: center;"><?php echo $post->title ?></h2>
-        <?php
-          $class = $like ? ' like-red' : ' like-default';
-          $action = $like ? 'delete' : 'create';
-        ?>
-        <div class="like-box<?php echo $class ?>"
-          data-pid="<?php echo $post->id ?>"
-          data-uid="<?php echo $session->getUserId() ?>"
-          data-action="<?php echo $action ?>"
-        >
-          <i class="fa fa-heart-o" aria-hidden="true"></i>
-          <i class="fa fa-heart" aria-hidden="true"></i>
-          <span class="like-count"><?php echo $likes_count ?></span>
-        </div>
-        <div class="post-info">
-          <i class="fa fa-user-o"></i> <?php echo h(User::findById($post->user_id)->username) ?>&nbsp;
-          <i class="fa fa-calendar"></i> <?php echo date('F j, Y', strtotime($post->created_at)) ?>
-        </div>
-<?php
-
-  // $a = 'https://www.youtube.com/watch?v=GDeJtgjvXTk';
-  // $b = 'https://youtu.be/GDeJtgjvXTk';
-  // $test = parse_url($b);
-  // echo $test['host'];
-
-?>
-        <?php echo $post->getBodyWithVideo() ?>
-      </div>
-
-      <div class="sidebar single">
-
-        <!-- Popular Posts -->
-        <div class="section popular">
-          <h2>Popular</h2>
-          <?php foreach($popular_posts as $post): ?>
-            <div class="post clearfix">
-              <img src="<?php echo url_for('/assets/images' . $post->image) ?>">
-              <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>" class="title">
-                <?php echo $post->title ?>
-              </a>
-            </div>
-          <?php endforeach; ?>
-        </div>
-        <!-- // Popular Posts -->
-
-        <?php include SHARED_PATH . '/_topics_widget.php' ?>
-
-      </div>
-    </div>
-    <!-- // content -->
+    <?php include SHARED_PATH . '/aside.php' ?>
 
   </div>
-  <!-- // page wrapper -->
+</div> <!--container-->
 
-  <?php include(SHARED_PATH . '/public_footer.php'); ?>
-</body>
-
-</html>
+<?php include SHARED_PATH . '/public_footer.php' ?>

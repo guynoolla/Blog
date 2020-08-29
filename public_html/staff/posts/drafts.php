@@ -32,79 +32,82 @@ $posts = Post::findWhere(
   ['updated_at' => 'DESC']
 );
 
+$page_title = 'Draft Posts';
+include SHARED_PATH . '/staff_header.php';
+require '_common-posts-html.php';
+
 ?>
-<!DOCTYPE html>
-<html lang="en">
+<div class="container-xl">
+  <div class="page-admin">
 
-  <?php
-    $page_title = 'Draft Posts';
-    include SHARED_PATH . '/staff_header.php';
-  ?>
-
-  <div class="admin-wrapper clearfix">
-
-    <?php include SHARED_PATH . '/staff_sidebar.php'; ?>
-
-    <!-- Admin Content -->
-    <div class="admin-content clearfix">
-
-      <div class="button-group">
-        <?php echo page_back_link('Back', 'btn btn-sm') ?>
-      </div>
-
-      <div class="">
-        <h2 style="text-align: center;"><?php echo $page_title ?></h2>
-
-        <?php if (empty($posts)): ?>
-          <p class="lead">There is no Posts yet.</p>
-          <?php exit; ?>
-        <?php endif; ?>
-
-        <?php echo display_session_message('msg success') ?>
-
-        <table>
-          <thead>
-            <th>N</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Email</th>
-            <th colspan="1">Action</th>
-          </thead>
-          <tbody>
-            <?php foreach($posts as $key => $post): ?>
-              <tr class="rec">
-                <td><?php echo $key + 1 ?></td>
-                <td>
-                  <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
-                    <?php echo $post->title ?>
-                  </a>
-                </td>
-                <?php $user = User::findById($post->user_id); ?>
-                <td><?php echo $user->username ?></td>
-                <td>
-                  <a href="mailto: <?php echo $user->email ?>">
-                    <?php echo $user->email ?>
-                  </a>
-                </td>
-                <td>
-                  <a href="<?php echo url_for('/staff/posts/drafts.php?id=' . $post->id . '&cmd=delete') ?>" class="delete">
-                    Delete
-                  </a>
-                </td>
-
-              </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-
-      </div>
+    <div class="row">
+      <div class="topbox col-12"></div>
     </div>
-    <!-- // Admin Content -->
+  
+    <div class="row">
+      <?php include SHARED_PATH . '/staff_sidebar.php' ?>
 
-  </div>
+      <main class="main col-lg-9">
+        <div class="main-content">
+          <?php echo page_back_button() ?>
+          
+          <h2 style="text-align: center;"><?php echo $page_title ?></h2>
 
+          <?php if (empty($posts)): ?>
+            <p class="lead">You have not posts yet.</p>
+          
+          <?php else: ?>
+            <?php echo display_session_message('msg success') ?>
 
-  <?php include SHARED_PATH . '/staff_footer.php'; ?>
-</body>
+            <table class="table table-bordered table-hover table-light table-sm">
+              <thead class="bg-muted-lk text-muted">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Author</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Edited</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach($posts as $key => $post): ?>
+                  <tr>
+                    <th scope="row"><?php echo $key + 1 ?></th>
+                    <td>
+                      <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
+                        <?php echo $post->title ?>
+                      </a>
+                    </td>
+                    <td>
+                      <?php $user = User::findById($post->user_id) ?>
+                      <a><?php echo h($user->username) ?></a>
+                    </td>
+                    <?php echo td_post_status($post) ?>
+                    <td>
+                      <a href="mailto: <?php echo $user->email ?>">
+                        <?php echo h($user->email) ?>
+                      </a>
+                    </td>
+                    <td>
+                      <span><?php echo date('M j, Y', strtotime($post->updated_at)) ?></span>
+                    </td>
+                    <td>
+                      <a class="btn-lk btn-lk--danger" href="<?php echo url_for('staff/posts/drafts.php?id=' . $post->id . '&cmd=delete') ?>">Delete</a>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+      
+          <?php endif; ?>
 
-</html>
+        </div>
+      </main>
+    </div><!-- row -->
+
+  </div><!--page admin-->
+</div><!--container-->
+
+<?php include SHARED_PATH . '/staff_footer.php'; ?>

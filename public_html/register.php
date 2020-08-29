@@ -23,7 +23,7 @@ include SHARED_PATH . '/public_header.php';
     <div class="col col-md-8 col-lg-6 my-auto">
 
       <div class="p-4 px-sm-5 py-5 rounded bg-white">
-        <form action="register.php" method="post">
+        <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
           <fieldset>
 
             <legend class="mb-5 h1">Register</legend>
