@@ -45,9 +45,8 @@
           margin-left: 1rem;
           white-space: nowrap;
           .show-number {
-            font-size: 1.3em;
+            font-size: 1.2em;
             color: #646566;
-            font-weight: bold;
           }
         }
         svg {
@@ -90,9 +89,13 @@
     text-align: center;
     color: $text-secondary;
     background-color: $bg-secondary;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     text-transform: uppercase;
-    letter-spacing: .3ch;
+    letter-spacing: .2ch;
+
+    .link-text {
+      margin-right: .5em;
+    }
   }
 
   &:hover .logo svg {

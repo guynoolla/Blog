@@ -2,22 +2,22 @@
   Social Links Widget -------------------------------- */
 
 .social-links-widget {
+  font-size: .9rem;
   ul {
     position: relative;
     text-align: center;
     padding: 0;
-    padding-left: .7em;
     
     li.menu-item {
       position: relative;
       display: inline-block;
-      padding-right: .7em;
-      a {
+      padding-right: 1.4em !important;
+
+      a.social-btn {
         position: relative;
         display: block;
         width: 1.5em;
         height: 1.5em;
-        padding: 0;
         overflow: hidden;
         span {
           display: block;

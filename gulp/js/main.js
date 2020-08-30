@@ -4,49 +4,48 @@ import animatedScrollTo from 'animated-scroll-to';
 
 window.jQuery = $;
 
+navbarSearchBehavior();
 
 $(document).ready(() => {
 
-  $(window).on('load', function() {
-    const slider = $('.slider');
+  const slider = $('.slider');
 
-    if (typeof slider.slick == "function") {
-      slider.slick({
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        autoplay: false,
-        autoplaySpeed: 2000,
-        nextArrow: $('.next'),
-        prevArrow: $('.prev'),
-        responsive: [{
-            breakpoint: 1201, //1024,
-            settings: {
-              slidesToShow: 2,
-              slidesToScroll: 1,
-              infinite: true,
-              dots: false
-            }
-          },
-          {
-            breakpoint: 991, // 880,
-            settings: {
-              slidesToShow: 2,
-              slidesToScroll: 1,
-              infinite: true,
-              dots: false
-            }
-          },
-          {
-            breakpoint: 701,
-            settings: {
-              slidesToShow: 1,
-              slidesToScroll: 1
-            }
+  if (typeof slider.slick == "function") {
+    slider.slick({
+      slidesToShow: 3,
+      slidesToScroll: 1,
+      autoplay: true,
+      autoplaySpeed: 2000,
+      nextArrow: $('.next'),
+      prevArrow: $('.prev'),
+      responsive: [{
+          breakpoint: 1201, //1024,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 1,
+            infinite: true,
+            dots: false
           }
-        ]
-      })
-    }
-  })
+        },
+        {
+          breakpoint: 991, // 880,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 1,
+            infinite: true,
+            dots: false
+          }
+        },
+        {
+          breakpoint: 701,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        }
+      ]
+    })
+  }
 
   $(window).on("scroll", function() {
     checkScrollPosition();    
@@ -66,16 +65,6 @@ $(document).ready(() => {
   })
 
   $(".sidebar").height($(".page-admin").height());
-
-  $(".search-field-lk").on("click", (e) => {
-    $(".search-field-lk").addClass("fw-auto");
-  });
-
-  $(document).on("click", (e) => {
-    if (!($(e.target).hasClass("search-field-lk"))) {
-      $(".navbar form input").removeClass("fw-auto");
-    }
-  })
 
 });
 
@@ -111,4 +100,21 @@ function scrollToEventHandler(position) {
       // or by another call of "animateScrollTo"
     }
   });
+}
+
+function navbarSearchBehavior() {
+  $(window).on("load", () => {
+    $(".search-field-lk").addClass("push-in-field");
+    $(".search-field-lk").removeClass("hide");
+
+    $(".search-field-lk").on("mouseover", (e) => {
+      $(".search-field-lk").removeClass("push-in-field");
+    });
+
+    $(document).on("click scroll", (e) => {
+      if (!($(e.target).hasClass("search-field-lk"))) {
+        $(".search-field-lk").addClass("push-in-field");
+      }
+    })
+  })
 }

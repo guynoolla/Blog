@@ -3,19 +3,27 @@ nav {
   
   .navbar-nav {
     text-transform: uppercase;
+    .nav-item .username-lk.nav-link {
+      color: $light-dark-read-green;
+      font-weight: bold;
+      letter-spacing: .05em;
+    }
   }
+}
 
-  .navbar-nav .nav-item .username-lk.nav-link {
-    color: $light-dark-read-green;
-    font-weight: bold;
-    letter-spacing: .05em;
-    border: 1px solid transparent;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    &:hover, &:focus {
-      border-color: $light-dark-read-green;
-      color: $light-dark-read-green !important;
-      border-radius: 5em;
+@media (min-width: 768px) {
+  nav {
+    .navbar-nav {
+      .nav-item .username-lk.nav-link {
+        border: 1px solid transparent;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        &:hover, &:focus {
+          border-color: $light-dark-read-green;
+          color: $light-dark-read-green !important;
+          border-radius: 5em;
+        }
+      }
     }
   }
 }
@@ -26,13 +34,15 @@ nav.no-border-bottom {
 
 nav form {
   position: relative;
+  overflow: hidden;
+  width: 15rem;
 
   input.search-field-lk {
-    width: 5rem !important;
-    transition: width 600ms ease-in !important;
-    border: none;
+    transform: translateX(0);
+    transition: transform 200ms ease-out;
+    border-color: #F8F9FA;
     background-color: #F8F9FA;
-    background-color: tan;
+    padding-right: 1rem;
 
     ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
       font-weight: 400;
@@ -49,42 +59,43 @@ nav form {
       color: #b0b1b2 !important;
       letter-spacing: .02rem;
     }
-    &.fw-auto {
-      width: 80% !important;
+    &.push-in-field {
+      transform: translateX(52%);
     }
   }
 
-  .svg-icon-btn-lk {
+  .svg-search-btn {
+    position: absolute;
+    top: .7rem;
+    right: .7rem;
     display:block;
     width: 1rem;
     height: 1rem;
     line-height: 1;
     
-    .svg-dark-lk {
+    .svg-gray {
       fill: #b5b9bc !important;
     }
   }
 }
 
 @media (max-width: 575.98px) {
-  nav {
-    form {
-      position: relative;
-      
-      .svg-icon-btn-lk {
-        position: absolute;
-        right: .5rem;
-        top: .6rem;
-      }
-      ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-        text-align: left;
-      }
-      :-ms-input-placeholder { /* Internet Explorer 10-11 */
-        text-align: left;
-      }
-      ::-ms-input-placeholder { /* Microsoft Edge */
-        text-align: left;
-      }
+  nav form {
+    position: relative;
+    
+    .svg-icon-btn-lk {
+      position: absolute;
+      right: .5rem;
+      top: .6rem;
+    }
+    ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+      text-align: left;
+    }
+    :-ms-input-placeholder { /* Internet Explorer 10-11 */
+      text-align: left;
+    }
+    ::-ms-input-placeholder { /* Microsoft Edge */
+      text-align: left;
     }
   }
 }

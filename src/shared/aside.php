@@ -1,4 +1,3 @@
-
 <div class="sidebar-content">
 
   <section class="widget mt-5">
@@ -17,38 +16,8 @@
   <section class="widget">
     <h3 class="title mt-5">Follow Me</h3>
 
-    <div class="social-links-widget">
-      <ul class="menu-social-items" class="social-menu">
-        <li class="menu-item menu-item-type-custom">
-          <a href="https://www.facebook.com/colorlib">
-            <i class="social_icon fa fa-facebook"><span>Facebook</span></i>
-          </a>
-        </li>
-        <li class="menu-item menu-item-type-custom">
-          <a href="https://twitter.com/colorlib">
-            <i class="social_icon fa fa-twitter"><span>Twitter</span></i>
-          </a>
-        </li>
-        <li class="menu-item menu-item-type-custom">
-          <a href="https://www.youtube.com/channel/UCOaovjLNXdIch2vLFsw_uew">
-          <i class="social_icon fa fa-youtube"><span>youtube</span></i></a>
-        </li>
-        <li class="menu-item menu-item-type-custom">
-          <a href="https://plus.google.com/100289203607749737039">
-            <i class="social_icon fa fa-google-plus"><span>Google+</span></i>
-          </a>
-        </li>
-        <li class="menu-item menu-item-type-custom">
-          <a href="https://instagram.com">
-            <i class="social_icon fa fa-instagram"><span>Instagram</span></i>
-          </a>
-        </li>
-        <li class="menu-item menu-item-type-custom">
-          <a href="https://github.com/puikinsh/">
-            <i class="social_icon fa fa-github"><span>Github</span></i>
-          </a>
-        </li>
-      </ul>
+    <div class="social-links-widget more-space-between">
+      <?php include '_social_links_list.php' ?>
     </div>
   </section>
 

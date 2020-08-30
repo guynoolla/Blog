@@ -26,7 +26,7 @@ if (!isset($page_title) || $page_title == '') {
       
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav">
-            <?php include '_navbar-dropdown.php' ?>
+            <?php include '_navbar_dropdown.php' ?>
           </ul>
         </div>
 

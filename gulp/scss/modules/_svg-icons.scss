@@ -1,0 +1,32 @@
+a.svg-social-btn,
+a.svg-icon-btn {
+  
+  display: block;
+  width: 1.2em;
+  height: 1.2em;
+  line-height: 1.2em;
+
+  &--more1 {
+    width: 1.3em;
+    height: 1.3em;
+  }
+  &--more2 {
+    width: 1.4em;
+    height: 1.4em;
+  }
+
+}
+
+.svg-social,
+.svg-icon {
+  fill:#6d6e72;
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  
+  &--less {
+    height: 70%;
+    width: auto;
+    max-width: 70%;
+  }
+}
