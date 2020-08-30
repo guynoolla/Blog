@@ -15,6 +15,13 @@ $warning-dark: darken(#f2a60e, 2);
   color: #6c757d !important;
 }
 
+.text-lk {
+  padding-top: 1rem;
+  font-size: 1rem;
+  letter-spacing: .02em;
+  line-height: 1.8;
+}
+
 .bg-danger-lk {
   background-color: lighten(#dc3545, 5) !important;
   a {
@@ -77,3 +84,12 @@ table tr td a.btn-lk {
     }    
   }
 }
+
+.bg-light-lk {
+  background-color: $bg-light-lk !important;
+  font-weight: 500 !important;
+  color: #5e5c5b !important;
+  a {
+    color: #5e5c5b !important;
+  }
+} 

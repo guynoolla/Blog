@@ -6,6 +6,7 @@ require_once '../../src/initialize.php';
 $user = false;
 $password = "";
 $confirm_password = "";
+$errors = [];
 
 if (is_get_request()) {
 
@@ -35,49 +36,42 @@ if (is_get_request()) {
 
 }
 
+$page_title = 'Reset';
+include(SHARED_PATH . '/public_header.php');
+
 ?>
-<!DOCTYPE html>
-<html lang="en">
+<div class="container-fluid bg-light-lk">
 
-<?php
-  $page_title = 'Password Reset';
-  include(SHARED_PATH . '/public_header.php');
-?>
+<div class="row justify-content-center h-100">
+  <div class="col col-md-8 col-lg-6 my-auto">
+    <div class="py-5 my-4 rounded bg-white">
 
-  <div class="auth-content">
-    <?php if (!$user): ?>
+      <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
+        <fieldset class="px-4 px-sm-5 mr-sm-1">
 
-      <h3><?php echo $page_title ?></h3>
-      <br>
-      <p>
-        Password reset link is invalid or expired, please click 
-        <a href="<?php echo url_for('password/forgot.php') ?>">here</a> 
-        to request another one.
-      </p>
+          <legend class="mb-5 h1"><?php echo $page_title ?></legend>
+          <?php
+            if (!empty($errors)) echo display_errors($errors);
+          ?>
+          <input type="hidden" name="user[token]" value="<?php echo $user_token ?>" />
+          
+          <div class="form-group row mr-sm-0">
+            <label for="password" class="col-sm-4 col-form-label">Password</label>
+            <input class="col-sm-8 form-control" type="password" name="user[password]" value="<?php echo $password ?>">
+          </div>
+          <div class="form-group row mr-sm-0">
+            <label for="confirm_password" class="col-sm-4 col-form-label">Confirm Password</label>
+            <input class="col-sm-8 form-control" type="password" name="user[confirm_password]" value="<?php echo $confirm_password ?>">
+          </div>
 
-    <?php else: ?>
-
-      <form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>">
-        <h3><?php echo $page_title ?></h3>
-        <br>
-        <?php
-          if (!empty($errors)) echo display_errors($errors);
-        ?>
-        <input type="hidden" name="user[token]" value="<?= $user_token ?>" />
-        <div>
-          <label for="inputPassword">Password</label>
-          <input type="password" name="user[password]" value="<?php echo $password ?>"  placeholder="Password" class="text-input" required>
-        </div>
-        <div>
-          <label for="inputPassword">Confirm Password</label>
-          <input type="password" name="user[confirm_password]" value="<?php echo $confirm_password ?>"  placeholder="Confirm Password" class="text-input" required>
-        </div>
-        <button type="submit" name="submit_button" class="btn">Reset</button>
+          <button type="submit" name="submit_button" class="btn btn-outline-default float-right my-4">Reset</button>
+        </fieldset>
       </form>
 
-    <?php endif; ?>
+    </div>
   </div>
+</div>
 
-</body>
+</div>
 
-</html>
+<?php include SHARED_PATH . '/public_footer.php' ?>

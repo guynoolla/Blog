@@ -135,7 +135,9 @@ include SHARED_PATH . '/carousel.php';
       </div> <!--main content-->
     </main> <!-- main -->
 
-    <?php include SHARED_PATH . '/aside.php' ?>
+    <aside class="sidebar col-lg-4" role="complementary">
+      <?php include SHARED_PATH . '/aside.php' ?>
+    </aside>
 
   </div>
 </div> <!--container-->

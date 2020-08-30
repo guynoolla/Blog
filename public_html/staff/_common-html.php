@@ -1,6 +1,6 @@
 <?php
 
-function page_back_button($link='Back', $class_list='btn btn-outline-secondary ml-auto mb-1') {
+function page_back_button($link='Back', $class_list='btn btn-outline-primary mb-1 ml-1') {
   $url = '';
 
   if (isset($_SERVER['HTTP_REFERER']) && isset($_SERVER['HTTP_HOST'])) {

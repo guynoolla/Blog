@@ -13,7 +13,7 @@
       <?php else: ?>
         <a class="dropdown-item" href="<?php echo url_for('/') ?>">Home</a>
       <?php endif; ?>
-      <a class="dropdown-item text-muted" href="<?php echo url_for('user/edit.php') ?>">User Settings</a>
+      <a class="dropdown-item text-muted" href="<?php echo url_for('staff/users/edit.php?id=' . $session->getUserId()) ?>">User Settings</a>
       <div class="dropdown-divider"></div>
       <a class="dropdown-item text-muted" href="<?php echo url_for('logout.php') ?>">Logout</a>
     </div>

@@ -29,7 +29,6 @@ class User extends \App\Classes\DatabaseObject {
   public $empty_password_field = true;
 
   public function __construct(array $args=[]) {
-    $this->user_type = $args['is_admin'] ?? '';
     $this->username = $args['username'] ?? '';
     $this->email = $args['email'] ?? '';
     $this->password = $args['password'] ?? '';
@@ -108,7 +107,12 @@ class User extends \App\Classes\DatabaseObject {
   }
 
   public function isAdmin() {
-    return $this->user_type === '1';
+    return $this->user_type === 'admin';
+  }
+
+  public function getUserType() {
+    if ($this->user_type == '') return 'logged_in';
+    else return $this->user_type;
   }
 
   static public function findByUsername($username) {

@@ -13,7 +13,7 @@ function require_login($redirect='login.php') {
 function display_errors($errors=array(), $top_text="Please fix the following errors:") {
   $output = '';
   if (!empty($errors)) {
-    $output .= "<div class=\"msg errors\">";
+    $output .= "<div class=\"msg-lk errors-lk\">";
     $output .= $top_text;
     $output .= "<ul>";
     foreach($errors as $error) {
@@ -28,9 +28,17 @@ function display_errors($errors=array(), $top_text="Please fix the following err
 function display_session_message($class_list='informer') {
   global $session;
   $msg = $session->message();
-  if(isset($msg) && $msg != '') {
+
+  if (isset($msg) && $msg != '') {
     $session->clearMessage();
-    return "<div class=\"" . $class_list . "\">" . h($msg) . "</div>";
+    $output = '';
+    $output .= "<div class=\"" . $class_list . "\">";
+    if (strpos($class_list, 'alert-dismissible') !== false) {
+      $output .= "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>";
+    }
+    $output .=  h($msg) . "</div>";
+    
+    return $output;
   }
 }
 

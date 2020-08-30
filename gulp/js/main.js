@@ -65,7 +65,17 @@ $(document).ready(() => {
     }
   })
 
-  //$('.sidebar').height($('.page-admin').height());
+  $(".sidebar").height($(".page-admin").height());
+
+  $(".search-field-lk").on("click", (e) => {
+    $(".search-field-lk").addClass("fw-auto");
+  });
+
+  $(document).on("click", (e) => {
+    if (!($(e.target).hasClass("search-field-lk"))) {
+      $(".navbar form input").removeClass("fw-auto");
+    }
+  })
 
 });
 

@@ -37,22 +37,15 @@ $page_title = 'Admin - Edit Topic';
 include SHARED_PATH . '/staff_header.php'
 
 ?>
-<div class="container-xl">
-  <div class="page-admin">
-
-    <div class="row">
-      <div class="topbox col-12"></div>
-    </div>
-
-    <div class="row">
-      <?php include SHARED_PATH . '/staff_sidebar.php' ?>
-      
-      <div class="main col-lg-9">
-        <?php include('./_form.php') ?>
-      </div>
-
-    </div>
+<div class="row">
+  <aside class="sidebar col-lg-3">
+    <?php include SHARED_PATH . '/staff_sidebar.php' ?>
+  </aside>
+  
+  <div class="main col-lg-9">
+    <?php include('./_form.php') ?>
   </div>
+
 </div>
 
 <?php include SHARED_PATH . '/staff_footer.php'; ?>

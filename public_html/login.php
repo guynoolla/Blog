@@ -1,9 +1,9 @@
 <?php
 require_once '../src/initialize.php';
 
-$errors = [];
 $username = '';
 $password = '';
+$errors = [];
 
 if (is_post_request()) {
 
@@ -38,28 +38,33 @@ if ($session->isLoggedIn()) {
 $page_title = 'User Login';
 include(SHARED_PATH . '/public_header.php');
 
-?><div class="lg-container bg-light-lk">
+?>
+<div class="container-fluid bg-light-lk">
 
   <div class="row justify-content-center h-100">
     <div class="col col-md-8 col-lg-6 my-auto">
 
-      <div class="p-4 px-sm-5 py-5 rounded bg-white">
+      <div class="py-5 my-4 rounded bg-white">
+
+        <div class="px-2 px-sm-4"><?php
+          if (!empty($errors)) echo display_errors($errors);
+        ?></div>
+
         <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
-          <fieldset>
+          <fieldset class="px-4 px-sm-5 mr-sm-2">
 
             <legend class="mb-5 h1">Login</legend>
-            <?php
-              if (!empty($user->errors)) echo display_errors($user->errors);
-            ?>
-            <div class="form-group row">
+
+            <div class="form-group row mr-sm-0">
               <label for="username" class="col-sm-4 col-form-label pl-1 pl-sm-3">Username</label>
               <input class="col-sm-8 form-control" id="username" type="text" name="username" value="">
             </div>
-            <div class="form-group row">
+            <div class="form-group row mr-sm-0">
               <label for="password" class="col-sm-4 col-form-label pl-1 pl-sm-3">Password</label>
-              <input class="col-sm-8 form-control" type="password" name="password" value="" class="text-input">
+              <input class="col-sm-8 form-control" type="password" name="password" value="">
+              <small class="small-nicer-lk ml-auto mt-1"><a href="<?php echo url_for('password/forgot.php') ?>">forgot password?</a></small>
             </div>
-            <p class="text-center mb-0 font-weight-bold">Or <a href="<?php echo url_for('register.php') ?>">Sign Up</a></p>
+            <p class="text-center font-weight-bold">Or <a href="<?php echo url_for('register.php') ?>">Sign Up</a></p>
             <button type="submit" name="submit_button" class="btn btn-outline-default float-right">Login</button>
 
           </fieldset>

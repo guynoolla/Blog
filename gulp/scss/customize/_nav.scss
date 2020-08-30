@@ -6,12 +6,85 @@ nav {
   }
 
   .navbar-nav .nav-item .username-lk.nav-link {
-    color: $light-dark-read !important;
+    color: $light-dark-read-green;
     font-weight: bold;
     letter-spacing: .05em;
+    border: 1px solid transparent;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    &:hover, &:focus {
+      border-color: $light-dark-read-green;
+      color: $light-dark-read-green !important;
+      border-radius: 5em;
+    }
   }
 }
 
 nav.no-border-bottom {
   border-bottom: none;
+}
+
+nav form {
+  position: relative;
+
+  input.search-field-lk {
+    width: 5rem !important;
+    transition: width 600ms ease-in !important;
+    border: none;
+    background-color: #F8F9FA;
+    background-color: tan;
+
+    ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+      font-weight: 400;
+      color: #b0b1b2 !important;
+      letter-spacing: .02rem;
+    }
+    :-ms-input-placeholder { /* Internet Explorer 10-11 */
+      font-weight: 400;
+      color: #b0b1b2 !important;
+      letter-spacing: .02rem;
+    }
+    ::-ms-input-placeholder { /* Microsoft Edge */
+      font-weight: 400;
+      color: #b0b1b2 !important;
+      letter-spacing: .02rem;
+    }
+    &.fw-auto {
+      width: 80% !important;
+    }
+  }
+
+  .svg-icon-btn-lk {
+    display:block;
+    width: 1rem;
+    height: 1rem;
+    line-height: 1;
+    
+    .svg-dark-lk {
+      fill: #b5b9bc !important;
+    }
+  }
+}
+
+@media (max-width: 575.98px) {
+  nav {
+    form {
+      position: relative;
+      
+      .svg-icon-btn-lk {
+        position: absolute;
+        right: .5rem;
+        top: .6rem;
+      }
+      ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+        text-align: left;
+      }
+      :-ms-input-placeholder { /* Internet Explorer 10-11 */
+        text-align: left;
+      }
+      ::-ms-input-placeholder { /* Microsoft Edge */
+        text-align: left;
+      }
+    }
+  }
 }

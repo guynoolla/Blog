@@ -1,3 +1,6 @@
+	</div><!--container-xl-->
+</div><!--Page Admin--> 
+
 <footer class="footer" role="contentinfo" id="scrollTestContact">
 	<div class="footer-content">
 		<div class="social-links-widget more-space-between">

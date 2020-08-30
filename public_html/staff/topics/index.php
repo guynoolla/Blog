@@ -29,66 +29,58 @@ include SHARED_PATH . '/staff_header.php';
 require '../_common-html.php';
 
 ?>
-<div class="container-xl">
-  <div class="page-admin">
+<div class="row">
+  <aside class="sidebar col-lg-3">
+    <?php include SHARED_PATH . '/staff_sidebar.php' ?>
+  </aside>
 
-    <div class="row">
-      <div class="topbox col-12"></div>
-    </div>
-  
-    <div class="row">
-      <?php include SHARED_PATH . '/staff_sidebar.php' ?>
+  <main class="main col-lg-9">
+    <div class="main-content">
+      <?php echo page_back_button() ?>
+      <a class="btn btn-outline-primary btn-md mb-1" href="<?php echo url_for('staff/topics/create.php') ?>">New Topic</a>
 
-      <main class="main col-lg-9">
-        <div class="main-content">
-          <?php echo page_back_button() ?>
-          <a class="btn btn-outline-secondary btn-md mb-1" href="<?php echo url_for('staff/topics/create.php') ?>">New Topic</a>
+      <h2 style="text-align: center;"><?php echo $page_title ?></h2>
 
-          <h2 style="text-align: center;"><?php echo $page_title ?></h2>
-
-          <?php if (empty($topics)): ?>
-            <p class="lead">You have not topics yet.</p>
-          
-          <?php else: ?>
-            <?php echo display_session_message('msg success') ?>
-
-            <table class="table table-striped table-bordered table-hover table-light table-sm">
-              <thead class="bg-muted-lk text-muted">
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Description</th>
-                  <th scope="colgroup" colspan="2">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php foreach($topics as $key => $topic): ?>
-                  <tr>
-                    <th scope="row"><?php echo $key + 1 ?></th>
-                    <td><a href="#"><?php echo $topic->name ?></a></td>
-                    <td><?php echo $topic->description ?></td>
-                    <td scope="colgroup" colspan="1">
-                      <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('/staff/topics/edit.php?id=' . $topic->id) ?>">
-                        Edit
-                      </a>
-                    </td>
-                    <td scope="colgroup" colspan="1">
-                      <a class="btn-lk btn-lk--danger" href="<?php echo url_for('/staff/topics/index.php?id=' . $topic->id . '&cmd=delete') ?>">
-                        Delete
-                      </a>
-                    </td>
-                  </tr>
-                <?php endforeach; ?>
-              </tbody>
-            </table>
+      <?php if (empty($topics)): ?>
+        <p class="lead">You have not topics yet.</p>
       
-          <?php endif; ?>
+      <?php else: ?>
+        <?php echo display_session_message('msg success') ?>
 
-        </div>
-      </main>
-    </div><!-- row -->
+        <table class="table table-striped table-bordered table-hover table-light table-sm">
+          <thead class="bg-muted-lk text-muted">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Description</th>
+              <th scope="colgroup" colspan="2">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach($topics as $key => $topic): ?>
+              <tr>
+                <th scope="row"><?php echo $key + 1 ?></th>
+                <td><a href="#"><?php echo $topic->name ?></a></td>
+                <td><?php echo $topic->description ?></td>
+                <td scope="colgroup" colspan="1">
+                  <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('/staff/topics/edit.php?id=' . $topic->id) ?>">
+                    Edit
+                  </a>
+                </td>
+                <td scope="colgroup" colspan="1">
+                  <a class="btn-lk btn-lk--danger" href="<?php echo url_for('/staff/topics/index.php?id=' . $topic->id . '&cmd=delete') ?>">
+                    Delete
+                  </a>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+  
+      <?php endif; ?>
 
-  </div><!--page admin-->
-</div><!--container-->
+    </div>
+  </main>
+</div><!-- row -->
 
 <?php include SHARED_PATH . '/staff_footer.php'; ?>

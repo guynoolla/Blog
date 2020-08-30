@@ -2,8 +2,10 @@
  Page Admin */
 
 .page-admin .topbox {
-  margin-top: 56px;
+  margin-top: 3rem;
   color: #444;
+  background-color: $bg-primary !important;
+  width: 100%;
 }
 
 /*
@@ -16,7 +18,7 @@
 }
 
 .page-admin .sidebar {
-  padding-top: .7rem;
+  padding-top: .1rem;
   .sidebar-nav {
     .nav-item {
       overflow: hidden;
@@ -65,7 +67,7 @@
   }
   
   .page-admin .main {
-    padding: 1rem 2rem;
+    padding: 0rem 2rem;
     padding-bottom: 3rem;
     border-right: 1px solid #eee;
   }
@@ -78,10 +80,10 @@
   h2 {
     text-align: center;
     background-color:#EFE4D5;
-    padding:1.5rem;
-    margin:0
+    padding: 1.5rem;
+    margin: 0;
   }
-  
+
   a.btn.btn-outline-primary,
   a.btn.btn-outline-secondary,
   a.btn.btn-outline-success {

@@ -37,15 +37,6 @@ footer {
     opacity: .8;
   }
 
-  &.bg-light-lk {
-    background-color: $bg-light-lk !important;
-    font-weight: 500;
-    color: #5e5c5b !important;
-    a {
-      color: #5e5c5b !important;
-    }
-  }  
-
 }
 
 @media (max-width: 768px) {

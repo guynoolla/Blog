@@ -38,42 +38,47 @@ if (is_post_request()) {
   }
 }
 
+$page_title = 'Password Reset';
+include(SHARED_PATH . '/public_header.php');
+
 ?>
-<!DOCTYPE html>
-<html lang="en">
+<div class="container-fluid bg-light-lk">
 
-<?php
-  $page_title = 'Password Reset';
-  include(SHARED_PATH . '/public_header.php');
-?>
+  <div class="row justify-content-center h-100">
+    <div class="col col-md-8 col-lg-6 my-auto">
 
-  <div class="auth-content">
+      <div class="py-5 my-4 rounded bg-white">
+      
+      <?php if (isset($_GET['r']) && $_GET['r'] == 'reset'): ?>
+      
+        <p class="mb-5 h1"><?php echo $page_title ?></p>
+        <p class="h4">Please check your email.</p>
 
-    <?php if (isset($_GET['r']) && $_GET['r'] == 'reset'): ?>
-      <h3><?php echo $page_title ?></h3>
-      <br>
-      <p>Please check your email.</p>
+      <?php else: ?>
 
-    <?php else: ?>
-      <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
-        <h3 class="form-title"><?php echo $page_title ?></h3>
-        <br>
-        <?php
-          if(!empty($errors)) echo display_errors($errors, '');
-        ?>
-        <div>
-          <label>Email Address</label>
-          <input type="email" name="email" value="" class="text-input">
-        </div>
-        <div>
-          <button type="submit" name="submit_button" class="btn">Reset</button>
-        </div>
-      </form>
+        <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
+          <fieldset class="px-4 px-sm-5 mr-sm-1">
+            
+            <legend class="mb-5 h1"><?php echo $page_title ?></legend>
+            <?php
+              if (!empty($user->errors)) echo display_errors($user->errors);
+            ?>
+            <div class="form-group row mr-sm-0">
+              <label for="email" class="col-sm-4 col-form-label pl-0 pl-sm-3">Email</label>
+              <input class="col-sm-8 form-control" id="email" type="email" name="email" value="">
+           </div>
 
-    <?php endif; ?>
+            <button type="submit" name="submit_button" class="btn btn-outline-default float-right my-4">Reset</button>
+          </fieldset>
+        </form>
 
+      <?php endif; ?>
+
+      </div>
+
+    </div>
   </div>
 
-</body>
+</div>
 
-</html>
+<?php include SHARED_PATH . '/public_footer.php' ?>

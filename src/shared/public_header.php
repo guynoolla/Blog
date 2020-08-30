@@ -37,8 +37,11 @@ if (!isset($page_title)) {
           <?php include '_navbar-dropdown.php' ?>
         </ul>
         <form class="form-inline mt-2 mt-md-0">
-          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          <input id="search" class="form-control mr-sm-2 search-field-lk" type="text" placeholder="Search" aria-label="Search">
+          <!-- <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
+          <a href="#" class="svg-icon-btn-lk">
+            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-search fa-w-16 fa-3x"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z" class="svg-dark-lk"></path></svg>
+          </a>
         </form>
       </div>
     </div>
@@ -51,4 +54,14 @@ if (!isset($page_title)) {
   </section>
 </header>
 
-<div> <!--Content wrapper div open-->
+<div><!--Content wrapper div open-->
+
+  <div class="container-md">
+    <div class="row">
+      <div class="col">
+        <?php echo display_session_message('alert alert-success alert-dismissible py-3 my-2 text-center h4 '); ?>
+      </div>
+    </div>
+  </div>
+
+<!--div wrapper div must be closed in Footer-->

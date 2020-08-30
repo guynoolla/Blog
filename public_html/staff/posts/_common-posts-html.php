@@ -27,11 +27,11 @@ function td_colgroup_actions_admin($post) {
   ?><td scope="colgroup"><?php
 
   if ($post->published && $post->proved): ?>
-    <a class="btn-lk btn-lk--warning" href="<?php echo url_for('/staff/posts/index.php?id=' . $post->id . '&cmd=unpublish') ?>">
+    <a class="btn-lk btn-lk--warning" href="<?php echo url_for('/staff/posts/proved.php?id=' . $post->id . '&cmd=disprove') ?>">
       disprove
     </a>
   <?php elseif ($post->published && !$post->proved): ?>
-    <a class="btn-lk btn-lk--primary" href="<?php echo url_for('/staff/posts/edit.php?id=' . $post->id) ?>">
+    <a class="btn-lk btn-lk--primary" href="<?php echo url_for('/staff/posts/unproved.php?id=' . $post->id . '&cmd=prove') ?>">
       prove
     </a>
   <?php else: ?>
@@ -60,7 +60,7 @@ function td_post_status($post) {
   return $output;
 }
 
-function page_back_button($link='Back', $class_list='btn btn-outline-secondary ml-auto mb-1') {
+function page_back_button($link='Back', $class_list='btn btn-outline-primary ml-auto mb-1 ml-1') {
   $url = '';
 
   if (isset($_SERVER['HTTP_REFERER']) && isset($_SERVER['HTTP_HOST'])) {

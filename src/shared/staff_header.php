@@ -33,3 +33,15 @@ if (!isset($page_title) || $page_title == '') {
       </div>
     </nav>
   </header>
+
+  <div class="container-xl">
+    <div class="page-admin">
+
+      <div class="row">
+        <div class="topbox col-12 pt-3">
+          <?php echo display_session_message('alert alert-success alert-dismissible py-3 my-2 text-center h4 '); ?>
+        </div>
+      </div>
+
+    <!--div1 Must be closed in Footer-->
+  <!--div2 Must be closed in Footer-->
