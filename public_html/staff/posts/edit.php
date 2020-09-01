@@ -19,9 +19,7 @@ if (is_post_request()) {
   $post->fileInstance($image);
   $post->mergeAttributes($_POST['post']);
 
-  $result = $post->save();
-
-  if ($result === true) {
+  if ($post->save()) {
     $session->message("Post was updated, you can view it by clicking on its title!");
     redirect_to(url_for('/staff/posts/index.php'));
   }

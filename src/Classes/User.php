@@ -8,12 +8,15 @@ use App\Classes\Token;
 class User extends \App\Classes\DatabaseObject {
 
   static protected $table_name = 'users';
-  static protected $db_columns = ['id','user_type','username','email','email_confirmed','hashed_password','created_at','password_reset_hash','password_reset_expires_at','email_confirm_hash','email_confirm_expires_at'];
+  static protected $db_columns = ['id','user_type','username','email','about_image','about_text','about_appear','email_confirmed','hashed_password','created_at','password_reset_hash','password_reset_expires_at','email_confirm_hash','email_confirm_expires_at'];
 
   public $id;
   public $user_type;
   public $username;
   public $email;
+  public $about_image;
+  public $about_text;
+  public $about_appear;
   protected $email_confirmed;
   protected $hashed_password;
   protected $password_reset_hash;
@@ -28,11 +31,20 @@ class User extends \App\Classes\DatabaseObject {
   protected $password_required = true;
   public $empty_password_field = true;
 
+  protected $image_object;
+
   public function __construct(array $args=[]) {
     $this->username = $args['username'] ?? '';
     $this->email = $args['email'] ?? '';
     $this->password = $args['password'] ?? '';
     $this->confirm_password = $args['confirm_password'] ?? '';
+    $this->about_image = $args['about_image'] ?? '';
+    $this->about_text = $args['about_text'] ?? '';
+    $this->about_appear = $args['about_appear'] ?? '';
+  }
+
+  public function fileInstance(File $image_obj) {
+    $this->image_obj = $image_obj;
   }
 
   protected function setHashedPassword() {
@@ -59,6 +71,16 @@ class User extends \App\Classes\DatabaseObject {
     return parent::update();
   }
 
+  public function beforeValidation($attr) {
+    foreach($attr as $prop => $value) {
+      if ($prop === 'about_appear') {
+        $this->filterCheckboxValue($prop);
+        $attr[$prop] = $this->about_appear;
+      }
+    }
+    return $attr;
+  }
+
   protected function validate() {
     $this->errors = [];
 
@@ -78,6 +100,10 @@ class User extends \App\Classes\DatabaseObject {
       $this->errors[] = "Email must be a valid format."; // ru Эл.адрес должен иметь соответствующий формат.
     } elseif(!has_unique_email($this->email, $this->id ?? 0)) {
       $this->errors[] = "Email already exists."; // ru Пользователь с данным эл.адресом зарегестрирован.
+    }
+
+    if (has_length_greater_than($this->about_text, 10000)) {
+      $this->errors[] = "About text cannot contain more than 10000 characters.";
     }
 
     if ($this->password_required) {
@@ -104,6 +130,33 @@ class User extends \App\Classes\DatabaseObject {
     }
 
     return (empty($this->errors) == true);
+  }
+
+  public function save() {
+    if (!isset($this->image_obj)) return parent::save();
+    $create = (!isset($this->id) == true);
+    $update = (isset($this->id) && $this->image_obj->isFileSelected() == true);
+    if (!$create && !$update) return parent::save();
+
+    $image_error = $this->handleImageUpload('about_image');
+
+    if ($image_error !== false) {
+      $this->errors[] = $image_error;
+      return false;
+
+    } else {
+      $old_image = $update ? $this->image : false;
+      $this->image = $this->image_obj->getFileInfo()['about_image'];
+      
+      if (parent::save()) {
+        if ($old_image) $this->image_obj->remove($old_image);
+        return true;
+
+      } else {
+        $this->image_obj->remove($this->image);
+        return false;
+      }
+    }
   }
 
   public function isAdmin() {
@@ -246,6 +299,14 @@ class User extends \App\Classes\DatabaseObject {
     $result->free();
 
     return $users;    
+  }
+
+  protected function filterCheckboxValue($property) {
+    if (in_array($this->$property, ['on','1','checked'])) {
+      $this->$property = '1';
+    } else {
+      $this->$property = '0';
+    }
   }
 
 }

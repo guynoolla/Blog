@@ -37,7 +37,7 @@ $edit = isset($post->id) ? true : false;
     <input type="text" name="post[title]" value="<?php echo h($post->title) ?>" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
   </div>
   <div class="form-group">
-    <label for="exampleFormControlTextarea1">Content</label>
+    <label for="postBody">Content</label>
     <ul class="list-group list-group-horizontal-md" style="margin-bottom:1px">
       <li class="list-group-item bg-muted-lk">
         <span class="font-weight-bold text-secondary">HTML</span>
@@ -54,19 +54,19 @@ $edit = isset($post->id) ? true : false;
         <a href="https://vimeo.com" class="text-muted">Vimeo</a>
       </li>
     </ul>
-    <textarea name="post[body]" value="<?php $post->body ?>" class="form-control" id="exampleFormControlTextarea1" rows="10"><?php echo $post->body ?></textarea>
+    <textarea name="post[body]" value="<?php $post->body ?>" class="form-control" id="postBody" rows="10"><?php echo $post->body ?></textarea>
     <small id="bodyHelp" class="form-text text-muted">External links are not allowed excerpt YouTube and Vimeo video links.</small>
   </div>
 
   <div class="form-group">
-    <label for="exampleFormControlFile1">Select Post Image</label>
+    <label for="image">Select Post Image</label>
     <?php if ($edit && $post->image): ?>
       <div class="d-flex align-items-bottom">
         <h5>Image: <?php echo $post->image ?></h5>
         <img class="ml-auto" id="postImage" src="<?php echo url_for('/assets/images/' . $post->image) ?>" style="width:200px;height:auto;">
       </div>
     <?php endif; ?>
-    <input type="file" name="image" class="form-control-file" id="exampleFormControlFile1">
+    <input type="file" name="image" class="form-control-file" id="image">
   </div>
   <div class="form-group mt-4">
     <select class="form-control" name="post[topic_id]">
@@ -83,11 +83,11 @@ $edit = isset($post->id) ? true : false;
     </select>
   </div>
   <div class="custom-control custom-switch mt-4">
-    <input name="post[published]" type="checkbox" class="custom-control-input" id="customSwitch1" <?php echo ($post->published == '1' ? 'checked' : '') ?>>
+    <input name="post[published]" type="checkbox" class="custom-control-input" id="publishSwitch"<?php echo ($post->published == '1' ? ' checked' : '') ?>>
     <?php if ($post->published == '' || $post->published == '0'): ?>
-      <label class="custom-control-label" for="customSwitch1">Publish</label>
+      <label class="custom-control-label" for="publishSwitch">Publish</label>
     <?php else: ?>
-      <label class="custom-control-label" for="customSwitch1">Published</label>
+      <label class="custom-control-label" for="publishSwitch">Published</label>
     <?php endif; ?>
     <small id="switchHelp" class="form-text small-nicer-lk">If it is not switched post will be saved as draft</small>
   </div>

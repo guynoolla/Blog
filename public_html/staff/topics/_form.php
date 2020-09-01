@@ -14,12 +14,12 @@
   <?php endif; ?>
   
   <div class="form-group">
-    <label for="exampleInputEmail1">Name</label>
-    <input type="text" name="topic[name]" value="<?php echo h($topic->name) ?>" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    <label for="email">Name</label>
+    <input type="text" name="topic[name]" value="<?php echo h($topic->name) ?>" class="form-control" id="email" aria-describedby="emailHelp">
   </div>
   <div class="form-group">
-    <label for="exampleFormControlTextarea1">Description</label>
-    <textarea name="topic[description]" value="<?php echo h($topic->description) ?>" class="form-control" id="exampleFormControlTextarea1" rows="5">
+    <label for="description">Description</label>
+    <textarea name="topic[description]" value="<?php echo h($topic->description) ?>" class="form-control" id="description" rows="5">
       <?php echo $topic->description ?>
     </textarea>
   </div>

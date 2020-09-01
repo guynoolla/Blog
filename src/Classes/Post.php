@@ -80,7 +80,10 @@ class Post extends \App\Classes\DatabaseObject {
       $this->errors[] = 'Post has not allowed html tag(s).';
     }
     if (has_external_link($this->body, $this->allowable_hosts)) {
-      $this->errors[] = 'Post cannot contain external links except YouTube and Vimeo';
+      $this->errors[] = 'Post cannot contain external links except YouTube and Vimeo.';
+    }
+    if (has_length_greater_than($this->body, 65000)) {
+      $this->errors[] = 'Post cannot contain more than 65000 characters.';
     }
 
     if (($count = $this->videoUrlsCount()) > 3) {
