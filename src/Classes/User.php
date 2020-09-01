@@ -234,5 +234,19 @@ class User extends \App\Classes\DatabaseObject {
     return $this->save();
   }
 
+  static public function queryUsersWithPostsNum() {
+    $sql = "SELECT u.*, COUNT(p.user_id) AS posted";
+    $sql .= " FROM users AS u LEFT JOIN posts AS p";
+    $sql .= " ON u.id = p.user_id GROUP BY u.username";
+    $result = self::$database->query($sql);
+    $users = [];
+    while($obj = $result->fetch_object()) {
+      $users[] = $obj;
+    }
+    $result->free();
+
+    return $users;    
+  }
+
 }
 ?>

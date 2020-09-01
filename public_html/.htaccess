@@ -6,5 +6,6 @@ RewriteEngine on
 RewriteRule ^(home)/?$ index.php [L]
 RewriteRule ^post/(.*)/?$ single.php?id=$1 [QSA] [L] 
 RewriteRule ^topic/(.*)/?$ index.php?id=$1 [QSA] [L]
+RewriteRule ^preview/(.*)/?$ single.php?id=$1 [QSA] [L]
 
 </IfModule>

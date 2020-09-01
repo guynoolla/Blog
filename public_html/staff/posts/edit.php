@@ -22,8 +22,8 @@ if (is_post_request()) {
   $result = $post->save();
 
   if ($result === true) {
-    $session->message("Post '" . $post->title . "' was updated!");
-    redirect_to(url_for('/staff/posts/edit.php?id=' . $post->id));
+    $session->message("Post was updated, you can view it by clicking on its title!");
+    redirect_to(url_for('/staff/posts/index.php'));
   }
 
 } else {

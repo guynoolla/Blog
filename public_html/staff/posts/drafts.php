@@ -15,7 +15,7 @@ if (isset($_GET['id'])) {
   $post = Post::findById($_GET['id']);
 
   if (!$cmd || !$post) {
-    redirect_to(url_for('/staff/posts/unproved.php'));
+    redirect_to(url_for('/staff/posts/published.php'));
   }
 
   if ($cmd == 'delete') {
@@ -29,10 +29,11 @@ if (isset($_GET['id'])) {
 
 $posts = Post::findWhere(
   ['published' => 0],
-  ['updated_at' => 'DESC']
+  ['updated_at' => 'DESC'],
+  'user_id != ' . $session->getUserId()
 );
 
-$page_title = 'Draft Posts';
+$page_title = 'Author\'s Posts: drafts';
 include SHARED_PATH . '/staff_header.php';
 require '_common-posts-html.php';
 
@@ -46,10 +47,10 @@ require '_common-posts-html.php';
     <div class="main-content">
       <?php echo page_back_button() ?>
       
-      <h2 style="text-align: center;"><?php echo $page_title ?></h2>
+      <h2 style="text-align: center;">Author's Posts: <em class="text-secondary">drafts</em></h2>
 
       <?php if (empty($posts)): ?>
-        <p class="lead">You have not posts yet.</p>
+        <p class="lead">No posts here.</p>
       
       <?php else: ?>
         <?php echo display_session_message('msg success') ?>
@@ -70,11 +71,7 @@ require '_common-posts-html.php';
             <?php foreach($posts as $key => $post): ?>
               <tr>
                 <th scope="row"><?php echo $key + 1 ?></th>
-                <td>
-                  <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
-                    <?php echo $post->title ?>
-                  </a>
-                </td>
+                <?php echo td_post_title($post) ?>
                 <td>
                   <?php $user = User::findById($post->user_id) ?>
                   <a><?php echo h($user->username) ?></a>

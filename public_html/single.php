@@ -52,6 +52,9 @@ include(SHARED_PATH . '/public_header.php');
       <div class="main-content">
           <div class="lg-one-article-row">
             <article>
+              <div class="w-100 text-center border-bottom py-1 rounded bg-gray-lk">
+                <a class="btn btn-outline-secondary" href="<?php echo url_for('staff/posts/edit.php') . '?id=' . $post->id . '&cmd=edit' ?>">Edit</a>
+              </div>
               <div class="post">
                 <div class="post-item-wrap">
                     <div class="post-item-inner">
@@ -78,7 +81,9 @@ include(SHARED_PATH . '/public_header.php');
       </div> <!--main content-->
     </main> <!-- main -->
 
-    <?php include SHARED_PATH . '/aside.php' ?>
+    <aside class="sidebar col-lg-4" role="complementary">    
+      <?php include SHARED_PATH . '/aside.php' ?>
+    </aside>
 
   </div>
 </div> <!--container-->

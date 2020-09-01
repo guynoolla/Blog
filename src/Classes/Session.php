@@ -50,7 +50,7 @@ class Session {
   }
 
   private function checkStoredLogin() {
-    if(isset($_SESSION['user_id'])) {
+    if (isset($_SESSION['user_id'])) {
       $this->user_id = $_SESSION['user_id'];
       $this->username = $_SESSION['username'];
       $this->last_login = $_SESSION['last_login'];

@@ -9,24 +9,47 @@ require_once('../../../src/initialize.php');
 if (require_login()) redirect_to(url_for('login.php'));
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Check Logged In
 
+// Check Admin >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 if (isset($_GET['id'])) {
 
   $cmd = $_GET['cmd'] ?? false;
   $post = Post::findById($_GET['id']);
 
-  if (!$cmd || !$post) {
-    redirect_to(url_for('/staff/posts/index.php'));
-  }
+  if (!$cmd || !$post) redirect_to(url_for('staff/index.php'));
 
-  if ($cmd == 'unpublish') {
-    $post->published = '0';
-    if ($post->save() === true) {
-      $session->message("The post '" . $post->title . "' was unpublished.");
-      redirect_to(url_for('/staff/posts/index.php'));
+  if ($session->isAdmin()) {
+    $message = '';
+
+    if ($cmd == 'publish') {
+      $post->published = '1';
+      $message = "The post '" . $post->title . "' was published.";
+
+    } elseif ($cmd == 'unpublish') {
+      $post->published = '0';
+      $message = "The post '" . $post->title . "' was unpublished.";
+    
+    } elseif ($cmd == 'prove') {
+      $post->proved = '1';
+      $message = "The post '" . $post->title . "' was proved.";
+
+    } elseif ($cmd == 'disprove') {
+      $post->proved = '0';
+      $message = "The post '" . $post->title . "' was disproved.";
+    }
+
+    if ($message && $post->save()) {
+      $session->message($message);
+      redirect_to(url_for('staff/posts/index.php'));
     }
   }
 
+  if ($cmd == 'edit') {
+    redirect_to(url_for('staff/posts/edit.php?id=' . $_GET['id']));
+  }
+
 }
+
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Check Admin
 
 $posts = Post::findWhere(
   ['user_id' => $session->getuserId()],
@@ -51,7 +74,7 @@ require '_common-posts-html.php';
       <h2 style="text-align: center;"><?php echo $page_title ?></h2>
 
       <?php if (empty($posts)): ?>
-        <p class="lead">You have not posts yet.</p>
+        <p class="lead">No posts here.</p>
       
       <?php else: ?>
         <?php echo display_session_message('msg success') ?>
@@ -60,29 +83,24 @@ require '_common-posts-html.php';
           <thead class="bg-muted-lk text-muted">
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Title</th>
-              <th scope="col">Author</th>
+              <th scope="colgroup" colspan="2">Title</th>
               <th scope="col">Status</th>
               <th scope="col">Edited</th>
-              <th scope="colgroup" colspan="2">Action</th>
+              <th scope="colgroup" colspan="3">Action</th>
             </tr>
           </thead>
           <tbody>
             <?php foreach($posts as $key => $post): ?>
               <tr>
                 <th scope="row"><?php echo $key + 1 ?></th>
-                <td>
-                  <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
-                    <?php echo $post->title ?>
-                  </a>
-                </td>
-                <td><?php echo (User::findById($post->user_id))->username ?></td>
+                <?php echo td_post_title($post, true) ?>
                 <?php echo td_post_status($post) ?>
                 <td>
                   <span><?php echo date('M j, Y', strtotime($post->updated_at)) ?></span>
                 </td>
-                <?php echo td_colgroup_actions($post) ?>
-                <?php echo td_colgroup_actions_admin($post) ?>
+
+                <?php echo td_action_edit($post, $session->isAdmin()) ?>
+                <?php echo td_action_prove($post, $session->isAdmin()) ?>
               </tr>
             <?php endforeach; ?>
           </tbody>

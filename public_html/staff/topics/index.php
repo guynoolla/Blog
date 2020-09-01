@@ -60,7 +60,7 @@ require '../_common-html.php';
             <?php foreach($topics as $key => $topic): ?>
               <tr>
                 <th scope="row"><?php echo $key + 1 ?></th>
-                <td><a href="#"><?php echo $topic->name ?></a></td>
+                <td><span class="h5"><?php echo $topic->name ?></span></td>
                 <td><?php echo $topic->description ?></td>
                 <td scope="colgroup" colspan="1">
                   <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('/staff/topics/edit.php?id=' . $topic->id) ?>">

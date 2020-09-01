@@ -64,8 +64,6 @@ $(document).ready(() => {
     }
   })
 
-  $(".sidebar").height($(".page-admin").height());
-
 });
 
 /**

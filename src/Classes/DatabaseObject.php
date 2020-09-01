@@ -61,7 +61,8 @@ class DatabaseObject {
     return static::findBySql($sql);
   }
 
-  static public function findById(string $id) {
+  static public function findById($id) {
+    $id = strval($id);
     $sql = "SELECT * FROM " . static::$table_name;
     $sql .= " WHERE id='" . self::escape($id) . "'";
     $obj_array = static::findBySql($sql);
@@ -156,18 +157,26 @@ class DatabaseObject {
     return $result;
   }
 
-  static public function findWhere(array $where=[], array $order=[]) {
+  static public function findWhere(array $where=[], array $order=[], string $not_equal='') {
     $sql = "SELECT * FROM " . static::$table_name;
     $sql = self::concatWhereToSql($sql, $where);
+    if ($not_equal != '') {
+      if (!empty($where)) $sql .= ' AND ' . $not_equal;
+      else $sql .= ' WHERE ' . $not_equal;
+    }
     if (!empty($order)) {
       $sql .= " ORDER BY " . key($order) . " " . $order[key($order)];
     }
     return static::findBySql($sql);
   }
 
-  static public function countAll($where=[]) {
+  static public function countAll($where=[], string $not_equal='') {
     $sql = "SELECT COUNT(*) FROM " . static::$table_name;
     $sql = self::concatWhereToSql($sql, $where);
+    if ($not_equal != '') {
+      if (!empty($where)) $sql .= ' AND ' . $not_equal;
+      else $sql .= ' WHERE ' . $not_equal;
+    }
     $result_set = self::$database->query($sql);
     $row = $result_set->fetch_array();
     return array_shift($row);
@@ -181,7 +190,7 @@ class DatabaseObject {
         if ($i > 0) {
           $sql .= " AND $key = '" . self::escape($value) . "'";
         } else {
-          $sql .= " WHERE $key='" . self::escape($value) . "'";
+          $sql .= " WHERE $key = '" . self::escape($value) . "'";
         }
         $i++;
       }

@@ -54,9 +54,7 @@ $edit = isset($post->id) ? true : false;
         <a href="https://vimeo.com" class="text-muted">Vimeo</a>
       </li>
     </ul>
-    <textarea name="post[body]" value="<?php $post->body ?>" class="form-control" id="exampleFormControlTextarea1" rows="10">
-      <?php echo $post->body ?>
-    </textarea>
+    <textarea name="post[body]" value="<?php $post->body ?>" class="form-control" id="exampleFormControlTextarea1" rows="10"><?php echo $post->body ?></textarea>
     <small id="bodyHelp" class="form-text text-muted">External links are not allowed excerpt YouTube and Vimeo video links.</small>
   </div>
 
@@ -85,7 +83,7 @@ $edit = isset($post->id) ? true : false;
     </select>
   </div>
   <div class="custom-control custom-switch mt-4">
-    <input name="post[published]" type="checkbox" class="custom-control-input" id="customSwitch1">
+    <input name="post[published]" type="checkbox" class="custom-control-input" id="customSwitch1" <?php echo ($post->published == '1' ? 'checked' : '') ?>>
     <?php if ($post->published == '' || $post->published == '0'): ?>
       <label class="custom-control-label" for="customSwitch1">Publish</label>
     <?php else: ?>
@@ -94,5 +92,10 @@ $edit = isset($post->id) ? true : false;
     <small id="switchHelp" class="form-text small-nicer-lk">If it is not switched post will be saved as draft</small>
   </div>
 
+  <?php
+    if ($session->isAdmin() && (!$post->published && !$post->proved)): ?>
+      <button type="submit" class="btn btn-danger ml-2 float-right">Delete</button><?php
+    endif;
+  ?>
   <button type="submit" class="btn btn-primary float-right">Save</button>
 </form>

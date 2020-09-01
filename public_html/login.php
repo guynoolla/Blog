@@ -56,7 +56,7 @@ include(SHARED_PATH . '/public_header.php');
             <legend class="mb-5 h1">Login</legend>
 
             <div class="form-group row mr-sm-0">
-              <label for="username" class="col-sm-4 col-form-label pl-1 pl-sm-3">Username</label>
+              <label for="username" class="col-sm-4 col-form-label pl-1 pl-sm-3">Username or Email</label>
               <input class="col-sm-8 form-control" id="username" type="text" name="username" value="">
             </div>
             <div class="form-group row mr-sm-0">

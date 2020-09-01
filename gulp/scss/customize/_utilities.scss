@@ -9,6 +9,10 @@ $warning-dark: darken(#f2a60e, 2);
   background-color: lighten(#444, 60) !important;
 }
 
+.bg-gray-lk {
+  background-color: #e1e5eb !important;
+}
+
 .small-nicer-lk {
   font-size: .9em !important;
   letter-spacing: .012em !important;
@@ -83,6 +87,23 @@ table tr td a.btn-lk {
       background-color: #fff !important;
     }    
   }
+
+  &--success {
+    background-color: #28a745;
+    &:hover, &:focus {
+      color: #28a745 !important;
+      border-color: #28a745 !important;
+      background-color: #fff !important;
+    }
+  }
+
+  &--light {
+    background-color: #fff !important;
+    &:hover, &:focus {
+      border-color: transparent !important;
+      background-color: transparent !important;
+    }
+  }
 }
 
 .bg-light-lk {
@@ -93,6 +114,12 @@ table tr td a.btn-lk {
     color: #5e5c5b !important;
   }
 } 
+
+.btn-outline-secondary {
+  &:hover {
+    color: #fff !important;
+  }
+}
 
 .hide {
   display: none !important;

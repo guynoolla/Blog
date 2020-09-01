@@ -15,15 +15,18 @@ if (isset($_GET['id'])) {
   $post = Post::findById($_GET['id']);
 
   if (!$cmd || !$post) {
-    redirect_to(url_for('/staff/posts/unproved.php'));
+    redirect_to(url_for('staff/posts/published.php'));
   }
 
-  if ($cmd == 'unpublish') {
+  if ($cmd == 'edit') {
+    redirect_to(url_for('staff/posts/edit.php?id=' . $_GET['id']));
+
+  } elseif ($cmd == 'unpublish') {
     $post->published = '0';
     
     if ($post->save() === true) {
       $session->message("Post '" . $post->title . "' was unpublished.");
-      redirect_to(url_for('/staff/posts/drafts.php'));
+      redirect_to(url_for('staff/posts/drafts.php'));
     }
 
   } elseif ($cmd == 'prove') {
@@ -31,22 +34,21 @@ if (isset($_GET['id'])) {
     
     if ($post->save() === true) {
       $session->message("Post '" . $post->title . "' was proved.");
-      redirect_to(url_for('/staff/posts/proved.php'));
-    } else {
-      dd('Cannot...');
+      redirect_to(url_for('staff/posts/proved.php'));
     }
-  }
+  } 
 
 }
 
 $posts = Post::findWhere(
-  ['published' => 1,'proved' => 0],
-  ['updated_at' => 'DESC']
+  ['published' => 1, 'proved' => 0],
+  ['updated_at' => 'DESC'],
+  'user_id != ' . $session->getUserId()
 );
 
-$page_title = 'Unproved Posts';
+$page_title = 'Author\'s Published Unproved Posts';
 include SHARED_PATH . '/staff_header.php';
-require '_common-posts-html.php'
+require '_common-posts-html.php';
 
 ?>
 <div class="row">
@@ -58,10 +60,10 @@ require '_common-posts-html.php'
     <div class="main-content">
       <?php echo page_back_button() ?>
 
-      <h2 style="text-align: center;"><?php echo $page_title ?></h2>
+      <h2 style="text-align: center;">Author's Posts: <em class="text-primary">published unproved</em></h2>
 
       <?php if (empty($posts)): ?>
-        <p class="lead">You have not posts yet.</p>
+        <p class="lead">No posts here.</p>
       
       <?php else: ?>
         <?php echo display_session_message('msg success') ?>
@@ -81,19 +83,17 @@ require '_common-posts-html.php'
             <?php foreach($posts as $key => $post): ?>
               <tr>
                 <th scope="row"><?php echo $key + 1 ?></th>
-                <td>
-                  <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
-                    <?php echo $post->title ?>
-                  </a>
-                </td>
+                <?php echo td_post_title($post) ?>
                 <td><?php echo (User::findById($post->user_id))->username ?></td>
                   <?php echo td_post_status($post) ?>
                 </td>
                 <td>
                   <span><?php echo date('M j, Y', strtotime($post->updated_at)) ?></span>
                 </td>
-                <?php echo td_colgroup_actions($post); ?>
-                <?php echo td_colgroup_actions_admin($post); ?>
+                <?php
+                  echo td_action_edit($post, $session->isAdmin());
+                  echo td_action_prove($post, $session->isAdmin());
+                ?>
               </tr>
             <?php endforeach; ?>
           </tbody>
