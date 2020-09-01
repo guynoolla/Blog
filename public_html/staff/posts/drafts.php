@@ -28,7 +28,8 @@ if (isset($_GET['id'])) {
 }
 
 $posts = Post::queryPostsWithUsernames([
-  'published' => 0, 'user_id' => ['!=' => $session->getUserId()]
+  'published' => 0,
+  'user_id' => ['!=' => $session->getUserId()]
 ],
   ' ORDER BY updated_at DESC'
 );

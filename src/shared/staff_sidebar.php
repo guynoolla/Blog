@@ -1,5 +1,4 @@
 <?php
-// Left Sidebar
 
 use App\Classes\Post;
 

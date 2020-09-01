@@ -81,7 +81,7 @@ include(SHARED_PATH . '/public_header.php');
       </div> <!--main content-->
     </main> <!-- main -->
 
-    <aside class="sidebar col-lg-4" role="complementary">    
+    <aside class="sidebar col-lg-4" role="complementary">  
       <?php include SHARED_PATH . '/aside.php' ?>
     </aside>
 

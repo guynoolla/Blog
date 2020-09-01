@@ -90,16 +90,16 @@ require '../_common-html.php';
                 <hr class="mt-5">
                 <h4 class="text-center">About Author</h4>
                 <div class="form-group row mr-sm-0">
-                  <label for="about_image" class="col-sm-4 pl-0 pl-sm-3">Your Image</label>
+                  <label for="about_image" class="col-sm-4 pl-0 pt-3 pl-sm-3">Your Image</label>
                   <?php if (isset($user->about_image)): ?>
-                    <div class="d-flex align-items-bottom">
-                      <h5>Image: <?php echo $user->about_image ?></h5>
-                      <img class="ml-auto" id="aboutImage" src="<?php echo url_for('/assets/images/' . $user->about_image) ?>" style="width:200px;height:auto;">
+                    <div class="col-sm-8">
+                      <h5 class="my-0">Image: <?php echo $user->about_image ?></h5>
+                      <img class="d-block float-left my-3" id="aboutImage" src="<?php echo url_for('/assets/images/' . $user->about_image) ?>" style="width:160px;height:auto;">
                     </div>
                   <?php endif; ?>
                   <input class="col-sm-8 form-control-file" type="file" name="about_image" id="about_image">
                 </div>
-                <div class="form-group row mr-sm-0">
+                <div class="form-group row mr-sm-0 mt-5">
                   <label for="aboutText" class="col-sm-4 pl-0 pl-sm-3">About Text</label>
                   <textarea class="col-sm-8 form-control" name="user[about_text]" value="" id="aboutText" rows="5"><?php echo $user->about_text ?></textarea>
                 </div>

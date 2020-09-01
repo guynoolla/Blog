@@ -55,6 +55,14 @@ class File {
 		}
 	}
 
+	public function handleUpload($field_name) {
+    if (!$this->isFileUploaded()) {
+      return $this->getUploadError();
+    } else {
+      return $this->moveFile($field_name);
+    }
+	}
+
 	public function moveFile($attr) {
 		$error = false;
 

@@ -1,20 +1,38 @@
-<div class="sidebar-content">
+<?php
 
-  <section class="widget mt-5">
-    <h3 class="title">About Me</h3>
+use App\Classes\User;
+use App\Classes\Post;
+use App\Classes\Topic;
 
-    <div class="about-widget">
-      <div class="about-image">
-        <img src="/assets/images/6.jpg" alt="About Us">
+if (isset($post)) $user = User::findById($post->user_id);
+
+$posts = App\Classes\Post::findWhere(
+  ['published' => '1'],
+  'ORDER BY RAND() LIMIT 3'
+);
+
+$topics = Topic::findAll();
+
+?>
+<div class="sidebar-content mt-2 pt-1">
+
+  <?php if ($user->about_appear): ?>
+    <section class="widget mt-5">
+      <h3 class="title mb-3">About Author</h3>
+
+      <div class="about-widget">
+        <div class="about-image d-flex align-items-center justify-content-center">
+          <img class="rounded-circle" src="<?php echo url_for('assets/images' . $user->about_image) ?>" alt="About Us">
+        </div>
+        <div class="about-text">
+          <p><?php echo $user->about_text ?></p>
+        </div>
       </div>
-      <div class="about-text">
-        <p>My name is Light Kite and I am an awesome blog theme for photography, food, travel and other blogs. I was created by Gainulla.</p>
-      </div>
-    </div>
-  </section>
+    </section>
+  <?php endif; ?>
 
   <section class="widget">
-    <h3 class="title mt-5">Follow Me</h3>
+    <h3 class="title">Follow Me</h3>
 
     <div class="social-links-widget more-space-between">
       <?php include '_social_links_list.php' ?>
@@ -25,39 +43,20 @@
     <h3 class="title">Recent Posts</h3>
 
     <div class="recent-posts-widget">
-
-      <div class="post">
-        <div class="post-image ">
-          <a href="https://colorlib.com/activello/post-format-standard/">
-            <img width="150" height="150" src="https://colorlib.com/activello/wp-content/uploads/sites/10/2015/11/photo-1438109491414-7198515b166b-150x150.jpg" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" loading="lazy" srcset="https://colorlib.com/activello/wp-content/uploads/sites/10/2015/11/photo-1438109491414-7198515b166b-150x150.jpg 150w, https://colorlib.com/activello/wp-content/uploads/sites/10/2015/11/photo-1438109491414-7198515b166b-180x180.jpg 180w, https://colorlib.com/activello/wp-content/uploads/sites/10/2015/11/photo-1438109491414-7198515b166b-300x300.jpg 300w, https://colorlib.com/activello/wp-content/uploads/sites/10/2015/11/photo-1438109491414-7198515b166b-600x600.jpg 600w" sizes="(max-width: 150px) 100vw, 150px">
-          </a>
-        </div> 
-        <div class="post-content">
-          <a href="https://colorlib.com/activello/post-format-standard/">Post Format: Standard</a>
-          <span class="date">- 05 Oct , 2016</span>
+      <?php foreach ($posts as $post): ?>
+        <div class="post">
+          <div class="post-image ">
+            <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
+<!-- class="attachment-thumbnail size-thumbnail wp-post-image" alt="" loading="lazy" srcset="https://colorlib.com/activello/wp-content/uploads/sites/10/2015/11/photo-1438109491414-7198515b166b-150x150.jpg 150w, https://colorlib.com/activello/wp-content/uploads/sites/10/2015/11/photo-1438109491414-7198515b166b-180x180.jpg 180w, https://colorlib.com/activello/wp-content/uploads/sites/10/2015/11/photo-1438109491414-7198515b166b-300x300.jpg 300w, https://colorlib.com/activello/wp-content/uploads/sites/10/2015/11/photo-1438109491414-7198515b166b-600x600.jpg 600w" sizes="(max-width: 150px) 100vw, 150px" -->
+              <img width="150" height="150" src="<?php echo url_for('assets/images' . $post->image) ?>" style="object-fit:cover">
+            </a>
+          </div> 
+          <div class="post-content">
+            <a href="https://colorlib.com/activello/post-format-standard/">Post Format: Standard</a>
+            <span class="date">- 05 Oct , 2016</span>
+          </div>
         </div>
-      </div>
-
-      <div class="post">
-        <div class="post-image gallery">
-          <a href="https://colorlib.com/activello/post-format-gallery/"><img width="150" height="150" src="https://colorlib.com/activello/wp-content/uploads/sites/10/2015/11/photo-1429734160945-4f85244d6a5a-150x150.jpg" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" loading="lazy" srcset="https://colorlib.com/activello/wp-content/uploads/sites/10/2015/11/photo-1429734160945-4f85244d6a5a-150x150.jpg 150w, https://colorlib.com/activello/wp-content/uploads/sites/10/2015/11/photo-1429734160945-4f85244d6a5a-180x180.jpg 180w, https://colorlib.com/activello/wp-content/uploads/sites/10/2015/11/photo-1429734160945-4f85244d6a5a-300x300.jpg 300w, https://colorlib.com/activello/wp-content/uploads/sites/10/2015/11/photo-1429734160945-4f85244d6a5a-600x600.jpg 600w" sizes="(max-width: 150px) 100vw, 150px"></a>
-        </div> 
-        <div class="post-content">
-          <a href="https://colorlib.com/activello/post-format-gallery/">Post Format: Gallery</a>
-          <span class="date">- 12 Nov , 2015</span>
-        </div>
-      </div>
-
-      <div class="post">
-        <div class="post-image ">
-          <a href="https://colorlib.com/activello/template-featured-image-vertical/"><img width="150" height="150" src="https://colorlib.com/activello/wp-content/uploads/sites/10/2012/03/photo-1437915015400-137312b61975-150x150.jpg" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" loading="lazy" srcset="https://colorlib.com/activello/wp-content/uploads/sites/10/2012/03/photo-1437915015400-137312b61975-150x150.jpg 150w, https://colorlib.com/activello/wp-content/uploads/sites/10/2012/03/photo-1437915015400-137312b61975-180x180.jpg 180w, https://colorlib.com/activello/wp-content/uploads/sites/10/2012/03/photo-1437915015400-137312b61975-300x300.jpg 300w, https://colorlib.com/activello/wp-content/uploads/sites/10/2012/03/photo-1437915015400-137312b61975-600x600.jpg 600w" sizes="(max-width: 150px) 100vw, 150px"></a>
-        </div> 
-        <div class="post-content">
-          <a href="https://colorlib.com/activello/template-featured-image-vertical/">Template: Featured Image (No Sidebar Layout)</a>
-          <span class="date">- 11 Nov , 2015</span>
-        </div>
-      </div>
-
+      <?php endforeach; ?>
     </div>
   </section>
 
@@ -80,26 +79,14 @@
     
     <div class="cats-widget">
       <ul>
-        <li class="cat-item">
-          <a href="https://colorlib.com/activello/category/post-formats/" title="Posts in this category test post formats.">Post Formats</a>
-          <span>11</span>
-        </li>
-        <li class="cat-item">
-          <a href="https://colorlib.com/activello/category/template-2/" title="Posts with template-related tests">Template</a>
-          <span>5</span>
-        </li>
-        <li class="cat-item">
-          <a href="https://colorlib.com/activello/category/cat-a/">Cat A</a>
-          <span>3</span>
-        </li>
-        <li class="cat-item">
-          <a href="https://colorlib.com/activello/category/edge-case-2/" title="Posts that have edge-case related tests">Edge Case</a>
-          <span>3</span>
-        </li>
-        <li class="cat-item">
-          <a href="https://colorlib.com/activello/category/cat-b/">Cat B</a>
-          <span>2</span>
-        </li>
+        <?php foreach ($topics as $topic): ?>
+          <li class="cat-item">
+            <a href="#" title="<?php $topic->name ?>"><?php echo $topic->name ?></a>
+            <span><?php echo Post::countAll(
+              ['topic_id' => $topic->id, 'proved' => '1']
+            ) ?></span>
+          </li>
+        <?php endforeach; ?>
       </ul>
     </div>
   </section>

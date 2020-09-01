@@ -54,10 +54,18 @@ include SHARED_PATH . '/carousel.php';
     
     <main class="main col-lg-8" role="main">
       <div class="main-content">
-        <?php
+        
+        <?php $total = count($posts);
+        
         foreach ($posts as $idx => $post):
           $num = $idx + 1;
-          if ($num <= 2): // first & second posts go here
+          $grow = false;
+
+          if (($idx + 1) == $total) {
+            $grow = (isset($posts_inside) && $posts_inside == 0);
+          } 
+          
+          if ($num <= 2 || $grow): // first & second posts go here
             ?>
             <div class="lg-one-article-row">
               <article>

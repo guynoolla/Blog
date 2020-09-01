@@ -22,7 +22,7 @@ class Post extends \App\Classes\DatabaseObject {
 
   protected $image_obj; // File class instance
   
-  public $allowable_tags = '<p><br><img><a><strong><em><ul><li><blockquote>';
+  public $allowable_tags = '<h2><h3><h4><p><br><img><a><strong><em><ul><li><blockquote>';
   public $allowable_hosts = ['www.youtube.com','youtube.com','youtu.be','vimeo.com'];
 
   public function __construct(array $args=[]) {
@@ -144,7 +144,7 @@ class Post extends \App\Classes\DatabaseObject {
     $update = (isset($this->id) && $this->image_obj->isFileSelected() == true);
     if (!$create && !$update) return parent::save();
 
-    $image_error = $this->handleImageUpload('image');
+    $image_error = $this->image_obj->handleUpload('image');
 
     if ($image_error !== false) {
       $this->errors[] = $image_error;
@@ -162,14 +162,6 @@ class Post extends \App\Classes\DatabaseObject {
         $this->image_obj->remove($this->image);
         return false;
       }
-    }
-  }
-
-  protected function handleImageUpload($prop) {
-    if (!$this->image_obj->isFileUploaded()) {
-      return $this->image_obj->getUploadError();
-    } else {
-      return $this->image_obj->moveFile($prop);
     }
   }
 

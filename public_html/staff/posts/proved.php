@@ -2,6 +2,7 @@
 use App\Classes\Post;
 use App\Classes\File;
 use App\Classes\User;
+use App\Classes\Pagination;
 
 require_once('../../../src/initialize.php');
 
@@ -27,10 +28,16 @@ if (isset($_GET['id'])) {
 
 }
 
-$posts = Post::findWhere(
-  ['proved' => 1],
-  'ORDER BY updated_at DESC'
-);
+$current_page = $_GET['page'] ?? 1;
+$per_page = 4;
+$total_count = Post::countAll(['proved' => '1']);
+$pagination = new Pagination($current_page, $per_page, $total_count);
+
+$sql = "SELECT * FROM posts WHERE proved='1'";
+$sql .= " ORDER BY updated_at DESC";
+$sql .= " LIMIT {$per_page}";
+$sql .= " OFFSET {$pagination->offset()}";
+$posts = Post::findBySql($sql);
 
 $page_title = 'Author\'s Published Proved Posts';
 include SHARED_PATH . '/staff_header.php';
@@ -88,7 +95,12 @@ require '_common-posts-html.php';
             <?php endforeach; ?>
           </tbody>
         </table>
-  
+        
+        <?php
+          $url = url_for('staff/posts/proved.php');
+          echo $pagination->page_links($url);
+        ?>
+
       <?php endif; ?>
 
     </div>

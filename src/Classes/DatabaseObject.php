@@ -157,10 +157,10 @@ class DatabaseObject {
     return $result;
   }
 
-  static public function findWhere(array $where=[], string $to_end="") {
+  static public function findWhere(array $where=[], string $append="") {
     $sql = "SELECT * FROM " . static::$table_name;
     $sql = self::concatWhereToSql($sql, $where);
-    if ($to_end != "") $sql .= $to_end;
+    if ($append != "") $sql .= $append;
 
     return static::findBySql($sql);
   }

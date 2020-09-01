@@ -31,7 +31,7 @@ class User extends \App\Classes\DatabaseObject {
   protected $password_required = true;
   public $empty_password_field = true;
 
-  protected $image_object;
+  protected $image_obj;
 
   public function __construct(array $args=[]) {
     $this->username = $args['username'] ?? '';
@@ -138,22 +138,22 @@ class User extends \App\Classes\DatabaseObject {
     $update = (isset($this->id) && $this->image_obj->isFileSelected() == true);
     if (!$create && !$update) return parent::save();
 
-    $image_error = $this->handleImageUpload('about_image');
+    $image_error = $this->image_obj->handleUpload('about_image');
 
     if ($image_error !== false) {
       $this->errors[] = $image_error;
       return false;
 
     } else {
-      $old_image = $update ? $this->image : false;
-      $this->image = $this->image_obj->getFileInfo()['about_image'];
+      $old_image = $update ? $this->about_image : false;
+      $this->about_image = $this->image_obj->getFileInfo()['about_image'];
       
       if (parent::save()) {
         if ($old_image) $this->image_obj->remove($old_image);
         return true;
 
       } else {
-        $this->image_obj->remove($this->image);
+        $this->image_obj->remove($this->about_image);
         return false;
       }
     }

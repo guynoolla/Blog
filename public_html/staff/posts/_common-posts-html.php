@@ -19,7 +19,9 @@ function td_action_edit($post, $is_admin=false) {
     <?php else:
       if (!$is_admin): ?>
         <a class="btn-lk btn-lk--light disabled text-center d-block">
-          <small class="text-dark">on moderation</small>
+          <small class="text-dark"><?php
+            echo ($post->proved ? '&mdash;' : 'on moderation')
+          ?></small>
         </a>
       <?php else:
         if ($url == 'staff/posts/index.php'): ?>

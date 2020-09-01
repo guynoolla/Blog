@@ -26,6 +26,7 @@ if (isset($_GET['id'])) {
 
     } elseif ($cmd == 'unpublish') {
       $post->published = '0';
+      $post->proved = '0';
       $message = "The post '" . $post->title . "' was unpublished.";
     
     } elseif ($cmd == 'prove') {
@@ -33,6 +34,7 @@ if (isset($_GET['id'])) {
       $message = "The post '" . $post->title . "' was proved.";
 
     } elseif ($cmd == 'disprove') {
+      $post->published = '0';
       $post->proved = '0';
       $message = "The post '" . $post->title . "' was disproved.";
     }

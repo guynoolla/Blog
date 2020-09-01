@@ -39,85 +39,12 @@ $warning-dark: darken(#f2a60e, 2);
   }
 }
 
-table tr td a.btn-lk {
-  color: #fff !important;
-  font-weight: normal !important;
-  text-transform: uppercase !important;
-  display: block !important;
-  text-align: center !important;
-  letter-spacing: .05em;
-  border: 1px solid transparent !important;
-  transition: border 300ms ease-in;
-  &:hover, &:focus {
-    color: $plum-color !important;
-  }
-
-  &--danger {
-    background-color: #dc3545;
-    &:hover, &:focus {
-      color: #dc3545 !important;
-      border-color: #dc3545 !important;
-      background-color: #fff !important;
-    }
-  }
-
-  &--secondary {
-    background-color: #6c757d !important;
-    &:hover, &:focus {
-      color: #6c757d !important;
-      border-color: #6c757d !important;
-      background-color: #fff !important;
-    }
-  }
-
-  &--primary {
-    background-color: #007bff !important;
-    &:hover, &:focus {
-      color: #007bff !important;
-      border-color: #007bff !important;
-      background-color: #fff !important;
-    }
-  }
-
-  &--warning {
-    background-color: $warning-dark !important;
-    &:hover, &:focus {
-      color: $warning-dark !important;
-      border-color: $warning-dark !important;
-      background-color: #fff !important;
-    }    
-  }
-
-  &--success {
-    background-color: #28a745;
-    &:hover, &:focus {
-      color: #28a745 !important;
-      border-color: #28a745 !important;
-      background-color: #fff !important;
-    }
-  }
-
-  &--light {
-    background-color: #fff !important;
-    &:hover, &:focus {
-      border-color: transparent !important;
-      background-color: transparent !important;
-    }
-  }
-}
-
 .bg-light-lk {
   background-color: $bg-light-lk !important;
   font-weight: 500 !important;
   color: #5e5c5b !important;
   a {
     color: #5e5c5b !important;
-  }
-} 
-
-.btn-outline-secondary {
-  &:hover {
-    color: #fff !important;
   }
 }
 
