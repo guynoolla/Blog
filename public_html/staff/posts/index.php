@@ -53,7 +53,7 @@ if (isset($_GET['id'])) {
 
 $posts = Post::findWhere(
   ['user_id' => $session->getuserId()],
-  ['updated_at' => 'DESC']
+  'ORDER BY updated_at DESC'
 );
 
 $page_title = ($session->isAdmin() ? 'Admin Posts' : 'User Posts');

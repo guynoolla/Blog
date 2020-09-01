@@ -29,7 +29,7 @@ if (isset($_GET['id'])) {
 
 $posts = Post::findWhere(
   ['proved' => 1],
-  ['updated_at' => 'DESC']
+  'ORDER BY updated_at DESC'
 );
 
 $page_title = 'Author\'s Published Proved Posts';

@@ -157,26 +157,17 @@ class DatabaseObject {
     return $result;
   }
 
-  static public function findWhere(array $where=[], array $order=[], string $not_equal='') {
+  static public function findWhere(array $where=[], string $to_end="") {
     $sql = "SELECT * FROM " . static::$table_name;
     $sql = self::concatWhereToSql($sql, $where);
-    if ($not_equal != '') {
-      if (!empty($where)) $sql .= ' AND ' . $not_equal;
-      else $sql .= ' WHERE ' . $not_equal;
-    }
-    if (!empty($order)) {
-      $sql .= " ORDER BY " . key($order) . " " . $order[key($order)];
-    }
+    if ($to_end != "") $sql .= $to_end;
+
     return static::findBySql($sql);
   }
 
-  static public function countAll($where=[], string $not_equal='') {
+  static public function countAll($where=[]) {
     $sql = "SELECT COUNT(*) FROM " . static::$table_name;
     $sql = self::concatWhereToSql($sql, $where);
-    if ($not_equal != '') {
-      if (!empty($where)) $sql .= ' AND ' . $not_equal;
-      else $sql .= ' WHERE ' . $not_equal;
-    }
     $result_set = self::$database->query($sql);
     $row = $result_set->fetch_array();
     return array_shift($row);
@@ -185,12 +176,23 @@ class DatabaseObject {
   static protected function concatWhereToSql($sql, $where) {
     if (!empty($where)) {
       $i = 0;
-      foreach ($where as $key => $value) {
-        if (!is_string($value)) $value = strval($value);
-        if ($i > 0) {
-          $sql .= " AND $key = '" . self::escape($value) . "'";
+      foreach ($where as $column => $value) {
+        if (!is_array($value)) {
+          $value = strval($value);
+          if ($i > 0) {
+            $sql .= " AND $column = '" . self::escape($value) . "'";
+          } else {
+            $sql .= " WHERE $column = '" . self::escape($value) . "'";
+          }
         } else {
-          $sql .= " WHERE $key = '" . self::escape($value) . "'";
+          foreach ($value as $operator => $nested) {
+            $nested = strval($nested);
+            if ($i > 0) {
+              $sql .= " AND $column $operator '" . self::escape($nested) . "'";
+            } else {
+              $sql .= " WHERE $column $operator '" . self::escape($nested) . "'";
+            }
+          }
         }
         $i++;
       }

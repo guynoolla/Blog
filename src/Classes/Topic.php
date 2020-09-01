@@ -41,7 +41,7 @@ class Topic extends \App\Classes\DatabaseObject {
 
   static public function findByTopic($name) {
     $obj_array = parent::findWhere(['name' => $name]);
-    if(!empty($obj_array)) {
+    if (!empty($obj_array)) {
       return array_shift($obj_array);
     } else {
       return false;

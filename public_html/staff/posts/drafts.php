@@ -27,10 +27,10 @@ if (isset($_GET['id'])) {
 
 }
 
-$posts = Post::findWhere(
-  ['published' => 0],
-  ['updated_at' => 'DESC'],
-  'user_id != ' . $session->getUserId()
+$posts = Post::queryPostsWithUsernames([
+  'published' => 0, 'user_id' => ['!=' => $session->getUserId()]
+],
+  ' ORDER BY updated_at DESC'
 );
 
 $page_title = 'Author\'s Posts: drafts';

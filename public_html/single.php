@@ -52,7 +52,7 @@ include(SHARED_PATH . '/public_header.php');
       <div class="main-content">
           <div class="lg-one-article-row">
             <article>
-              <div class="w-100 text-center border-bottom py-1 rounded bg-gray-lk">
+              <div class="w-100 text-right border-bottom py-1 px-1 rounded bg-gray-lk">
                 <a class="btn btn-outline-secondary" href="<?php echo url_for('staff/posts/edit.php') . '?id=' . $post->id . '&cmd=edit' ?>">Edit</a>
               </div>
               <div class="post">

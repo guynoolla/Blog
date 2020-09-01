@@ -217,6 +217,32 @@ class Post extends \App\Classes\DatabaseObject {
     return $posts;    
   }
 
+  static public function queryPostsWithUsernames(array $where, string $end="") {
+    $sql = "SELECT p.*, u.username FROM posts AS p";
+    $sql .= " LEFT JOIN users AS u ON p.user_id = u.id";
+    $where = self::prefixColumnName($where, 'p');
+    $sql = parent::concatWhereToSql($sql, $where);
+
+    if ($end != "") $sql .= $end;
+
+    $result = self::$database->query($sql);
+    $posts = [];
+    while ($obj = $result->fetch_object()) {
+      $posts[] = $obj;
+    }
+    $result->free();
+
+    return $posts; 
+  }
+
+  static protected function prefixColumnName($where, $prefix='p') {
+    $prefixed = [];
+    foreach ($where as $col => $value) {
+      $prefixed[$prefix.'.'.$col] = $value;
+    }
+    return $prefixed;
+  }
+
   public function getBodyWithVideo() {
     if (!isset($this->video_urls)) return $this->body;
 

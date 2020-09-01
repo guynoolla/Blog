@@ -3,10 +3,11 @@
 
 use App\Classes\Post;
 
-$published = Post::countAll(
-  ['published' => 1, 'proved' => 0],
-  ' user_id != ' . $session->getUserId()
-);
+$published = Post::countAll([
+  'published' => 1,
+  'proved' => 0,
+  'user_id' => ['!=' => $session->getUserId()]
+]);
 
 ?>
 <ul class="sidebar-nav">

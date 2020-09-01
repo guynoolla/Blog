@@ -40,10 +40,12 @@ if (isset($_GET['id'])) {
 
 }
 
-$posts = Post::findWhere(
-  ['published' => 1, 'proved' => 0],
-  ['updated_at' => 'DESC'],
-  'user_id != ' . $session->getUserId()
+$posts = Post::findWhere([
+  'published' => 1,
+  'proved' => 0,
+  'user_id' => ['!=' => $session->getUserId()]
+],
+  'ORDER BY updated_at DESC'
 );
 
 $page_title = 'Author\'s Published Unproved Posts';

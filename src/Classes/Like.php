@@ -17,7 +17,10 @@ class Like extends \App\Classes\DatabaseObject {
   }
 
   static public function getUserPostLike(int $user_id, int $post_id) {
-    $obj_arr = self::findWhere(['user_id' => $user_id, 'post_id' => $post_id]);
+    $obj_arr = self::findWhere([
+      'user_id' => $user_id,
+      'post_id' => $post_id
+    ]);
     if (!empty($obj_arr)) {
       return array_shift($obj_arr);
     } else {
