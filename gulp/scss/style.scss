@@ -1,9 +1,11 @@
 @import 'node_modules/bootstrap/scss/bootstrap';
 @import './common/vars';
-@import './customize/utilities';
 @import './common/base';
+@import './customize/utilities';
+@import './customize/message';
 @import './customize/nav';
 @import './customize/btn';
+@import './customize/pagination';
 @import './sections/logo';
 @import './modules/buttons';
 @import './modules/svg-icons';
@@ -18,4 +20,3 @@
 @import './sections/aside';
 @import './sections/footer';
 @import './modules/post-entry';
-@import './customize/message';

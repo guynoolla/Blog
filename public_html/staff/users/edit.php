@@ -41,7 +41,6 @@ if ($session->isAdmin() || $session->getUserId() == $user->id) {
 
 $page_title = 'Settings';
 include SHARED_PATH . '/staff_header.php';
-require '../_common-html.php';
 
 ?>
 <div class="row">

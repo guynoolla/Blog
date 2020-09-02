@@ -2,6 +2,7 @@
 use App\Classes\Post;
 use App\Classes\File;
 use App\Classes\User;
+use App\Classes\Pagination;
 
 require_once('../../../src/initialize.php');
 
@@ -40,17 +41,26 @@ if (isset($_GET['id'])) {
 
 }
 
-$posts = Post::findWhere([
-  'published' => 1,
-  'proved' => 0,
-  'user_id' => ['!=' => $session->getUserId()]
-],
-  'ORDER BY updated_at DESC'
-);
+$current_page = $_GET['page'] ?? 1;
+$per_page = DASHBOARD_PER_PAGE;
+$total_count = Post::countAll([
+  'published'=>'1',
+  'proved'=>'0',
+  'user_id'=>['!=' => $session->getUserId()]
+]);
+$pagination = new Pagination($current_page, $per_page, $total_count);
+
+$sql = "SELECT * FROM posts";
+$sql .= " WHERE published='1' AND proved='0'";
+$sql .= " AND user_id != '{$session->getUserId()}'";
+$sql .= " ORDER BY updated_at DESC";
+$sql .= " LIMIT {$per_page}";
+$sql .= " OFFSET {$pagination->offset()}";
+$posts = Post::findBySql($sql);
 
 $page_title = 'Author\'s Published Unproved Posts';
 include SHARED_PATH . '/staff_header.php';
-require '_common-posts-html.php';
+include '_common-posts-html.php';
 
 ?>
 <div class="row">
@@ -74,7 +84,7 @@ require '_common-posts-html.php';
           <thead class="bg-muted-lk text-muted">
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Title</th>
+              <th scope="colgroup" colspan="2">Title</th>
               <th scope="col">Author</th>
               <th scope="col">Status</th>
               <th scope="col">Edited</th>
@@ -85,7 +95,7 @@ require '_common-posts-html.php';
             <?php foreach($posts as $key => $post): ?>
               <tr>
                 <th scope="row"><?php echo $key + 1 ?></th>
-                <?php echo td_post_title($post) ?>
+                <?php echo td_post_title($post, true) ?>
                 <td><?php echo (User::findById($post->user_id))->username ?></td>
                   <?php echo td_post_status($post) ?>
                 </td>
@@ -101,6 +111,11 @@ require '_common-posts-html.php';
           </tbody>
         </table>
   
+        <?php
+          $url = url_for('staff/posts/published.php');
+          echo $pagination->page_links($url);
+        ?>
+
       <?php endif; ?>
 
     </div>

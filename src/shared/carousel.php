@@ -2,58 +2,20 @@
   <div class="carousel-content">
     <div class="left-right-overlay"></div>
     <div class="slider">
+      <?php foreach($posts as $post): ?>
         <div>
-            <img src="/assets/images/1.jpg" />
-            <div class="slider-post-text">
-                <a href="#" class="category">Adventure</a>
-                <h2><a href="">Awesome Post on Activello And it is very long</a></h2>
-                <div class="read-more"><a href="">Read More</a></div>
-            </div>
+          <img src="<?php echo url_for('assets/images/' . $post->image) ?>" />
+          <div class="slider-post-text">
+            <a href="<?php echo url_for('topic/' . u($post->topic) . '?id=' . $post->tid) ?>" class="category"><?php echo $post->topic ?></a>
+            <h2><a href="<?php echo url_for('post/' . u($post->title)) . '?id=' . $post->id ?>"><?php echo $post->title ?></a></h2>
+            <div class="read-more"><a href="<?php echo url_for('post/' . u($post->title)) . '?id=' . $post->id ?>">Read More</a></div>
+          </div>
         </div>
-        <div>
-            <img src="/assets/images/2.jpg" />
-            <div class="slider-post-text">
-                <a href="#" class="category">Nature</a>
-                <h2><a href="">Awesome Post on Activello And it is very long</a></h2>
-                <div class="read-more"><a href="">Read More</a></div>
-            </div>
-        </div>
-        <div>
-            <img src="/assets/images/3.jpg" />
-            <div class="slider-post-text">
-                <a href="" class="category">History</a>
-                <h2><a href="">Awesome Post on Activello And it is very long</a></h2>
-                <div class="read-more"><a href="">Read More</a></div>
-            </div>
-        </div>
-        <div>
-            <img src="/assets/images/4.jpg" />
-            <div class="slider-post-text">
-                <a href="#" class="category">Adventure</a>
-                <h2><a href="">Awesome Post on Activello And it is very long</a></h2>
-                <div class="read-more"><a href="">Read More</a></div>
-            </div>
-        </div>
-        <div>
-            <img src="/assets/images/5.jpg" />
-            <div class="slider-post-text">
-                <a href="#" class="category">Comedy</a>
-                <h2><a href="">Awesome Post on Activello And it is very long</a></h2>
-                <div class="read-more"><a href="">Read More</a></div>
-            </div>
-        </div>
-        <div>
-            <img src="/assets/images/6.jpg" />
-            <div class="slider-post-text">
-                <a href="#" class="category">Life</a>
-                <h2><a href="">Awesome Post on Activello And it is very long</a></h2>
-                <div class="read-more"><a href="">Read More</a></div>
-            </div>
-        </div>
+      <?php endforeach; ?>
     </div>
     <div class="slider-nav">
-        <a class="slider-btn next"><i class="fa fa-chevron-right"></i></a>
-        <a class="slider-btn prev"><i class="fa fa-chevron-left"></i></a>
+      <a class="slider-btn next"><i class="fa fa-chevron-right"></i></a>
+      <a class="slider-btn prev"><i class="fa fa-chevron-left"></i></a>
     </div>
   </div>
 </section>

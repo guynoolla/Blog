@@ -84,7 +84,7 @@ $edit = isset($post->id) ? true : false;
   </div>
   <div class="custom-control custom-switch mt-4">
     <input name="post[published]" type="checkbox" class="custom-control-input" id="publishSwitch"<?php echo ($post->published == '1' ? ' checked' : '') ?>>
-    <?php if ($post->published == '' || $post->published == '0'): ?>
+    <?php if ($post->published == '0'): ?>
       <label class="custom-control-label" for="publishSwitch">Publish</label>
     <?php else: ?>
       <label class="custom-control-label" for="publishSwitch">Published</label>

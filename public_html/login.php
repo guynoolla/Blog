@@ -39,7 +39,7 @@ $page_title = 'User Login';
 include(SHARED_PATH . '/public_header.php');
 
 ?>
-<div class="container-fluid bg-light-lk">
+<div class="container-fluid bg-other-lk">
 
   <div class="row justify-content-center h-100">
     <div class="col col-md-8 col-lg-6 my-auto">

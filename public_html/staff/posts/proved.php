@@ -22,14 +22,18 @@ if (isset($_GET['id'])) {
 
     if ($post->save() === true) {
       $session->message("Post '" . $post->title . "' was disproved.");
-      redirect_to(url_for('/staff/posts/published.php'));
+      if ($post->user_id == $session->getUserId()) {
+        redirect_to(url_for('staff/posts/index.php'));
+      } else {
+        redirect_to(url_for('staff/posts/published.php'));
+      }
     }
   }
 
 }
 
 $current_page = $_GET['page'] ?? 1;
-$per_page = 4;
+$per_page = DASHBOARD_PER_PAGE;
 $total_count = Post::countAll(['proved' => '1']);
 $pagination = new Pagination($current_page, $per_page, $total_count);
 
@@ -41,7 +45,7 @@ $posts = Post::findBySql($sql);
 
 $page_title = 'Author\'s Published Proved Posts';
 include SHARED_PATH . '/staff_header.php';
-require '_common-posts-html.php';
+include '_common-posts-html.php';
 
 ?>
 <div class="row">

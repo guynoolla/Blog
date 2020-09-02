@@ -1,10 +1,14 @@
 import $ from 'jquery';
+require('core-js');
 require('bootstrap');
 import animatedScrollTo from 'animated-scroll-to';
+import { preventExtensions } from 'core-js/fn/object';
+
 
 window.jQuery = $;
 
 navbarSearchBehavior();
+homePagePaginationBehavior();
 
 $(document).ready(() => {
 
@@ -57,9 +61,10 @@ $(document).ready(() => {
 
   $(".siteNavJS li").on("click", (e) => {
     if (e.target.href.indexOf('#') > -1) {
-      const data = '#' + e.target.href.split('#');
-      if (data.length == 2) {
-        scrollToEventHandler(document.querySelector(scrollTarget[1]));
+      const splitted = e.target.href.split('#');
+      if (splitted.length == 2) {
+        const target = '#' + splitted[1];
+        scrollToEventHandler(document.querySelector(target));
       }
     }
   })
@@ -69,6 +74,27 @@ $(document).ready(() => {
 /**
  * Functions
  */
+
+function homePagePaginationBehavior() {
+  $(window).on("load", () => {
+    const url = window.location.href;
+    if (url.indexOf("?") > -1) {
+      const urlParts = url.split("?");
+      if (urlParts[1].indexOf("&") > -1) {
+        // here...
+      } else {
+        if (urlParts[1].indexOf("=") > -1) {
+          const assignment = urlParts[1].split('=')
+          if (assignment[0] === 'page') {
+            if ($("#homeMain").length) {
+              scrollToEventHandler(document.querySelector("#homeMain"));
+            }
+          }
+        }
+      }
+    }
+  })
+}
 
 function checkScrollPosition() {
   if ($(window).scrollTop() > 50) {

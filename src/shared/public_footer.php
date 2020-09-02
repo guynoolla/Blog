@@ -1,14 +1,16 @@
 </div> <!--Content wrapper div close-->
 
 <?php
-	$bg = '';
 	$url = $_SERVER['REQUEST_URI'];
-	if ($url != '/' && !url_contain('post')) {
-		$bg = 'bg-light-lk';
+	
+	if ($url == "/" || url_contain(['index.php','post','topic'])) {
+		$bg = '';
+	} else {
+		$bg = 'bg-other-lk';
 	}
 
 ?>
-<footer class="<?php echo $bg ?>" role="contentinfo" id="scrollTestContact">
+<footer class="<?php echo $bg ?>" role="contentinfo" id="scrollFooter">
 	<div class="footer-content">
 		<div class="social-links-widget more-space-between">
 			<?php include '_social_links_list.php' ?>

@@ -107,7 +107,7 @@ class Post extends \App\Classes\DatabaseObject {
   }
 
   protected function filterCheckboxValue($property) {
-    if (in_array($this->$property, ['on','1','checked'])) {
+    if (in_array($this->{$property}, ['on','1','checked'])) {
       $this->$property = '1';
     } else {
       $this->$property = '0';
@@ -165,10 +165,14 @@ class Post extends \App\Classes\DatabaseObject {
     }
   }
 
-  static public function queryProvedPosts() {
-    $sql = "SELECT p.*, u.username FROM posts AS p";
-    $sql .= " JOIN users AS u ON p.user_id = u.id";
-    $sql .= " WHERE p.published = 1 AND p.proved = 1";
+  static public function queryProvedPosts(int $per_page, int $offset) {
+    $sql = "SELECT p.*, u.username, t.id AS tid, t.name AS topic";
+    $sql .= " FROM posts AS p";
+    $sql .= " LEFT JOIN users AS u ON p.user_id = u.id";
+    $sql .= " LEFT JOIN topics AS t ON p.topic_id = t.id";
+    $sql .= " WHERE p.proved = 1";
+    $sql .= " ORDER BY updated_at DESC";
+    $sql .= " LIMIT {$per_page} OFFSET {$offset}";
     $result = self::$database->query($sql);
     $posts = [];
     while($obj = $result->fetch_object()) {
@@ -200,7 +204,7 @@ class Post extends \App\Classes\DatabaseObject {
     $_topic_id = self::$database->escape_string($topic_id);
     $sql = "SELECT p.*, u.username FROM posts AS p";
     $sql .= " JOIN users AS u ON p.user_id = u.id";
-    $sql .= " WHERE p.published = 1";
+    $sql .= " WHERE p.proved = 1";
     $sql .= " AND topic_id = " . $_topic_id;
     $result = self::$database->query($sql);
     $posts = [];

@@ -23,14 +23,9 @@ function td_action_edit($post, $is_admin=false) {
             echo ($post->proved ? '&mdash;' : 'on moderation')
           ?></small>
         </a>
-      <?php else:
-        if ($url == 'staff/posts/index.php'): ?>
-          <a class="btn-lk btn-lk--primary" href="<?php echo url_for($url . '?id=' . $post->id . '&cmd=unpublish')
-          ?>">unpublish</a>
-        <?php elseif ($url == 'staff/posts/published.php'): ?>
-          <a class="btn-lk btn-lk--secondary" href="<?php echo url_for($url . '?id=' . $post->id . '&cmd=edit')
-          ?>">edit</a>
-        <?php endif;
+      <?php else: ?>
+        <a class="btn-lk btn-lk--primary" href="<?php echo url_for($url . '?id=' . $post->id . '&cmd=unpublish')
+        ?>">unpublish</a><?php
       endif;
     endif; ?>
   </td><?php
@@ -115,25 +110,5 @@ function td_post_title($post, $group=false) {
   $output = ob_get_contents();
   ob_end_clean();
 
-  return $output;
-}
-
-function page_back_button($link='Back', $class_list='btn btn-outline-primary ml-auto mb-1 ml-1') {
-  $url = '';
-
-  if (isset($_SERVER['HTTP_REFERER']) && isset($_SERVER['HTTP_HOST'])) {
-    $url = parse_url($_SERVER['HTTP_REFERER']);
-    if ($url['host'] == $_SERVER['HTTP_HOST']) {
-      $url = $_SERVER['HTTP_REFERER'];
-    } else {
-      $url = '';
-    }
-  }
-
-  $output = "<a href=\"" . ($url ? $url : url_for('index.php')) . "\"";
-  $output .= " class=\"" . $class_list . "\" >";
-  $output .= $link;
-  $output .= '</a>';
-  
   return $output;
 }

@@ -1,0 +1,32 @@
+/**
+ Pagination */
+
+.pagination-nav {
+  border-bottom: none !important;
+
+  .pagination {
+    .page-item {
+      .page-link {
+        border: none;
+        color: #444 !important;
+        background-color: #f2f2f2 !important;
+        transition: background-color 400ms ease-in, color 400ms linear;
+
+        &:hover, &:focus {
+          background-color: $plum-color !important;
+          color: #fff !important;
+        }
+      }
+      &.active .page-link {
+        background-color: $bg-muted-lk !important;
+        color: #444 !important;
+      }
+    }
+  }
+}
+
+.pagination.pagination-md {
+  .page-item .page-link {
+    padding: .7rem 1rem;
+  }
+}

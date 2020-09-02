@@ -2,6 +2,7 @@
 use App\Classes\Post;
 use App\Classes\File;
 use App\Classes\User;
+use App\Classes\Pagination;
 
 require_once('../../../src/initialize.php');
 
@@ -27,16 +28,27 @@ if (isset($_GET['id'])) {
 
 }
 
-$posts = Post::queryPostsWithUsernames([
+$current_page = $_GET['page'] ?? 1;
+$per_page = DASHBOARD_PER_PAGE;
+$total_count = Post::countAll([
   'published' => 0,
   'user_id' => ['!=' => $session->getUserId()]
-],
-  ' ORDER BY updated_at DESC'
-);
+]);
+$pagination = new Pagination($current_page, $per_page, $total_count, 'pagination-md');
+
+$sql = "SELECT * FROM posts";
+$sql .= " WHERE published = '0'";
+$sql .= " AND user_id != '{$session->getUserId()}'";
+$sql .= " ORDER BY updated_at DESC";
+$sql .= " LIMIT {$per_page}";
+$sql .= " OFFSET {$pagination->offset()}";
+$posts = Post::findBySql($sql);
+
+
 
 $page_title = 'Author\'s Posts: drafts';
 include SHARED_PATH . '/staff_header.php';
-require '_common-posts-html.php';
+include '_common-posts-html.php';
 
 ?>
 <div class="row">
@@ -93,6 +105,11 @@ require '_common-posts-html.php';
             <?php endforeach; ?>
           </tbody>
         </table>
+
+        <?php
+          $url = url_for('staff/posts/drafts.php');
+          echo $pagination->page_links($url);
+        ?>
   
       <?php endif; ?>
 

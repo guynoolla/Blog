@@ -51,9 +51,10 @@ include(SHARED_PATH . '/public_header.php');
     <main class="main col-lg-8" role="main">
       <div class="main-content">
           <div class="lg-one-article-row">
-            <article>
+            <article class="single">
               <div class="w-100 text-right border-bottom py-1 px-1 rounded bg-gray-lk">
                 <a class="btn btn-outline-secondary" href="<?php echo url_for('staff/posts/edit.php') . '?id=' . $post->id . '&cmd=edit' ?>">Edit</a>
+                <a class="btn btn-outline-secondary" href="<?php echo page_back_url() ?>">Back</a>
               </div>
               <div class="post">
                 <div class="post-item-wrap">
@@ -70,7 +71,7 @@ include(SHARED_PATH . '/public_header.php');
                         </a></span> -->
                       </div>
                       <a href="#">
-                        <img src="<?php echo url_for('assets/images' . $post->image) ?>" alt="Image" class="tm-image">
+                        <img src="<?php echo url_for('assets/images' . $post->image) ?>" alt="Image">
                       </a>
                     </div>
                     <div><?php echo $post->getBodyWithVideo() ?></div>

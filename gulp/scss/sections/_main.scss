@@ -73,6 +73,9 @@
           padding-top:  .62rem;
           padding-bottom: 3rem;
           border-bottom: 1px solid #dedede;
+          &:last-of-type {
+            border-bottom: none;
+          }
 
           .entry-content {
             margin: 1.3rem 0 0;
@@ -89,4 +92,16 @@
     }
   }
 
+}
+
+.main .main-content {
+  .lg-one-article-row {
+    article.single {
+      img {
+        object-fit: cover;
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
 }

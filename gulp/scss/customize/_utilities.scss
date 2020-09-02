@@ -1,16 +1,18 @@
-$bg-light-lk: lighten($blue, 30);
 $warning-dark: darken(#f2a60e, 2);
+$bg-other-lk: lighten($blue, 30);
+$bg-muted-lk: lighten(#444, 60);
+$bg-gray-lk: #e1e5eb;
 
-.bg-light-lk {
-  background-color: $bg-light-lk !important;
+.bg-other-lk {
+  background-color: $bg-other-lk !important;
 }
 
 .bg-muted-lk {
-  background-color: lighten(#444, 60) !important;
+  background-color: $bg-muted-lk !important;
 }
 
 .bg-gray-lk {
-  background-color: #e1e5eb !important;
+  background-color: $bg-gray-lk !important;
 }
 
 .small-nicer-lk {
@@ -39,8 +41,8 @@ $warning-dark: darken(#f2a60e, 2);
   }
 }
 
-.bg-light-lk {
-  background-color: $bg-light-lk !important;
+.bg-other-lk {
+  background-color: $bg-other-lk !important;
   font-weight: 500 !important;
   color: #5e5c5b !important;
   a {

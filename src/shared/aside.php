@@ -4,7 +4,7 @@ use App\Classes\User;
 use App\Classes\Post;
 use App\Classes\Topic;
 
-if (isset($post)) $user = User::findById($post->user_id);
+if (url_contain(['post/','preview/'])) $user = User::findById($post->user_id);
 
 $posts = App\Classes\Post::findWhere(
   ['published' => '1'],
@@ -16,7 +16,7 @@ $topics = Topic::findAll();
 ?>
 <div class="sidebar-content mt-2 pt-1">
 
-  <?php if ($user->about_appear): ?>
+  <?php if (url_contain(['post/','preview/']) && $user->about_appear): ?>
     <section class="widget mt-5">
       <h3 class="title mb-3">About Author</h3>
 
@@ -52,7 +52,7 @@ $topics = Topic::findAll();
             </a>
           </div> 
           <div class="post-content">
-            <a href="https://colorlib.com/activello/post-format-standard/">Post Format: Standard</a>
+            <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>"><?php echo $post->title ?></a>
             <span class="date">- 05 Oct , 2016</span>
           </div>
         </div>
@@ -62,7 +62,7 @@ $topics = Topic::findAll();
 
   <section class="widget">
     <div class="search-widget pt-5 pb-3">
-      <form role="search" method="get" class="form-search" action="https://colorlib.com/activello/">
+      <form role="search" method="get" class="form-search" action="<?php echo $_SERVER['PHP_SELF'] ?>">
         <div class="input-group">
           <label class="screen-reader-text" for="s">Search for:</label>
           <input type="text" class="form-control search-query" placeholder="Search…" value="" name="s" title="Search for:">
@@ -75,13 +75,13 @@ $topics = Topic::findAll();
   </section>
 
   <section class="widget">
-    <h3 class="title">Categories</h3>
+    <h3 class="title">Topics</h3>
     
     <div class="cats-widget">
       <ul>
         <?php foreach ($topics as $topic): ?>
           <li class="cat-item">
-            <a href="#" title="<?php $topic->name ?>"><?php echo $topic->name ?></a>
+            <a href="<?php echo url_for('topic/') . u($topic->name) . '?id=' . $topic->id ?>" title="<?php $topic->name ?>"><?php echo $topic->name ?></a>
             <span><?php echo Post::countAll(
               ['topic_id' => $topic->id, 'proved' => '1']
             ) ?></span>

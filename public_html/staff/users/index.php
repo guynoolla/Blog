@@ -28,7 +28,6 @@ $users = User::queryUsersWithPostsNum();
 
 $page_title = 'List Users';
 include SHARED_PATH . '/staff_header.php';
-require '../_common-html.php';
 
 ?>
 <div class="row">

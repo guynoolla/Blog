@@ -43,7 +43,10 @@ include SHARED_PATH . '/staff_header.php'
   </aside>
   
   <div class="main col-lg-9">
-    <?php include('./_form.php') ?>
+    <div class="main-content">
+      <?php echo page_back_button() ?>
+      <?php include('./_form.php') ?>
+    </div>
   </div>
 
 </div>

@@ -1,8 +1,11 @@
 <?php
 use App\Classes\Post;
 use App\Classes\Topic;
+use App\Classes\Pagination;
 
 require_once '../src/initialize.php';
+
+$headline = '';
 
 // Handle Contact Form Submit -->
 if (is_post_request()) {
@@ -19,53 +22,76 @@ if (is_post_request()) {
   }
 } // <--Contact Form
 
-$trend_posts = Post::queryProvedPosts();
-
-if (isset($_GET['search_term'])) {
-  $term = $_GET['search_term'] ?? '';
+if (isset($_GET['s'])) {
+  $term = $_GET['s'] ?? '';
   $posts = Post::querySearchPosts(trim($term));
+
+  $current_page = $_GET['page'] ?? 1;
+  $per_page = 4;
+  $total_count = $posts ? count($posts) : 0;
+  $pagination = new Pagination($current_page, $per_page, $total_count);
+
   if ($posts) {
-    $page_title = "You searched for '" . $term . "'";
+    $headline = "You searched for '<strong>" . $term . "</strong>'";
   } else {
-    $page_title = "Nothing found for '" . $term . "'";
+    $headline = "Nothing found for '<strong>" . $term . "</strong>'";
   }
+
 } elseif (isset($_GET['id'])) {
   $topic_id = $_GET['id'] ?? 0;
   $posts = Post::queryPostsByTopic($topic_id);
   $topic_name = Topic::findById($topic_id)->name;
 
+  $current_page = $_GET['page'] ?? 1;
+  $per_page = 4;
+  $total_count = Post::countAll(['topic_id' => $topic_id, 'proved' => '1']);
+  $pagination = new Pagination($current_page, $per_page, $total_count, 'pagination-lg');
+
   if ($posts) {
-    $page_title = "You searched for posts under '" . $topic_name . "'";
+    $headline = "You searched for posts under <strong>'" . $topic_name . "'</strong>";
   } else {
-    $page_title = "Sorry, no posts under '" . $topic_name . "' found.";
+    $headline = "Sorry, no posts under <strong>'" . $topic_name . "'</strong> found.";
   }
+
 } else {
-  $posts = Post::queryProvedPosts();
+  $current_page = $_GET['page'] ?? 1;
+  $per_page = 4;
+  $total_count = Post::countAll(['proved' => '1']);
+  $pagination = new Pagination($current_page, $per_page, $total_count, 'pagination-lg');
+  
+  $posts = Post::queryProvedPosts($per_page, $pagination->offset());
+  $trend_post = $posts;
   $page_title = 'Recent Posts';
 }
 
 include SHARED_PATH . '/public_header.php';
-
-include SHARED_PATH . '/carousel.php';
+if (!isset($_GET['id']) && !isset($_GET['s'])) {
+  include SHARED_PATH . '/carousel.php';
+}
 
 ?>
 <div class="container-md">
   <div class="row">
     
-    <main class="main col-lg-8" role="main">
+    <main class="main col-lg-8" role="main" id="homeMain">
       <div class="main-content">
-        
-        <?php $total = count($posts);
+        <?php if ($headline): ?>
+          <h1 class="text-center"><?php echo $headline ?></h1>
+        <?php endif;
+
+        $total = count($posts);
         
         foreach ($posts as $idx => $post):
           $num = $idx + 1;
           $grow = false;
+          $shrink = false;
 
           if (($idx + 1) == $total) {
-            $grow = (isset($posts_inside) && $posts_inside == 0);
+            $grow = (!(isset($posts_inside)) || ($posts_inside == 0));
+            $shrink = ($current_page > 1 && (count($posts) % 2 == 0));
           } 
           
-          if ($num <= 2 || $grow): // first & second posts go here
+          if (($num <= 2 || $grow) || ($num == 1 && $shrink)): // first & second posts go here
             ?>
             <div class="lg-one-article-row">
               <article>
@@ -131,7 +157,7 @@ include SHARED_PATH . '/carousel.php';
                   </div>
               </article>
             <!--Close div after two posts are inside it and reset $posts_inside-->
-            <?php if ($posts_inside == 2) : $posts_inside = 0; ?>
+            <?php if ($posts_inside == 2): $posts_inside = 0; ?>
               </div> <!--lg-two-articles-row-->
             <?php endif;
           endif;
@@ -140,6 +166,12 @@ include SHARED_PATH . '/carousel.php';
         // Close two articles row if it was not because odd Posts Total
         if (isset($posts_inside) && $posts_inside == 1) echo '</div>';
         ?>
+
+        <div class="row justify-content-center mt-4"><?php
+          $url = url_for('index.php');
+          echo $pagination->page_links($url);
+        ?></div>
+
       </div> <!--main content-->
     </main> <!-- main -->
 

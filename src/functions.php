@@ -51,12 +51,19 @@ if(!function_exists('money_format')) {
   }
 }
 
-function url_contain($string) {
-  if (strpos($_SERVER['REQUEST_URI'], $string) !== false) {
-    return true;
-  } else {
-    return false;
+function url_contain($value) {
+  $arr = [];
+  if (is_string($value)) {
+    $arr[] = $value;
+  } elseif (is_array($value)) {
+    $arr = $value;
   }
+  foreach($arr as $value) {
+    if (strpos($_SERVER['REQUEST_URI'], $value) !== false) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function is_active($unique_url_part, $link, $icon='', $url_params='', $num=false) {
@@ -82,6 +89,26 @@ function url_split_by_slash() {
 
 function get_base_url() {
   return "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}";
+}
+
+function page_back_url() {
+  if (isset($_SERVER['HTTP_REFERER']) && isset($_SERVER['HTTP_HOST'])) {
+    $url = parse_url($_SERVER['HTTP_REFERER']);
+    if ($url['host'] == $_SERVER['HTTP_HOST']) {
+      return $_SERVER['HTTP_REFERER'];
+    } else {
+      return '';
+    }
+  }  
+}
+
+function page_back_button($link='Back', $class_list='btn btn-outline-primary mb-1 ml-1') {
+  $url = page_back_url();
+  $output = "<a href=\"" . ($url ? $url : url_for('index.php')) . "\"";
+  $output .= " class=\"" . $class_list . "\" >";
+  $output .= $link;
+  $output .= '</a>';
+  return $output;
 }
 
 ?>

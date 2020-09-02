@@ -35,6 +35,9 @@ define('ADMIN_EMAIL', 'yusupovgz@yandex.ru');
  */
 define("SECRET_KEY", "jaItYP0KmKp6wcWCCkCKrxMEVT0yIdqn");
 
+// Pagination
+define("DASHBOARD_PER_PAGE", 5);
+
 // Functions
 require_once('functions.php');
 require_once('db_credentials.php');
