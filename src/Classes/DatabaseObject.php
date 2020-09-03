@@ -44,7 +44,7 @@ class DatabaseObject {
   static protected function instantiate($record) {
     $object = new static;
 
-    foreach($record as $property => $value) {
+    foreach ($record as $property => $value) {
       if (property_exists($object, $property)) {
         $object->{$property} = $value;
       }

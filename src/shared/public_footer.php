@@ -24,6 +24,10 @@
 
 <?php echo pass_to_js() ?>
 <script src="<?php echo url_for('assets/js/main.js') ?>" type="text/javascript"></script>
-<script type="text/javascript" src="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.min.js"></script>
+
+<?php if ($url == '/' || url_contain('index.php')): ?>
+	<script type="text/javascript" src="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.min.js"></script>
+<?php endif; ?>
+
 </body>
 </html>

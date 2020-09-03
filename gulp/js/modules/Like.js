@@ -47,6 +47,9 @@ class Like {
           likeBox.toggleClass('like-red like-default');
         } else if (res.action == 'error') {
           console.log('Error: ' + res);
+          for (let item in res) {
+            console.log('item', res[item]);
+          }
         }
       },
       error: res => console.log(res)

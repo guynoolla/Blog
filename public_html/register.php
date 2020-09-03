@@ -1,11 +1,12 @@
 <?php
 use App\Classes\User;
+use App\Classes\Like;
 
 require_once '../src/initialize.php';
 
 if (is_post_request()) {
   $user = new User($_POST['user']);
-  if($user->save()) {
+  if ($user->save()) {
     $session->message('You have been registered, now you can log in!');
     redirect_to(url_for('login.php'));
   }

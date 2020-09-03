@@ -62,7 +62,7 @@ $topics = Topic::findAll();
 
   <section class="widget">
     <div class="search-widget pt-5 pb-3">
-      <form role="search" method="get" class="form-search" action="<?php echo $_SERVER['PHP_SELF'] ?>">
+      <form role="search" method="get" class="form-search" action="<?php echo url_for('index.php') ?>">
         <div class="input-group">
           <label class="screen-reader-text" for="s">Search for:</label>
           <input type="text" class="form-control search-query" placeholder="Search…" value="" name="s" title="Search for:">

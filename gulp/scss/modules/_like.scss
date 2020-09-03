@@ -8,7 +8,7 @@
   font-size: 1.2rem;
   position: relative;
   display: block;
-  min-width: 65px;
+  min-width: 70px;
   padding: .3rem 0;
   padding-bottom: 0;
   float: right;
@@ -16,9 +16,14 @@
   border-radius: 3px;
   box-shadow: 2px 2px 1.5px #dedede;
   cursor: pointer;
+  
+  .fa {
+    position: absolute;
+    top: .5rem;
+    left: .5rem;
+  }
 
   .fa.fa-heart-o {
-    margin-left: 10px;
     font-size: 1.3em;
     z-index: 999;
     color: red;
@@ -26,11 +31,10 @@
   
   .fa.fa-heart  {
     font-size: 1.2em;
-    margin-left: -1.3em;
     z-index: 998 !important;
     color: #eee;
   }
-  
+
   .fa.fa-heart {
     transform: scale(0);
     color: transparent;
@@ -48,15 +52,22 @@
   }
   
   .like-count {
-    padding-left: 3px;
+    display: block;
+    float: right;
+    margin-left: 30px;
+    padding-left: 7px;
     padding-right: 7px;
     border-radius: 2px;
-    text-align: right;
     font-size: 1.2rem;
     font-weight: normal;
     color: red;
   }
 
+  .icons-wrap {
+    position: relative;
+    display: block;
+    float: left;
+  }
 }
 
 /*
@@ -67,7 +78,7 @@
   position: relative;
   display: block;
   min-width: 65px;
-  padding: .1rem 0;
+  padding: 3px 0;
   padding-bottom: 0;
   float: right;
   background-color: #eee;
@@ -127,24 +138,29 @@
   }
 
   .svg-icons-wrap {
-    position: relative;
+    position: absolute;
     display: block;
-    width: 1.5em;
-    height: 1.5em;
-    margin-top: .2em;
+    width: 1.3em;
+    height: 1.3em;
+    margin-top: .3em;
     margin-left: .5em;
     margin-right: .3em;
-    float: left;
   }
 
-  // .like-count {
-  //   padding-left: 7px;
-  //   padding-right: 7px;
-  //   border-radius: 2px;
-  //   text-align: right;
-  //   font-size: 1.2rem;
-  //   font-weight: normal;
-  //   color: red;
-  //   display: block;
-  // }
+  .like-count {
+    margin-left: 35px !important;
+  }
+}
+
+/*
+  Likebox with with background and no borders */
+
+.like-box.like-box--white {
+  background-color: #fff;
+  border-color: none;
+  box-shadow: none;
+
+  &.like-default .fa-dark {
+    color: #fff;
+  }
 }

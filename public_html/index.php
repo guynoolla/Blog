@@ -48,9 +48,9 @@ if (isset($_GET['s'])) {
   $pagination = new Pagination($current_page, $per_page, $total_count, 'pagination-lg');
 
   if ($posts) {
-    $headline = "You searched for posts under <strong>'" . $topic_name . "'</strong>";
+    $headline = "You searched for posts under '<strong>" . $topic_name . "</strong>'";
   } else {
-    $headline = "Sorry, no posts under <strong>'" . $topic_name . "'</strong> found.";
+    $headline = "Sorry, no posts under '<strong>" . $topic_name . "</strong>' found.";
   }
 
 } else {
@@ -114,7 +114,10 @@ if (!isset($_GET['id']) && !isset($_GET['s'])) {
                                 </a></span>
                             </div>
                             <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
-                              <img src="<?php echo url_for('assets/images' . $post->image) ?>" alt="Image" class="tm-image">
+                            <?php if ($post->getBodyWithVideo()): ?>
+                              $post->getBodyWithVideo();
+                            <?php endif; ?>>
+                            <!-- <img src="<?php echo url_for('assets/images' . $post->image) ?>" alt="Image" class="tm-image"> -->
                             </a>
                           </div>
                       </div>

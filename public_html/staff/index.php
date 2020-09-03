@@ -26,9 +26,9 @@ include SHARED_PATH . '/staff_header.php';
 
       <?php if (!$user->isEmailConfirmed()): ?>
         <p class="text-lk">
-          Welcome, <strong><?php echo $user->username ?></strong>! Now you are logged in and can put your likes to posts.<br>
-          You, also will be able to add your own posts if you confirm email address.<br>
-          Please, <a class="underlined" href="<?php echo url_for('email/confirm_mail.php?email=' . $user->email) ?>" class="link-underlined"><u>confirm</u></a> you email address if you want to have author rights.
+          Welcome, <strong><?php echo $user->username ?></strong>! Now you are logged in and can put your likes.<br>
+          You, also can confirm your email address to become an author.<br>
+          If you want to add a Post, please <a class="underlined" href="<?php echo url_for('email/confirm_mail.php?email=' . $user->email) ?>" class="link-underlined"><u>confirm</u></a> your email address.
         </p>
 
       <?php else: ?>
