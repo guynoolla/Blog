@@ -1,0 +1,150 @@
+/**
+ Like */
+
+/*
+ Font like icons -----------------------------------------------*/
+
+.like-box {
+  font-size: 1.2rem;
+  position: relative;
+  display: block;
+  min-width: 65px;
+  padding: .3rem 0;
+  padding-bottom: 0;
+  float: right;
+  background-color: #eee;
+  border-radius: 3px;
+  box-shadow: 2px 2px 1.5px #dedede;
+  cursor: pointer;
+
+  .fa.fa-heart-o {
+    margin-left: 10px;
+    font-size: 1.3em;
+    z-index: 999;
+    color: red;
+  }
+  
+  .fa.fa-heart  {
+    font-size: 1.2em;
+    margin-left: -1.3em;
+    z-index: 998 !important;
+    color: #eee;
+  }
+  
+  .fa.fa-heart {
+    transform: scale(0);
+    color: transparent;
+    transition: transform .1s ease-out;
+  }
+  
+  &.like-red .fa.fa-heart {
+    transform: scale(1);
+    color: red;
+  }
+  
+  &.like-default .fa.fa-heart {
+    transform: scale(0);
+    color: red;
+  }
+  
+  .like-count {
+    padding-left: 3px;
+    padding-right: 7px;
+    border-radius: 2px;
+    text-align: right;
+    font-size: 1.2rem;
+    font-weight: normal;
+    color: red;
+  }
+
+}
+
+/*
+ Svg like icons -------------------------------------------------------*/
+
+ .like-box {
+
+  position: relative;
+  display: block;
+  min-width: 65px;
+  padding: .1rem 0;
+  padding-bottom: 0;
+  float: right;
+  background-color: #eee;
+  border-radius: 3px;
+  box-shadow: 2px 2px 1.5px #dedede;
+  cursor: pointer;
+
+  .fa-light {
+    z-index: 999;
+    color: red;
+  }
+  
+  .fa-dark {
+    z-index: 998 !important;
+    color: #eee;
+    color: transparent;
+  }
+  
+  &.like-red .fa-dark {
+    transform: rotateY(0deg);
+    transform-origin: center;
+    color: red;
+    transition: transform 400ms ease;
+  }
+  &.like-red .fa-light {
+    transform: rotateY(-180deg);
+    transform-origin: center;
+    color: red;
+    transition: transform 400ms ease;
+  }
+  
+  &.like-default .fa-dark {
+    transform: rotateY(-180deg);
+    transform-origin: center;
+    color: #eee;
+    transition: transform 400ms ease;
+  }
+  &.like-default .fa-light {
+    transform: rotateY(0deg);
+    transform-origin: center;
+    color: red;
+    transition: transform 400ms ease;
+  }
+
+  .svg-icon {
+    position: absolute;
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+
+    &--light {
+      z-index: 999 !important;
+    }
+    &--dark {
+      z-index: 998 !important;
+    }
+  }
+
+  .svg-icons-wrap {
+    position: relative;
+    display: block;
+    width: 1.5em;
+    height: 1.5em;
+    margin-top: .2em;
+    margin-left: .5em;
+    margin-right: .3em;
+    float: left;
+  }
+
+  // .like-count {
+  //   padding-left: 7px;
+  //   padding-right: 7px;
+  //   border-radius: 2px;
+  //   text-align: right;
+  //   font-size: 1.2rem;
+  //   font-weight: normal;
+  //   color: red;
+  //   display: block;
+  // }
+}

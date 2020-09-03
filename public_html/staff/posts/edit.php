@@ -17,20 +17,28 @@ if (is_post_request()) {
   $post = Post::findById($id);
   $image = new File($_FILES['image']);
   $post->fileInstance($image);
+  if (!isset($_POST['post']['published'])) {
+    $_POST['post']['published'] = '0';
+  } 
   $post->mergeAttributes($_POST['post']);
 
   if ($post->save()) {
     $session->message("Post was updated, you can view it by clicking on its title!");
-    redirect_to(url_for('/staff/posts/index.php'));
+    redirect_to(url_for('staff/posts/index.php'));
   }
 
 } else {
   // Post ID must be provided
   if (isset($_GET['id'])) {
     $post = App\Classes\Post::findById($_GET['id']);
+
+    // Check Access >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    if (!$session->isAdmin() && $session->getUserId() != $post->user_id)
+      redirect_to(url_for('index.php'));
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Check Access
     
     if ($post === false) {
-      redirect_to(url_for('/staff/posts/index.php'));
+      redirect_to(url_for('staff/posts/index.php'));
     }
   }
 }
@@ -45,7 +53,10 @@ include SHARED_PATH . '/staff_header.php';
   </aside>
   
   <div class="main col-lg-9">
-    <?php include('./_form.php') ?>
+    <div class="main-content">
+      <?php echo page_back_button() ?>
+      <?php include('./_form.php') ?>
+    </div>
   </div>
 </div>
 

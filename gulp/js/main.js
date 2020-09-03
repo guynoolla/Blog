@@ -3,12 +3,15 @@ require('core-js');
 require('bootstrap');
 import animatedScrollTo from 'animated-scroll-to';
 import { preventExtensions } from 'core-js/fn/object';
+import like from './modules/Like';
 
 
 window.jQuery = $;
 
 navbarSearchBehavior();
 homePagePaginationBehavior();
+
+const Like = new like();
 
 $(document).ready(() => {
 

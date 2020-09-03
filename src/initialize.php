@@ -54,6 +54,7 @@ $session = new App\Classes\Session;
 
 function pass_to_js() {
   global $session;
+
   $server['baseUrl'] = WWW_ROOT;
   $server['isLoggedIn'] = $session->isLoggedIn();
   $script = '<script>';
