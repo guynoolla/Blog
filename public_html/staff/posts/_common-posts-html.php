@@ -24,8 +24,12 @@ function td_action_edit($post, $is_admin=false) {
           ?></small>
         </a>
       <?php else: ?>
-        <a class="btn-lk btn-lk--primary" href="<?php echo url_for($url . '?id=' . $post->id . '&cmd=unpublish')
-        ?>">unpublish</a><?php
+        <?php if ($post->proved): ?>
+          <a class="btn btn-sm disabled text-center d-block">-</a>
+        <?php else: ?>
+          <a class="btn-lk btn-lk--primary" href="<?php echo url_for($url . '?id=' . $post->id . '&cmd=unpublish')
+          ?>">unpublish</a><?php
+        endif;
       endif;
     endif; ?>
   </td><?php

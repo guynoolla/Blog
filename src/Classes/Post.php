@@ -6,13 +6,15 @@ namespace App\Classes;
 class Post extends \App\Classes\DatabaseObject {
 
   static protected $table_name = 'posts';
-  static protected $db_columns = ['id','user_id','topic_id','title','image','body','video_urls','published','proved','created_at','updated_at'];
+  static protected $db_columns = ['id','user_id','topic_id','title','format','image','video','body','video_urls','published','proved','created_at','updated_at'];
 
   public $id;
   public $user_id;
   public $topic_id;
   public $title;
+  public $format;
   public $image;
+  public $video;
   public $body;
   protected $video_urls;
   public $published;
@@ -25,11 +27,18 @@ class Post extends \App\Classes\DatabaseObject {
   public $allowable_tags = '<h2><h3><h4><p><br><img><a><strong><em><ul><li><blockquote>';
   public $allowable_hosts = ['www.youtube.com','youtube.com','youtu.be','vimeo.com'];
 
+  // Relational data by foreign key in posts
+  public $username = '';  // user->username
+  public $tid = '';       // topic->id
+  public $topic = '';     // topic->name
+
   public function __construct(array $args=[]) {
     $this->user_id = $args['user_id'] ?? '';
     $this->topic_id = $args['topic_id'] ?? '';
     $this->title = $args['title'] ?? '';
+    $this->format = $args['format'] ?? '';
     $this->image = $args['image'] ?? '';
+    $this->video = $args['video'] ?? '';
     $this->body = $args['body'] ?? '';
     $this->published = $args['published'] ?? '';
   }
@@ -56,6 +65,14 @@ class Post extends \App\Classes\DatabaseObject {
       } elseif ($prop === 'published') {
         $this->filterCheckboxValue($prop);
         $attr[$prop] = $this->published;
+      } elseif ($prop === 'video') {
+        if (is_array($value)) {
+          $this->videoMerger();
+          $attr[$prop] = $this->video;
+        } elseif ($value && !json_decode($value)) {
+          $this->getEntryVideoUrl();
+          $attr[$prop] = $this->video;
+        }
       }
     }
     return $attr;
@@ -84,6 +101,13 @@ class Post extends \App\Classes\DatabaseObject {
     }
     if (has_length_greater_than($this->body, 65000)) {
       $this->errors[] = 'Post cannot contain more than 65000 characters.';
+    }
+
+    // Optional value (post can have image or video format)
+    if ($this->video != "") {
+      if (has_external_link($this->video, $this->allowable_hosts)) {
+        $this->errors[] = 'Videos except YouTube and Vimeo are not allowed.';
+      }
     }
 
     if (($count = $this->videoUrlsCount()) > 3) {
@@ -138,29 +162,46 @@ class Post extends \App\Classes\DatabaseObject {
     }
   }
 
+  protected function getEntryVideoUrl() {
+    $host = parse_url($this->video)['host'];
+    if ($host === 'www.youtube.com' || $host === 'youtu.be') {
+      $embed_url = $this->getYoutubeEmbedUrl($this->video);
+    } elseif ($host === 'vimeo.com') {
+      $embed_url = $this->getVimeoEmbedUrl($this->video);
+    }
+    $this->video = json_encode([$this->video => $embed_url]);
+  }
+
   public function save() {
-    if (!isset($this->image_obj)) return parent::save();
-    $create = (!isset($this->id) == true);
-    $update = (isset($this->id) && $this->image_obj->isFileSelected() == true);
-    if (!$create && !$update) return parent::save();
+    if ($this->format == "" || $this->format == 'video') {
 
-    $image_error = $this->image_obj->handleUpload('image');
+      return parent::save();
 
-    if ($image_error !== false) {
-      $this->errors[] = $image_error;
-      return false;
-
-    } else {
-      $old_image = $update ? $this->image : false;
-      $this->image = $this->image_obj->getFileInfo()['image'];
+    } elseif ($this->format == 'image') {
+      if (!isset($this->image_obj)) return parent::save();
       
-      if (parent::save()) {
-        if ($old_image) $this->image_obj->remove($old_image);
-        return true;
+      $create = (!isset($this->id) == true);
+      $update = (isset($this->id) && $this->image_obj->isFileSelected() == true);
+      if (!$create && !$update) return parent::save();
+
+      $image_error = $this->image_obj->handleUpload('image');
+
+      if ($image_error !== false) {
+        $this->errors[] = $image_error;
+        return false;
 
       } else {
-        $this->image_obj->remove($this->image);
-        return false;
+        $old_image = $update ? $this->image : false;
+        $this->image = $this->image_obj->getFileInfo()['image'];
+        
+        if (parent::save()) {
+          if ($old_image) $this->image_obj->remove($old_image);
+          return true;
+
+        } else {
+          $this->image_obj->remove($this->image);
+          return false;
+        }
       }
     }
   }
@@ -173,12 +214,14 @@ class Post extends \App\Classes\DatabaseObject {
     $sql .= " WHERE p.proved = 1";
     $sql .= " ORDER BY updated_at DESC";
     $sql .= " LIMIT {$per_page} OFFSET {$offset}";
-    $result = self::$database->query($sql);
-    $posts = [];
-    while($obj = $result->fetch_object()) {
-      $posts[] = $obj;
-    }
-    $result->free();
+
+    $posts = self::findBySql($sql);
+    // $result = self::$database->query($sql);
+    // $posts = [];
+    // while($obj = $result->fetch_object()) {
+    //   $posts[] = $obj;
+    // }
+    // $result->free();
 
     return $posts;
   }
@@ -242,6 +285,38 @@ class Post extends \App\Classes\DatabaseObject {
     return $prefixed;
   }
 
+  static public function queryRandomImage() {
+    $sql = "SELECT image FROM posts WHERE proved = 1";
+    $sql .= " ORDER BY RAND() LIMIT 1";
+    $result = self::$database->query($sql);
+    $image = $result->fetch_assoc()['image'];
+    $result->free();
+
+    return $image;
+  }
+
+  public function getEntryVideo() {
+    $this->videoSplitter();
+    $url = $this->video['url'];
+    $embed_url = $this->video['embed'];
+
+    if ($this->format == 'video') {
+      $youtube = '<iframe src="%s" class="embed-responsive-item"';
+      $youtube .= ' frameborder="0" allowfullscreen></iframe>';
+      $vimeo = '<iframe src="%s" class="embed-responsive-item"';
+      $vimeo .= ' frameborder="0" webkitallowfullscreen mozallowfullscreen';
+      $vimeo .= ' controls="0" showinfo="0" allowfullscreen></iframe>';
+      $host = parse_url($url)['host'];
+      if ($host === 'www.youtube.com' || $host === 'youtu.be') {
+        $iframe = $youtube;
+      } elseif ($host === 'vimeo.com') {
+        $iframe = $vimeo;
+      }
+      $output = sprintf($iframe, $embed_url);
+      return $output;
+    }
+  }
+
   public function getBodyWithVideo() {
     if (!isset($this->video_urls)) return $this->body;
 
@@ -290,14 +365,25 @@ class Post extends \App\Classes\DatabaseObject {
     }
   }
 
-  static public function queryRandomImage() {
-    $sql = "SELECT image FROM posts WHERE proved = 1";
-    $sql .= " ORDER BY RAND() LIMIT 1";
-    $result = self::$database->query($sql);
-    $image = $result->fetch_assoc()['image'];
-    $result->free();
+  function videoSplitter() {
+    if (isset($this->video) && $this->video != "") {
+      $video = [];
+      $arr = (array) json_decode($this->video);
+      $video['url'] = key($arr);
+      $video['embed'] = $arr[$video['url']];
+      $this->video = $video;
+      return $this->video;
+    }
+    return "";
+  }
 
-    return $image;
+  function videoMerger() {
+    if (is_array($this->video)) {
+      $this->video = json_encode([
+        $this->video['url'] => $this->video['embed']
+      ]);
+      return $this->video;
+    }
   }
 
 }

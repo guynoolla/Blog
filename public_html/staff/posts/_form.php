@@ -15,7 +15,7 @@ $auth_user_id = $session->getUserId();
 $edit = isset($post->id) ? true : false;
 
 ?>
-<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data" class="py-3">
+<form id="editPostForm" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data" class="py-3">
   <?php
     if (!$edit) echo '<legend class="text-center">New Post</legend>';
     else echo '<legend class="text-center">Update Post</legend>'
@@ -33,8 +33,8 @@ $edit = isset($post->id) ? true : false;
   <?php endif; ?>  
 
   <div class="form-group">
-    <label for="exampleInputEmail1">Title</label>
-    <input type="text" name="post[title]" value="<?php echo h($post->title) ?>" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    <label for="title">Title</label>
+    <input type="text" name="post[title]" value="<?php echo h($post->title) ?>" class="form-control" id="title" aria-describedby="emailHelp">
   </div>
   <div class="form-group">
     <label for="postBody">Content</label>
@@ -59,17 +59,36 @@ $edit = isset($post->id) ? true : false;
   </div>
 
   <div class="form-group">
-    <label for="image">Select Post Image</label>
+    <label>Post Format</label>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="post[format]" id="format1" value="image" <?php echo (($post->format == 'image' || !$edit) ? 'checked' : '') ?>>
+      <label class="form-check-label" for="format1">
+        Image
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="post[format]" id="format2" value="video" <?php echo ($post->format == 'video' ? 'checked' : '') ?>>
+      <label class="form-check-label" for="format2">
+        Video
+      </label>
+    </div>
+  </div>
+
+  <?php $post->videoSplitter(); ?>
+
+  <div class="form-group mt-2">
     <?php if ($edit && $post->image): ?>
       <div class="d-flex align-items-bottom">
         <h5>Image: <?php echo $post->image ?></h5>
         <img class="ml-auto" id="postImage" src="<?php echo url_for('/assets/images/' . $post->image) ?>" style="width:200px;height:auto;">
       </div>
     <?php endif; ?>
-    <input type="file" name="image" class="form-control-file" id="image">
+    <input type="file" name="image" class="form-control-file" id="image" <?php echo ($post->format == 'video' ? 'disabled' : '') ?>>
+    <input type="text" name="post[video]" value="<?php echo $post->video['url'] ?>" class="form-control mt-1" id="video" placeholder="URL of Video" <?php echo (($post->format == 'image' || !$edit) ? 'disabled' : '') ?>>
   </div>
   <div class="form-group mt-4">
-    <select class="form-control" name="post[topic_id]">
+    <label for="topic">Topic</label>
+    <select class="form-control" name="post[topic_id]" id="topic">
       <?php if (!$edit): ?>
         <option value="">Select topic</option>
       <?php endif; ?>

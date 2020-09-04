@@ -17,6 +17,7 @@
     flex-direction: column;
     align-items: center;
     height: 100%;
+    overflow: hidden;
 
     .nav-item {
       width: 100%;
@@ -34,6 +35,7 @@
         text-decoration: none;
         filter: grayscale(100%) opacity(.7);
         transition: width 350ms ease;
+        
         &:hover {
           filter: grayscale(0%) opacity(1);
           background-color: $bg-secondary !important;

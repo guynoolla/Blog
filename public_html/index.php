@@ -65,6 +65,7 @@ if (isset($_GET['s'])) {
 }
 
 include SHARED_PATH . '/public_header.php';
+
 if (!isset($_GET['id']) && !isset($_GET['s'])) {
   include SHARED_PATH . '/carousel.php';
 }
@@ -95,33 +96,42 @@ if (!isset($_GET['id']) && !isset($_GET['s'])) {
             ?>
             <div class="lg-one-article-row">
               <article>
-                  <div class="post">
-                      <div class="post-item-wrap">
-                          <div class="post-item-inner">
-                            <h2 class="entry-title text-center">
-                              <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
-                                <?php echo h($post->title) ?>
-                              </a>
-                            </h2>
-                            <div class="entry-meta">
-                              <span class="posted-on">Posted on <a href="#" rel="bookmark">
-                                <time class="entry-date published" datetime="<?php echo $post->created_at ?>">
-                                  <?php echo date('M j, Y', strtotime($post->created_at)) ?>
-                                </time>
-                              </a></span>by <span class="author vcard">
-                                <a class="url fn n" href="https://colorlib.com/activello/author/aigars-silkalns/">
-                                  <?php echo h($post->username) ?>
-                                </a></span>
-                            </div>
-                            <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
-                            <?php if ($post->getBodyWithVideo()): ?>
-                              $post->getBodyWithVideo();
-                            <?php endif; ?>>
-                            <!-- <img src="<?php echo url_for('assets/images' . $post->image) ?>" alt="Image" class="tm-image"> -->
-                            </a>
-                          </div>
+                <div class="post">
+                  <div class="post-item-wrap">
+                    <div class="post-item-inner">
+                      <h2 class="entry-title text-center">
+                        <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
+                          <?php echo h($post->title) ?>
+                        </a>
+                      </h2>
+                      <div class="entry-meta">
+                        <span class="posted-on">Posted on <a href="#" rel="bookmark">
+                          <time class="entry-date published" datetime="<?php echo $post->created_at ?>">
+                            <?php echo date('M j, Y', strtotime($post->created_at)) ?>
+                          </time>
+                        </a></span>by <span class="author vcard">
+                          <a class="url fn n" href="https://colorlib.com/activello/author/aigars-silkalns/">
+                            <?php echo h($post->username) ?>
+                          </a></span>
                       </div>
+
+                      <div class="post-format<?php echo ($post->format == 'video' ? ' post-format--video' : '') ?>">
+                        <?php if ($post->format == 'image'): ?>
+                          <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
+                            <div class="ard ard--image ard--hor-lg" style="background-image: url(<?php echo url_for('assets/images' . $post->image) ?>)"></div>
+                          </a>
+                        <?php elseif ($post->format == 'video'): ?>
+                          <div class="embed-responsive embed-responsive-16by9">
+                            <?php echo $post->getEntryVideo() ?>
+                            <a class="overlay" href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>"></a>
+                          </div>
+                        <?php endif; ?>
+                      </div>
+
+                      <div class="entry-content"><?php echo Post::excerpt($post->body) ?></div>
+                    </div>
                   </div>
+                </div>
               </article>
             </div>
             <?php
@@ -134,31 +144,40 @@ if (!isset($_GET['id']) && !isset($_GET['s'])) {
             else:
               $posts_inside++;
             endif; ?>
-              <article>
-                  <div class="post">
-                      <div class="post-item-wrap">
-                          <div class="post-item-inner">
-                              <h2 class="entry-title text-center"><a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>"><?php echo h($post->title) ?></a></h2>
-                              <div class="entry-meta">
-                                <span class="posted-on">Posted on <a href="#" rel="bookmark">
-                                  <time class="entry-date published" datetime="<?php echo $post->created_at ?>">
-                                    <?php echo date('M j, Y', strtotime($post->created_at)) ?>
-                                  </time>
-                                </a></span>by <span class="author vcard">
-                                  <a class="url fn n" href="https://colorlib.com/activello/author/aigars-silkalns/">
-                                    <?php echo h($post->username) ?>
-                                  </a></span>
-                              </div>
-                              <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
-                                <img src="<?php echo url_for('assets/images' . $post->image) ?>" alt="Image" class="tm-image">
-                              </a>
-                              <div class="entry-content">
-                                  <p>Puzzle is a Bootstrap (v3.3.6) HTML CSS layout provided by <span class="light-blue-text">templatemo</span>. You can download, modify and use this layout for absolutely free of charge.</p>
-                              </div>
-                          </div>
+            <article>
+              <div class="post">
+                <div class="post-item-wrap">
+                    <div class="post-item-inner">
+                      <h2 class="entry-title text-center"><a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>"><?php echo h($post->title) ?></a></h2>
+                      <div class="entry-meta">
+                        <span class="posted-on">Posted on <a href="#" rel="bookmark">
+                          <time class="entry-date published" datetime="<?php echo $post->created_at ?>">
+                            <?php echo date('M j, Y', strtotime($post->created_at)) ?>
+                          </time>
+                        </a></span>by <span class="author vcard">
+                          <a class="url fn n" href="https://colorlib.com/activello/author/aigars-silkalns/">
+                            <?php echo h($post->username) ?>
+                          </a></span>
                       </div>
-                  </div>
-              </article>
+
+                      <div class="post-format<?php echo ($post->format == 'video' ? ' post-format--video' : '') ?>">
+                        <?php if ($post->format == 'image'): ?>
+                          <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">  
+                            <div class="ard ard--image ard--ver-md ard--opt-lg" style="background-image: url(<?php echo url_for('assets/images' . $post->image) ?>)"></div>
+                          </a>
+                        <?php elseif ($post->format == 'video'): ?>
+                          <div class="embed-responsive embed-responsive-16by9">
+                            <?php echo $post->getEntryVideo() ?>
+                            <a class="overlay" href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>"></a>
+                          </div>
+                        <?php endif; ?>
+                      </div>
+
+                      <div class="entry-content"><?php echo Post::excerpt($post->body) ?></div>
+                    </div>
+                </div>
+              </div>
+            </article>
             <!--Close div after two posts are inside it and reset $posts_inside-->
             <?php if ($posts_inside == 2): $posts_inside = 0; ?>
               </div> <!--lg-two-articles-row-->

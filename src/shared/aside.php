@@ -31,14 +31,6 @@ $topics = Topic::findAll();
     </section>
   <?php endif; ?>
 
-  <section class="widget">
-    <h3 class="title">Follow Me</h3>
-
-    <div class="social-links-widget more-space-between">
-      <?php include '_social_links_list.php' ?>
-    </div>
-  </section>
-
   <section class="widget mt-5">
     <h3 class="title">Recent Posts</h3>
 
@@ -71,6 +63,14 @@ $topics = Topic::findAll();
           </div>
         </div>
       </form>
+    </div>
+  </section>
+
+  <section class="widget">
+    <h3 class="title">Follow Me</h3>
+
+    <div class="social-links-widget more-space-between">
+      <?php include '_social_links_list.php' ?>
     </div>
   </section>
 

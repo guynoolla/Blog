@@ -1,0 +1,44 @@
+/**
+ Resize div keeping aspect ratio 16x9 */
+
+.ard {
+  width: 100%;
+  padding-bottom: 56.3%;
+
+  &--image {
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
+}
+
+/*
+ Adapt for theme ---------------------------------*/ 
+
+@media (min-width: 768px) {
+  .ard {
+    &--hor-md {
+      padding-bottom: 46%;
+    }
+    &--opt-md {
+      padding-bottom: 62%;
+    }
+    &--ver-md {
+      padding-bottom: 75%;
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .ard {
+    &--hor-lg {
+      padding-bottom: 46%;
+    }
+    &--opt-lg {
+      padding-bottom: 62%;
+    }
+    &--ver-lg {
+      padding-bottom: 75%;
+    }
+  }
+}

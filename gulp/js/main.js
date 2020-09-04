@@ -3,17 +3,48 @@ require('core-js');
 require('bootstrap');
 import animatedScrollTo from 'animated-scroll-to';
 import { preventExtensions } from 'core-js/fn/object';
+import Breakpoint from 'bootstrap-breakpoints';
 import like from './modules/Like';
 
 
 window.jQuery = $;
-
-navbarSearchBehavior();
-homePagePaginationBehavior();
-
 const Like = new like();
 
+
 $(document).ready(() => {
+
+  Breakpoint.init();
+
+  deviceWidthResponsiveEmbed();
+  navbarSearchBehavior();
+  homePagePaginationBehavior();
+  editPostFormElementsBehavior();
+
+  var rtime;
+  var timeout = false;
+  var delta = 200;
+
+  $(window).resize(function() {
+    rtime = new Date();
+    if (timeout === false) {
+      timeout = true;
+      setTimeout(resizeend, delta);
+    }
+  });
+  
+  function resizeend() {
+    if (new Date() - rtime < delta) {
+      setTimeout(resizeend, delta);
+    } else {
+      timeout = false;
+      var er1 = $("main .lg-one-article-row .post .post-format .embed-responsive");
+      var er2 = $("main .lg-two-articles-row .post .post-format .embed-responsive");
+      if (er1.length && er2.length) {
+        resetEmbedResponsive(er1, er2);
+        embedResponsiveOnResize(er1, er2);
+      }
+    }               
+  }
 
   const slider = $('.slider');
 
@@ -78,25 +109,95 @@ $(document).ready(() => {
  * Functions
  */
 
+function deviceWidthResponsiveEmbed() {
+  var oneColEmbedResponsive = $("main .lg-one-article-row .post .post-format .embed-responsive");
+  var twoColEmbedResponsive = $("main .lg-two-articles-row .post .post-format .embed-responsive");
+
+  if (oneColEmbedResponsive.length) {
+    if (Breakpoint.is("xs")) { // 576px
+      console.log('Breakpoint', 'xs')
+      // Leave as is
+    }
+    if (Breakpoint.is("sm")) { // 768px
+      console.log("Breakpoint", "sm")
+      twoColEmbedResponsive.removeClass("embed-responsive-16by9");
+      twoColEmbedResponsive.addClass("embed-responsive-4by3");
+    }
+    if (Breakpoint.is("md")) { // 992px
+      console.log("Breakpoint", "md")
+      // Leave as is
+    }
+    if (Breakpoint.is("lg")) { // 1200px
+      console.log("Breakpoint", "lg")
+      // Leave as is
+    }
+  }
+}
+
+function embedResponsiveOnResize(embedResp1, embedResp2) {
+  if (Breakpoint.is("xs")) { // 576px
+    console.log("Breakpoint", "xs");
+    embedResp1.addClass('embed-responsive-16by9');
+    embedResp2.addClass('embed-responsive-16by9');
+  }
+  if (Breakpoint.is("sm")) { // 768px
+    console.log("Breakpoint", "sm");
+    embedResp1.addClass('embed-responsive-16by9');
+    embedResp2.addClass("embed-responsive-4by3");
+  }
+  if (Breakpoint.is("md")) { // 992px
+    console.log("Breakpoint", "md");
+    embedResp1.addClass('embed-responsive-16by9');
+    embedResp2.addClass('embed-responsive-16by9');
+  }
+  if (Breakpoint.is("lg")) { // 1200px
+    console.log("Breakpoint", "lg");
+    embedResp1.addClass('embed-responsive-16by9');
+    embedResp2.addClass('embed-responsive-16by9');
+  }  
+}
+
+function resetEmbedResponsive(embedResp1, embedResp2) {
+  embedResp1.removeClass('embed-responsive-4by3');
+  embedResp1.removeClass('embed-responsive-16by9');
+  embedResp1.removeClass('embed-responsive-21by9');
+  embedResp2.removeClass('embed-responsive-4by3');
+  embedResp2.removeClass('embed-responsive-16by9');
+  embedResp2.removeClass('embed-responsive-21by9');
+}
+
+function editPostFormElementsBehavior() {
+  const Form = $("#editPostForm");
+  
+  Form.find(".form-check-input").on("change", (e) => {
+    if (e.target.value == "image") {
+      Form.find("#image").prop("disabled", false);
+      Form.find("#video").prop("disabled", true);
+    } else if (e.target.value == "video") {
+      Form.find("#image").prop("disabled", true);
+      Form.find("#video").prop("disabled", false);        
+    }
+  })
+}
+
 function homePagePaginationBehavior() {
-  $(window).on("load", () => {
-    const url = window.location.href;
-    if (url.indexOf("?") > -1) {
-      const urlParts = url.split("?");
-      if (urlParts[1].indexOf("&") > -1) {
-        // here...
-      } else {
-        if (urlParts[1].indexOf("=") > -1) {
-          const assignment = urlParts[1].split('=')
-          if (assignment[0] === 'page') {
-            if ($("#homeMain").length) {
-              scrollToEventHandler(document.querySelector("#homeMain"));
-            }
+  const url = window.location.href;
+
+  if (url.indexOf("?") > -1) {
+    const urlParts = url.split("?");
+    if (urlParts[1].indexOf("&") > -1) {
+      // here...
+    } else {
+      if (urlParts[1].indexOf("=") > -1) {
+        const assignment = urlParts[1].split('=')
+        if (assignment[0] === 'page') {
+          if ($("#homeMain").length) {
+            scrollToEventHandler(document.querySelector("#homeMain"));
           }
         }
       }
     }
-  })
+  }
 }
 
 function checkScrollPosition() {

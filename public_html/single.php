@@ -94,12 +94,21 @@ include(SHARED_PATH . '/public_header.php');
                       </span>
                     </div>
 
-                    <a href="#">
-                      <img src="<?php echo url_for('assets/images' . $post->image) ?>" alt="Image">
-                    </a>
+                    <div class="post-format<?php echo ($post->format == 'video' ? ' post-format--video' : '') ?>">
+                      <?php if ($post->format == 'image'): ?>
+                        <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
+                          <div class="ard ard--image ard--hor-lg" style="background-image: url(<?php echo url_for('assets/images' . $post->image) ?>)"></div>
+                        </a>
+                      <?php elseif ($post->format == 'video'): ?>
+                        <div class="embed-responsive embed-responsive-16by9">
+                          <?php echo $post->getEntryVideo() ?>
+                        </div>
+                      <?php endif; ?>
+                    </div>
+
+                    <div><?php echo $post->getBodyWithVideo() ?></div>
 
                   </div>
-                  <div><?php echo $post->getBodyWithVideo() ?></div>
                 </div>
               </div>
             </article>
