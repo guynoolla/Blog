@@ -8,10 +8,10 @@ import like from './modules/Like';
 
 
 window.jQuery = $;
-const Like = new like();
-
 
 $(document).ready(() => {
+
+  const Like = new like();
 
   Breakpoint.init();
 

@@ -24,12 +24,15 @@ if (is_post_request()) {
 
 if (isset($_GET['s'])) {
   $term = $_GET['s'] ?? '';
-  $posts = Post::querySearchPosts(trim($term));
 
   $current_page = $_GET['page'] ?? 1;
   $per_page = 4;
-  $total_count = $posts ? count($posts) : 0;
+  $total_count = Post::countAll([
+    'proved' => 1, 'title' => ['like' => "%{$term}%"],
+    "OR p.body LIKE '{%$term%}'"
+  ]);
   $pagination = new Pagination($current_page, $per_page, $total_count);
+  $posts = Post::querySearchPosts(trim($term), $per_page, $pagination->offset());
 
   if ($posts) {
     $headline = "You searched for '<strong>" . $term . "</strong>'";
@@ -60,7 +63,6 @@ if (isset($_GET['s'])) {
   $pagination = new Pagination($current_page, $per_page, $total_count, 'pagination-lg');
   
   $posts = Post::queryProvedPosts($per_page, $pagination->offset());
-  $trend_post = $posts;
   $page_title = 'Recent Posts';
 }
 

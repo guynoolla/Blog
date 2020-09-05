@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import Cookies from 'js-cookie';
 
 class Like {
 
@@ -7,16 +8,42 @@ class Like {
   }
 
   events() {
+    if (!server.isLoggedIn) {
+      let likeBox = $(".like-box");
+      const postId = likeBox.attr('data-pid');
+      this.clearClasses(likeBox);
+
+      if (Cookies.get('lk_pid_liked') == postId) {
+        likeBox.addClass("like-red");
+        likeBox.attr('data-action', 'delete');
+        this.increment(likeBox);
+      } else {
+        likeBox.addClass("like-default");
+        likeBox.attr('data-action', 'create');
+      }
+    }
+
     $(".like-box").on("click", this.clickDispatcher.bind(this));
   }
 
   clickDispatcher(e) {
+    let likeBox = $(e.target).closest(".like-box");
+    
     if (!server.isLoggedIn) {
-      console.log('You must be logged in to like a post!');
-      return;
+      const postId = likeBox.attr('data-pid');
+      const action = likeBox.attr('data-action');
+
+      if (action == 'create') {
+        this.createLike(likeBox);
+        Cookies.set('lk_pid_liked', postId, { expires: 365 });
+      } else if (action == 'delete') {
+        this.deleteLike(likeBox);
+        Cookies.remove('lk_pid_liked');
+      }
+
+    } else {
+      this.postLikeHandler(likeBox);
     }
-    let currentLikeBox = $(e.target).closest(".like-box");
-    this.postLikeHandler(currentLikeBox);
   }
 
   postLikeHandler(likeBox) {
@@ -33,27 +60,44 @@ class Like {
         const res = $.parseJSON(response);
 
         if (res.action == 'created') {
-          likeBox.attr('data-action', 'delete');
-          let likeCount = parseInt(likeBox.find(".like-count").html(), 10);
-          likeCount++;
-          likeBox.find(".like-count").html(likeCount);
-          likeBox.toggleClass('like-red like-default');
-
+          this.createLike(likeBox);
         } else if (res.action == 'deleted') {
-          likeBox.attr('data-action', 'create');
-          let likeCount = parseInt(likeBox.find(".like-count").html(), 10);
-          likeCount--;
-          likeBox.find(".like-count").html(likeCount);
-          likeBox.toggleClass('like-red like-default');
+          this.deleteLike(likeBox);
         } else if (res.action == 'error') {
           console.log('Error: ' + res);
-          for (let item in res) {
-            console.log('item', res[item]);
-          }
         }
       },
       error: res => console.log(res)
     });
+  }
+
+  createLike(likeBox) {
+    likeBox.attr('data-action', 'delete');
+    this.increment(likeBox);
+    likeBox.toggleClass('like-red like-default');
+  }
+
+  deleteLike(likeBox) {
+    likeBox.attr('data-action', 'create');
+    this.decrement(likeBox);
+    likeBox.toggleClass('like-red like-default');
+  }
+
+  clearClasses(likeBox) {
+    likeBox.removeClass("like-red");
+    likeBox.removeClass("like-default");
+  }
+
+  increment(likeBox) {
+    let likeCount = parseInt(likeBox.find(".like-count").html(), 10);
+    likeCount++;
+    likeBox.find(".like-count").html(likeCount);    
+  }
+
+  decrement(likeBox) {
+    let likeCount = parseInt(likeBox.find(".like-count").html(), 10);
+    likeCount--;
+    likeBox.find(".like-count").html(likeCount);
   }
 
 }

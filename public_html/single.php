@@ -33,15 +33,22 @@ if (!$post->proved) {
   }
 }
 
+
 if ($session->isLoggedIn()) {
   $like = new Like([
     'post_id' => $post->id,
     'user_id' => $session->getUserId()
   ]);
+} else {
+  $like = false;
 }
-if (isset($like)) {
+
+if ($like) {
   $class = $like->liked ? ' like-red' : ' like-default';
   $action = $like->liked ? 'delete' : 'create';
+} else {
+  $class = "";
+  $action = "";
 }
 
 $page_title = $post->title;

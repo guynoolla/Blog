@@ -226,19 +226,16 @@ class Post extends \App\Classes\DatabaseObject {
     return $posts;
   }
 
-  static public function querySearchPosts($term) {
+  static public function querySearchPosts($term, int $per_page, int $offset) {
     $_term = self::$database->escape_string($term);
     $sql = "SELECT p.*, u.username FROM posts AS p";
     $sql .= " JOIN users AS u ON p.user_id = u.id";
     $sql .= " WHERE published = 1";
     $sql .= " AND p.title LIKE '%" . $_term . "%'";
     $sql .= " OR p.body LIKE '%" . $_term . "%'";
-    $result = self::$database->query($sql);
-    $posts = [];
-    while($obj = $result->fetch_object()) {
-      $posts[] = $obj;
-    }
-    $result->free();
+    $sql .= " ORDER BY updated_at DESC";
+    $sql .= " LIMIT {$per_page} OFFSET {$offset}";
+    $posts = self::findBySql($sql);
 
     return $posts;
   }
