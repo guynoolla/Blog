@@ -84,6 +84,7 @@ $edit = isset($post->id) ? true : false;
       </div>
     <?php endif; ?>
     <input type="file" name="image" class="form-control-file" id="image" <?php echo ($post->format == 'video' ? 'disabled' : '') ?>>
+    <small id="fileHelp" class="form-text small-nicer-lk">Image aspect ratio (width x height) must be between 7x5 9x5)</small>
     <input type="text" name="post[video]" value="<?php echo $post->video['url'] ?>" class="form-control mt-1" id="video" placeholder="URL of Video" <?php echo (($post->format == 'image' || !$edit) ? 'disabled' : '') ?>>
   </div>
   <div class="form-group mt-4">

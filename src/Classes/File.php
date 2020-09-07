@@ -55,21 +55,29 @@ class File {
 		}
 	}
 
-	public function handleUpload($field_name) {
+	public function handleUpload($field_name, $ratio) {
     if (!$this->isFileUploaded()) {
       return $this->getUploadError();
     } else {
-      return $this->moveFile($field_name);
+      return $this->moveFile($field_name, $ratio);
     }
 	}
 
-	public function moveFile($attr) {
+	public function moveFile($attr, $ratio) {
 		$error = false;
 
-		$size = ROUND($this->file['size']/1024);
-		$limit = $this->max_file_size/1024;
-		if ($size > $limit) {
-			$error = 'The uploaded file must not be larger than ' . $limit . 'KB.';
+		list ($w, $h) = getimagesize($this->file['tmp_name']);
+		$img_ratio = $w/$h;
+
+		if ($img_ratio < $ratio['min'] || $img_ratio > $ratio['max'] ) {
+			$error = 'Image aspect ratio (width x height) must be between 7x5 9x5)';
+
+		} else {
+			$size = ROUND($this->file['size']/1024);
+			$limit = $this->max_file_size/1024;
+			if ($size > $limit) {
+				$error = 'The uploaded file must not be larger than ' . $limit . 'KB.';
+			}
 		}
 
 		if (!$error) {

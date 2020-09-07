@@ -54,7 +54,7 @@ if ($like) {
 $page_title = $post->title;
 include(SHARED_PATH . '/public_header.php');
 
-?><div class="container-md">
+?><div class="container-xl">
   <div class="row">
     
     <main class="main col-lg-8" role="main">
@@ -104,8 +104,8 @@ include(SHARED_PATH . '/public_header.php');
                     <div class="post-format<?php echo ($post->format == 'video' ? ' post-format--video' : '') ?>">
                       <?php if ($post->format == 'image'): ?>
                         <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
-                          <div class="ard ard--image ard--hor-lg">
-                            <img class="ard-image" srcset="<?php echo Post::responsive($post->image, IMAGES_PATH) ?>">
+                          <div class="ard ard--image ard--hor-md">
+                            <img class="ard-image ard-image--wide" srcset="<?php echo Post::responsive($post->image, IMAGES_PATH) ?>">
                           </div>
                         </a>
                       <?php elseif ($post->format == 'video'): ?>

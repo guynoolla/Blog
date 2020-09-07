@@ -27,6 +27,8 @@ class Post extends \App\Classes\DatabaseObject {
   public $allowable_tags = '<h2><h3><h4><p><br><img><a><strong><em><ul><li><blockquote>';
   public $allowable_hosts = ['www.youtube.com','youtube.com','youtu.be','vimeo.com'];
 
+  protected $image_aspect_ratio = ['min'=>1.4, 'max'=>1.8];
+
   static public $resize_dimensions = [
               ['width' => 420, 'height' => 240],
               ['width' => 640, 'height' => 365],
@@ -191,7 +193,7 @@ class Post extends \App\Classes\DatabaseObject {
       $update = (isset($this->id) && $this->image_obj->isFileSelected() == true);
       if (!$create && !$update) return parent::save();
 
-      $image_error = $this->image_obj->handleUpload('image');
+      $image_error = $this->image_obj->handleUpload('image', $this->image_aspect_ratio);
 
       if ($image_error !== false) {
         $this->errors[] = $image_error;
@@ -247,7 +249,7 @@ class Post extends \App\Classes\DatabaseObject {
     $sql .= " LEFT JOIN users AS u ON p.user_id = u.id";
     $sql .= " LEFT JOIN topics AS t ON p.topic_id = t.id";
     $sql .= " WHERE p.proved = 1";
-    $sql .= " ORDER BY updated_at DESC";
+    $sql .= " ORDER BY created_at DESC";
     $sql .= " LIMIT {$per_page} OFFSET {$offset}";
 
     $posts = self::findBySql($sql);

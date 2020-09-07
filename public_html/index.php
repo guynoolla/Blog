@@ -73,7 +73,7 @@ if (!isset($_GET['id']) && !isset($_GET['s'])) {
 }
 
 ?>
-<div class="container-md">
+<div class="container-xl">
   <div class="row">
     
     <main class="main col-lg-8" role="main" id="homeMain">
@@ -120,8 +120,8 @@ if (!isset($_GET['id']) && !isset($_GET['s'])) {
                       <div class="post-format<?php echo ($post->format == 'video' ? ' post-format--video' : '') ?>">
                         <?php if ($post->format == 'image'): ?>
                           <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
-                            <div class="ard ard--hor-lg">
-                              <img class="ard-image" srcset="<?php echo Post::responsive($post->image, IMAGES_PATH) ?>" alt="<?php $post->title ?>">
+                            <div class="ard ard--hor-md">
+                              <img class="ard-image ard-image--wide" srcset="<?php echo Post::responsive($post->image, IMAGES_PATH) ?>" alt="<?php $post->title ?>">
                             </div>
                           </a>
                         <?php elseif ($post->format == 'video'): ?>
@@ -167,7 +167,7 @@ if (!isset($_GET['id']) && !isset($_GET['s'])) {
                       <div class="post-format<?php echo ($post->format == 'video' ? ' post-format--video' : '') ?>">
                         <?php if ($post->format == 'image'): ?>
                           <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">  
-                            <div class="ard ard--ver-md ard--opt-lg">
+                            <div class="ard ard--opt-md ard--opt-lg">
                               <img class="ard-image ard-image--center" srcset="<?php echo Post::responsive($post->image, IMAGES_PATH) ?>" alt="<?php $post->title ?>">
                             </div>
                           </a>
