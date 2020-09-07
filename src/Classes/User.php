@@ -288,9 +288,11 @@ class User extends \App\Classes\DatabaseObject {
   }
 
   static public function queryUsersWithPostsNum() {
-    $sql = "SELECT u.*, COUNT(p.user_id) AS posted";
+    $sql = "SELECT u.*, COUNT(p.user_id) AS posted,";
+    $sql .= " SUM(if (p.proved = '1', 1, 0)) AS approved";
     $sql .= " FROM users AS u LEFT JOIN posts AS p";
-    $sql .= " ON u.id = p.user_id GROUP BY u.username";
+    $sql .= " ON u.id = p.user_id GROUP BY u.id";
+    $sql .= " ORDER BY u.username";
     $result = self::$database->query($sql);
     $users = [];
     while($obj = $result->fetch_object()) {

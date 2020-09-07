@@ -67,7 +67,9 @@ include SHARED_PATH . '/staff_header.php';
                 <td><a href="mailto: <?php echo $user->email ?>"><?php echo $user->email ?></a></td>
                 <td><span class="text-primary"><?php echo $user->user_type ?></span></td>
                 <td><?php echo date('M j, Y', strtotime($user->created_at)) ?></td>
-                <td><?php echo $user->posted ?></td>
+                <td><?php echo $user->posted ?> - <span class="text-success font-weight-bold">
+                  <?php echo $user->approved ?></span>
+                </td>
                 <td scope="colgroup" colspan="1">
                   <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('/staff/users/edit.php?id=' . $user->id) ?>">
                     Edit

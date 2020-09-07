@@ -7,7 +7,7 @@ use App\Classes\Topic;
 if (url_contain(['post/','preview/'])) $user = User::findById($post->user_id);
 
 $posts = App\Classes\Post::findWhere(
-  ['published' => '1'],
+  ['proved' => '1'],
   'ORDER BY RAND() LIMIT 3'
 );
 
@@ -39,8 +39,7 @@ $topics = Topic::findAll();
         <div class="post">
           <div class="post-image ">
             <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
-<!-- class="attachment-thumbnail size-thumbnail wp-post-image" alt="" loading="lazy" srcset="https://colorlib.com/activello/wp-content/uploads/sites/10/2015/11/photo-1438109491414-7198515b166b-150x150.jpg 150w, https://colorlib.com/activello/wp-content/uploads/sites/10/2015/11/photo-1438109491414-7198515b166b-180x180.jpg 180w, https://colorlib.com/activello/wp-content/uploads/sites/10/2015/11/photo-1438109491414-7198515b166b-300x300.jpg 300w, https://colorlib.com/activello/wp-content/uploads/sites/10/2015/11/photo-1438109491414-7198515b166b-600x600.jpg 600w" sizes="(max-width: 150px) 100vw, 150px" -->
-              <img width="150" height="150" src="<?php echo url_for('assets/images' . $post->image) ?>" style="object-fit:cover">
+              <img src="<?php echo url_for('render_img.php?img='. u($post->image) .'&w=420') ?>" style="object-fit:cover" width="150" height="150">
             </a>
           </div> 
           <div class="post-content">

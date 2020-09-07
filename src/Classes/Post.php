@@ -27,6 +27,13 @@ class Post extends \App\Classes\DatabaseObject {
   public $allowable_tags = '<h2><h3><h4><p><br><img><a><strong><em><ul><li><blockquote>';
   public $allowable_hosts = ['www.youtube.com','youtube.com','youtu.be','vimeo.com'];
 
+  static public $resize_dimensions = [
+              ['width' => 420, 'height' => 240],
+              ['width' => 640, 'height' => 365],
+              ['width' => 800, 'height' => 450],
+              ['width' => 1025, 'height' => 580]
+            ];
+
   // Relational data by foreign key in posts
   public $username = '';  // user->username
   public $tid = '';       // topic->id
@@ -193,17 +200,45 @@ class Post extends \App\Classes\DatabaseObject {
       } else {
         $old_image = $update ? $this->image : false;
         $this->image = $this->image_obj->getFileInfo()['image'];
-        
+        $this->resizeImage($this->image_obj->getFileInfo());
+
         if (parent::save()) {
-          if ($old_image) $this->image_obj->remove($old_image);
+          if ($old_image) $this->deleteImages($old_image);
           return true;
 
         } else {
-          $this->image_obj->remove($this->image);
+          $this->deleteImages($this->image);
           return false;
         }
       }
     }
+  }
+
+  protected function deleteImages($image) {
+    $images_path = $this->image_obj->images_path;
+    $filename = $images_path . '/' . $image;
+    list($noextimg, $ext) = explode('.', $image);
+    $this->image_obj->remove($image);
+
+    foreach (self::$resize_dimensions as $d) {
+      $resized = "/{$noextimg}_{$d['width']}.{$ext}";
+      $this->image_obj->remove($resized);
+    }
+    return true;
+  }
+
+  protected function resizeImage($file) {
+    list($w, $h) = getimagesize($file['filename']);
+
+    foreach (self::$resize_dimensions as $d) {
+      if ($w > $d['width']) {
+        $imagine = new \Imagine\Gd\Imagine();
+        $imagine->open($file['filename'])
+          ->thumbnail(new \Imagine\Image\Box($d['width'], $d['height']))
+          ->save("{$file['dir_path']}/{$file['id']}_{$d['width']}.{$file['ext']}");
+      }
+    }
+    return true;
   }
 
   static public function queryProvedPosts(int $per_page, int $offset) {
@@ -216,12 +251,6 @@ class Post extends \App\Classes\DatabaseObject {
     $sql .= " LIMIT {$per_page} OFFSET {$offset}";
 
     $posts = self::findBySql($sql);
-    // $result = self::$database->query($sql);
-    // $posts = [];
-    // while($obj = $result->fetch_object()) {
-    //   $posts[] = $obj;
-    // }
-    // $result->free();
 
     return $posts;
   }
@@ -302,7 +331,7 @@ class Post extends \App\Classes\DatabaseObject {
       $youtube .= ' frameborder="0" allowfullscreen></iframe>';
       $vimeo = '<iframe src="%s" class="embed-responsive-item"';
       $vimeo .= ' frameborder="0" webkitallowfullscreen mozallowfullscreen';
-      $vimeo .= ' controls="0" showinfo="0" allowfullscreen></iframe>';
+      $vimeo .= ' allowfullscreen></iframe>';
       $host = parse_url($url)['host'];
       if ($host === 'www.youtube.com' || $host === 'youtu.be') {
         $iframe = $youtube;
@@ -323,7 +352,7 @@ class Post extends \App\Classes\DatabaseObject {
       foreach ($video_urls as $url => $embed_url) {
         $div = '<div class="embed-responsive embed-responsive-16by9">%s</div>';
         $youtube = '<iframe src="%s" class="embed-responsive-item"';
-        $youtube .= ' frameborder="0" allowfullscreen></iframe>';
+        $youtube .= ' controls="0" showinfo="0" frameborder="0" allowfullscreen></iframe>';
         $vimeo = '<iframe src="%s" class="embed-responsive-item"';
         $vimeo .= ' frameborder="0" webkitallowfullscreen mozallowfullscreen';
         $vimeo .= ' allowfullscreen></iframe>';
@@ -364,11 +393,11 @@ class Post extends \App\Classes\DatabaseObject {
 
   function videoSplitter() {
     if (isset($this->video) && $this->video != "") {
-      $video = [];
       $arr = (array) json_decode($this->video);
-      $video['url'] = key($arr);
-      $video['embed'] = $arr[$video['url']];
-      $this->video = $video;
+      $url = key($arr);
+      $this->video = [];
+      $this->video['url'] = $url;
+      $this->video['embed'] = $arr[$url];
       return $this->video;
     }
     return "";
@@ -381,6 +410,18 @@ class Post extends \App\Classes\DatabaseObject {
       ]);
       return $this->video;
     }
+  }
+  
+  static public function responsive(string $image, $images_path, $depth = 0) {
+    $src_value = '';
+    $depth = ($depth == 0) ? count(self::$resize_dimensions) : $depth;
+    $arr_max = $depth - 1;
+    foreach (self::$resize_dimensions as $k => $v) {
+      $src_value .= url_for("render_img.php?img={$image}&w={$v['width']}");
+      $src_value .= $k < $arr_max ? " {$v['width']}w , " : " {$v['width']}w"; 
+      if (($k + 1) == $depth) return $src_value;
+    }
+    return $src_value;
   }
 
 }

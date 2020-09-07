@@ -104,7 +104,9 @@ include(SHARED_PATH . '/public_header.php');
                     <div class="post-format<?php echo ($post->format == 'video' ? ' post-format--video' : '') ?>">
                       <?php if ($post->format == 'image'): ?>
                         <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
-                          <div class="ard ard--image ard--hor-lg" style="background-image: url(<?php echo url_for('assets/images' . $post->image) ?>)"></div>
+                          <div class="ard ard--image ard--hor-lg">
+                            <img class="ard-image" srcset="<?php echo Post::responsive($post->image, IMAGES_PATH) ?>">
+                          </div>
                         </a>
                       <?php elseif ($post->format == 'video'): ?>
                         <div class="embed-responsive embed-responsive-16by9">
@@ -113,7 +115,7 @@ include(SHARED_PATH . '/public_header.php');
                       <?php endif; ?>
                     </div>
 
-                    <div><?php echo $post->getBodyWithVideo() ?></div>
+                    <div class="mt-4"><?php echo $post->getBodyWithVideo() ?></div>
 
                   </div>
                 </div>

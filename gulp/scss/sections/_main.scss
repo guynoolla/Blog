@@ -13,11 +13,11 @@
       article {
         position: relative;
 
-        .post-format img {
-          object-fit: cover;
-          width: 100%;
-          height: auto;
-        }
+        // .post-format img {
+        //   object-fit: cover;
+        //   width: 100%;
+        //   height: auto;
+        // }
       }
     }
     
@@ -28,14 +28,14 @@
       article {
         display: flex;
         width: 100%;
-        img {
-          display: block;
-          margin: 0 auto;
-          max-width: 21.25rem;
-          width: 100%;
-          height: auto;
-          object-fit: cover;
-        }
+        // img {
+        //   display: block;
+        //   margin: 0 auto;
+        //   max-width: 21.25rem;
+        //   width: 100%;
+        //   height: auto;
+        //   object-fit: cover;
+        // }
       }
     }
     
@@ -48,10 +48,10 @@
         article {
           width: 100%;
           padding-left: 2.4rem;
-          img {
-            width: 100%;
-            height: 15rem;
-          }
+          // img {
+          //   width: 100%;
+          //   height: 15rem;
+          // }
         }
       }
     }
@@ -60,7 +60,7 @@
       .lg-two-articles-row {
         article {
           .post-format img {
-            height: 13rem;
+            //height: 13rem;
           }
         }
       }
@@ -69,7 +69,6 @@
     article .post {
       width: 100%;
       margin: 0;
-      padding-right: .62rem;
     
       .post-item-wrap {
         .post-item-inner {
@@ -99,11 +98,11 @@
 .main .main-content {
   .lg-one-article-row {
     article.single {
-      img {
-        object-fit: cover;
-        width: 100%;
-        height: auto;
-      }
+      // img {
+      //   object-fit: cover;
+      //   width: 100%;
+      //   height: auto;
+      // }
     }
   }
 }
@@ -132,28 +131,14 @@
   }
 }
 
-// @media (min-width: 768px) {
-//   .main .main-content {
-//     .lg-one-article-row article {
-//       .post-format {
-//         &--video {
-//           .embed-responsive {
-//             border-top: 2rem solid #222 !important;
-//             border-bottom: 2rem solid #222 !important;
-//           }
-//         }
-//       }
-//     }
-//   }
-// }
-
 @media (min-width: 992px) {
   .main .main-content {
+    padding-right: .62rem !important;
+
     .lg-two-articles-row article {
       .post-format {
         &--video {
           .embed-responsive {
-            background-color: #222;
             padding-top: .6rem;
             padding-bottom: .6rem;
           }

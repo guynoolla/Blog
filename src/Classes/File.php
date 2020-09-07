@@ -73,26 +73,28 @@ class File {
 		}
 
 		if (!$error) {
-			$file_ext = substr(strrchr($this->file['name'], '.'), 1);
-			$file_name = time().rand(1000, 9999) . '.' . $file_ext;
+			$ext = substr(strrchr($this->file['name'], '.'), 1);
+			$id = time().rand(1000, 9999);
+			$img = $id . '.' . $ext;
 			$date_path = date('Y') . '/' . date('m') . '/' . date('d');
 			$dir_path = $this->images_path . '/' . $date_path;
 			if (!is_dir( $dir_path)) {
 				mkdir( $dir_path, 0777, true );
-				$file_path = $dir_path. '/' . $file_name;
+				$filename = $dir_path . '/' . $img;
 			} else {
-				$file_path = $dir_path . '/' . $file_name;
+				$filename = $dir_path . '/' . $img;
 			}
 
-			if (move_uploaded_file($this->file['tmp_name'], $file_path)) {
-				$this->file_info['dir_path'] = $dir_path;
-				$this->file_info[$attr] = "/$date_path/$file_name";
-				$this->file_info['file_path'] = $file_path;
-				$this->file_info['file_name'] = $file_name;
+			if (move_uploaded_file($this->file['tmp_name'], $filename)) {
 				$this->file_info['date_path'] = $date_path;
-				$this->file_info['extension'] = $file_ext;
+				$this->file_info['dir_path'] = $dir_path;
+				$this->file_info['filename'] = $filename;
+				$this->file_info['id'] = $id;
+				$this->file_info['img'] = $img;
+				$this->file_info['ext'] = $ext;
 				$this->file_info['size'] = $size;
-		
+				$this->file_info[$attr] = "/$date_path/$img";
+
 			} else {
 				$error = 'The file could not be moved.';
 				@unlink( $this->file['tmp_name'] );
@@ -103,28 +105,11 @@ class File {
 	}
 
 	public function remove($attr_value) {
-		$dest = $this->images_path . '/' . $attr_value;
+		$filename = $this->images_path . '/' . $attr_value;
 
-		if (file_exists($dest) && is_file($dest)) {
-			unlink($dest);
+		if (file_exists($filename) && is_file($filename)) {
+			unlink($filename);
 		}
-	}
-
-	public function render($attr_value) {
-		$dest = $this->images_path . '/' . $attr_value;
-
-		if (!file_exists($dest)) { $dest = $this->images_path . '/' . $this->default; }
-
-		$file_ext = substr(strrchr($attr_value, '.'), 1);
-
-		if ($this->cache) {
-			header("Cache-Control: private, max-age=" . $this->cache);
-			header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $this->cache) . ' GMT');
-		}
-		header("Content-Type: image/$file_ext");
-		header('Content-Length: ' . filesize($dest));
-
-		readfile($dest);
 	}
 
 }

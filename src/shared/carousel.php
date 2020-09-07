@@ -4,7 +4,9 @@
     <div class="slider">
       <?php foreach($posts as $post): ?>
         <div>
-          <img src="<?php echo url_for('assets/images/' . $post->image) ?>" />
+          <div class="ard ard--square">
+            <img srcset="<?php echo \App\Classes\Post::responsive($post->image, IMAGES_PATH, 2) ?>" alt="<?php $post->title ?>">
+          </div>
           <div class="slider-post-text">
             <a href="<?php echo url_for('topic/' . u($post->topic) . '?id=' . $post->tid) ?>" class="category"><?php echo $post->topic ?></a>
             <h2><a href="<?php echo url_for('post/' . u($post->title)) . '?id=' . $post->id ?>"><?php echo $post->title ?></a></h2>

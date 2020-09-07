@@ -26,7 +26,7 @@ if (isset($_GET['s'])) {
   $term = $_GET['s'] ?? '';
 
   $current_page = $_GET['page'] ?? 1;
-  $per_page = 4;
+  $per_page = 6;
   $total_count = Post::countAll([
     'proved' => 1, 'title' => ['like' => "%{$term}%"],
     "OR p.body LIKE '{%$term%}'"
@@ -46,7 +46,7 @@ if (isset($_GET['s'])) {
   $topic_name = Topic::findById($topic_id)->name;
 
   $current_page = $_GET['page'] ?? 1;
-  $per_page = 4;
+  $per_page = 6;
   $total_count = Post::countAll(['topic_id' => $topic_id, 'proved' => '1']);
   $pagination = new Pagination($current_page, $per_page, $total_count, 'pagination-lg');
 
@@ -58,7 +58,7 @@ if (isset($_GET['s'])) {
 
 } else {
   $current_page = $_GET['page'] ?? 1;
-  $per_page = 4;
+  $per_page = 6;
   $total_count = Post::countAll(['proved' => '1']);
   $pagination = new Pagination($current_page, $per_page, $total_count, 'pagination-lg');
   
@@ -120,7 +120,9 @@ if (!isset($_GET['id']) && !isset($_GET['s'])) {
                       <div class="post-format<?php echo ($post->format == 'video' ? ' post-format--video' : '') ?>">
                         <?php if ($post->format == 'image'): ?>
                           <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
-                            <div class="ard ard--image ard--hor-lg" style="background-image: url(<?php echo url_for('assets/images' . $post->image) ?>)"></div>
+                            <div class="ard ard--hor-lg">
+                              <img class="ard-image" srcset="<?php echo Post::responsive($post->image, IMAGES_PATH) ?>" alt="<?php $post->title ?>">
+                            </div>
                           </a>
                         <?php elseif ($post->format == 'video'): ?>
                           <div class="embed-responsive embed-responsive-16by9">
@@ -165,7 +167,9 @@ if (!isset($_GET['id']) && !isset($_GET['s'])) {
                       <div class="post-format<?php echo ($post->format == 'video' ? ' post-format--video' : '') ?>">
                         <?php if ($post->format == 'image'): ?>
                           <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">  
-                            <div class="ard ard--image ard--ver-md ard--opt-lg" style="background-image: url(<?php echo url_for('assets/images' . $post->image) ?>)"></div>
+                            <div class="ard ard--ver-md ard--opt-lg">
+                              <img class="ard-image ard-image--center" srcset="<?php echo Post::responsive($post->image, IMAGES_PATH) ?>" alt="<?php $post->title ?>">
+                            </div>
                           </a>
                         <?php elseif ($post->format == 'video'): ?>
                           <div class="embed-responsive embed-responsive-16by9">

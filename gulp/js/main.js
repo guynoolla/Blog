@@ -52,36 +52,35 @@ $(document).ready(() => {
     slider.slick({
       slidesToShow: 3,
       slidesToScroll: 1,
-      autoplay: true,
+      autoplay: false,
       autoplaySpeed: 2000,
       nextArrow: $('.next'),
       prevArrow: $('.prev'),
       responsive: [{
-          breakpoint: 1201, //1024,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 1,
-            infinite: true,
-            dots: false
-          }
-        },
-        {
-          breakpoint: 991, // 880,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 1,
-            infinite: true,
-            dots: false
-          }
-        },
-        {
-          breakpoint: 701,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1
-          }
+        breakpoint: 1201, //1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          infinite: true,
+          dots: false
         }
-      ]
+      },
+      {
+        breakpoint: 991, // 880,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          infinite: true,
+          dots: false
+        }
+      },
+      {
+        breakpoint: 701,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }]
     })
   }
 
