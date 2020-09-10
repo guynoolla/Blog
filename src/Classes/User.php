@@ -23,7 +23,7 @@ class User extends \App\Classes\DatabaseObject {
   protected $password_reset_expires_at;
   protected $email_confirm_hash;
   protected $email_confirm_expires_at;
-  protected $created_at;
+  public $created_at;
   // form password fields
   public $password;
   public $confirm_password;
@@ -32,6 +32,10 @@ class User extends \App\Classes\DatabaseObject {
   public $empty_password_field = true;
 
   protected $image_obj;
+
+  // Relational data by foreign key in posts
+  public $posted = "";
+  public $approved = "";
 
   public function __construct(array $args=[]) {
     $this->username = $args['username'] ?? '';
@@ -287,18 +291,14 @@ class User extends \App\Classes\DatabaseObject {
     return $this->save();
   }
 
-  static public function queryUsersWithPostsNum() {
+  static public function queryUsersWithPostsNum(int $per_page, int $offset) {
     $sql = "SELECT u.*, COUNT(p.user_id) AS posted,";
-    $sql .= " SUM(if (p.proved = '1', 1, 0)) AS approved";
+    $sql .= " SUM(if (p.approved = '1', 1, 0)) AS approved";
     $sql .= " FROM users AS u LEFT JOIN posts AS p";
-    $sql .= " ON u.id = p.user_id GROUP BY u.id";
-    $sql .= " ORDER BY u.username";
-    $result = self::$database->query($sql);
-    $users = [];
-    while($obj = $result->fetch_object()) {
-      $users[] = $obj;
-    }
-    $result->free();
+    $sql .= " ON u.id = p.user_id";
+    $sql .= " GROUP BY u.id ORDER BY u.username";
+    $sql .= " LIMIT {$per_page} OFFSET {$offset}";
+    $users = self::findBySql($sql);
 
     return $users;    
   }

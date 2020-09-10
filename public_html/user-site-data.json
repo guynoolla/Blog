@@ -1,0 +1,34 @@
+{
+  "social": {
+    "facebook": {
+      "have": true,
+      "link": "https://www.facebook.com"
+    },
+    "twitter": {
+      "have": true,
+      "link": "https://www.twitter.com"
+    },
+    "googlePlus": {
+      "have": false,
+      "link": "https://www.plus.google.com"
+    },
+    "youtube": {
+      "have": true,
+      "link": "https://www.youtube.com"
+    },
+    "instagram": {
+      "have": true,
+      "link": "https://www.instagram.com"
+    },
+    "github": {
+      "have": true, 
+      "link": "https://www.github.com"
+    }
+  },
+  "copyright": {
+    "sign": "&#169;",
+    "sitename": "Light Kight",
+    "delimeter": "&#124;",
+    "rights": "All rights reserved"
+  }
+}

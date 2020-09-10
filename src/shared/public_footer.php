@@ -3,7 +3,7 @@
 <?php
 	$url = $_SERVER['REQUEST_URI'];
 	
-	if ($url == "/" || url_contain(['index.php','post','topic'])) {
+	if ($url == "/" || url_contain(['index.php','post','topic','preview'])) {
 		$bg = '';
 	} else {
 		$bg = 'bg-other-lk';
@@ -16,7 +16,7 @@
 			<?php include '_social_links_list.php' ?>
 		</div>
 		<div class="copyright mt-4">
-			Light Kite. Theme by <a href="https://colorlib.com/" target="_blank">Gainulla</a> web developer
+			<?php echo "{$jsonstore->copyright->sign} {$jsonstore->copyright->sitename} " . date('Y') . " {$jsonstore->copyright->delimeter} {$jsonstore->copyright->rights}" ?>
 		</div>
 	</div>
 	<a href="#topScrollElement" class="scroll-to-top" id="scrollToTopJS" style="display: block;"><i class="fa fa-angle-up"></i></a>

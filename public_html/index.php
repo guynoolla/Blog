@@ -27,10 +27,12 @@ if (isset($_GET['s'])) {
 
   $current_page = $_GET['page'] ?? 1;
   $per_page = 6;
+
   $total_count = Post::countAll([
-    'proved' => 1, 'title' => ['like' => "%{$term}%"],
-    "OR p.body LIKE '{%$term%}'"
-  ]);
+    'approved' => '1',
+    ["( title LIKE '%?%' OR body LIKE '%?%' )", $term, $term]
+  ], 'GROUP BY id ORDER BY title DESC');
+
   $pagination = new Pagination($current_page, $per_page, $total_count);
   $posts = Post::querySearchPosts(trim($term), $per_page, $pagination->offset());
 
@@ -42,12 +44,12 @@ if (isset($_GET['s'])) {
 
 } elseif (isset($_GET['id'])) {
   $topic_id = $_GET['id'] ?? 0;
-  $posts = Post::queryPostsByTopic($topic_id);
   $topic_name = Topic::findById($topic_id)->name;
+  $posts = Post::queryPostsByTopic($topic_id);
 
   $current_page = $_GET['page'] ?? 1;
   $per_page = 6;
-  $total_count = Post::countAll(['topic_id' => $topic_id, 'proved' => '1']);
+  $total_count = Post::countAll(['topic_id' => $topic_id, 'approved' => '1']);
   $pagination = new Pagination($current_page, $per_page, $total_count, 'pagination-lg');
 
   if ($posts) {
@@ -59,21 +61,21 @@ if (isset($_GET['s'])) {
 } else {
   $current_page = $_GET['page'] ?? 1;
   $per_page = 6;
-  $total_count = Post::countAll(['proved' => '1']);
+  $total_count = Post::countAll(['approved' => '1']);
   $pagination = new Pagination($current_page, $per_page, $total_count, 'pagination-lg');
   
-  $posts = Post::queryProvedPosts($per_page, $pagination->offset());
+  $posts = Post::queryApprovedPosts($per_page, $pagination->offset());
   $page_title = 'Recent Posts';
 }
 
 include SHARED_PATH . '/public_header.php';
 
-if (!isset($_GET['id']) && !isset($_GET['s'])) {
+if (!isset($_GET['id']) && !isset($_GET['s']) && $current_page == 1) {
   include SHARED_PATH . '/carousel.php';
 }
 
 ?>
-<div class="container-xl">
+<div class="container-md">
   <div class="row">
     
     <main class="main col-lg-8" role="main" id="homeMain">
@@ -101,6 +103,7 @@ if (!isset($_GET['id']) && !isset($_GET['s'])) {
                 <div class="post">
                   <div class="post-item-wrap">
                     <div class="post-item-inner">
+                      <a href="<?php echo url_for('topic/' . u($post->topic) . '?id=' . $post->tid) ?>" class="category category--dark text-center"><?php echo $post->topic ?></a>
                       <h2 class="entry-title text-center">
                         <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
                           <?php echo h($post->title) ?>
@@ -120,7 +123,7 @@ if (!isset($_GET['id']) && !isset($_GET['s'])) {
                       <div class="post-format<?php echo ($post->format == 'video' ? ' post-format--video' : '') ?>">
                         <?php if ($post->format == 'image'): ?>
                           <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
-                            <div class="ard ard--hor-md">
+                            <div class="ard ard--wide-md">
                               <img class="ard-image ard-image--wide" srcset="<?php echo Post::responsive($post->image, IMAGES_PATH) ?>" alt="<?php $post->title ?>">
                             </div>
                           </a>
@@ -133,6 +136,9 @@ if (!isset($_GET['id']) && !isset($_GET['s'])) {
                       </div>
 
                       <div class="entry-content"><?php echo Post::excerpt($post->body) ?></div>
+                      <div class="read-more read-more--dark text-center mt-3">
+                        <a href="<?php echo url_for('post/' . u($post->title)) . '?id=' . $post->id ?>">Read More</a>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -152,6 +158,7 @@ if (!isset($_GET['id']) && !isset($_GET['s'])) {
               <div class="post">
                 <div class="post-item-wrap">
                     <div class="post-item-inner">
+                      <a href="<?php echo url_for('topic/' . u($post->topic) . '?id=' . $post->tid) ?>" class="category category--dark text-center"><?php echo $post->topic ?></a>
                       <h2 class="entry-title text-center"><a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>"><?php echo h($post->title) ?></a></h2>
                       <div class="entry-meta">
                         <span class="posted-on">Posted on <a href="#" rel="bookmark">
@@ -167,8 +174,8 @@ if (!isset($_GET['id']) && !isset($_GET['s'])) {
                       <div class="post-format<?php echo ($post->format == 'video' ? ' post-format--video' : '') ?>">
                         <?php if ($post->format == 'image'): ?>
                           <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">  
-                            <div class="ard ard--opt-md ard--opt-lg">
-                              <img class="ard-image ard-image--center" srcset="<?php echo Post::responsive($post->image, IMAGES_PATH) ?>" alt="<?php $post->title ?>">
+                            <div class="ard ard--mid-md ard--tall-lg ard--mid-xl">
+                              <img class="ard-image ard-image--center ard-image--wide" srcset="<?php echo Post::responsive($post->image, IMAGES_PATH) ?>" alt="<?php $post->title ?>">
                             </div>
                           </a>
                         <?php elseif ($post->format == 'video'): ?>

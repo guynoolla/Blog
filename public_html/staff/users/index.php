@@ -1,5 +1,6 @@
 <?php
 use App\Classes\User;
+use App\Classes\Pagination;
 
 require_once('../../../src/initialize.php');
 
@@ -23,8 +24,12 @@ if (isset($_GET['id']) && isset($_GET['cmd'])) {
   }
 }
 
-//$users = User::findAll();
-$users = User::queryUsersWithPostsNum();
+$current_page = $_GET['page'] ?? 1;
+$per_page = DASHBOARD_PER_PAGE;
+$total_count = User::countAll();
+$pagination = new Pagination($current_page, $per_page, $total_count);
+
+$users = User::queryUsersWithPostsNum($per_page, $pagination->offset());
 
 $page_title = 'List Users';
 include SHARED_PATH . '/staff_header.php';
@@ -84,6 +89,11 @@ include SHARED_PATH . '/staff_header.php';
             <?php endforeach; ?>
           </tbody>
         </table>
+
+        <?php
+          $url = url_for('staff/users/index.php');
+          echo $pagination->page_links($url);
+        ?>
   
       <?php endif; ?>
 

@@ -160,14 +160,15 @@ class DatabaseObject {
   static public function findWhere(array $where=[], string $append="") {
     $sql = "SELECT * FROM " . static::$table_name;
     $sql = self::concatWhereToSql($sql, $where);
-    if ($append != "") $sql .= $append;
+    if ($append != "") $sql .= " {$append}";
 
     return static::findBySql($sql);
   }
 
-  static public function countAll($where=[]) {
+  static public function countAll($where=[], $append="") {
     $sql = "SELECT COUNT(*) FROM " . static::$table_name;
     $sql = self::concatWhereToSql($sql, $where);
+    if ($append != "") $sql .= " {$append}";
     $result_set = self::$database->query($sql);
     $row = $result_set->fetch_array();
     return array_shift($row);
@@ -177,26 +178,42 @@ class DatabaseObject {
     if (!empty($where)) {
       $i = 0;
       foreach ($where as $column => $value) {
-        if (!is_array($value)) {
-          $value = strval($value);
-          if ($i > 0) {
-            $sql .= " AND $column = '" . self::escape($value) . "'";
-          } else {
-            $sql .= " WHERE $column = '" . self::escape($value) . "'";
-          }
-        } else {
-          foreach ($value as $operator => $nested) {
-            $nested = strval($nested);
+        if (!is_int($column)) {
+          if (!is_array($value)) {
+            $value = strval($value);
             if ($i > 0) {
-              $sql .= " AND $column $operator '" . self::escape($nested) . "'";
+              $sql .= " AND $column = '" . self::escape($value) . "'";
             } else {
-              $sql .= " WHERE $column $operator '" . self::escape($nested) . "'";
+              $sql .= " WHERE $column = '" . self::escape($value) . "'";
+            }
+          } else {
+            foreach ($value as $operator => $ivalue) {
+              $ivalue = strval($ivalue);
+              if ($i > 0) {
+                $sql .= " AND $column $operator '" . self::escape($ivalue) . "'";
+              } else {
+                $sql .= " WHERE $column $operator '" . self::escape($ivalue) . "'";
+              }
             }
           }
+        } else {
+          $q = "";
+          $arr = [];
+          foreach ($value as $ykey => $yvalue) {
+            if ($ykey == 0) {
+              $q = str_replace('%', '%%', $yvalue);
+              $q = str_replace('?', '%s', $q);
+            } else {
+              $arr[] = self::escape($yvalue);
+            }
+          }
+          $sql .= $i > 0 ? ' AND ' : ' WHERE ';
+          $sql .= vsprintf($q, $arr);
         }
         $i++;
       }
     }
+
     return $sql;
   }
 

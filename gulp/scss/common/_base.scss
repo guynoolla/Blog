@@ -193,3 +193,7 @@ a {
   color: #A7A7A7 !important;
   font-weight: 300;
 }
+
+.embed-responsive::before {
+  background-color: #0f0e0e;
+}

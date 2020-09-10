@@ -15,7 +15,6 @@ $(document).ready(() => {
 
   Breakpoint.init();
 
-  deviceWidthResponsiveEmbed();
   navbarSearchBehavior();
   homePagePaginationBehavior();
   editPostFormElementsBehavior();
@@ -23,6 +22,10 @@ $(document).ready(() => {
   var rtime;
   var timeout = false;
   var delta = 200;
+  var er1 = $(".embed-responsive");
+  var er2 = $(".embed-responsive");
+
+  deviceMediaEmbedResponsive(er1, er2);
 
   $(window).resize(function() {
     rtime = new Date();
@@ -37,11 +40,11 @@ $(document).ready(() => {
       setTimeout(resizeend, delta);
     } else {
       timeout = false;
-      var er1 = $("main .lg-one-article-row .post .post-format .embed-responsive");
-      var er2 = $("main .lg-two-articles-row .post .post-format .embed-responsive");
       if (er1.length && er2.length) {
-        resetEmbedResponsive(er1, er2);
-        embedResponsiveOnResize(er1, er2);
+        cleanEmbedResponsive(er1, er2);
+        mediaEmbedResponsive(er1, er2);
+      } else {
+        console.log("here!")
       }
     }               
   }
@@ -108,61 +111,49 @@ $(document).ready(() => {
  * Functions
  */
 
-function deviceWidthResponsiveEmbed() {
-  var oneColEmbedResponsive = $("main .lg-one-article-row .post .post-format .embed-responsive");
-  var twoColEmbedResponsive = $("main .lg-two-articles-row .post .post-format .embed-responsive");
-
-  if (oneColEmbedResponsive.length) {
-    if (Breakpoint.is("xs")) { // 576px
-      console.log('Breakpoint', 'xs')
-      // Leave as is
-    }
-    if (Breakpoint.is("sm")) { // 768px
-      console.log("Breakpoint", "sm")
-      twoColEmbedResponsive.removeClass("embed-responsive-16by9");
-      twoColEmbedResponsive.addClass("embed-responsive-4by3");
-    }
-    if (Breakpoint.is("md")) { // 992px
-      console.log("Breakpoint", "md")
-      // Leave as is
-    }
-    if (Breakpoint.is("lg")) { // 1200px
-      console.log("Breakpoint", "lg")
-      // Leave as is
-    }
+function deviceMediaEmbedResponsive(embedResp1, embedResp2) {
+  if (Breakpoint.is("md")) {
+    cleanEmbedResponsive(false, embedResp2);
+    mediaEmbedResponsive(false, embedResp2);
+  } else {
+    // Leave default embed-responsive-16by9;
   }
 }
 
-function embedResponsiveOnResize(embedResp1, embedResp2) {
-  if (Breakpoint.is("xs")) { // 576px
+function mediaEmbedResponsive(embedResp1=false, embedResp2=false) {
+  if (Breakpoint.is("xs")) {
     console.log("Breakpoint", "xs");
-    embedResp1.addClass('embed-responsive-16by9');
-    embedResp2.addClass('embed-responsive-16by9');
+    if (embedResp1) embedResp1.addClass('embed-responsive-16by9');
+    if (embedResp2) embedResp2.addClass('embed-responsive-16by9');
   }
-  if (Breakpoint.is("sm")) { // 768px
+  if (Breakpoint.is("sm")) {
     console.log("Breakpoint", "sm");
-    embedResp1.addClass('embed-responsive-16by9');
-    embedResp2.addClass("embed-responsive-4by3");
+    if (embedResp1) embedResp1.addClass('embed-responsive-16by9');
+    if (embedResp2) embedResp2.addClass("embed-responsive-16by9");
   }
-  if (Breakpoint.is("md")) { // 992px
+  if (Breakpoint.is("md")) {
     console.log("Breakpoint", "md");
-    embedResp1.addClass('embed-responsive-16by9');
-    embedResp2.addClass('embed-responsive-16by9');
+    if (embedResp1) embedResp1.addClass('embed-responsive-16by9');
+    if (embedResp2) embedResp2.addClass('embed-responsive-4by3');
   }
-  if (Breakpoint.is("lg")) { // 1200px
+  if (Breakpoint.is("lg")) {
     console.log("Breakpoint", "lg");
-    embedResp1.addClass('embed-responsive-16by9');
-    embedResp2.addClass('embed-responsive-16by9');
+    if (embedResp1) embedResp1.addClass('embed-responsive-16by9');
+    if (embedResp2) embedResp2.addClass('embed-responsive-16by9');
   }  
 }
 
-function resetEmbedResponsive(embedResp1, embedResp2) {
-  embedResp1.removeClass('embed-responsive-4by3');
-  embedResp1.removeClass('embed-responsive-16by9');
-  embedResp1.removeClass('embed-responsive-21by9');
-  embedResp2.removeClass('embed-responsive-4by3');
-  embedResp2.removeClass('embed-responsive-16by9');
-  embedResp2.removeClass('embed-responsive-21by9');
+function cleanEmbedResponsive(embedResp1=false, embedResp2=false) {
+  if (embedResp1) {
+    embedResp1.removeClass('embed-responsive-4by3');
+    embedResp1.removeClass('embed-responsive-16by9');
+    embedResp1.removeClass('embed-responsive-21by9');
+  }
+  if (embedResp2) {
+    embedResp2.removeClass('embed-responsive-4by3');
+    embedResp2.removeClass('embed-responsive-16by9');
+    embedResp2.removeClass('embed-responsive-21by9');
+  }
 }
 
 function editPostFormElementsBehavior() {

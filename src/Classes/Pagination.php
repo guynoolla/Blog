@@ -11,7 +11,7 @@ class Pagination {
   protected $css_class = 'pagination';
   protected $numbers_scope;
 
-  public function __construct($page=1, $per_page=4, $total_count=0, $css_class='pagination-lg') {
+  public function __construct($page=1, $per_page=4, $total_count=0, $css_class='pagination-md') {
     $this->current_page = (int) $page;
     $this->per_page = (int) $per_page;
     $this->total_count = (int) $total_count;

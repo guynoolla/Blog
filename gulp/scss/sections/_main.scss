@@ -44,7 +44,7 @@
     
       .post-item-wrap {
         .post-item-inner {
-          padding-top:  .62rem;
+          padding-top:  1.62rem;
           padding-bottom: 1.5rem;
           border-bottom: 1px solid #dedede;
           &:last-of-type {
@@ -97,16 +97,5 @@
 @media (min-width: 992px) {
   .main .main-content {
     padding-right: 1rem !important;
-
-    .lg-two-articles-row article {
-      .post-format {
-        &--video {
-          .embed-responsive {
-            padding-top: .6rem;
-            padding-bottom: .6rem;
-          }
-        }
-      }
-    }
   }
 }

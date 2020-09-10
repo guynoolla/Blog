@@ -7,7 +7,7 @@ use App\Classes\Topic;
 if (url_contain(['post/','preview/'])) $user = User::findById($post->user_id);
 
 $posts = App\Classes\Post::findWhere(
-  ['proved' => '1'],
+  ['approved' => '1'],
   'ORDER BY RAND() LIMIT 3'
 );
 
@@ -66,7 +66,7 @@ $topics = Topic::findAll();
   </section>
 
   <section class="widget">
-    <h3 class="title">Follow Me</h3>
+    <h3 class="title">Follow Us</h3>
 
     <div class="social-links-widget more-space-between">
       <?php include '_social_links_list.php' ?>
@@ -82,7 +82,7 @@ $topics = Topic::findAll();
           <li class="cat-item">
             <a href="<?php echo url_for('topic/') . u($topic->name) . '?id=' . $topic->id ?>" title="<?php $topic->name ?>"><?php echo $topic->name ?></a>
             <span><?php echo Post::countAll(
-              ['topic_id' => $topic->id, 'proved' => '1']
+              ['topic_id' => $topic->id, 'approved' => '1']
             ) ?></span>
           </li>
         <?php endforeach; ?>

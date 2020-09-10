@@ -10,17 +10,12 @@ class File {
 	protected $max_file_size;
 	protected $file_info = [];
 	protected $default = 'default.png';
-	protected $cache = false;
+	public $error = false;
 
 	public function __construct($file=null) {
 		$this->file = $file;
 		$this->images_path = IMAGES_PATH;
 		$this->max_file_size = MAX_FILE_SIZE;
-	}
-
-	// 604800 seconds is one week 60*60*24*7
-	public function cache($cache_time=604800) {
-		$this->cache = $cache_time;
 	}
 
 	public function getFileInfo() {
@@ -42,45 +37,48 @@ class File {
 		switch($this->file['error']) {
 			case 1:
 			case 2:
-				return 'The uploaded file was too large.';
+						$this->error = 'The uploaded file was too large.';
+						break;
 			case 3:
-				return 'The file was only partially uploaded.';
+						$this->error = 'The file was only partially uploaded.';
+						break;
 			case 6:
 			case 7:
 			case 8:
-				return 'The file could not be uploaded due to a system error.';
+						$this->error = 'The file could not be uploaded due to a system error.';
+						break;
 			case 4:
 			default:
-				return 'No file was uploaded.';
+					$this->error = 'No file was uploaded.';
+					break;
 		}
+		return $this->error;
 	}
 
 	public function handleUpload($field_name, $ratio) {
     if (!$this->isFileUploaded()) {
-      return $this->getUploadError();
+			return $this->getUploadError();
     } else {
       return $this->moveFile($field_name, $ratio);
     }
 	}
 
 	public function moveFile($attr, $ratio) {
-		$error = false;
-
 		list ($w, $h) = getimagesize($this->file['tmp_name']);
 		$img_ratio = $w/$h;
 
 		if ($img_ratio < $ratio['min'] || $img_ratio > $ratio['max'] ) {
-			$error = 'Image aspect ratio (width x height) must be between 7x5 9x5)';
+			$this->error = 'Image aspect ratio (width x height) must be between 7x5 9x5)';
 
 		} else {
 			$size = ROUND($this->file['size']/1024);
 			$limit = $this->max_file_size/1024;
 			if ($size > $limit) {
-				$error = 'The uploaded file must not be larger than ' . $limit . 'KB.';
+				$this->error = 'The uploaded file must not be larger than ' . $limit . 'KB.';
 			}
 		}
 
-		if (!$error) {
+		if (!$this->error) {
 			$ext = substr(strrchr($this->file['name'], '.'), 1);
 			$id = time().rand(1000, 9999);
 			$img = $id . '.' . $ext;
@@ -104,12 +102,12 @@ class File {
 				$this->file_info[$attr] = "/$date_path/$img";
 
 			} else {
-				$error = 'The file could not be moved.';
+				$this->error = 'The file could not be moved.';
 				@unlink( $this->file['tmp_name'] );
 			}
 		}
 
-		return $error;
+		return $this->error;
 	}
 
 	public function remove($attr_value) {

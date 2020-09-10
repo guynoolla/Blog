@@ -6,7 +6,7 @@ namespace App\Classes;
 class Post extends \App\Classes\DatabaseObject {
 
   static protected $table_name = 'posts';
-  static protected $db_columns = ['id','user_id','topic_id','title','format','image','video','body','video_urls','published','proved','created_at','updated_at'];
+  static protected $db_columns = ['id','user_id','topic_id','title','format','image','video','body','video_urls','published','approved','created_at','updated_at'];
 
   public $id;
   public $user_id;
@@ -18,7 +18,7 @@ class Post extends \App\Classes\DatabaseObject {
   public $body;
   protected $video_urls;
   public $published;
-  public $proved;
+  public $approved;
   public $created_at;
   public $updated_at;
 
@@ -112,10 +112,19 @@ class Post extends \App\Classes\DatabaseObject {
       $this->errors[] = 'Post cannot contain more than 65000 characters.';
     }
 
-    // Optional value (post can have image or video format)
-    if ($this->video != "") {
-      if (has_external_link($this->video, $this->allowable_hosts)) {
-        $this->errors[] = 'Videos except YouTube and Vimeo are not allowed.';
+    if (!in_array($this->format, ['image', 'video'])) {
+      $this->errors[] = 'Video must have image or video format';
+
+    } else {
+      if ($this->format == 'video') {
+        if (is_blank($this->video)) {
+          $this->errors[] = 'Post video url is not set.';
+        }
+        if (has_external_link($this->video, $this->allowable_hosts)) {
+          $this->errors[] = 'Videos except YouTube and Vimeo are not allowed.';
+        }
+      } elseif ($this->format == 'image') {
+        // Image validation is in save method
       }
     }
 
@@ -132,11 +141,6 @@ class Post extends \App\Classes\DatabaseObject {
     } else {
       return 0;
     }
-  }
-
-  public function delete() {
-    $this->image_obj->remove($this->image);
-    return parent::delete();
   }
 
   protected function filterCheckboxValue($property) {
@@ -182,38 +186,46 @@ class Post extends \App\Classes\DatabaseObject {
   }
 
   public function save() {
-    if ($this->format == "" || $this->format == 'video') {
-
+    if (is_null($this->format) || $this->format == 'video') {
       return parent::save();
 
     } elseif ($this->format == 'image') {
       if (!isset($this->image_obj)) return parent::save();
-      
+
       $create = (!isset($this->id) == true);
       $update = (isset($this->id) && $this->image_obj->isFileSelected() == true);
-      if (!$create && !$update) return parent::save();
 
-      $image_error = $this->image_obj->handleUpload('image', $this->image_aspect_ratio);
+      if ($create || $update) {
+        $this->image_obj->handleUpload('image', $this->image_aspect_ratio);
 
-      if ($image_error !== false) {
-        $this->errors[] = $image_error;
-        return false;
-
-      } else {
-        $old_image = $update ? $this->image : false;
-        $this->image = $this->image_obj->getFileInfo()['image'];
-        $this->resizeImage($this->image_obj->getFileInfo());
-
-        if (parent::save()) {
-          if ($old_image) $this->deleteImages($old_image);
-          return true;
+        if ($this->image_obj->error) {
+          $this->errors[] = $this->image_obj->error;
+          return false;
 
         } else {
-          $this->deleteImages($this->image);
-          return false;
+          $file_info = $this->image_obj->getFileInfo();
+          $old_image = isset($this->id) ? $this->image : false;
+  
+          $this->image = $file_info['image'];
+          $this->resizeImage($file_info);
+  
+          if (parent::save()) {
+            if ($old_image) $this->deleteImages($old_image);
+            return true;
+          } else {
+            $this->deleteImages($this->image);
+            return false;
+          }
         }
+      } else {
+        return parent::save();
       }
     }
+  }
+
+  public function delete() {
+    $this->deleteImages($this->image);
+    return parent::delete();
   }
 
   protected function deleteImages($image) {
@@ -243,15 +255,14 @@ class Post extends \App\Classes\DatabaseObject {
     return true;
   }
 
-  static public function queryProvedPosts(int $per_page, int $offset) {
+  static public function queryApprovedPosts(int $per_page, int $offset) {
     $sql = "SELECT p.*, u.username, t.id AS tid, t.name AS topic";
     $sql .= " FROM posts AS p";
     $sql .= " LEFT JOIN users AS u ON p.user_id = u.id";
     $sql .= " LEFT JOIN topics AS t ON p.topic_id = t.id";
-    $sql .= " WHERE p.proved = 1";
+    $sql .= " WHERE p.approved = 1";
     $sql .= " ORDER BY created_at DESC";
     $sql .= " LIMIT {$per_page} OFFSET {$offset}";
-
     $posts = self::findBySql($sql);
 
     return $posts;
@@ -259,11 +270,13 @@ class Post extends \App\Classes\DatabaseObject {
 
   static public function querySearchPosts($term, int $per_page, int $offset) {
     $_term = self::$database->escape_string($term);
-    $sql = "SELECT p.*, u.username FROM posts AS p";
-    $sql .= " JOIN users AS u ON p.user_id = u.id";
-    $sql .= " WHERE published = 1";
-    $sql .= " AND p.title LIKE '%" . $_term . "%'";
-    $sql .= " OR p.body LIKE '%" . $_term . "%'";
+    $sql = "SELECT p.*, u.username, t.id AS tid, t.name as topic";
+    $sql .= " FROM posts AS p";
+    $sql .= " LEFT JOIN users AS u ON p.user_id = u.id";
+    $sql .= " LEFT JOIN topics AS t ON p.topic_id = t.id";
+    $sql .= " WHERE p.approved = 1";
+    $sql .= " AND (p.title LIKE '%" . $_term . "%'";
+    $sql .= " OR p.body LIKE '%" . $_term . "%')";
     $sql .= " ORDER BY updated_at DESC";
     $sql .= " LIMIT {$per_page} OFFSET {$offset}";
     $posts = self::findBySql($sql);
@@ -273,16 +286,13 @@ class Post extends \App\Classes\DatabaseObject {
 
   static public function queryPostsByTopic($topic_id) {
     $_topic_id = self::$database->escape_string($topic_id);
-    $sql = "SELECT p.*, u.username FROM posts AS p";
+    $sql = "SELECT p.*, u.username, t.id AS tid, t.name as topic";
+    $sql .= " FROM posts AS p";
     $sql .= " JOIN users AS u ON p.user_id = u.id";
-    $sql .= " WHERE p.proved = 1";
+    $sql .= " JOIN topics AS t ON p.topic_id = t.id";
+    $sql .= " WHERE p.approved = 1";
     $sql .= " AND topic_id = " . $_topic_id;
-    $result = self::$database->query($sql);
-    $posts = [];
-    while($obj = $result->fetch_object()) {
-      $posts[] = $obj;
-    }
-    $result->free();
+    $posts = self::findBySql($sql);
 
     return $posts;    
   }
@@ -314,7 +324,7 @@ class Post extends \App\Classes\DatabaseObject {
   }
 
   static public function queryRandomImage() {
-    $sql = "SELECT image FROM posts WHERE proved = 1";
+    $sql = "SELECT image FROM posts WHERE approved = 1";
     $sql .= " ORDER BY RAND() LIMIT 1";
     $result = self::$database->query($sql);
     $image = $result->fetch_assoc()['image'];
@@ -420,7 +430,7 @@ class Post extends \App\Classes\DatabaseObject {
     $arr_max = $depth - 1;
     foreach (self::$resize_dimensions as $k => $v) {
       $src_value .= url_for("render_img.php?img={$image}&w={$v['width']}");
-      $src_value .= $k < $arr_max ? " {$v['width']}w , " : " {$v['width']}w"; 
+      $src_value .= $k < $arr_max ? " {$v['width']}w, " : " {$v['width']}w"; 
       if (($k + 1) == $depth) return $src_value;
     }
     return $src_value;

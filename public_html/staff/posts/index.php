@@ -27,17 +27,17 @@ if (isset($_GET['id'])) {
 
     } elseif ($cmd == 'unpublish') {
       $post->published = '0';
-      $post->proved = '0';
+      $post->approved = '0';
       $message = "The post '" . $post->title . "' was unpublished.";
     
     } elseif ($cmd == 'prove') {
-      $post->proved = '1';
-      $message = "The post '" . $post->title . "' was proved.";
+      $post->approved = '1';
+      $message = "The post '" . $post->title . "' was approved.";
 
     } elseif ($cmd == 'disprove') {
       $post->published = '0';
-      $post->proved = '0';
-      $message = "The post '" . $post->title . "' was disproved.";
+      $post->approved = '0';
+      $message = "The post '" . $post->title . "' was disapproved.";
     }
 
     if ($message && $post->save()) {
@@ -58,9 +58,12 @@ $per_page = DASHBOARD_PER_PAGE;
 $total_count = Post::countAll(['user_id' => $session->getUserId()]);
 $pagination = new Pagination($current_page, $per_page, $total_count);
 
-$sql = "SELECT * FROM posts";
-$sql .= " WHERE user_id='{$session->getUserId()}'";
-$sql .= " ORDER BY updated_at DESC";
+$sql = "SELECT p.*, u.username, t.id AS tid, t.name AS topic";
+$sql .= " FROM posts AS p";
+$sql .= " LEFT JOIN users AS u ON p.user_id = u.id";
+$sql .= " LEFT JOIN topics AS T ON p.topic_id = t.id";
+$sql .= " WHERE p.user_id='{$session->getUserId()}'";
+$sql .= " ORDER BY p.updated_at DESC";
 $sql .= " LIMIT {$per_page}";
 $sql .= " OFFSET {$pagination->offset()}";
 $posts = Post::findBySql($sql);
@@ -91,7 +94,8 @@ include '_common-posts-html.php';
           <thead class="bg-muted-lk text-muted">
             <tr>
               <th scope="col">#</th>
-              <th scope="colgroup" colspan="2">Title</th>
+              <th scope="col">Title</th>
+              <th scope="col">Topic</th>
               <th scope="col">Status</th>
               <th scope="col">Edited</th>
               <th scope="colgroup" colspan="3">Action</th>
@@ -101,14 +105,15 @@ include '_common-posts-html.php';
             <?php foreach($posts as $key => $post): ?>
               <tr>
                 <th scope="row"><?php echo $key + 1 ?></th>
-                <?php echo td_post_title($post, true) ?>
+                <?php echo td_post_title($post) ?>
+                <?php echo td_post_topic($post) ?>
                 <?php echo td_post_status($post) ?>
                 <td>
                   <span><?php echo date('M j, Y', strtotime($post->updated_at)) ?></span>
                 </td>
 
-                <?php echo td_action_edit($post, $session->isAdmin()) ?>
-                <?php echo td_action_prove($post, $session->isAdmin()) ?>
+                <?php echo td_actions_column_fst($post, $session->isAdmin()) ?>
+                <?php echo td_actions_column_snd($post, $session->isAdmin()) ?>
               </tr>
             <?php endforeach; ?>
           </tbody>

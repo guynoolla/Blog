@@ -85,7 +85,7 @@ $edit = isset($post->id) ? true : false;
     <?php endif; ?>
     <input type="file" name="image" class="form-control-file" id="image" <?php echo ($post->format == 'video' ? 'disabled' : '') ?>>
     <small id="fileHelp" class="form-text small-nicer-lk">Image aspect ratio (width x height) must be between 7x5 9x5)</small>
-    <input type="text" name="post[video]" value="<?php echo $post->video['url'] ?>" class="form-control mt-1" id="video" placeholder="URL of Video" <?php echo (($post->format == 'image' || !$edit) ? 'disabled' : '') ?>>
+    <input type="text" name="post[video]" value="<?php echo (isset($post->video['url']) ? $post->video['url'] : '') ?>" class="form-control mt-1" id="video" placeholder="URL of Video" <?php echo (($post->format == 'image' || !$edit) ? 'disabled' : '') ?>>
   </div>
   <div class="form-group mt-4">
     <label for="topic">Topic</label>
@@ -113,9 +113,9 @@ $edit = isset($post->id) ? true : false;
   </div>
 
   <?php
-    if ($session->isAdmin() && (!$post->published && !$post->proved)): ?>
-      <button type="submit" class="btn btn-danger ml-2 float-right">Delete</button><?php
+    if ($session->isAdmin() && (!$post->published && !$post->approved)): ?>
+      <button type="submit" name="delete" class="btn btn-danger ml-2 float-right">Delete</button><?php
     endif;
   ?>
-  <button type="submit" class="btn btn-primary float-right">Save</button>
+  <button type="submit" name="create" class="btn btn-primary float-right">Save</button>
 </form>

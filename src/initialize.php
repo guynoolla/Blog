@@ -50,6 +50,7 @@ require('debug.php');
 $database = db_connect();
 App\Classes\DatabaseObject::setDatabase($database);
 
+// Is used globally in pages
 $session = new App\Classes\Session;
 
 function pass_to_js() {
@@ -63,5 +64,9 @@ function pass_to_js() {
 
   return $script;
 }
+
+$json = file_get_contents(PUBLIC_PATH . '/user-site-data.json');
+// Is used globally in pages
+$jsonstore = json_decode($json);
 
 ?>

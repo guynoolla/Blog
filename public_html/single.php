@@ -15,7 +15,7 @@ if (!$post || $_title !== $post->title) {
   error_404();
 }
 
-if (!$post->proved) {
+if (!$post->approved) {
   $access = false;
 
   if ($session->isLoggedIn()) {

@@ -36,15 +36,16 @@ $total_count = Post::countAll([
 ]);
 $pagination = new Pagination($current_page, $per_page, $total_count, 'pagination-md');
 
-$sql = "SELECT * FROM posts";
-$sql .= " WHERE published = '0'";
-$sql .= " AND user_id != '{$session->getUserId()}'";
-$sql .= " ORDER BY updated_at DESC";
+$sql = "SELECT p.*, u.username, t.id AS tid, t.name AS topic";
+$sql .= " FROM posts AS p";
+$sql .= " LEFT JOIN users AS u ON p.user_id = u.id";
+$sql .= " LEFT JOIN topics AS T ON p.topic_id = t.id";
+$sql .= " WHERE p.published = '0'";
+$sql .= " AND p.user_id != '{$session->getUserId()}'";
+$sql .= " ORDER BY p.updated_at DESC";
 $sql .= " LIMIT {$per_page}";
 $sql .= " OFFSET {$pagination->offset()}";
 $posts = Post::findBySql($sql);
-
-
 
 $page_title = 'Author\'s Posts: drafts';
 include SHARED_PATH . '/staff_header.php';
@@ -60,7 +61,7 @@ include '_common-posts-html.php';
     <div class="main-content">
       <?php echo page_back_button() ?>
       
-      <h2 style="text-align: center;">Author's Posts: <em class="text-secondary">drafts</em></h2>
+      <h2 style="text-align: center;"><em class="text-dark">Drafts</em></h2>
 
       <?php if (empty($posts)): ?>
         <p class="lead">No posts here.</p>
@@ -73,6 +74,7 @@ include '_common-posts-html.php';
             <tr>
               <th scope="col">#</th>
               <th scope="col">Title</th>
+              <th scope="col">Topic</th>
               <th scope="col">Author</th>
               <th scope="col">Status</th>
               <th scope="col">Email</th>
@@ -85,6 +87,7 @@ include '_common-posts-html.php';
               <tr>
                 <th scope="row"><?php echo $key + 1 ?></th>
                 <?php echo td_post_title($post) ?>
+                <?php echo td_post_topic($post) ?>
                 <td>
                   <?php $user = User::findById($post->user_id) ?>
                   <a><?php echo h($user->username) ?></a>
@@ -99,7 +102,7 @@ include '_common-posts-html.php';
                   <span><?php echo date('M j, Y', strtotime($post->updated_at)) ?></span>
                 </td>
                 <td>
-                  <a class="btn-lk btn-lk--danger" href="<?php echo url_for('staff/posts/drafts.php?id=' . $post->id . '&cmd=delete') ?>">Delete</a>
+                  <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('staff/posts/edit.php?id=' . $post->id) ?>">Edit</a>
                 </td>
               </tr>
             <?php endforeach; ?>

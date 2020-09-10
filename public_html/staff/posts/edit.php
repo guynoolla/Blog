@@ -11,12 +11,20 @@ if (!$session->isAuthor()) redirect_to(url_for('index.php'));
 $post = false;
 
 if (is_post_request()) {
-
   $id = $_POST['post']['id'] ?? 0;
 
   $post = Post::findById($id);
+
   $image = new File($_FILES['image']);
   $post->fileInstance($image);
+
+  if (isset($_POST['delete'])) {
+    if ($post->delete()) {
+      $session->message("The post ' . $post->title . ' was deleted.");
+      redirect_to(url_for('staff/posts/index.php'));
+    }
+  }
+
   if (!isset($_POST['post']['published'])) {
     $_POST['post']['published'] = '0';
   } 
@@ -24,7 +32,16 @@ if (is_post_request()) {
 
   if ($post->save()) {
     $session->message("Post was updated, you can view it by clicking on its title!");
-    redirect_to(url_for('staff/posts/index.php'));
+    
+    if ($session->isAdmin()) {
+      if ($post->user_id == $session->getUserId()) {
+        redirect_to(url_for('staff/posts/index.php'));
+      } else {
+        redirect_to(url_for('staff/posts/drafts.php'));
+      }
+    } else {
+      redirect_to(url_for('staff/posts/index.php'));
+    }
   }
 
 } else {

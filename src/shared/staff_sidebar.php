@@ -4,7 +4,7 @@ use App\Classes\Post;
 
 $published = Post::countAll([
   'published' => 1,
-  'proved' => 0,
+  'approved' => 0,
   'user_id' => ['!=' => $session->getUserId()]
 ]);
 
@@ -61,11 +61,19 @@ $published = Post::countAll([
       </a>
     </li>
 
+    <?php $active = (url_contain('staff/users/index') ? ' active' : ''); ?>
+    <li class="nav-item" id="themeButton">
+      <a href="<?php echo url_for('staff/users/index.php') ?>" class="nav-link<?php echo $active ?>">
+        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="users" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="svg-icon svg-icon--smaller svg-inline--fa fa-users fa-w-20 fa-5x"><path fill="currentColor" d="M96 224c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm448 0c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm32 32h-64c-17.6 0-33.5 7.1-45.1 18.6 40.3 22.1 68.9 62 75.1 109.4h66c17.7 0 32-14.3 32-32v-32c0-35.3-28.7-64-64-64zm-256 0c61.9 0 112-50.1 112-112S381.9 32 320 32 208 82.1 208 144s50.1 112 112 112zm76.8 32h-8.3c-20.8 10-43.9 16-68.5 16s-47.6-6-68.5-16h-8.3C179.6 288 128 339.6 128 403.2V432c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48v-28.8c0-63.6-51.6-115.2-115.2-115.2zm-223.7-13.4C161.5 263.1 145.6 256 128 256H64c-35.3 0-64 28.7-64 64v32c0 17.7 14.3 32 32 32h65.9c6.3-47.4 34.9-87.3 75.2-109.4z" class="svg-icon"></path></svg>
+        <span class="link-text">Users</span>
+      </a>
+    </li>
+
     <?php $active = (url_contain('staff/posts/drafts') ? ' active' : ''); ?>
     <li class="nav-item">
       <a href="<?php echo url_for('staff/posts/drafts.php') ?>" class="nav-link<?php echo $active ?>">
         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pencil-ruler" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-icon svg-icon--smaller svg-inline--fa fa-pencil-ruler fa-w-16 fa-5x"><path fill="currentColor" d="M109.46 244.04l134.58-134.56-44.12-44.12-61.68 61.68a7.919 7.919 0 0 1-11.21 0l-11.21-11.21c-3.1-3.1-3.1-8.12 0-11.21l61.68-61.68-33.64-33.65C131.47-3.1 111.39-3.1 99 9.29L9.29 99c-12.38 12.39-12.39 32.47 0 44.86l100.17 100.18zm388.47-116.8c18.76-18.76 18.75-49.17 0-67.93l-45.25-45.25c-18.76-18.76-49.18-18.76-67.95 0l-46.02 46.01 113.2 113.2 46.02-46.03zM316.08 82.71l-297 296.96L.32 487.11c-2.53 14.49 10.09 27.11 24.59 24.56l107.45-18.84L429.28 195.9 316.08 82.71zm186.63 285.43l-33.64-33.64-61.68 61.68c-3.1 3.1-8.12 3.1-11.21 0l-11.21-11.21c-3.09-3.1-3.09-8.12 0-11.21l61.68-61.68-44.14-44.14L267.93 402.5l100.21 100.2c12.39 12.39 32.47 12.39 44.86 0l89.71-89.7c12.39-12.39 12.39-32.47 0-44.86z" class="svg-icon"></path></svg>
-        <span class="link-text">Author's Drafts</span>
+        <span class="link-text">Users Draft Posts</span>
       </a>
     </li>
 
@@ -73,15 +81,15 @@ $published = Post::countAll([
     <li class="nav-item">
       <a href="<?php echo url_for('staff/posts/published.php') ?>" class="nav-link<?php echo $active ?>">
         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="toggle-on" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="svg-icon svg-icon--smaller svg-inline--fa fa-toggle-on fa-w-18 fa-5x"><path fill="currentColor" d="M384 64H192C86 64 0 150 0 256s86 192 192 192h192c106 0 192-86 192-192S490 64 384 64zm0 320c-70.8 0-128-57.3-128-128 0-70.8 57.3-128 128-128 70.8 0 128 57.3 128 128 0 70.8-57.3 128-128 128z" class="svg-icon"></path></svg>
-        <span class="link-text">Author's Published &nbsp;<span class="show-number"><?php echo $published ?></span></span>
+        <span class="link-text">Users Published Posts &nbsp;<span class="show-number"><?php echo $published ?></span></span>
       </a>
     </li>
 
-    <?php $active = (url_contain('staff/posts/proved') ? ' active' : ''); ?>
+    <?php $active = (url_contain('staff/posts/approved') ? ' active' : ''); ?>
     <li class="nav-item border-bottom" id="themeButton">
-      <a href="<?php echo url_for('staff/posts/proved.php') ?>" class="nav-link<?php echo $active ?>">
+      <a href="<?php echo url_for('staff/posts/approved.php') ?>" class="nav-link<?php echo $active ?>">
       <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check-double" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-icon svg-icon--smaller svg-inline--fa fa-check-double fa-w-16 fa-5x"><path fill="currentColor" d="M505 174.8l-39.6-39.6c-9.4-9.4-24.6-9.4-33.9 0L192 374.7 80.6 263.2c-9.4-9.4-24.6-9.4-33.9 0L7 302.9c-9.4 9.4-9.4 24.6 0 34L175 505c9.4 9.4 24.6 9.4 33.9 0l296-296.2c9.4-9.5 9.4-24.7.1-34zm-324.3 106c6.2 6.3 16.4 6.3 22.6 0l208-208.2c6.2-6.3 6.2-16.4 0-22.6L366.1 4.7c-6.2-6.3-16.4-6.3-22.6 0L192 156.2l-55.4-55.5c-6.2-6.3-16.4-6.3-22.6 0L68.7 146c-6.2 6.3-6.2 16.4 0 22.6l112 112.2z" class="svg-icon"></path></svg>
-        <span class="link-text">Author's Proved Posts</i></span>
+        <span class="link-text">Users Approved Posts</i></span>
       </a>
     </li>
 
@@ -90,14 +98,6 @@ $published = Post::countAll([
       <a href="<?php echo url_for('staff/topics/index.php') ?>" class="nav-link<?php echo $active ?>">
         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sign" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-icon svg-icon--smaller svg-inline--fa fa-sign fa-w-16 fa-5x"><path fill="currentColor" d="M496 64H128V16c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16v48H16C7.2 64 0 71.2 0 80v32c0 8.8 7.2 16 16 16h48v368c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V128h368c8.8 0 16-7.2 16-16V80c0-8.8-7.2-16-16-16zM160 384h320V160H160v224z" class="svg-icon"></path></svg>
         <span class="link-text">Topics</span>
-      </a>
-    </li>
-
-    <?php $active = (url_contain('staff/users/index') ? ' active' : ''); ?>
-    <li class="nav-item" id="themeButton">
-      <a href="<?php echo url_for('staff/users/index.php') ?>" class="nav-link<?php echo $active ?>">
-        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="users" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="svg-icon svg-icon--smaller svg-inline--fa fa-users fa-w-20 fa-5x"><path fill="currentColor" d="M96 224c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm448 0c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm32 32h-64c-17.6 0-33.5 7.1-45.1 18.6 40.3 22.1 68.9 62 75.1 109.4h66c17.7 0 32-14.3 32-32v-32c0-35.3-28.7-64-64-64zm-256 0c61.9 0 112-50.1 112-112S381.9 32 320 32 208 82.1 208 144s50.1 112 112 112zm76.8 32h-8.3c-20.8 10-43.9 16-68.5 16s-47.6-6-68.5-16h-8.3C179.6 288 128 339.6 128 403.2V432c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48v-28.8c0-63.6-51.6-115.2-115.2-115.2zm-223.7-13.4C161.5 263.1 145.6 256 128 256H64c-35.3 0-64 28.7-64 64v32c0 17.7 14.3 32 32 32h65.9c6.3-47.4 34.9-87.3 75.2-109.4z" class="svg-icon"></path></svg>
-        <span class="link-text">Users</span>
       </a>
     </li>
   <!-- Check Admin >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->

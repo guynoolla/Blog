@@ -15,6 +15,9 @@ if (is_post_request()) {
 
   $image = new File($_FILES['about_image']);
   $user->fileInstance($image);
+  if (!isset($_POST['user']['about_appear'])) {
+    $_POST['user']['about_appear'] = '0';
+  }
   $user->mergeAttributes($_POST['user']);
 
   if ($user->save()) {
@@ -90,9 +93,11 @@ include SHARED_PATH . '/staff_header.php';
                 <h4 class="text-center">About Author</h4>
                 <div class="form-group row mr-sm-0">
                   <label for="about_image" class="col-sm-4 pl-0 pt-3 pl-sm-3">Your Image</label>
-                  <?php if (isset($user->about_image)): ?>
+                  <?php if ($user->about_image): ?>
                     <div class="col-sm-8">
-                      <h5 class="my-0">Image: <?php echo $user->about_image ?></h5>
+                      <?php if ($user->isAdmin()): ?>
+                        <h5 class="my-0">Image: <?php echo $user->about_image ?></h5>
+                      <?php endif; ?>
                       <img class="d-block float-left my-3" id="aboutImage" src="<?php echo url_for('/assets/images/' . $user->about_image) ?>" style="width:160px;height:auto;">
                     </div>
                   <?php endif; ?>

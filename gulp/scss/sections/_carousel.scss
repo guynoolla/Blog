@@ -50,25 +50,7 @@
           flex-direction: column;
           justify-content: flex-end;
           align-items: center;
-          
-          .category {
-            display: block;
-            color: #FFF;
-            font-size: .8em;
-            font-weight: 300;
-            letter-spacing: .2em;
-            text-transform: uppercase;
-            &::after {
-              content: "";
-              clear: both;
-              display: flex;
-              width: 25px;
-              margin: 0 auto;
-              padding-top: 1em;
-              margin-bottom: -.5em;
-              border-bottom: 1px solid #F5F5F5;
-            }
-          }
+
           h2 {
             width: 100%;
             font-size: 1.4em;
@@ -81,34 +63,6 @@
             margin-bottom: 1em;
             a {
               color: #FFF;
-            }
-          }
-
-          .read-more {
-            a {
-              color: #FFF;
-              text-transform: uppercase;
-              font-size: .9em;
-              letter-spacing: .2em;
-              font-weight: 500;
-              &::before {
-                content: "";
-                clear: both;
-                height: 1em;
-                margin-bottom: -.15em;
-                display: inline-block;
-                border-left: 2px solid #DDD;
-                padding-right: .6em;
-              }
-              &::after {
-                content: "";
-                clear: both;
-                height: 1em;
-                margin-bottom: -.15em;
-                display: inline-block;
-                border-right: 2px solid #DDD;
-                padding-left: .6em;
-              }
             }
           }
         }
@@ -146,4 +100,35 @@
     }
   }
 
+}
+
+/**
+  Category element is shared with other page sections */
+
+.category {
+  display: block;
+  color: #FFF;
+  font-size: .8em;
+  font-weight: 300;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  &::after {
+    content: "";
+    clear: both;
+    display: flex;
+    width: 2.6em;
+    margin: 0 auto;
+    padding-top: 1em;
+    margin-bottom: -.5em;
+    border-bottom: 1px solid #DDD;
+  }
+
+  &--dark {
+    color: #444 !important;
+    &::after {
+      width: 2.5rem;
+      border-bottom: 2px solid $plum-color;
+      padding-top: .7em;
+    }
+  }
 }
