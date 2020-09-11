@@ -92,7 +92,7 @@ include SHARED_PATH . '/staff_header.php';
 
         <?php
           $url = url_for('staff/users/index.php');
-          echo $pagination->page_links($url);
+          echo $pagination->pageLinks($url);
         ?>
   
       <?php endif; ?>

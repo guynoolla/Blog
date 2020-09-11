@@ -165,12 +165,12 @@ class DatabaseObject {
     return static::findBySql($sql);
   }
 
-  static public function countAll($where=[], $append="") {
+  static public function countAll($where=[]) {
     $sql = "SELECT COUNT(*) FROM " . static::$table_name;
     $sql = self::concatWhereToSql($sql, $where);
-    if ($append != "") $sql .= " {$append}";
     $result_set = self::$database->query($sql);
     $row = $result_set->fetch_array();
+    $result_set->free();
     return array_shift($row);
   }
 
@@ -215,6 +215,14 @@ class DatabaseObject {
     }
 
     return $sql;
+  }
+
+  static public function executeSql($sql, $fst_row=false) {
+    $result_set = self::$database->query($sql);
+    $row = $result_set->fetch_array();
+    $result_set->free();
+    if ($fst_row) return array_shift($row);
+    else return $row;
   }
 
 }

@@ -30,7 +30,7 @@ if (isset($_GET['id'])) {
       $post->approved = '0';
       $message = "The post '" . $post->title . "' was unpublished.";
     
-    } elseif ($cmd == 'prove') {
+    } elseif ($cmd == 'approve') {
       $post->approved = '1';
       $message = "The post '" . $post->title . "' was approved.";
 
@@ -121,7 +121,7 @@ include '_common-posts-html.php';
 
         <?php
           $url = url_for('staff/posts/index.php');
-          echo $pagination->page_links($url);
+          echo $pagination->pageLinks($url);
         ?>
   
       <?php endif; ?>

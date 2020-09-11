@@ -292,15 +292,15 @@ class User extends \App\Classes\DatabaseObject {
   }
 
   static public function queryUsersWithPostsNum(int $per_page, int $offset) {
-    $sql = "SELECT u.*, COUNT(p.user_id) AS posted,";
-    $sql .= " SUM(if (p.approved = '1', 1, 0)) AS approved";
-    $sql .= " FROM users AS u LEFT JOIN posts AS p";
-    $sql .= " ON u.id = p.user_id";
-    $sql .= " GROUP BY u.id ORDER BY u.username";
-    $sql .= " LIMIT {$per_page} OFFSET {$offset}";
-    $users = self::findBySql($sql);
-
-    return $users;    
+    $sql = <<<SQL
+          SELECT u.*, COUNT(p.user_id) AS posted,
+          SUM(if (p.approved = '1', 1, 0)) AS approved
+          FROM users AS u LEFT JOIN posts AS p
+          ON u.id = p.user_id
+          GROUP BY u.id ORDER BY u.username
+          LIMIT $per_page OFFSET $offset
+SQL;
+    return self::findBySql($sql);
   }
 
   protected function filterCheckboxValue($property) {

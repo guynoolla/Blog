@@ -60,7 +60,7 @@ function td_actions_column_snd($post, $is_admin) {
       ?>">publish</a>
 
     <?php elseif ($post->published && !$post->approved): ?>
-      <a class="btn-lk btn-lk--success" href="<?php echo url_for($url . '?id=' . $post->id . '&cmd=prove')
+      <a class="btn-lk btn-lk--success" href="<?php echo url_for($url . '?id=' . $post->id . '&cmd=approve')
       ?>">prove</a>
     
     <?php elseif ($post->published && $post->approved): ?>
@@ -121,7 +121,7 @@ function td_post_topic($post) {
   ob_start();
   
   ?><td scope="col">
-    <em><a href="<?php echo url_for('topic/' . u($post->topic) . '?id=' . $post->tid)
+    <em><a href="<?php echo url_for('topic/' . u($post->topic) . '?id=' . $post->topic_id)
     ?>"><?php echo $post->topic ?></a></em>
   </td><?php
 

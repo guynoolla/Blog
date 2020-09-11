@@ -11,9 +11,9 @@ if (!$session->isAuthor()) redirect_to(url_for('index.php'));
 function posts_creation_limit($count=2) {
   global $session;
   $count = Post::countAll([
-    'user_id' => $session->getUserId()
-  ], 'AND DATE(`created_at`) = CURDATE()'
-  );
+    'user_id' => $session->getUserId(),
+    ['?', 'DATE(`created_at`) = CURDATE()']
+  ]);
 
   if ($count > 1) {
     $session->message('Sorry, you reached the maximum  posts per day (' . $count . ')');

@@ -10,6 +10,7 @@ class Pagination {
   public $total_count;
   protected $css_class = 'pagination';
   protected $numbers_scope;
+  protected $delimiter;
 
   public function __construct($page=1, $per_page=4, $total_count=0, $css_class='pagination-md') {
     $this->current_page = (int) $page;
@@ -24,51 +25,51 @@ class Pagination {
     return $this->per_page * ($this->current_page - 1);
   }
 
-  public function total_pages() {
+  public function totalPages() {
     return ceil($this->total_count / $this->per_page);
   }
 
-  public function previous_page() {
+  public function previousPage() {
     $prev = $this->current_page - 1;
     return ($prev > 0) ? $prev : false;
   }
 
-  public function next_page() {
+  public function nextPage() {
     $next = $this->current_page + 1;
-    return ($next <= $this->total_pages()) ? $next : false;
+    return ($next <= $this->totalPages()) ? $next : false;
   }
 
-  public function previous_link($url="") {
+  public function previousLink($url="") {
     $link = "";
     $text = (strpos($this->css_class, 'pagination-lg') !== false) ?
     '&laquo; Previous' : '&laquo;';
-    if ($this->previous_page() != false) {
+    if ($this->previousPage() != false) {
       $link .= "<li class=\"page-item\">";
-      $link .= "<a class=\"page-link page-link--text\" href=\"{$url}?page={$this->previous_page()}\" aria-lable=\"Previous\">";
+      $link .= "<a class=\"page-link page-link--text\" href=\"{$url}{$this->delimiter}page={$this->previousPage()}\" aria-lable=\"Previous\">";
       $link .= "<span aria-hidden=\"true\">{$text}</span></a>";
       $link .= "</li>";
     }
     return $link;
   }
 
-  public function next_link($url="") {
+  public function nextLink($url="") {
     $link = "";
     $text = (strpos($this->css_class, 'pagination-lg') !== false) ?
             'Next &raquo;' : '&raquo;';
 
-    if ($this->next_page() != false) {
+    if ($this->nextPage() != false) {
       $link .= "<li class=\"page-item\">";
-      $link .= "<a class=\"page-link page-link--text\" href=\"{$url}?page={$this->next_page()}\" aria-label=\"Next\">";
+      $link .= "<a class=\"page-link page-link--text\" href=\"{$url}{$this->delimiter}page={$this->nextPage()}\" aria-label=\"Next\">";
       $link .= "<span aria-hidden=\"true\">{$text}</span></a>";
       $link .= "</li>";
     }
     return $link;
   }
 
-  public function number_links($url="") {
+  public function numberLinks($url="") {
     $output = "";
     $numbers_to_show = $this->getNumbersToShow(); 
-    for ($i = 1; $i <= $this->total_pages(); $i++) {
+    for ($i = 1; $i <= $this->totalPages(); $i++) {
       if (in_array($i, $numbers_to_show)) {
         if ($i == $this->current_page) {
           $output .= "<li class=\"page-item active\" aria-current=\"page\">";
@@ -76,7 +77,7 @@ class Pagination {
           $output .= "</li>";
         } else {
           $output .= "<li class=\"page-item\">";
-          $output .= "<a class=\"page-link\" href=\"{$url}?page={$i}\">{$i}</a>";
+          $output .= "<a class=\"page-link\" href=\"{$url}{$this->delimiter}page={$i}\">{$i}</a>";
           $output .= "</li>";
         }
       }
@@ -84,14 +85,16 @@ class Pagination {
     return $output;
   }
 
-  public function page_links($url) {
+  public function pageLinks($url) {
+    $url = $this->prepareUrl($url);
+
     $output = "";
-    if ($this->total_pages() > 1) {
+    if ($this->totalPages() > 1) {
       $output .= "<nav class=\"pagination-nav\">";
       $output .= "<ul class=\"<?php $this->css_class ?>\">";
-      $output .= $this->previous_link($url);
-      $output .= $this->number_links($url);
-      $output .= $this->next_link($url);
+      $output .= $this->previousLink($url);
+      $output .= $this->numberLinks($url);
+      $output .= $this->nextLink($url);
       $output .= "</ul>";
       $output .= "</nav>";
     }
@@ -110,6 +113,40 @@ class Pagination {
       $numbers[] = $i;
     }
     return $numbers;
+  }
+
+  protected function prepareUrl($url) {
+    if (strpos($url, '?') === false) {
+      $this->delimiter = '?';
+      return $url;
+    }
+    $data = explode('?', $url);
+    $base = $data[0];
+    $params_str = $data[1];
+
+    if (strpos($params_str, '&') !== false) {
+      $params = explode('&', $params_str);
+    } else {
+      $params[0] = $params_str; 
+    }
+    foreach ($params as $key => $param) {
+      if (explode('=', $param)[0] == 'page') {
+        unset($params[$key]);
+      }
+    }
+
+    if (count($params) == 0) {
+      $this->delimiter = '?';
+      return $base;
+    } elseif (count($params) == 1) {
+      $this->delimiter = '&';
+      return $base . '?' . $params[0];
+    } elseif (count($params) > 1) {
+      $this->delimiter = '&';
+      $first = array_shift($params);
+      $url =  $base . '?' . $first . '&' . implode('&', $params);
+      return $url;
+    }
   }
 
 }

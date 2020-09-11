@@ -38,7 +38,6 @@ class Post extends \App\Classes\DatabaseObject {
 
   // Relational data by foreign key in posts
   public $username = '';  // user->username
-  public $tid = '';       // topic->id
   public $topic = '';     // topic->name
 
   public function __construct(array $args=[]) {
@@ -256,81 +255,60 @@ class Post extends \App\Classes\DatabaseObject {
   }
 
   static public function queryApprovedPosts(int $per_page, int $offset) {
-    $sql = "SELECT p.*, u.username, t.id AS tid, t.name AS topic";
-    $sql .= " FROM posts AS p";
-    $sql .= " LEFT JOIN users AS u ON p.user_id = u.id";
-    $sql .= " LEFT JOIN topics AS t ON p.topic_id = t.id";
-    $sql .= " WHERE p.approved = 1";
-    $sql .= " ORDER BY created_at DESC";
-    $sql .= " LIMIT {$per_page} OFFSET {$offset}";
-    $posts = self::findBySql($sql);
-
-    return $posts;
+    $cond = <<<SQL
+            WHERE p.approved = 1
+            ORDER BY p.created_at DESC
+SQL;
+    return self::selectWithJoins($cond, $per_page, $offset);
   }
 
   static public function querySearchPosts($term, int $per_page, int $offset) {
-    $_term = self::$database->escape_string($term);
-    $sql = "SELECT p.*, u.username, t.id AS tid, t.name as topic";
-    $sql .= " FROM posts AS p";
-    $sql .= " LEFT JOIN users AS u ON p.user_id = u.id";
-    $sql .= " LEFT JOIN topics AS t ON p.topic_id = t.id";
-    $sql .= " WHERE p.approved = 1";
-    $sql .= " AND (p.title LIKE '%" . $_term . "%'";
-    $sql .= " OR p.body LIKE '%" . $_term . "%')";
-    $sql .= " ORDER BY updated_at DESC";
-    $sql .= " LIMIT {$per_page} OFFSET {$offset}";
-    $posts = self::findBySql($sql);
-
-    return $posts;
+    $term = self::$database->escape_string($term);
+    $cond = <<<SQL
+            WHERE p.approved = 1
+              AND ( p.title LIKE '%$term%' OR p.body LIKE '%$term%' )
+            ORDER BY p.created_at DESC
+SQL;
+    return self::selectWithJoins($cond, $per_page, $offset);
   }
 
-  static public function queryPostsByTopic($topic_id) {
-    $_topic_id = self::$database->escape_string($topic_id);
-    $sql = "SELECT p.*, u.username, t.id AS tid, t.name as topic";
-    $sql .= " FROM posts AS p";
-    $sql .= " JOIN users AS u ON p.user_id = u.id";
-    $sql .= " JOIN topics AS t ON p.topic_id = t.id";
-    $sql .= " WHERE p.approved = 1";
-    $sql .= " AND topic_id = " . $_topic_id;
-    $posts = self::findBySql($sql);
-
-    return $posts;    
+  static public function queryPostsByTopic($topic_id, $per_page, $offset) {
+    $tid = parent::escape($topic_id);
+    $cond = <<<SQL
+            WHERE p.approved = '1' AND p.topic_id = $tid
+            ORDER BY p.created_at DESC
+SQL;
+    return self::selectWithJoins($cond, $per_page, $offset);
   }
 
-  static public function queryPostsWithUsernames(array $where, string $end="") {
-    $sql = "SELECT p.*, u.username FROM posts AS p";
-    $sql .= " LEFT JOIN users AS u ON p.user_id = u.id";
-    $where = self::prefixColumnName($where, 'p');
-    $sql = parent::concatWhereToSql($sql, $where);
-
-    if ($end != "") $sql .= $end;
-
-    $result = self::$database->query($sql);
-    $posts = [];
-    while ($obj = $result->fetch_object()) {
-      $posts[] = $obj;
-    }
-    $result->free();
-
-    return $posts; 
+  static public function queryPostsByAuthor($user_id, $per_page, $offset) {
+    $uid = parent::escape($user_id);
+    $cond = <<<SQL
+            WHERE p.user_id = $uid
+            ORDER BY p.created_at DESC
+SQL;
+    return self::selectWithJoins($cond, $per_page, $offset);
   }
 
-  static protected function prefixColumnName($where, $prefix='p') {
-    $prefixed = [];
-    foreach ($where as $col => $value) {
-      $prefixed[$prefix.'.'.$col] = $value;
-    }
-    return $prefixed;
+  static public function queryPostsByDatePub(array $dates, $per_page, $offset) {
+    $cond = <<<SQL
+            WHERE p.approved = '1'
+            AND ( p.created_at >= '{$dates['date_min']}'
+            AND p.created_at < '{$dates['date_max']}' )
+SQL;
+    return self::selectWithJoins($cond, $per_page, $offset);
   }
 
-  static public function queryRandomImage() {
-    $sql = "SELECT image FROM posts WHERE approved = 1";
-    $sql .= " ORDER BY RAND() LIMIT 1";
-    $result = self::$database->query($sql);
-    $image = $result->fetch_assoc()['image'];
-    $result->free();
+  static protected function selectWithJoins($conditions='', $per_page, $offset) {
+    $sql = <<<SQL
+      SELECT p.*, u.username, t.name as topic
+      FROM posts AS p
+      LEFT JOIN users AS u ON p.user_id = u.id
+      LEFT JOIN topics AS t ON p.topic_id = t.id
+SQL;
+    $sql .= $conditions . " LIMIT {$per_page} OFFSET {$offset}";
 
-    return $image;
+    return self::findBySql($sql);
   }
 
   public function getEntryVideo() {

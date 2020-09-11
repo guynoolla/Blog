@@ -3,10 +3,10 @@
 <?php
 	$url = $_SERVER['REQUEST_URI'];
 	
-	if ($url == "/" || url_contain(['index.php','post','topic','preview'])) {
-		$bg = '';
-	} else {
+	if (url_contain(['pasword', 'email'])) {
 		$bg = 'bg-other-lk';
+	} else {
+		$bg = '';
 	}
 
 ?>
@@ -25,7 +25,7 @@
 <?php echo pass_to_js() ?>
 <script src="<?php echo url_for('assets/js/main.js') ?>" type="text/javascript"></script>
 
-<?php if ($url == '/' || url_contain('index.php')): ?>
+<?php if (isset($carousel_posts)): ?>
 	<script type="text/javascript" src="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.min.js"></script>
 <?php endif; ?>
 

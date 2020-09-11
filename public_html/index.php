@@ -1,37 +1,28 @@
 <?php
 use App\Classes\Post;
 use App\Classes\Topic;
+USE App\Classes\User;
 use App\Classes\Pagination;
 
 require_once '../src/initialize.php';
 
 $headline = '';
+$type = 'default';
 
-// Handle Contact Form Submit -->
-if (is_post_request()) {
-  $email = $_POST['email'] ?? '';
-  $message = $_POST['message'] ?? '';
+/*
+  GET POSTS BY SEARCH TERM ///////////////////////////////////////*/
 
-  if ($email && $message) {
-    $mailer = new App\Contracts\Mailer;
-    $text = strip_tags($message);
-    
-    $mailer->send(ADMIN_EMAIL,'Contact Form', $text, $message);
-    $session->message('Thank you for your message!');
-    redirect_to(url_for('index.php'));
-  }
-} // <--Contact Form
+ if (isset($_GET['s'])) {
+  $type = 'search';
 
-if (isset($_GET['s'])) {
   $term = $_GET['s'] ?? '';
 
   $current_page = $_GET['page'] ?? 1;
   $per_page = 6;
-
   $total_count = Post::countAll([
     'approved' => '1',
     ["( title LIKE '%?%' OR body LIKE '%?%' )", $term, $term]
-  ], 'GROUP BY id ORDER BY title DESC');
+  ]);
 
   $pagination = new Pagination($current_page, $per_page, $total_count);
   $posts = Post::querySearchPosts(trim($term), $per_page, $pagination->offset());
@@ -42,23 +33,86 @@ if (isset($_GET['s'])) {
     $headline = "Nothing found for '<strong>" . $term . "</strong>'";
   }
 
-} elseif (isset($_GET['id'])) {
-  $topic_id = $_GET['id'] ?? 0;
-  $topic_name = Topic::findById($topic_id)->name;
-  $posts = Post::queryPostsByTopic($topic_id);
+/*
+  GET POSTS BY TOPIC /////////////////////////////////////////////*/
+
+} elseif (isset($_GET['tid'])) {
+  $type = 'topic';
+
+  $topic_id = $_GET['tid'] ?? 0;
+  $topic = Topic::findById($topic_id);
+  if (!$topic) redirect_to(url_for('index.php'));  
 
   $current_page = $_GET['page'] ?? 1;
   $per_page = 6;
-  $total_count = Post::countAll(['topic_id' => $topic_id, 'approved' => '1']);
+  $total_count = Post::countAll([
+    'approved' => 1,
+    'topic_id' => $topic_id,
+  ]);
+
   $pagination = new Pagination($current_page, $per_page, $total_count, 'pagination-lg');
+  $posts = Post::queryPostsByTopic($topic_id, $per_page, $pagination->offset());
 
   if ($posts) {
-    $headline = "You searched for posts under '<strong>" . $topic_name . "</strong>'";
+    $headline = "You searched for posts under '<strong>" . $topic->name . "</strong>'";
   } else {
-    $headline = "Sorry, no posts under '<strong>" . $topic_name . "</strong>' found.";
+    $headline = "Sorry, no posts under '<strong>" . $topic->name . "</strong>' found.";
   }
 
+/*
+ GET POSTS BY AUTHOR */
+} elseif (isset($_GET['uid'])) {
+  $type = 'author';
+
+  $user_id = $_GET['uid'] ?? 0;
+  $user = User::findById($user_id);
+  if (!$user) redirect_to(url_for('index.php'));  
+
+  $current_page = $_GET['page'] ?? 1;
+  $per_page = 6;
+  $total_count = Post::countAll([
+    'approved' => 1,
+    'user_id' => $user_id
+  ]);
+
+  $pagination = new Pagination($current_page, $per_page, $total_count, 'pagination-lg');
+  $posts = Post::queryPostsByAuthor($user_id, $per_page, $pagination->offset());
+
+  if ($posts) {
+    $headline = "You searched for posts by '<strong>" . $user->username . "</strong>'";
+  } else {
+    $headline = "Sorry, no posts by '<strong>" . $user->username . "</strong>' found.";
+  }
+
+/*
+  GET POSTS BY PUBLISHED DATE ///////////////////////////////////// */
+  
+} elseif (isset($_GET['pub'])) {
+  $type = 'on-date';
+
+  $created_at = urldecode($_GET['pub']);
+  $date_publ = date('Y-m-d', strtotime($created_at));
+  $date_next = date('Y-m-d', strtotime('+ 1 day', strtotime($created_at)));
+
+  $current_page = $_GET['page'] ?? 1;
+  $per_page = 6;
+  $total_count = Post::countAll([
+    'approved' => 1,
+    ["( created_at >= '?' AND created_at < '?' )", $date_publ, $date_next],
+  ]);
+
+  $pagination = new Pagination($current_page, $per_page, $total_count, 'pagination-lg');
+  $posts = Post::queryPostsByDatePub(
+    ['date_min' => $date_publ, 'date_max' => $date_next],
+    $per_page,
+    $pagination->offset()
+  );
+
+/*
+  GET FRONTEND POSTS ///////////////////////////////////////////////*/
+
 } else {
+  $type= 'default';
   $current_page = $_GET['page'] ?? 1;
   $per_page = 6;
   $total_count = Post::countAll(['approved' => '1']);
@@ -70,7 +124,8 @@ if (isset($_GET['s'])) {
 
 include SHARED_PATH . '/public_header.php';
 
-if (!isset($_GET['id']) && !isset($_GET['s']) && $current_page == 1) {
+if ($type == 'default') {
+  $carousel_posts = ($type == 'topic') ? Post::queryApprovedPosts(3, 0) : $posts;
   include SHARED_PATH . '/carousel.php';
 }
 
@@ -103,19 +158,20 @@ if (!isset($_GET['id']) && !isset($_GET['s']) && $current_page == 1) {
                 <div class="post">
                   <div class="post-item-wrap">
                     <div class="post-item-inner">
-                      <a href="<?php echo url_for('topic/' . u($post->topic) . '?id=' . $post->tid) ?>" class="category category--dark text-center"><?php echo $post->topic ?></a>
+                      <a href="<?php echo url_for('topic/' . u($post->topic) . '?tid=' . $post->topic_id) ?>" class="category category--dark text-center"><?php echo $post->topic ?></a>
                       <h2 class="entry-title text-center">
                         <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
                           <?php echo h($post->title) ?>
                         </a>
                       </h2>
+
                       <div class="entry-meta">
-                        <span class="posted-on">Posted on <a href="#" rel="bookmark">
+                        <span class="posted-on">Posted on <a href="<?php echo url_for('on-date/?pub=' . u(date('Y-m-d', strtotime($post->created_at)))) ?>" rel="bookmark">
                           <time class="entry-date published" datetime="<?php echo $post->created_at ?>">
                             <?php echo date('M j, Y', strtotime($post->created_at)) ?>
                           </time>
                         </a></span>by <span class="author vcard">
-                          <a class="url fn n" href="https://colorlib.com/activello/author/aigars-silkalns/">
+                          <a class="url fn n" href="<?php echo url_for('author/' . u($post->username) . '?uid=' . $post->user_id) ?>">
                             <?php echo h($post->username) ?>
                           </a></span>
                       </div>
@@ -158,17 +214,19 @@ if (!isset($_GET['id']) && !isset($_GET['s']) && $current_page == 1) {
               <div class="post">
                 <div class="post-item-wrap">
                     <div class="post-item-inner">
-                      <a href="<?php echo url_for('topic/' . u($post->topic) . '?id=' . $post->tid) ?>" class="category category--dark text-center"><?php echo $post->topic ?></a>
+                      
+                    <a href="<?php echo url_for('topic/' . u($post->topic) . '?tid=' . $post->topic_id) ?>" class="category category--dark text-center"><?php echo $post->topic ?></a>
                       <h2 class="entry-title text-center"><a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>"><?php echo h($post->title) ?></a></h2>
+                      
                       <div class="entry-meta">
-                        <span class="posted-on">Posted on <a href="#" rel="bookmark">
+                        <span class="posted-on">Posted on <a href="<?php echo url_for('on-date/?pub=' . u(date('Y-m-d', strtotime($post->created_at)))) ?>" rel="bookmark">
                           <time class="entry-date published" datetime="<?php echo $post->created_at ?>">
                             <?php echo date('M j, Y', strtotime($post->created_at)) ?>
                           </time>
-                        </a></span>by <span class="author vcard">
-                          <a class="url fn n" href="https://colorlib.com/activello/author/aigars-silkalns/">
-                            <?php echo h($post->username) ?>
-                          </a></span>
+                        </a></span>by<span>
+                        <a href="<?php echo url_for('author/' . u($post->username) . '?uid=' . $post->user_id) ?>">
+                          <?php echo h($post->username) ?>
+                        </a></span>
                       </div>
 
                       <div class="post-format<?php echo ($post->format == 'video' ? ' post-format--video' : '') ?>">
@@ -203,8 +261,8 @@ if (!isset($_GET['id']) && !isset($_GET['s']) && $current_page == 1) {
         ?>
 
         <div class="row justify-content-center mt-4"><?php
-          $url = url_for('index.php');
-          echo $pagination->page_links($url);
+          $url = url_for($_SERVER['REQUEST_URI']);
+          echo $pagination->pageLinks($url);
         ?></div>
 
       </div> <!--main content-->

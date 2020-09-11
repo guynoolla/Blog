@@ -109,7 +109,7 @@ include '_common-posts-html.php';
         
         <?php
           $url = url_for('staff/posts/approved.php');
-          echo $pagination->page_links($url);
+          echo $pagination->pageLinks($url);
         ?>
 
       <?php endif; ?>
