@@ -256,7 +256,7 @@ class Post extends \App\Classes\DatabaseObject {
 
   static public function queryApprovedPosts(int $per_page, int $offset) {
     $cond = <<<SQL
-            WHERE p.approved = 1
+            WHERE p.approved = '1'
             ORDER BY p.created_at DESC
 SQL;
     return self::selectWithJoins($cond, $per_page, $offset);
@@ -284,7 +284,7 @@ SQL;
   static public function queryPostsByAuthor($user_id, $per_page, $offset) {
     $uid = parent::escape($user_id);
     $cond = <<<SQL
-            WHERE p.user_id = $uid
+            WHERE p.approved = 1 AND p.user_id = $uid
             ORDER BY p.created_at DESC
 SQL;
     return self::selectWithJoins($cond, $per_page, $offset);

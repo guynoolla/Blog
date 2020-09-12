@@ -60,7 +60,8 @@ $type = 'default';
   }
 
 /*
- GET POSTS BY AUTHOR */
+ GET POSTS BY AUTHOR ////////////////////////////////////////////*/
+
 } elseif (isset($_GET['uid'])) {
   $type = 'author';
 
@@ -109,7 +110,7 @@ $type = 'default';
   );
 
 /*
-  GET FRONTEND POSTS ///////////////////////////////////////////////*/
+  GET FRONTEND RECENT POSTS ///////////////////////////////////*/
 
 } else {
   $type= 'default';

@@ -122,6 +122,9 @@ class Pagination {
     }
     $data = explode('?', $url);
     $base = $data[0];
+    if ($_SERVER['SERVER_NAME'] == 'localhost') {
+      $base = url_for('/');
+    }
     $params_str = $data[1];
 
     if (strpos($params_str, '&') !== false) {

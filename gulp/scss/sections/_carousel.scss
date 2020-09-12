@@ -14,8 +14,7 @@
       left: 0;
       bottom: 0;
       right: 0;
-      background-color: #5882b5;
-      opacity: .3;
+      background-color: rgba(0, 0, 0, .1);
     }
 
     .slider {
@@ -31,6 +30,7 @@
         position: relative;
 
         img {
+          width: 100%;
           height: 27.5em;
           object-fit: cover;
           object-position: 50% 50%;
@@ -41,9 +41,10 @@
           position: absolute;
           top: 0; left: 0; right: 0; bottom: 0;
           background-color: rgba(0, 0, 0, .5);
+          transition: background-color 600ms ease-in;
           height: 27.5em;
           padding: 6em 4em;
-          padding-bottom: 2em;
+          padding-bottom: 4em;
           z-index: 801;
           text-align: center;
           display: flex;
@@ -51,16 +52,20 @@
           justify-content: flex-end;
           align-items: center;
 
+          &:hover, &:focus {
+            background-color: rgba(0, 0, 0, .3);
+          }
+
           h2 {
             width: 100%;
-            font-size: 1.4em;
+            font-size: 1.6em;
             letter-spacing: .02em;
             font-weight: 300;
             line-height: 1.4em;
             z-index: 801;
             color: white;
             cursor: pointer;
-            margin-bottom: 1em;
+            margin-bottom: 1.2em;
             a {
               color: #FFF;
             }
@@ -110,7 +115,7 @@
   color: #FFF;
   font-size: .8em;
   font-weight: 300;
-  letter-spacing: .2em;
+  letter-spacing: .1em;
   text-transform: uppercase;
   &::after {
     content: "";
@@ -119,8 +124,8 @@
     width: 2.6em;
     margin: 0 auto;
     padding-top: 1em;
-    margin-bottom: -.5em;
-    border-bottom: 1px solid #DDD;
+    margin-bottom: -1.8em;
+    border-bottom: 2px solid #DDD;
   }
 
   &--dark {

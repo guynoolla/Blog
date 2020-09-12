@@ -88,7 +88,11 @@ function url_split_by_slash() {
 }
 
 function get_base_url() {
-  return "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}";
+  $base = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}";
+  if ($_SERVER['SERVER_NAME'] == 'localhost') {
+    $base .= url_for('/');
+  }
+  return $base;
 }
 
 function page_back_url() {
@@ -102,7 +106,7 @@ function page_back_url() {
   }  
 }
 
-function page_back_button($link='Back', $class_list='btn btn-outline-primary mb-1 ml-1') {
+function page_back_button($link='Back', $class_list='btn btn-outline-primary my-1 ml-1') {
   $url = page_back_url();
   $output = "<a href=\"" . ($url ? $url : url_for('index.php')) . "\"";
   $output .= " class=\"" . $class_list . "\" >";

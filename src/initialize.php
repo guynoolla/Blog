@@ -10,7 +10,7 @@ define("PUBLIC_PATH", PROJECT_PATH . "/public_html");
 define("SHARED_PATH", PRIVATE_PATH . "/shared");
 
 // Assign the root URL to a PHP constant
-if($_SERVER['SERVER_NAME'] == 'localhost') {
+if ($_SERVER['SERVER_NAME'] == 'localhost') {
   $public_end = strpos($_SERVER['SCRIPT_NAME'], '/public_html') + 12;
   $doc_root = substr($_SERVER['SCRIPT_NAME'], 0, $public_end);
 } else {

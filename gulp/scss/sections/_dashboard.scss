@@ -1,5 +1,5 @@
 /**
- Page Admin */
+ Page Admin - Dashboard */
 
 .page-admin .topbox {
   margin-top: 3rem;
@@ -15,6 +15,11 @@
   padding-left: 4rem;
   padding-bottom: 2rem;
   background-color: #f7f7f7;
+
+  .main-content {
+    padding-top: .2em;
+    padding-right: 0 !important;
+  }
 }
 
 .page-admin .sidebar {
