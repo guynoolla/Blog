@@ -5,13 +5,14 @@ import animatedScrollTo from 'animated-scroll-to';
 import { preventExtensions } from 'core-js/fn/object';
 import Breakpoint from 'bootstrap-breakpoints';
 import like from './modules/Like';
-
+import posts from './modules/Posts';
 
 window.jQuery = $;
 
 $(document).ready(() => {
 
   const Like = new like();
+  const Posts = new posts();
 
   Breakpoint.init();
 
@@ -44,9 +45,9 @@ $(document).ready(() => {
         cleanEmbedResponsive(er1, er2);
         mediaEmbedResponsive(er1, er2);
       } else {
-        console.log("here!")
+        // here...
       }
-    }               
+    }         
   }
 
   const slider = $('.slider');

@@ -72,11 +72,11 @@ class Pagination {
     for ($i = 1; $i <= $this->totalPages(); $i++) {
       if (in_array($i, $numbers_to_show)) {
         if ($i == $this->current_page) {
-          $output .= "<li class=\"page-item active\" aria-current=\"page\">";
+          $output .= "<li class=\"page-item active\" aria-current=\"page\" id=\"item-{$i}\">";
           $output .= "<a class=\"page-link\" href=\"#\">{$i}<span class=\"sr-only\">(current)</span></a>";
           $output .= "</li>";
         } else {
-          $output .= "<li class=\"page-item\">";
+          $output .= "<li class=\"page-item\" id=\"item-{$i}\">";
           $output .= "<a class=\"page-link\" href=\"{$url}{$this->delimiter}page={$i}\">{$i}</a>";
           $output .= "</li>";
         }

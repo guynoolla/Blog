@@ -58,6 +58,12 @@ function pass_to_js() {
 
   $server['baseUrl'] = WWW_ROOT;
   $server['isLoggedIn'] = $session->isLoggedIn();
+  $server['userId'] = $session->isLoggedIn() ? $session->getUserId() : 0;
+  $server['singlePost'] = (url_contain('post/') && url_contain('?id='))
+                        ? $_GET['id'] : false;
+  $server['dashboardMain'] = (url_contain('staff/index'))
+                           ? true : false;
+
   $script = '<script>';
   $script .= 'var server = ' . json_encode($server);
   $script .= '</script>';

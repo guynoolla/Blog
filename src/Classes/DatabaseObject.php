@@ -225,6 +225,29 @@ class DatabaseObject {
     else return $row;
   }
 
+	static public function getMultiInsertValues(array $items) {
+		$params = [];
+		$rows = [];
+
+		foreach ($items as $i => $item) {
+			$rows[$i] = [$i];
+			foreach ($rows[$i] as $value) {
+				$params[] = $value;
+			}
+		}
+
+		$rowLength = count($rows[0]);
+		$rowsTotal = count($rows);
+		$length = $rowsTotal * $rowLength;
+
+		$args = implode(',', array_map(
+			function($chank) { return '(' . implode(',', $chank) . ')'; },
+			array_chunk(array_fill(0, $length, '?'), $rowLength)
+		));
+
+		return [$args, $params];
+	}
+
 }
 
 ?>

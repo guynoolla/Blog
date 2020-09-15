@@ -299,6 +299,19 @@ SQL;
     return self::selectWithJoins($cond, $per_page, $offset);
   }
 
+  static public function queryAllWhere($ids, $per_page, $offset) {
+    foreach ($ids as $key => $pid) {
+      $pid = strval($pid);
+      $ids[$key] = parent::escape($pid);
+    }
+    $ids_str = implode(",", $ids);
+
+    $cond = <<<SQL
+          WHERE p.id in ($ids_str) AND p.approved = '1'
+SQL;
+    return self::selectWithJoins($cond, $per_page, $offset);
+  }
+
   static protected function selectWithJoins($conditions='', $per_page, $offset) {
     $sql = <<<SQL
       SELECT p.*, u.username, t.name as topic
@@ -402,7 +415,7 @@ SQL;
     }
   }
   
-  static public function responsive(string $image, $images_path, $depth = 0) {
+  static public function responsive(string $image, $depth = 0) {
     $src_value = '';
     $depth = ($depth == 0) ? count(self::$resize_dimensions) : $depth;
     $arr_max = $depth - 1;

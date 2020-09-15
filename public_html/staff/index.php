@@ -22,18 +22,18 @@ include SHARED_PATH . '/staff_header.php';
   <main class="main col-lg-9">
     <div class="main-content">
 
-      <h2 class="mt-0">Logged In</h2>
+      <h2 class="mt-0">Logged in</h2>
 
       <?php if (!$user->isEmailConfirmed()): ?>
         <p class="text-lk">
-          Welcome, <strong><?php echo $user->username ?></strong>! Now you are logged in and can put your likes.<br>
-          You, also can confirm your email address to become an author.<br>
-          If you want to add a Post, please <a class="underlined" href="<?php echo url_for('email/confirm_mail.php?email=' . $user->email) ?>" class="link-underlined"><u>confirm</u></a> your email address.
+          You are logged <strong><?php echo $user->username ?></strong>.<br>
+          To add a Post you should <a class="underlined" href="<?php echo url_for('email/confirm_mail.php?email=' . $user->email) ?>" class="link-underlined"><u>confirm</u></a> your email address.
         </p>
 
       <?php else: ?>
 
         <!-- Email Confirmed User -->
+        <div class="loadPostsJS"></div>
 
       <?php endif; ?>
 

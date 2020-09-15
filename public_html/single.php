@@ -33,7 +33,6 @@ if (!$post->approved) {
   }
 }
 
-
 if ($session->isLoggedIn()) {
   $like = new Like([
     'post_id' => $post->id,
@@ -53,6 +52,10 @@ if ($like) {
 
 $page_title = $post->title;
 include(SHARED_PATH . '/public_header.php');
+
+// dd($like, 1);
+// echo '&nbsp;&nbsp;Class: ' . $class;
+// echo '&nbsp;&nbsp;Action: ' . $action;
 
 ?><div class="container-xl">
   <div class="row">
@@ -106,7 +109,7 @@ include(SHARED_PATH . '/public_header.php');
                       <?php if ($post->format == 'image'): ?>
                         <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
                           <div class="ard ard--image ard--hor-md">
-                            <img class="ard-image ard-image--wide" srcset="<?php echo Post::responsive($post->image, IMAGES_PATH) ?>">
+                            <img class="ard-image ard-image--wide" srcset="<?php echo Post::responsive($post->image) ?>">
                           </div>
                         </a>
                       <?php elseif ($post->format == 'video'): ?>

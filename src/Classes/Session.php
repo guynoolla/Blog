@@ -104,9 +104,15 @@ class Session {
   public function store(array $data=[]) {
     if (empty($data) && isset($_SESSION['store'])) {
       return $_SESSION['store'];
+
     } elseif (!empty($data)) {
       foreach ($data as $key => $value) {
-        $_SESSION['store'][$key] = $value;
+        if (!is_null($value)) {
+          $_SESSION['store'][$key] = $value;
+        } else {
+          $_SESSION['store'][$key] = null;
+          unset($_SESSION['store'][$key]);
+        }
       }
     } else {
       return false;

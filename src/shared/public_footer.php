@@ -3,7 +3,7 @@
 <?php
 	$url = $_SERVER['REQUEST_URI'];
 	
-	if (url_contain(['pasword', 'email'])) {
+	if (url_contain(['pasword/', 'email/'])) {
 		$bg = 'bg-other-lk';
 	} else {
 		$bg = '';

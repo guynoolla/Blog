@@ -5,7 +5,7 @@
       <?php foreach ($carousel_posts as $post): ?>
         <div>
           <div class="ard ard--square">
-            <img srcset="<?php echo \App\Classes\Post::responsive($post->image, IMAGES_PATH, 3) ?>" alt="<?php echo $post->title ?>">
+            <img srcset="<?php echo \App\Classes\Post::responsive($post->image, 3) ?>" alt="<?php echo $post->title ?>">
           </div>
           <div class="slider-post-text">
             <a href="<?php echo url_for('topic/' . u($post->topic) . '?tid=' . $post->topic_id) ?>" class="category"><?php echo $post->topic ?></a>

@@ -66,5 +66,16 @@ class Like extends \App\Classes\DatabaseObject {
     ]);
   }
 
+  static public function userLikesForLast30Days($user_id) {
+    $uid = parent::escape($user_id);
+
+    $sql = <<<SQL
+    SELECT * FROM likes WHERE
+    created_at BETWEEN NOW() - INTERVAL 30 DAY AND NOW()
+    AND user_id = $uid AND liked = '1'
+SQL;
+
+    return self::findBySql($sql);
+  }
 }
 ?>
