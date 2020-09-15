@@ -21,6 +21,10 @@ class Posts {
         target.closest(".page-link").trigger("click");
         return;
       }
+      if (target.parent().hasClass("active")) {
+        return;
+      }
+
       let url = target.attr("href");
       
       if (url) {
@@ -30,6 +34,7 @@ class Posts {
           if (value.split("=")[0] == 'page') {
             this.page = value.split("=")[1];
             $(".pagination li.page-item").removeClass("active");
+            $(`#item-${this.page}`).addClass("active");
             let ids = this.cookieData.splice(this.offset(), this.perPage);
             this.loadPosts(ids);
             return false;
