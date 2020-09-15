@@ -32,13 +32,12 @@ if (!isset($page_title)) {
             <a class="nav-link" href="<?php echo url_for('/') ?>">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#scrollFooter">Contact</a>
+            <a class="nav-link" href="#widget-contact-form">Contact</a>
           </li>
           <?php include '_navbar_dropdown.php' ?>
         </ul>
         <form action="<?php echo url_for('index.php') ?>" method="get" class="form-inline mt-2 mt-md-0">
           <input id="search" name="s" class="form-control mr-sm-2 search-field-lk hide" type="text" placeholder="Search" aria-label="Search">
-          <!-- <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
           <label>
             <input type="submit" name="b" value="search" style="display:none">
             <span class="svg-search-btn">

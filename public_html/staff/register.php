@@ -2,13 +2,13 @@
 use App\Classes\User;
 use App\Classes\Like;
 
-require_once '../src/initialize.php';
+require_once '../../src/initialize.php';
 
 if (is_post_request()) {
   $user = new User($_POST['user']);
   if ($user->save()) {
     $session->message('You have been registered, now you can log in!');
-    redirect_to(url_for('login.php'));
+    redirect_to(url_for('staff/login.php'));
   }
 } else {
   $user = new User();
@@ -50,7 +50,7 @@ include SHARED_PATH . '/public_header.php';
               <label for="confirm_password" class="col-sm-4 pl-0 pl-sm-3">Confirm Password</label>
               <input class="col-sm-8 form-control" type="password" name="user[confirm_password]" value="<?php echo $user->empty_password_field ? '' : $user->confirm_password ?>">
             </div>
-            <p class="text-center mb-0 font-weight-bold">Or <a href="<?php echo url_for('login.php') ?>">Sign In</a></p>
+            <p class="text-center mb-0 font-weight-bold">Or <a href="<?php echo url_for('staff/login.php') ?>">Sign In</a></p>
             <button type="submit" name="submit_button" class="btn btn-outline-default float-right">Register</button>
 
           </fieldset>

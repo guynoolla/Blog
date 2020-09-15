@@ -9,8 +9,25 @@ switch($target) {
         $session->isLoggedIn() ? user_like_post($_POST) : null;
   case 'posts_by_ids':
         $session->isLoggedIn() ? cookie_ids_posts($_POST) : null;
+  case 'contact_form':
+        contact_form_submit($_POST);
   default:
         exit(json_encode(['target' => 'error']));
+}
+
+function contact_form_submit($data) {
+  $email = $data['email'] ?? '';
+  $message = $data['message'] ?? '';
+
+  if ($email && $message) {
+    $mailer = new \App\Contracts\Mailer;
+    $text = strip_tags($message);
+    
+    $mailer->send(ADMIN_EMAIL,'Contact Form', $text, $message);
+    $message = 'Thank you for your message!';
+    
+    exit(json_encode(['success', $message]));
+  }
 }
 
 function user_like_post($data) {

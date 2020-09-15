@@ -10,7 +10,7 @@
 @import './sections/carousel';
 @import './sections/header';
 @import './sections/main';
-@import './sections/aside';
+@import './sections/aside-sidebar';
 @import './sections/footer';
 @import './modules/buttons';
 @import './modules/svg-icons';
@@ -23,3 +23,5 @@
 @import './modules/post-entry';
 @import './modules/like';
 @import './common/vendors';
+@import './modules/contact-form-widget';
+@import './modules/loading';

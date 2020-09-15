@@ -10,6 +10,23 @@ $headline = '';
 $type = 'default';
 
 /*
+  Contact Form Submit Hanlder /////////////////////////////////*/
+
+if (is_post_request()) {
+  $email = $_POST['email'] ?? '';
+  $message = $_POST['message'] ?? '';
+
+  if ($email && $message) {
+    $mailer = new App\Contracts\Mailer;
+    $text = strip_tags($message);
+    
+    $mailer->send(ADMIN_EMAIL,'Contact Form', $text, $message);
+    $session->message('Thank you for your message!');
+    redirect_to(url_for('index.php'));
+  }
+}
+
+/*
   GET POSTS BY SEARCH TERM ///////////////////////////////////////*/
 
  if (isset($_GET['s'])) {
@@ -270,7 +287,7 @@ if ($type == 'default') {
     </main> <!-- main -->
 
     <aside class="sidebar col-lg-4" role="complementary">
-      <?php include SHARED_PATH . '/aside.php' ?>
+      <?php include SHARED_PATH . '/aside_sidebar.php' ?>
     </aside>
 
   </div>

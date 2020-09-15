@@ -13,7 +13,7 @@ include(SHARED_PATH . '/public_header.php');
       <div class="p-4 px-sm-5 py-5 my-4 rounded bg-white">
 
         <h2><?php echo $page_title ?></h2>
-        <p class="h4">You can now <a class="font-weight-bold" href="<?php echo url_for('login.php') ?>">login</a>.</p>
+        <p class="h4">You can now <a class="font-weight-bold" href="<?php echo url_for('staff/login.php') ?>">login</a>.</p>
 
       </div>
     </div>

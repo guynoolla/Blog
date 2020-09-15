@@ -8,10 +8,10 @@ class Posts {
     this.perPage = 2;
     this.page = 1;
     this.onload();
-    this.event();
+    this.events();
   }
 
-  event() {
+  events() {
     $(".loadPostsJS").on("click", ".page-link", (e) => {
       e.preventDefault();
 
@@ -56,6 +56,10 @@ class Posts {
 
   loadPosts(ids) {
     if (server.dashboardMain) {
+      $(".loadPostsJS").fadeOut(600, () => {
+        $(".loading").removeClass("d-none");
+      });
+
       $.ajax({
         url: server.baseUrl + '/ajax.php',
         type: 'POST',
@@ -70,9 +74,15 @@ class Posts {
         success: res => {
           const data = JSON.parse(res);
           if (data[0] == 'success') {
-            const output = this.makeHtml(data[1], data[2]);
-            $(".loadPostsJS").html(output);
-            $('#page-' + this.page).addClass("active");
+            const output = this.makeHtml(data[1], data[2])
+            let timer = setTimeout(() => {
+              $(".loadPostsJS").fadeIn(() => {
+                $(".loading").addClass("d-none")
+              })
+              $(".loadPostsJS").html(output)
+              clearTimeout(timer)
+            }, 1000)
+            $('#page-' + this.page).addClass("active")
           }
         },
         error: res => console.log(res)

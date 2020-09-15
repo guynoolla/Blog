@@ -44,9 +44,9 @@ if (isset($_GET['id'])) {
 $current_page = $_GET['page'] ?? 1;
 $per_page = DASHBOARD_PER_PAGE;
 $total_count = Post::countAll([
-  'published'=>'1',
-  'approved'=>'0',
-  'user_id'=>['!=' => $session->getUserId()]
+  'published' => '1',
+  'approved' => '0',
+  'user_id' => ['!=' => $session->getUserId()]
 ]);
 $pagination = new Pagination($current_page, $per_page, $total_count);
 

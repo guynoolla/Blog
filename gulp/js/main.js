@@ -4,15 +4,16 @@ require('bootstrap');
 import animatedScrollTo from 'animated-scroll-to';
 import { preventExtensions } from 'core-js/fn/object';
 import Breakpoint from 'bootstrap-breakpoints';
-import like from './modules/Like';
-import posts from './modules/Posts';
+import Like from './modules/Like';
+import Posts from './modules/Posts';
+import FormValidate from './modules/FormValidate';
 
 window.jQuery = $;
 
 $(document).ready(() => {
 
-  const Like = new like();
-  const Posts = new posts();
+  const like = new Like();
+  const posts = new Posts();
 
   Breakpoint.init();
 
@@ -49,6 +50,62 @@ $(document).ready(() => {
       }
     }         
   }
+
+  $("#contactForm").on("submit", e => {
+    e.preventDefault();
+
+    const validate = new FormValidate("contactForm");
+    const email = validate.email('email');
+    const message = validate.length('message');
+
+    const widget = $(".widget-contact-form");
+
+    widget.on("click", e => {
+      widget.find(".alert").addClass("d-none")
+    });
+
+    widget.find(".alert").html("").addClass("d-none")
+      .removeClass("alert-danger")
+      .removeClass("alert-success")
+
+    if (validate.errors.length == 0) {
+      widget.find(".spinner-grow").removeClass("d-none");
+
+      $.ajax({
+        url: server.baseUrl + '/ajax.php',
+        type: 'POST',
+        data: { 
+          email: email,
+          message: message,
+          target: 'contact_form'
+        },
+        success: res => {
+          let timer = setTimeout(() => {
+            widget.find(".spinner-grow").addClass("d-none");
+            const data = JSON.parse(res);
+            if (data[0] == "success") {
+              widget.find(".alert").html(data[1])
+                .removeClass("d-none")
+                .addClass("alert-success")
+              widget.find("#email").val("");
+              widget.find("#message").val("");
+            }
+            clearTimeout(timer);
+          }, 2000);
+        },
+        error: res => console.log(res)
+      })
+    } else {
+      let output =  "";
+      validate.errors.forEach(err => output += err + ' ');
+
+      widget.find(".alert").html(output)
+        .removeClass("d-none")
+        .addClass("alert-danger");
+    }
+
+    return false;
+  });
 
   const slider = $('.slider');
 

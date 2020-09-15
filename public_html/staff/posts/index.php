@@ -7,7 +7,7 @@ use App\Classes\Pagination;
 require_once('../../../src/initialize.php');
 
 // Check Logged In >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-if (require_login()) redirect_to(url_for('login.php'));
+if (require_login()) redirect_to(url_for('staff/login.php'));
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Check Logged In
 
 // Check Admin >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

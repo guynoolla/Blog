@@ -1,5 +1,5 @@
 <?php
-require_once '../src/initialize.php';
+require_once '../../src/initialize.php';
 
 $username = '';
 $password = '';
@@ -64,7 +64,7 @@ include(SHARED_PATH . '/public_header.php');
               <input class="col-sm-8 form-control" type="password" name="password" value="">
               <small class="small-nicer-lk ml-auto mt-1"><a href="<?php echo url_for('password/forgot.php') ?>">forgot password?</a></small>
             </div>
-            <p class="text-center font-weight-bold">Or <a href="<?php echo url_for('register.php') ?>">Sign Up</a></p>
+            <p class="text-center font-weight-bold">Or <a href="<?php echo url_for('staff/register.php') ?>">Sign Up</a></p>
             <button type="submit" name="submit_button" class="btn btn-outline-default float-right">Login</button>
 
           </fieldset>

@@ -25,6 +25,12 @@
       "link": "https://www.github.com"
     }
   },
+  "contactForm": {
+    "title": "Contact Us",
+    "emailPlaceholder": "Email",
+    "messagePlaceholder": "Message...",
+    "buttonText": "Send"
+  },
   "copyright": {
     "sign": "&#169;",
     "sitename": "Light Kight",

@@ -134,7 +134,7 @@ include(SHARED_PATH . '/public_header.php');
     </main> <!-- main -->
 
     <aside class="sidebar col-lg-4" role="complementary">  
-      <?php include SHARED_PATH . '/aside.php' ?>
+      <?php include SHARED_PATH . '/aside_sidebar.php' ?>
     </aside>
 
   </div>

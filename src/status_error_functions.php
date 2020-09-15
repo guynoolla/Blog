@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-function require_login($redirect='login.php') {
+function require_login($redirect='staff/login.php') {
   global $session;
   if (!$session->isLoggedIn()) {
     redirect_to(url_for($redirect));

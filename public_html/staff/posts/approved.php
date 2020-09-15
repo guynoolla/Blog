@@ -34,13 +34,16 @@ if (isset($_GET['id'])) {
 
 $current_page = $_GET['page'] ?? 1;
 $per_page = DASHBOARD_PER_PAGE;
-$total_count = Post::countAll(['approved' => '1']);
+$total_count = Post::countAll([
+  'approved' => '1',
+  'user_id' => ['!=' => $session->getUserId()]
+]);
 $pagination = new Pagination($current_page, $per_page, $total_count);
 
 $sql = "SELECT p.*, u.username, t.id AS tid, t.name AS topic";
 $sql .= " FROM posts AS p";
 $sql .= " LEFT JOIN users AS u ON p.user_id = u.id";
-$sql .= " LEFT JOIN topics AS T ON p.topic_id = t.id";
+$sql .= " LEFT JOIN topics AS t ON p.topic_id = t.id";
 $sql .= " WHERE p.approved='1'";
 $sql .= " AND p.user_id != '{$session->getUserId()}'";
 $sql .= " ORDER BY p.updated_at DESC";

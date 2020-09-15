@@ -89,29 +89,33 @@ include SHARED_PATH . '/staff_header.php';
                   <input class="col-sm-8 form-control" type="password" name="user[confirm_password]" value="<?php echo $user->empty_password_field ? '' : $user->confirm_password ?>">
                 </div>
 
-                <hr class="mt-5">
-                <h4 class="text-center">About Author</h4>
-                <div class="form-group row mr-sm-0">
-                  <label for="about_image" class="col-sm-4 pl-0 pt-3 pl-sm-3">Your Image</label>
-                  <?php if ($user->about_image): ?>
-                    <div class="col-sm-8">
-                      <?php if ($user->isAdmin()): ?>
-                        <h5 class="my-0">Image: <?php echo $user->about_image ?></h5>
-                      <?php endif; ?>
-                      <img class="d-block float-left my-3" id="aboutImage" src="<?php echo url_for('/assets/images/' . $user->about_image) ?>" style="width:160px;height:auto;">
-                    </div>
-                  <?php endif; ?>
-                  <input class="col-sm-8 form-control-file" type="file" name="about_image" id="about_image">
-                </div>
-                <div class="form-group row mr-sm-0 mt-5">
-                  <label for="aboutText" class="col-sm-4 pl-0 pl-sm-3">About Text</label>
-                  <textarea class="col-sm-8 form-control" name="user[about_text]" value="" id="aboutText" rows="5"><?php echo $user->about_text ?></textarea>
-                </div>
-                <div class="form-group row custom-control custom-switch mt-4">
-                  <label class="col-sm-4 pl-0 pl-sm-3"></label>
-                  <input name="user[about_appear]" type="checkbox" class="col-sm-8 custom-control-input" id="appearSwitch"<?php echo ($user->about_appear == '1' ? ' checked' : '') ?>>
-                  <label class="custom-control-label" for="appearSwitch">Appear in sidebar</label>
-                </div>
+                <?php if ($session->isAuthor()): ?>
+
+                  <hr class="mt-5">
+                  <h3 class="text-center">About author</h3>
+                  <div class="form-group row mr-sm-0">
+                    <label for="about_image" class="col-sm-4 pl-0 pt-3 pl-sm-3">Your Image</label>
+                    <?php if ($user->about_image): ?>
+                      <div class="col-sm-8">
+                        <?php if ($user->isAdmin()): ?>
+                          <h5 class="my-0">Image: <?php echo $user->about_image ?></h5>
+                        <?php endif; ?>
+                        <img class="d-block float-left my-3" id="aboutImage" src="<?php echo url_for('/assets/images/' . $user->about_image) ?>" style="width:160px;height:auto;">
+                      </div>
+                    <?php endif; ?>
+                    <input class="col-sm-8 form-control-file" type="file" name="about_image" id="about_image">
+                  </div>
+                  <div class="form-group row mr-sm-0 mt-5">
+                    <label for="aboutText" class="col-sm-4 pl-0 pl-sm-3">About Text</label>
+                    <textarea class="col-sm-8 form-control" name="user[about_text]" value="" id="aboutText" rows="5"><?php echo $user->about_text ?></textarea>
+                  </div>
+                  <div class="form-group row custom-control custom-switch mt-4">
+                    <label class="col-sm-4 pl-0 pl-sm-3"></label>
+                    <input name="user[about_appear]" type="checkbox" class="col-sm-8 custom-control-input" id="appearSwitch"<?php echo ($user->about_appear == '1' ? ' checked' : '') ?>>
+                    <label class="custom-control-label" for="appearSwitch">Appear in post page sidebar</label>
+                  </div>
+
+                <?php endif; ?>
 
                 <button type="submit" name="submit_button" class="btn btn-outline-default float-right my-3">Save</button>
               </fieldset>
