@@ -7,7 +7,7 @@ use App\Classes\Token;
 
 class User extends \App\Classes\DatabaseObject {
 
-  static protected $table_name = 'users';
+  static protected $table_name = "`users`";
   static protected $db_columns = ['id','user_type','username','email','about_image','about_text','about_appear','email_confirmed','hashed_password','created_at','password_reset_hash','password_reset_expires_at','email_confirm_hash','email_confirm_expires_at'];
 
   public $id;
@@ -133,11 +133,11 @@ class User extends \App\Classes\DatabaseObject {
       }
     }
 
-    if ($this->about_appear != "") {
-      if ($this->about_text == "" || $this->about_image == "") {
-        $this->errors[] = "About can not appear without image and text.";
-      }
-    }
+    // if ($this->about_appear != "") {
+    //   if ($this->about_text == "" || $this->about_image == "") {
+    //     $this->errors[] = "About can not appear without image and text.";
+    //   }
+    // }
 
     return (empty($this->errors) == true);
   }
@@ -227,8 +227,8 @@ class User extends \App\Classes\DatabaseObject {
 
   static public function getByPasswordResetToken($user_token) {
     $token = User::token($user_token);
-    
-    $sql = "SELECT * FROM users";
+  
+    $sql = "SELECT * FROM " . self::$table_name;
     $sql .= " WHERE password_reset_hash = '" . $token->getHash() . "'";
     $obj_array = static::findBySql($sql);
 
@@ -276,7 +276,7 @@ class User extends \App\Classes\DatabaseObject {
   static public function getByEmailConfirmToken($user_token) {
     $token = User::token($user_token);
     
-    $sql = "SELECT * FROM users";
+    $sql = "SELECT * FROM " . self::$table_name;
     $sql .= " WHERE email_confirm_hash = '" . $token->getHash() . "'";
     $obj_array = static::findBySql($sql);
 
@@ -304,7 +304,7 @@ class User extends \App\Classes\DatabaseObject {
     $sql = <<<SQL
           SELECT u.*, COUNT(p.user_id) AS posted,
           SUM(if (p.approved = '1', 1, 0)) AS approved
-          FROM users AS u LEFT JOIN posts AS p
+          FROM {self::$table_name} AS u LEFT JOIN `posts` AS p
           ON u.id = p.user_id
           GROUP BY u.id ORDER BY u.username
           LIMIT $per_page OFFSET $offset

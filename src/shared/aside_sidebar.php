@@ -82,7 +82,7 @@ $topics = Topic::findAll();
       <ul>
         <?php foreach ($topics as $topic): ?>
           <li class="cat-item">
-            <a href="<?php echo url_for('topic/') . u($topic->name) . '?id=' . $topic->id ?>" title="<?php $topic->name ?>"><?php echo $topic->name ?></a>
+            <a href="<?php echo url_for('topic/') . u($topic->name) . '?tid=' . $topic->id ?>" title="<?php $topic->name ?>"><?php echo $topic->name ?></a>
             <span><?php echo Post::countAll(
               ['topic_id' => $topic->id, 'approved' => '1']
             ) ?></span>

@@ -5,7 +5,7 @@ namespace App\Classes;
 
 class Topic extends \App\Classes\DatabaseObject {
 
-  static protected $table_name = 'topics';
+  static protected $table_name = "`topics`";
   static protected $db_columns = ['id','name','description'];
   
   public $id;

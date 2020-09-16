@@ -5,7 +5,7 @@ namespace App\Classes;
 
 class Post extends \App\Classes\DatabaseObject {
 
-  static protected $table_name = 'posts';
+  static protected $table_name = "`posts`";
   static protected $db_columns = ['id','user_id','topic_id','title','format','image','video','body','video_urls','published','approved','created_at','updated_at'];
 
   public $id;
@@ -315,9 +315,9 @@ SQL;
   static protected function selectWithJoins($conditions='', $per_page, $offset) {
     $sql = <<<SQL
       SELECT p.*, u.username, t.name as topic
-      FROM posts AS p
-      LEFT JOIN users AS u ON p.user_id = u.id
-      LEFT JOIN topics AS t ON p.topic_id = t.id
+      FROM {self::$table_name} AS p
+      LEFT JOIN `users` AS u ON p.user_id = u.id
+      LEFT JOIN `topics` AS t ON p.topic_id = t.id
 SQL;
     $sql .= $conditions . " LIMIT {$per_page} OFFSET {$offset}";
 

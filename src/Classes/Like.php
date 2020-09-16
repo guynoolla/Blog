@@ -5,7 +5,7 @@ namespace App\Classes;
 
 class Like extends \App\Classes\DatabaseObject {
 
-  static protected $table_name = 'likes';
+  static protected $table_name = "`likes`";
   static protected $db_columns = ['id','post_id','user_id','liked','created_at'];
   public $id;
   public $post_id;
@@ -40,7 +40,7 @@ class Like extends \App\Classes\DatabaseObject {
     $pid = self::escape($post_id);
     $uid = self::escape($user_id);
     $sql = <<<SQL
-      SELECT * FROM likes WHERE
+      SELECT * FROM {self::$table_name} WHERE
       post_id = $pid AND user_id = $uid
 SQL;
     $like = parent::findBySql($sql)[0];
@@ -67,7 +67,7 @@ SQL;
     $uid = parent::escape($user_id);
 
     $sql = <<<SQL
-    SELECT * FROM likes WHERE
+    SELECT * FROM {self::$table_name} WHERE
     created_at BETWEEN NOW() - INTERVAL 30 DAY AND NOW()
     AND user_id = $uid AND liked = '1'
 SQL;
