@@ -49,31 +49,38 @@ function cookie_ids_posts($data) {
   $offset = $data['offset'] ?? 0;
   $page = $data['page'] ?? 0;
 
-  foreach($ids as $id) {
-    $like = new \App\Classes\Like([
-      'post_id' => $id,
-      'user_id' => $uid,
-      'action' => 'create'
-    ]);
-    $like->process('create');
+  // foreach($ids as $id) {
+  //   $like = new \App\Classes\Like([
+  //     'post_id' => $id,
+  //     'user_id' => $uid,
+  //     'action' => 'create'
+  //   ]);
+  //   $like->process('create');
+  // }
+
+  $likes = \App\Classes\Like::userLikesForLast30Days($uid);
+  $liked_ids = [];
+
+  if (is_array($likes)) {
+    foreach($likes as $like) {
+      $liked_ids[] = $like->post_id;
+    }
   }
 
-  $likes = [];
-  $likes = \App\Classes\Like::userLikesForLast30Days($uid);
+  if (is_array($ids)) {
+    $pids = array_merge($liked_ids, $ids);
+    $pids = array_unique($pids);
+  }
 
-  if (!empty($likes)) {
-
-    $pids = [];
-    foreach($likes as $like) {
-      $pids[] = $like->post_id;
-    }
+  if (!empty($pids)) {
 
     $total_count = \App\Classes\Post::countAll([
       'approved' => '1',
       ['id in (?)', implode(',', $pids)]
     ]);
-    $pagination = new \App\Classes\Pagination($page, $per_page, $total_count);
 
+    $pagination = new \App\Classes\Pagination($page, $per_page, $total_count);
+  
     $posts = \App\Classes\Post::queryAllWhere($pids, $per_page, $offset);
     $arr = [];
     $j = 0;

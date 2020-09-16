@@ -35,8 +35,7 @@ class Posts {
             this.page = value.split("=")[1];
             $(".pagination li.page-item").removeClass("active");
             $(`#item-${this.page}`).addClass("active");
-            let ids = this.cookieData.splice(this.offset(), this.perPage);
-            this.loadPosts(ids);
+            this.loadPosts(this.cookieData);
             return false;
           }
         });
@@ -49,8 +48,7 @@ class Posts {
   }
 
   onload() {
-    let ids = this.cookieData.splice(this.offset(), this.perPage);
-    this.loadPosts(ids);
+    this.loadPosts(this.cookieData);
     this.page++;
   }
 
@@ -59,6 +57,8 @@ class Posts {
       $(".loadPostsJS").fadeOut(600, () => {
         $(".loading").removeClass("d-none");
       });
+
+      console.log('IDS: ', ids.length);
 
       $.ajax({
         url: server.baseUrl + '/ajax.php',

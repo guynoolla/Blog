@@ -77,5 +77,6 @@ SQL;
 
     return self::findBySql($sql);
   }
+
 }
 ?>
