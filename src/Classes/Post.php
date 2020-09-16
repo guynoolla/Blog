@@ -315,7 +315,7 @@ SQL;
   static protected function selectWithJoins($conditions='', $per_page, $offset) {
     $sql = <<<SQL
       SELECT p.*, u.username, t.name as topic
-      FROM {self::$table_name} AS p
+      FROM `posts` AS p
       LEFT JOIN `users` AS u ON p.user_id = u.id
       LEFT JOIN `topics` AS t ON p.topic_id = t.id
 SQL;

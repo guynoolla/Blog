@@ -193,7 +193,7 @@ class User extends \App\Classes\DatabaseObject {
   }
 
   static public function findByEmail($email) {
-    $sql = "SELECT * FROM " . self::$table_name;
+  $sql = "SELECT * FROM " . self::$table_name;
     $sql .= " WHERE email='" . self::$database->escape_string($email) . "'";
     $obj_array = static::findBySql($sql);
     if (!empty($obj_array)) {
@@ -304,7 +304,7 @@ class User extends \App\Classes\DatabaseObject {
     $sql = <<<SQL
           SELECT u.*, COUNT(p.user_id) AS posted,
           SUM(if (p.approved = '1', 1, 0)) AS approved
-          FROM {self::$table_name} AS u LEFT JOIN `posts` AS p
+          FROM `users` AS u LEFT JOIN `posts` AS p
           ON u.id = p.user_id
           GROUP BY u.id ORDER BY u.username
           LIMIT $per_page OFFSET $offset
