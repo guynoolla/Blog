@@ -31,14 +31,18 @@ function contact_form_submit($data) {
 }
 
 function user_like_post($data) {
-  global $session;
+  $post_id = $data['post_id'] ?? 0;
+  $user_id = $data['user_id'] ?? 0;
+  $action = $data['action'] ?? "";
 
-  $like = new \App\Classes\Like($data);
+  if ($post_id && $user_id && $action) {
+    $like = \App\Classes\Like::get($post_id, $user_id);
 
-  if ($like->process($data['action'])) {
-    exit(json_encode(['action' => $data['action'] . 'd'])); // created || deleted
-  } else {
-    exit(json_encode(['action' => 'error']));
+    if ($like->process($action)) {
+      exit(json_encode(['action' => $action . 'd'])); // created || deleted
+    } else {
+      exit(json_encode(['action' => 'error']));
+    }
   }
 }
 
@@ -48,15 +52,6 @@ function cookie_ids_posts($data) {
   $per_page = $data['per_page'] ?? 0;
   $offset = $data['offset'] ?? 0;
   $page = $data['page'] ?? 0;
-
-  // foreach($ids as $id) {
-  //   $like = new \App\Classes\Like([
-  //     'post_id' => $id,
-  //     'user_id' => $uid,
-  //     'action' => 'create'
-  //   ]);
-  //   $like->process('create');
-  // }
 
   $likes = \App\Classes\Like::userLikesForLast30Days($uid);
   $liked_ids = [];

@@ -133,15 +133,24 @@ class User extends \App\Classes\DatabaseObject {
       }
     }
 
+    if ($this->about_appear != "") {
+      if ($this->about_text == "" || $this->about_image == "") {
+        $this->errors[] = "About can not appear without image and text.";
+      }
+    }
+
     return (empty($this->errors) == true);
   }
 
   public function save() {
-    if (!isset($this->image_obj)) return parent::save();
+    if (!isset($this->image_obj)) {
+      return parent::save();
+    }
     $create = (!isset($this->id) == true);
     $update = (isset($this->id) && $this->image_obj->isFileSelected() == true);
-    if (!$create && !$update) return parent::save();
-
+    if (!$create && !$update) {
+      return parent::save();
+    }
     $image_error = $this->image_obj->handleUpload('about_image');
 
     if ($image_error !== false) {

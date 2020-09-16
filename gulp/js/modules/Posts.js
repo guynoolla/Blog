@@ -75,13 +75,13 @@ class Posts {
           const data = JSON.parse(res);
           if (data[0] == 'success') {
             const output = this.makeHtml(data[1], data[2])
-            let timer = setTimeout(() => {
+            //let timer = setTimeout(() => {
               $(".loadPostsJS").fadeIn(() => {
                 $(".loading").addClass("d-none")
               })
               $(".loadPostsJS").html(output)
-              clearTimeout(timer)
-            }, 1000)
+              //clearTimeout(timer)
+            //}, 1000)
             $('#page-' + this.page).addClass("active")
           }
         },

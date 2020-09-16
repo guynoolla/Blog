@@ -80,7 +80,7 @@ $(document).ready(() => {
           target: 'contact_form'
         },
         success: res => {
-          let timer = setTimeout(() => {
+          //let timer = setTimeout(() => {
             widget.find(".spinner-grow").addClass("d-none");
             const data = JSON.parse(res);
             if (data[0] == "success") {
@@ -90,8 +90,8 @@ $(document).ready(() => {
               widget.find("#email").val("");
               widget.find("#message").val("");
             }
-            clearTimeout(timer);
-          }, 2000);
+            //clearTimeout(timer);
+          //}, 2000);
         },
         error: res => console.log(res)
       })

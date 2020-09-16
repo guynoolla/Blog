@@ -34,28 +34,17 @@ if (!$post->approved) {
 }
 
 if ($session->isLoggedIn()) {
-  $like = new Like([
-    'post_id' => $post->id,
-    'user_id' => $session->getUserId()
-  ]);
-} else {
-  $like = false;
-}
-
-if ($like) {
+  $like = Like::get($post->id, $session->getUserId());
   $class = $like->liked ? ' like-red' : ' like-default';
   $action = $like->liked ? 'delete' : 'create';
 } else {
+  $like = false;
   $class = "";
   $action = "";
 }
 
 $page_title = $post->title;
 include(SHARED_PATH . '/public_header.php');
-
-// dd($like, 1);
-// echo '&nbsp;&nbsp;Class: ' . $class;
-// echo '&nbsp;&nbsp;Action: ' . $action;
 
 ?><div class="container-xl">
   <div class="row">

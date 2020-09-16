@@ -42,8 +42,6 @@ class Like {
           let data = this.getCookie();
 
           data.forEach((pid, idx, obj) => {
-            console.log('pid singlePost, postId', [pid, server.singlePost, postId]);
-
             if (pid == server.singlePost && pid == postId) {
               this.postLikeHandler(likeBox);
               return false;
