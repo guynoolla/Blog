@@ -15,9 +15,7 @@ if (is_post_request()) {
 
   $image = new File($_FILES['about_image']);
   $user->fileInstance($image);
-  if (!isset($_POST['user']['about_appear'])) {
-    $_POST['user']['about_appear'] = '0';
-  }
+
   $user->mergeAttributes($_POST['user']);
 
   if ($user->save()) {
@@ -107,11 +105,11 @@ include SHARED_PATH . '/staff_header.php';
                   </div>
                   <div class="form-group row mr-sm-0 mt-5">
                     <label for="aboutText" class="col-sm-4 pl-0 pl-sm-3">About Text</label>
-                    <textarea class="col-sm-8 form-control" name="user[about_text]" value="" id="aboutText" rows="5"><?php echo $user->about_text ?></textarea>
+                    <textarea class="col-sm-8 form-control" name="user[about][about_text]" value="" id="aboutText" rows="5"><?php echo $user->about_text ?></textarea>
                   </div>
                   <div class="form-group row custom-control custom-switch mt-4">
                     <label class="col-sm-4 pl-0 pl-sm-3"></label>
-                    <input name="user[about_appear]" type="checkbox" class="col-sm-8 custom-control-input" id="appearSwitch"<?php echo ($user->about_appear == '1' ? ' checked' : '') ?>>
+                    <input name="user[about][about_appear]" type="checkbox" class="col-sm-8 custom-control-input" id="appearSwitch"<?php echo ($user->about_appear == '1' ? ' checked' : '') ?>>
                     <label class="custom-control-label" for="appearSwitch">Appear in post page sidebar</label>
                   </div>
 

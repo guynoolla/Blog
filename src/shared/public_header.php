@@ -52,8 +52,8 @@ if (!isset($page_title)) {
   </nav>
   <section class="logo">
     <div class="logo-content">
-      <h1 class="brand"><a href="/">Light Kite</a></h1>
-      <div class="description">Just another theme by Gainulla</div>
+      <h1 class="brand"><a href="/"><?php echo $jsonstore->header->siteName ?></a></h1>
+      <div class="description"><?php echo $jsonstore->header->siteDescription ?></div>
     </div>
   </section>
 </header>

@@ -63,24 +63,29 @@ class Post extends \App\Classes\DatabaseObject {
     foreach ($attr as $prop => $value) {
       if ($prop !== 'body') {
         if (!is_null($value)) {
-          $this->$prop = strip_tags($value);
+          $this->$prop = trim(strip_tags($value));
           $attr[$prop] = $this->$prop;
         }
       }
       if ($prop === 'video_urls') {
         $this->getBodyVideoUrls();
-        $attr[$prop] = $this->video_urls;
+        $attr[$prop] = $this->video_urls == "" ? 'NULL' : $this->video_urls;
+      
       } elseif ($prop === 'published') {
         $this->filterCheckboxValue($prop);
         $attr[$prop] = $this->published;
+      
       } elseif ($prop === 'video') {
+
         if (is_array($value)) {
           $this->videoMerger();
           $attr[$prop] = $this->video;
+        
         } elseif ($value && !json_decode($value)) {
           $this->getEntryVideoUrl();
           $attr[$prop] = $this->video;
         }
+
       }
     }
     return $attr;
@@ -272,7 +277,7 @@ SQL;
     return self::selectWithJoins($cond, $per_page, $offset);
   }
 
-  static public function queryPostsByTopic($topic_id, $per_page, $offset) {
+  static public function queryPostsByTopic($topic_id, int $per_page, int $offset) {
     $tid = parent::escape($topic_id);
     $cond = <<<SQL
             WHERE p.approved = '1' AND p.topic_id = $tid
@@ -281,7 +286,7 @@ SQL;
     return self::selectWithJoins($cond, $per_page, $offset);
   }
 
-  static public function queryPostsByAuthor($user_id, $per_page, $offset) {
+  static public function queryPostsByAuthor($user_id, int $per_page, int $offset) {
     $uid = parent::escape($user_id);
     $cond = <<<SQL
             WHERE p.approved = 1 AND p.user_id = $uid
@@ -290,7 +295,7 @@ SQL;
     return self::selectWithJoins($cond, $per_page, $offset);
   }
 
-  static public function queryPostsByDatePub(array $dates, $per_page, $offset) {
+  static public function queryPostsByDatePub(array $dates, int $per_page, int $offset) {
     $cond = <<<SQL
             WHERE p.approved = '1'
             AND ( p.created_at >= '{$dates['date_min']}'
@@ -299,7 +304,7 @@ SQL;
     return self::selectWithJoins($cond, $per_page, $offset);
   }
 
-  static public function queryAllWhere($ids, $per_page, $offset) {
+  static public function queryAllWhere($ids, int $per_page, int $offset) {
     foreach ($ids as $key => $pid) {
       $pid = strval($pid);
       $ids[$key] = parent::escape($pid);
@@ -312,14 +317,25 @@ SQL;
     return self::selectWithJoins($cond, $per_page, $offset);
   }
 
-  static protected function selectWithJoins($conditions='', $per_page, $offset) {
+  static public function queryImageFormatPosts(int $count = 6) {
+    $cond = <<<SQL
+            WHERE p.approved = '1' AND format = 'image'
+            ORDER BY p.created_at DESC
+            LIMIT {$count};
+SQL;
+    return self::selectWithJoins($cond);
+  } 
+
+  static protected function selectWithJoins($conditions='', $per_page=false, $offset=false) {
     $sql = <<<SQL
       SELECT p.*, u.username, t.name as topic
       FROM `posts` AS p
       LEFT JOIN `users` AS u ON p.user_id = u.id
       LEFT JOIN `topics` AS t ON p.topic_id = t.id
 SQL;
-    $sql .= $conditions . " LIMIT {$per_page} OFFSET {$offset}";
+    $sql .= $conditions;
+
+    if ($per_page && $offset) $sql .= " LIMIT {$per_page} OFFSET {$offset}";
 
     return self::findBySql($sql);
   }
@@ -425,6 +441,16 @@ SQL;
       if (($k + 1) == $depth) return $src_value;
     }
     return $src_value;
+  }
+
+  static public function filterImageFormat(array $posts) {
+    $arr = [];
+    foreach ($posts as $post) {
+      if ($post->format == 'image') {
+        $arr[] = $post;
+      }
+    }
+    return $arr;
   }
 
 }

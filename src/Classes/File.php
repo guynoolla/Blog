@@ -10,7 +10,7 @@ class File {
 	protected $max_file_size;
 	protected $file_info = [];
 	protected $default = 'default.png';
-	public $error = false;
+	public $error = "";
 
 	public function __construct($file=null) {
 		$this->file = $file;
@@ -55,7 +55,7 @@ class File {
 		return $this->error;
 	}
 
-	public function handleUpload($field_name, $ratio) {
+	public function handleUpload($field_name, array $ratio=[]) {
     if (!$this->isFileUploaded()) {
 			return $this->getUploadError();
     } else {
@@ -67,15 +67,16 @@ class File {
 		list ($w, $h) = getimagesize($this->file['tmp_name']);
 		$img_ratio = $w/$h;
 
-		if ($img_ratio < $ratio['min'] || $img_ratio > $ratio['max'] ) {
-			$this->error = 'Image aspect ratio (width x height) must be between 7x5 9x5)';
-
-		} else {
-			$size = ROUND($this->file['size']/1024);
-			$limit = $this->max_file_size/1024;
-			if ($size > $limit) {
-				$this->error = 'The uploaded file must not be larger than ' . $limit . 'KB.';
+		if (!empty($ratio)) {
+			if ($img_ratio < $ratio['min'] || $img_ratio > $ratio['max'] ) {
+				$this->error .= 'Image aspect ratio (width x height) must be between 7x5 9x5) ';
 			}
+		}
+
+		$size = ROUND($this->file['size']/1024);
+		$limit = $this->max_file_size/1024;
+		if ($size > $limit) {
+			$this->error .= 'The uploaded file must not be larger than ' . $limit . 'KB. ';
 		}
 
 		if (!$this->error) {
@@ -102,7 +103,7 @@ class File {
 				$this->file_info[$attr] = "/$date_path/$img";
 
 			} else {
-				$this->error = 'The file could not be moved.';
+				$this->error .= 'The file could not be moved.';
 				@unlink( $this->file['tmp_name'] );
 			}
 		}

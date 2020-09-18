@@ -87,20 +87,22 @@ class DatabaseObject {
 
     if (!$this->validate()) return false;
 
-    $attribute_pairs = [];
+    $into = [];
+    $values = [];
     foreach ($attributes as $key => $value) {
-      if ($value == "") { continue; }
-      else { $attribute_pairs[] = "$key = '" . self::escape($value) . "'"; }
+      if ($value == "") continue;
+      $into[] = $key;
+      $values[] = self::escape($value);
     }
 
     $sql = "INSERT INTO " . static::$table_name . "(";
-    $sql .= join(', ', array_keys($attributes));
+    $sql .= join(', ', array_values($into));
     $sql .= ") VALUES ('";
-    $sql .= join("', '", array_values($attributes));
+    $sql .= join("', '", array_values($values));
     $sql .= "')";
     $result = self::$database->query($sql);
 
-    if ($result) { $this->id = self::$database->insert_id; }
+    if ($result) $this->id = self::$database->insert_id;
 
     return $result;
   }
@@ -113,8 +115,11 @@ class DatabaseObject {
 
     $attribute_pairs = [];
     foreach ($attributes as $key => $value) {
-      if ($value == "") { continue; }
-      elseif ($value === 'NULL') { $attribute_pairs[] = "$key = NULL"; } 
+      if ($value == "") {
+        continue;
+      } elseif ($value === 'NULL') {
+        $attribute_pairs[] = "$key = NULL";
+      } 
       else { $attribute_pairs[] = "$key = '" . self::escape($value) . "'"; }
     }
 

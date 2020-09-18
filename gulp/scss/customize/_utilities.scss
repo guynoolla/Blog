@@ -53,3 +53,20 @@ $bg-gray-lk: #e1e5eb;
 .hide {
   display: none !important;
 }
+
+form .form-group 
+
+form .form-group {
+  input.alert-valid {
+    color: #088608;
+  }
+  input.alert-error,
+  textarea.alert-error {
+    border: 1px solid #f47f89 !important;
+  }
+  span.field-validation-error {
+    display: block;
+    height: 1.8rem;
+    line-height: 1.6rem;
+  }
+}

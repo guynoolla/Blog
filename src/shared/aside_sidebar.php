@@ -45,7 +45,7 @@ $topics = Topic::findAll();
     <h3 class="title">Recent Posts</h3>
 
     <div class="recent-posts-widget">
-      <?php foreach ($posts as $post): ?>
+      <?php $i = 1; foreach ($carousel_posts as $post): ?>
         <div class="post">
           <div class="post-image ">
             <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
@@ -57,7 +57,8 @@ $topics = Topic::findAll();
             <span class="date">- 05 Oct , 2016</span>
           </div>
         </div>
-      <?php endforeach; ?>
+        <?php if ($i == 3) break; ?>
+      <?php $i++; endforeach; ?>
     </div>
   </section>
 
@@ -97,13 +98,15 @@ $topics = Topic::findAll();
     <div class="widget-contact-form">
       <div class="alert alert-dismissible d-none rounded-0"></div>
       <form id="contactForm" action="<?php echo url_for('form_post.php') ?>" method="post">
-        <div class="form-group mb-3">
+        <div class="form-group mb-0">
           <label for="email" class="d-none">Email</label>
           <input type="email" name="email" class="form-control rounded-0" id="email" placeholder="<?php echo $jsonstore->contactForm->emailPlaceholder ?>">
+          <span class="text-danger field-validation-error"></span>
         </div>
         <div class="form-group">
           <label for="message" class="d-none">Message</label>
           <textarea name="message" class="form-control rounded-0" id="message" rows="3" placeholder="<?php echo $jsonstore->contactForm->messagePlaceholder ?>"></textarea>
+          <span class="text-danger field-validation-error"></span>
         </div>
         <button type="submit" class="btn btn-lg btn-default float-right rounded-0" name="submit" id="contactSubmit">
           <span class="spinner-grow spinner-grow-sm d-none" role="status" aria-hidden="true"></span>

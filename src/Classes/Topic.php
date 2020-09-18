@@ -6,34 +6,51 @@ namespace App\Classes;
 class Topic extends \App\Classes\DatabaseObject {
 
   static protected $table_name = "`topics`";
-  static protected $db_columns = ['id','name','description'];
+  static protected $db_columns = ['id','name','description','created_at'];
   
   public $id;
   public $name;
   public $description;
+  public $created_at;
 
   public function __construct(array $args=[]) {
     foreach($args as $key => $value) {
-      $args[$key] = strip_tags($value);
+      $args[$key] = strip_tags(trim($value));
     }
     $this->name = $args['name'] ?? '';
     $this->description = $args['description'] ?? '';
   }
 
+  protected function beforeValidation($attr) {
+    foreach($attr as $key => $value) {
+      $value = trim(strip_tags($value));
+      if ($key == 'description' && $value == "") {
+        $value = 'NULL';
+      }
+      $attr[$key] = $value;
+    }
+    return parent::beforeValidation($attr);
+  }
+
   protected function validate() {
     $this->errors = [];
 
-    if(is_blank($this->name)) {
+    if (is_blank($this->name)) {
       $this->errors[] = 'Topic name cannot be blank.';
-    } elseif(!has_length($this->name, ['max' => 100])) {
+    } elseif(!has_length($this->name, ['max' => 50])) {
       $this->errors[] = 'Topic name must be less than 100 characters.';
-    } elseif(self::findByTopic($this->name)) {
-      $this->errors[] = 'This topic already exists.';
     }
-    if(is_blank($this->description)) {
-      $this->errors[] = 'Description cannot be blank.';
-    } elseif(!has_length($this->description, ['min' => 10, 'max' => 1000])) {
-      $this->errors[] = 'Description must be between 10 and 1000 characters.';
+
+    if (!is_blank($this->description)) {
+      if (!has_length($this->description, ['min' => 30, 'max' => 300])) {
+        $this->errors[] = 'Description must be between 10 and 1000 characters.';
+      }
+    }
+
+    if (!isset($this->id)) {
+      if (self::findByTopic($this->name)) {
+        $this->errors[] = 'This topic already exists.';
+      }
     }
 
     return (empty($this->errors) == true);

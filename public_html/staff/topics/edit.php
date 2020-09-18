@@ -24,9 +24,8 @@ if (is_get_request()) {
   $id = $_POST['topic']['id'] ?? 0;
   $topic = Topic::findById($id);
   $topic->mergeAttributes($_POST['topic']);
-  $result = $topic->save();
 
-  if($result === true) {
+  if($topic->save()) {
     $session->message("The Topic '" . $topic->name . "' was updated!");
     redirect_to(url_for('/staff/topics/index.php'));
   }

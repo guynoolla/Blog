@@ -7,6 +7,9 @@ table tr td a.btn-lk {
   letter-spacing: .05em;
   border: 1px solid transparent !important;
   transition: border 300ms ease-in;
+  padding-left: .5em;
+  padding-right: .5em;
+
   &:hover, &:focus {
     color: $plum-color !important;
   }
@@ -69,4 +72,9 @@ table tr td a.btn-lk {
   &:hover {
     color: #fff !important;
   }
+}
+
+
+.alert-dismissible .close {
+  padding: .85rem 1.35rem;
 }

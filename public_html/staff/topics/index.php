@@ -36,7 +36,7 @@ include SHARED_PATH . '/staff_header.php';
   <main class="main col-lg-9">
     <div class="main-content">
       <?php echo page_back_button() ?>
-      <a class="btn btn-outline-primary btn-md mb-1" href="<?php echo url_for('staff/topics/create.php') ?>">New Topic</a>
+      <a class="btn btn-outline-primary btn-md" href="<?php echo url_for('staff/topics/create.php') ?>">New Topic</a>
 
       <h2 style="text-align: center;"><?php echo $page_title ?></h2>
 
@@ -52,6 +52,7 @@ include SHARED_PATH . '/staff_header.php';
               <th scope="col">#</th>
               <th scope="col">Name</th>
               <th scope="col">Description</th>
+              <th scope="col">Created</th>
               <th scope="colgroup" colspan="2">Actions</th>
             </tr>
           </thead>
@@ -61,6 +62,9 @@ include SHARED_PATH . '/staff_header.php';
                 <th scope="row"><?php echo $key + 1 ?></th>
                 <td><span class="h5"><?php echo $topic->name ?></span></td>
                 <td><?php echo $topic->description ?></td>
+                <td>
+                  <span><?php echo date('M j, Y', strtotime($topic->created_at)) ?></span>
+                </td>
                 <td scope="colgroup" colspan="1">
                   <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('/staff/topics/edit.php?id=' . $topic->id) ?>">
                     Edit

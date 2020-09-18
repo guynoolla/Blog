@@ -48,10 +48,10 @@ $edit = isset($post->id) ? true : false;
         <span class="h5 text-muted"><?php echo h($tags) ?></span>
       </li>
       <li class="list-group-item font-weight-bold bg-muted-lk flex-grow-1 d-none d-md-block">
-        <a href="https://www.youtube.com" class="text-muted">YouTube</a>
+        <span class="text-muted">YouTube</span>
       </li>
       <li class="list-group-item font-weight-bold bg-muted-lk flex-grow-1 d-none d-md-block">
-        <a href="https://vimeo.com" class="text-muted">Vimeo</a>
+        <span class="text-muted">Vimeo</span>
       </li>
     </ul>
     <textarea name="post[body]" value="<?php $post->body ?>" class="form-control" id="postBody" rows="10"><?php echo $post->body ?></textarea>

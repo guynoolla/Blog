@@ -1,4 +1,20 @@
 {
+  "header": {
+    "siteName": "Light Kite",
+    "siteDescription": "Just another project by Gai"
+  },
+  "contactForm": {
+    "title": "Contact Us",
+    "emailPlaceholder": "Email",
+    "messagePlaceholder": "Message...",
+    "buttonText": "Send"
+  },
+  "copyright": {
+    "sign": "&#169;",
+    "sitename": "Light Kight",
+    "delimeter": "&#124;",
+    "rights": "All rights reserved"
+  },
   "social": {
     "facebook": {
       "have": true,
@@ -24,17 +40,5 @@
       "have": true, 
       "link": "https://www.github.com"
     }
-  },
-  "contactForm": {
-    "title": "Contact Us",
-    "emailPlaceholder": "Email",
-    "messagePlaceholder": "Message...",
-    "buttonText": "Send"
-  },
-  "copyright": {
-    "sign": "&#169;",
-    "sitename": "Light Kight",
-    "delimeter": "&#124;",
-    "rights": "All rights reserved"
   }
 }

@@ -38,13 +38,10 @@ class User extends \App\Classes\DatabaseObject {
   public $approved = "";
 
   public function __construct(array $args=[]) {
-    $this->username = $args['username'] ?? '';
-    $this->email = $args['email'] ?? '';
-    $this->password = $args['password'] ?? '';
-    $this->confirm_password = $args['confirm_password'] ?? '';
-    $this->about_image = $args['about_image'] ?? '';
-    $this->about_text = $args['about_text'] ?? '';
-    $this->about_appear = $args['about_appear'] ?? '';
+    $this->username = $args['username'] ?? "";
+    $this->email = $args['email'] ?? "";
+    $this->password = $args['password'] ?? "";
+    $this->confirm_password = $args['confirm_password'] ?? "";
   }
 
   public function fileInstance(File $image_obj) {
@@ -133,11 +130,14 @@ class User extends \App\Classes\DatabaseObject {
       }
     }
 
-    // if ($this->about_appear != "") {
-    //   if ($this->about_text == "" || $this->about_image == "") {
-    //     $this->errors[] = "About can not appear without image and text.";
-    //   }
-    // }
+    if (!is_null($this->about_appear)) {
+      if (!$this->image_obj->isFileSelected() && $this->about_image == "") {
+        $this->errors[] = "About image is not selected.";
+      }
+      if ($this->about_text == "") {
+        $this->errors[] = "About text is not entered.";
+      }
+    }
 
     return (empty($this->errors) == true);
   }
@@ -151,10 +151,10 @@ class User extends \App\Classes\DatabaseObject {
     if (!$create && !$update) {
       return parent::save();
     }
-    $image_error = $this->image_obj->handleUpload('about_image');
+    $this->image_obj->handleUpload('about_image');
 
-    if ($image_error !== false) {
-      $this->errors[] = $image_error;
+    if ($this->image_obj->error) {
+      $this->errors[] = $this->image_obj->error;
       return false;
 
     } else {
@@ -170,6 +170,18 @@ class User extends \App\Classes\DatabaseObject {
         return false;
       }
     }
+  }
+
+  public function mergeAttributes(array $args=[]) {
+    if (isset($args['about'])) {
+      if (!isset($args['about']['about_appear'])) {
+        $args['about']['about_appear'] = '0';
+      }
+      foreach ($args['about'] as $key => $value) {
+        $args[$key] = $value;
+      }
+    }
+    parent::mergeAttributes($args);
   }
 
   public function isAdmin() {
@@ -315,8 +327,6 @@ SQL;
   protected function filterCheckboxValue($property) {
     if (in_array($this->$property, ['on','1','checked'])) {
       $this->$property = '1';
-    } else {
-      $this->$property = '0';
     }
   }
 

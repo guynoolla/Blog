@@ -5,37 +5,53 @@ class FormValidate {
 
   constructor(formId) {
     this.form = $(`#${formId}`);
-    this.errors = [];
+    this.errors = {
+      email: [],
+      message: []
+    };
+    this.hasError = () => {
+      return this.errors.email.length > 0 || 
+             this.errors.message.length > 0;
+    };
+  }
+
+  showErrors(id) {
+    let errors = "";
+    this.errors[id].forEach(value => {
+      errors += `${value} `;
+    });
+    $(`#${id}`).addClass("alert-error")
+      .next().text(errors);
   }
 
   email(id) {
     const email = this.form.find(`#${id}`);
+
     if (email.val().length == 0) {
-      this.errors.push("Email cannot be blank.");
-      return false;
-    }
-    if (validator.validate(email.val())) {
-      return email.val();
+      this.errors.email.push("Email cannot be blank.");
+    } else if (!validator.validate(email.val())) {
+      this.errors.email.push("Email is incorrect.");
     } else {
-      this.errors.push("Email is incorrect.");
+      return email.val();
     }
-    return false;
+
+    this.showErrors(id);
   }
 
   length(id, min = 10, max = 1000) {
     const text = this.form.find(`#${id}`);
+
     if (text.val().length == 0) {
-      this.errors.push("Message cannot be blank.");
-      return false;
-    }
-    if (text.val().length < min) {
-      this.errors.push("Message is too short.");
+      this.errors.message.push("Message cannot be blank.");
+    } else if (text.val().length < min) {
+      this.errors.message.push("Message is too short.");
     } else if (text.val().length > max) {
-      this.errors.push("Message is too long.");
+      this.errors.message.push("Message is too long.");
     } else {
       return text.val();
     }
-    return false;
+
+    this.showErrors(id);
   }
 
 }

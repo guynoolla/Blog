@@ -132,20 +132,18 @@ if (is_post_request()) {
 } else {
   $type= 'default';
   $current_page = $_GET['page'] ?? 1;
+  $carousel_posts = Post::queryImageFormatPosts();
+
   $per_page = 6;
   $total_count = Post::countAll(['approved' => '1']);
   $pagination = new Pagination($current_page, $per_page, $total_count, 'pagination-lg');
-  
+
   $posts = Post::queryApprovedPosts($per_page, $pagination->offset());
   $page_title = 'Recent Posts';
 }
 
 include SHARED_PATH . '/public_header.php';
-
-if ($type == 'default') {
-  $carousel_posts = ($type == 'topic') ? Post::queryApprovedPosts(3, 0) : $posts;
-  include SHARED_PATH . '/carousel.php';
-}
+include SHARED_PATH . '/carousel.php';
 
 ?>
 <div class="container-md">

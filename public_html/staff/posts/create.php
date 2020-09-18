@@ -26,8 +26,11 @@ if (is_post_request()) {
   posts_creation_limit(3);
 
   $post = new Post($_POST['post']);
-  $image = new File($_FILES['image']);
-  $post->fileInstance($image);
+
+  if (isset($_FILES['image'])) {
+    $image = new File($_FILES['image']);
+    $post->fileInstance($image);
+  }
 
   $result = $post->save();
 
