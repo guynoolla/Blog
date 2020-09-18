@@ -54,11 +54,10 @@ $bg-gray-lk: #e1e5eb;
   display: none !important;
 }
 
-form .form-group 
-
 form .form-group {
-  input.alert-valid {
-    color: #088608;
+  input.alert-valid,
+  textarea.alert-valid {
+    border: 2px solid #088608 !important;
   }
   input.alert-error,
   textarea.alert-error {

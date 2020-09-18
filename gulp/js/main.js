@@ -56,8 +56,10 @@ $(document).ready(() => {
     e.preventDefault();
 
     const validate = new FormValidate("contactForm");
+    validate.textSize.min = 20;
+    validate.textSize.max = 50;
     const email = validate.email('email');
-    const message = validate.length('message');
+    const message = validate.text('message');
 
     const widget = $(".widget-contact-form");
 

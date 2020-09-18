@@ -96,19 +96,19 @@ $topics = Topic::findAll();
   <section class="widget my-4" id="widget-contact-form">
     <h3 class="title"><?php echo $jsonstore->contactForm->title ?></h3>
     <div class="widget-contact-form">
-      <div class="alert alert-dismissible d-none rounded-0"></div>
+      <div class="alert alert-dismissible d-none"></div>
       <form id="contactForm" action="<?php echo url_for('form_post.php') ?>" method="post">
         <div class="form-group mb-0">
           <label for="email" class="d-none">Email</label>
-          <input type="email" name="email" class="form-control rounded-0" id="email" placeholder="<?php echo $jsonstore->contactForm->emailPlaceholder ?>">
+          <input type="email" name="email" class="form-control" id="email" placeholder="<?php echo $jsonstore->contactForm->emailPlaceholder ?>">
           <span class="text-danger field-validation-error"></span>
         </div>
-        <div class="form-group">
+        <div class="form-group mb-0">
           <label for="message" class="d-none">Message</label>
-          <textarea name="message" class="form-control rounded-0" id="message" rows="3" placeholder="<?php echo $jsonstore->contactForm->messagePlaceholder ?>"></textarea>
+          <textarea name="message" class="form-control" id="message" rows="3" placeholder="<?php echo $jsonstore->contactForm->messagePlaceholder ?>"></textarea>
           <span class="text-danger field-validation-error"></span>
         </div>
-        <button type="submit" class="btn btn-lg btn-default float-right rounded-0" name="submit" id="contactSubmit">
+        <button type="submit" class="btn btn-lg btn-default float-right" name="submit" id="contactSubmit">
           <span class="spinner-grow spinner-grow-sm d-none" role="status" aria-hidden="true"></span>
           <?php echo $jsonstore->contactForm->buttonText ?>
         </button>

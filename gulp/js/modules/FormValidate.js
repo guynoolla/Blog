@@ -1,3 +1,4 @@
+import { forEach } from 'core-js/fn/array';
 import $ from 'jquery';
 var validator = require("email-validator");
 
@@ -5,53 +6,97 @@ class FormValidate {
 
   constructor(formId) {
     this.form = $(`#${formId}`);
-    this.errors = {
-      email: [],
-      message: []
-    };
+    this.errors = {};
     this.hasError = () => {
-      return this.errors.email.length > 0 || 
-             this.errors.message.length > 0;
+      const keys = Object.keys(this.errors);
+      let has = false;
+      keys.forEach(key => {
+        if (this.errors[key].length > 0) has = true;
+      })
+      return has;
     };
+    this.textSize = {
+      min: 50,
+      max: 1000
+    };
+    this.typingTimer;
+    this.prevValue = {};
+    this.changeEvent = {};
   }
 
-  showErrors(id) {
-    let errors = "";
-    this.errors[id].forEach(value => {
-      errors += `${value} `;
+  onElementChange(fid, elem) {
+    if (typeof this.changeEvent[fid] == "undefined") {
+      elem.on("keyup", () => {
+        const type = elem[0].type;
+        const value = elem.val().trim();
+
+        if (value != this.prevValue[fid]) {
+          clearTimeout(this.typingTimer);
+
+          this.typingTimer = setTimeout(() => {
+            console.log("Started");
+            switch(type) {
+              case "email":
+                      this.email(fid, false);
+              case "textarea":
+                      this.text(fid, false);
+            }
+          }, 600)
+        }
+        this.prevValue[fid] = value;
+      })
+      this.changeEvent[fid] = true;
+    }
+  }
+
+  showErrors(fid, elem) {
+    elem.removeClass("alert-error").next().text("");
+    let errorsStr = "";
+    this.errors[fid].forEach(value => {
+      errorsStr += `${value} `;
     });
-    $(`#${id}`).addClass("alert-error")
-      .next().text(errors);
+    elem.addClass("alert-error").next().text(errorsStr);
+    this.onElementChange(fid, elem);
   }
 
-  email(id) {
-    const email = this.form.find(`#${id}`);
+  showValid(elem) {
+    elem.removeClass("alert-error");
+    elem.addClass("alert-valid");
+    elem.next().text("");
+  }
+
+  email(fid, errIndicate = true) {
+    const email = this.form.find(`#${fid}`);
+    this.errors[fid] = [];
 
     if (email.val().length == 0) {
-      this.errors.email.push("Email cannot be blank.");
+      this.errors[fid].push("Email cannot be blank.");
     } else if (!validator.validate(email.val())) {
-      this.errors.email.push("Email is incorrect.");
+      this.errors[fid].push("Email is incorrect.");
     } else {
-      return email.val();
+      this.showValid(email)
+      return email.val()
     }
 
-    this.showErrors(id);
+    if (errIndicate == true) this.showErrors(fid, email);
   }
 
-  length(id, min = 10, max = 1000) {
-    const text = this.form.find(`#${id}`);
+  text(fid, errIndicate = true) {
+    const text = this.form.find(`#${fid}`);
+    this.errors[fid] = [];
 
     if (text.val().length == 0) {
-      this.errors.message.push("Message cannot be blank.");
-    } else if (text.val().length < min) {
-      this.errors.message.push("Message is too short.");
-    } else if (text.val().length > max) {
-      this.errors.message.push("Message is too long.");
+      this.errors[fid].push("Message cannot be blank.");
+    } else if (text.val().length < this.textSize.min) {
+      this.errors[fid].push("Message is too short.");
+    } else if (text.val().length > this.textSize.max) {
+      this.errors[fid].push("Message is too long.");
     } else {
-      return text.val();
+      this.showValid(text)
+      return text.val()
     }
 
-    this.showErrors(id);
+    if (errIndicate == true) this.showErrors(fid, text);
   }
 
 }
