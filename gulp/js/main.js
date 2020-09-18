@@ -56,8 +56,8 @@ $(document).ready(() => {
     e.preventDefault();
 
     const validate = new FormValidate("contactForm");
-    validate.textSize.min = 20;
-    validate.textSize.max = 50;
+    validate.textSize.min = 10;
+    validate.textSize.max = 500;
     const email = validate.email('email');
     const message = validate.text('message');
 
@@ -83,15 +83,13 @@ $(document).ready(() => {
           target: 'contact_form'
         },
         success: res => {
-          console.log("Res", res);
-          return;
           //let timer = setTimeout(() => {
             widget.find(".spinner-grow").addClass("d-none");
             const data = JSON.parse(res);
             if (data[0] == "success") {
               widget.find(".alert").html(data[1])
                 .removeClass("d-none")
-                .addClass("alert-valid")
+                .addClass("lead text-success my-0");
               widget.find("#email").val("");
               widget.find("#message").val("");
             }
@@ -101,14 +99,6 @@ $(document).ready(() => {
         error: res => console.log(res)
       })
     }
-    //  else {
-    //   let output =  "";
-    //   validate.errors.forEach(err => output += err + ' ');
-
-    //   widget.find(".alert").html(output)
-    //     .removeClass("d-none")
-    //     .addClass("alert-error");
-    // }
 
     return false;
   });
