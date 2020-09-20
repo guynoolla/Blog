@@ -92,7 +92,7 @@ function cookie_ids_posts($data) {
         $arr[$j]['username'] = htmlspecialchars($post->username);
         $arr[$j]['to_single'] = url_for('post/' . urlencode($post->title) . '?id=' . $post->id);
         $arr[$j]['to_author'] = url_for('author/' . urlencode($post->username) . '?uid=' . $post->user_id);
-        $arr[$j]['to_on_date'] = url_for('on-date/?pub=' . urlencode(date('Y-m-d', strtotime($post->created_at))));
+        $arr[$j]['to_on_date'] = url_for('ondate/pub/?ymd=' . urlencode(date('Y-m-d', strtotime($post->created_at))));
         $arr[$j]['to_topic'] = url_for('topic/' . urlencode($post->topic) . '?tid=' . $post->topic_id);
         $j++;
       }

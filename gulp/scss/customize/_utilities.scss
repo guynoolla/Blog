@@ -53,21 +53,3 @@ $bg-gray-lk: #e1e5eb;
 .hide {
   display: none !important;
 }
-
-form .form-group {
-  input.alert-valid,
-  textarea.alert-valid {
-    border: 1px solid #8ecc8e !important;
-    background-color: #e1f6e1 !important;
-  }
-  input.alert-error,
-  textarea.alert-error {
-    border: 1px solid #ebacb1 !important;
-    background-color: #f6e0e1 !important;
-  }
-  span.field-validation-error {
-    display: block;
-    height: 1.8rem;
-    line-height: 1.7rem;
-  }
-}

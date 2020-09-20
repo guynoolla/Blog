@@ -40,7 +40,7 @@
         .slider-post-text {
           position: absolute;
           top: 0; left: 0; right: 0; bottom: 0;
-          background-color: rgba(0, 0, 0, .5);
+          background-color: rgba(0, 0, 0, .6);
           transition: background-color 600ms ease-in;
           height: 27.5em;
           padding: 6em 4em;
@@ -130,6 +130,7 @@
 
   &--dark {
     color: #444 !important;
+    margin-bottom: 2.8em;
     &::after {
       width: 2.5rem;
       border-bottom: 2px solid $plum-color;

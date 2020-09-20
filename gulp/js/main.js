@@ -11,16 +11,17 @@ import { forEach } from 'core-js/fn/array';
 
 window.jQuery = $;
 
-$(document).ready(() => {
-
-  const like = new Like();
-  const posts = new Posts();
+$(() => {
 
   Breakpoint.init();
 
+  slickCarousel();
   navbarSearchBehavior();
   homePagePaginationBehavior();
   editPostFormElementsBehavior();
+
+  const like = new Like();
+  const posts = new Posts();
 
   var rtime;
   var timeout = false;
@@ -30,7 +31,7 @@ $(document).ready(() => {
 
   deviceMediaEmbedResponsive(er1, er2);
 
-  $(window).resize(function() {
+  $(window).on("resize", function() {
     rtime = new Date();
     if (timeout === false) {
       timeout = true;
@@ -47,98 +48,58 @@ $(document).ready(() => {
         cleanEmbedResponsive(er1, er2);
         mediaEmbedResponsive(er1, er2);
       } else {
-        // here...
+        // code...
       }
     }         
   }
 
-  $("#contactForm").on("submit", e => {
-    e.preventDefault();
-
-    const validate = new FormValidate("contactForm");
-    validate.textSize.min = 10;
-    validate.textSize.max = 500;
-    const email = validate.email('email');
-    const message = validate.text('message');
-
-    const widget = $(".widget-contact-form");
-
-    widget.on("click", e => {
-      widget.find(".alert").addClass("d-none")
-    });
-
-    widget.find(".alert").html("").addClass("d-none")
-      .removeClass("alert-error")
-      .removeClass("alert-valid")
-
-    if (!validate.hasError()) {
-      widget.find(".spinner-grow").removeClass("d-none");
-
-      $.ajax({
-        url: server.baseUrl + '/ajax.php',
-        type: 'POST',
-        data: { 
-          email: email,
-          message: message,
-          target: 'contact_form'
-        },
-        success: res => {
-          //let timer = setTimeout(() => {
-            widget.find(".spinner-grow").addClass("d-none");
-            const data = JSON.parse(res);
-            if (data[0] == "success") {
-              widget.find(".alert").html(data[1])
-                .removeClass("d-none")
-                .addClass("lead text-success my-0");
-              widget.find("#email").val("");
-              widget.find("#message").val("");
-            }
-            //clearTimeout(timer);
-          //}, 2000);
-        },
-        error: res => console.log(res)
-      })
+  $("#navSearchForm, #asideSearchForm").on("submit", e => {
+    const form = $(e.target)
+    const term = form.find("input[name='s']").val()
+    if (term.trim() == "") {
+      e.preventDefault();
+      return false;
     }
+  })
 
-    return false;
-  });
+  if ($("#contactForm").length) {
+    const validate = new FormValidate("contactForm");
+    validate.settings.textSize["message"] = { min: 20, max: 1000 };
 
-  const slider = $('.slider');
+    validate.form.on("submit change", async (e) => {
+      e.preventDefault();
 
-  if (typeof slider.slick == "function") {
-    slider.slick({
-      slidesToShow: 3,
-      slidesToScroll: 1,
-      autoplay: false,
-      autoplaySpeed: 2000,
-      nextArrow: $('.next'),
-      prevArrow: $('.prev'),
-      responsive: [{
-        breakpoint: 1201, //1024,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          infinite: true,
-          dots: false
-        }
-      },
-      {
-        breakpoint: 991, // 880,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          infinite: true,
-          dots: false
-        }
-      },
-      {
-        breakpoint: 701,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1
-        }
-      }]
-    })
+      const email = await validate.email("email")
+      const message = await validate.text("message")
+
+      if (email && message) {
+        $(validate.form).find(".spinner-grow").removeClass("d-none");
+  
+        $.ajax({
+          url: server.baseUrl + '/ajax.php',
+          type: 'POST',
+          data: { 
+            email: email,
+            message: message,
+            target: 'contact_form'
+          },
+          success: res => {
+            let timer = setTimeout(() => {
+              $(validate.form).find(".spinner-grow").addClass("d-none");
+  
+              const data = JSON.parse(res);
+              if (data[0] == "success") {
+                validate.responseMessage(data[1])
+              }
+              clearTimeout(timer);
+            }, 2000);
+          },
+          error: res => console.log(res)
+        })
+      }
+
+      return false;
+    });
   }
 
   $(window).on("scroll", function() {
@@ -176,22 +137,22 @@ function deviceMediaEmbedResponsive(embedResp1, embedResp2) {
 
 function mediaEmbedResponsive(embedResp1=false, embedResp2=false) {
   if (Breakpoint.is("xs")) {
-    console.log("Breakpoint", "xs");
+    //console.log("Breakpoint", "xs");
     if (embedResp1) embedResp1.addClass('embed-responsive-16by9');
     if (embedResp2) embedResp2.addClass('embed-responsive-16by9');
   }
   if (Breakpoint.is("sm")) {
-    console.log("Breakpoint", "sm");
+    //console.log("Breakpoint", "sm");
     if (embedResp1) embedResp1.addClass('embed-responsive-16by9');
     if (embedResp2) embedResp2.addClass("embed-responsive-16by9");
   }
   if (Breakpoint.is("md")) {
-    console.log("Breakpoint", "md");
+    //console.log("Breakpoint", "md");
     if (embedResp1) embedResp1.addClass('embed-responsive-16by9');
     if (embedResp2) embedResp2.addClass('embed-responsive-4by3');
   }
   if (Breakpoint.is("lg")) {
-    console.log("Breakpoint", "lg");
+    //console.log("Breakpoint", "lg");
     if (embedResp1) embedResp1.addClass('embed-responsive-16by9');
     if (embedResp2) embedResp2.addClass('embed-responsive-16by9');
   }  
@@ -288,5 +249,46 @@ function navbarSearchBehavior() {
         $(".search-field-lk").addClass("push-in-field");
       }
     })
+  })
+}
+
+function slickCarousel() {
+  $(window).on("load", () => {
+    const slider = $(".slider");
+    if (typeof slider.slick == "function") {
+      slider.slick({
+        slidesToShow: 2,
+        slidesToScroll: 1,
+        autoplay: false,
+        autoplaySpeed: 2000,
+        nextArrow: $('.next'),
+        prevArrow: $('.prev'),
+        responsive: [{
+          breakpoint: 1201, // 1024,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 1,
+            infinite: true,
+            dots: false
+          }
+        },
+        {
+          breakpoint: 991, // 880,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 1,
+            infinite: true,
+            dots: false
+          }
+        },
+        {
+          breakpoint: 701,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        }]
+      })
+    }
   })
 }

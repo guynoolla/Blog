@@ -10,6 +10,7 @@ $id = $_GET['id'] ?? 0;
 $post = Post::findById($id);
 $url_parts = url_split_by_slash();
 $_title = urldecode(end($url_parts));
+$username = User::findById($post->user_id)->username;
 
 if (!$post || $_title !== $post->title) {
   error_404();
@@ -81,16 +82,16 @@ include(SHARED_PATH . '/public_header.php');
                 <div class="post-item-wrap">
                   <div class="post-item-inner border-bottom-0">
 
-                    <h2 class="entry-title text-center mt-0"><a href=""><?php echo h($post->title) ?></a></h2>
+                    <h2 class="entry-title text-center mt-0"><?php echo h($post->title) ?></h2>
 
                     <div class="entry-meta">
-                      <span class="posted-on">Posted on <a href="<?php echo url_for('on-date/?pub=' . u(date('Y-m-d', strtotime($post->created_at)))) ?>" rel="bookmark">
+                      <span class="posted-on">Posted on <a href="<?php echo url_for('ondate/pub/?ymd=' . u(date('Y-m-d', strtotime($post->created_at)))) ?>" rel="bookmark">
                         <time class="entry-date published" datetime="<?php echo $post->created_at ?>">
                           <?php echo date('M j, Y', strtotime($post->created_at)) ?>
                         </time>
                       </a></span>by <span class="author">
-                      <a href="<?php echo url_for('author/' . u($post->username) . '?uid=' . $post->user_id) ?>">
-                        <?php echo User::findById($post->user_id)->username ?>
+                      <a href="<?php echo url_for('author/' . u($username) . '?uid=' . $post->user_id) ?>">
+                        <?php echo $username ?>
                       </a></span>
                     </div>
 

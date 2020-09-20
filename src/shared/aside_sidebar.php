@@ -9,7 +9,7 @@ if (url_contain(['post/','preview/'])) {
 }
 
 $posts = App\Classes\Post::findWhere(
-  ['approved' => '1'],
+  ['approved' => '1', 'format' => 'image'],
   'ORDER BY RAND() LIMIT 3'
 );
 
@@ -45,7 +45,7 @@ $topics = Topic::findAll();
     <h3 class="title">Recent Posts</h3>
 
     <div class="recent-posts-widget">
-      <?php $i = 1; foreach ($carousel_posts as $post): ?>
+      <?php $i = 1; foreach ($posts as $post): ?>
         <div class="post">
           <div class="post-image ">
             <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
@@ -64,10 +64,10 @@ $topics = Topic::findAll();
 
   <section class="widget">
     <div class="search-widget pt-4 pb-3">
-      <form role="search" method="get" class="form-search" action="<?php echo url_for('index.php') ?>">
+      <form id="asideSearchForm" role="search" method="get" class="form-search" action="<?php echo url_for('index.php') ?>">
         <div class="input-group">
           <label class="screen-reader-text" for="s">Search for:</label>
-          <input type="text" class="form-control search-query" placeholder="Search…" value="" name="s" title="Search for:">
+          <input name="s" type="text" class="form-control search-query" placeholder="Search…" value="" title="Search for:">
           <div class="input-group-append">
             <button type="submit" class="btn btn-default" name="submit" id="searchSubmit" value="Search">Search</button>
           </div>
@@ -77,7 +77,7 @@ $topics = Topic::findAll();
   </section>
 
   <section class="widget">
-    <h3 class="title">Topics</h3>
+    <h3 class="title mb-3">Topics</h3>
     
     <div class="cats-widget">
       <ul>
@@ -95,8 +95,7 @@ $topics = Topic::findAll();
 
   <section class="widget my-4" id="widget-contact-form">
     <h3 class="title"><?php echo $jsonstore->contactForm->title ?></h3>
-    <div class="widget-contact-form">
-      <div class="alert alert-dismissible d-none"></div>
+    <div class="widget-contact-form pt-2">
       <form id="contactForm" action="<?php echo url_for('form_post.php') ?>" method="post">
         <div class="form-group mb-0">
           <label for="email" class="d-none">Email</label>
@@ -109,9 +108,10 @@ $topics = Topic::findAll();
           <span class="text-danger field-validation-error"></span>
         </div>
         <button type="submit" class="btn btn-lg btn-default float-right" name="submit" id="contactSubmit">
-          <span class="spinner-grow spinner-grow-sm d-none" role="status" aria-hidden="true"></span>
+          <span class="spinner-grow spinner-grow-sm d-none mr-3" role="status" aria-hidden="true"></span>
           <?php echo $jsonstore->contactForm->buttonText ?>
         </button>
+        <div class="response-message response-message--shade"></div>
       </form>
     </div>
   </section>

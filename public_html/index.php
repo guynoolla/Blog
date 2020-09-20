@@ -10,23 +10,6 @@ $headline = '';
 $type = 'default';
 
 /*
-  Contact Form Submit Hanlder /////////////////////////////////*/
-
-if (is_post_request()) {
-  $email = $_POST['email'] ?? '';
-  $message = $_POST['message'] ?? '';
-
-  if ($email && $message) {
-    $mailer = new App\Contracts\Mailer;
-    $text = strip_tags($message);
-    
-    $mailer->send(ADMIN_EMAIL,'Contact Form', $text, $message);
-    $session->message('Thank you for your message!');
-    redirect_to(url_for('index.php'));
-  }
-}
-
-/*
   GET POSTS BY SEARCH TERM ///////////////////////////////////////*/
 
  if (isset($_GET['s'])) {
@@ -103,12 +86,12 @@ if (is_post_request()) {
   }
 
 /*
-  GET POSTS BY PUBLISHED DATE ///////////////////////////////////// */
+  GET POSTS ON DATE //////////////////////////////////////////// */
   
-} elseif (isset($_GET['pub'])) {
-  $type = 'on-date';
+} elseif (isset($_GET['date'])) {
+  $type = 'ondate';
 
-  $created_at = urldecode($_GET['pub']);
+  $created_at = urldecode($_GET['date']);
   $date_publ = date('Y-m-d', strtotime($created_at));
   $date_next = date('Y-m-d', strtotime('+ 1 day', strtotime($created_at)));
 
@@ -132,7 +115,8 @@ if (is_post_request()) {
 } else {
   $type= 'default';
   $current_page = $_GET['page'] ?? 1;
-  $carousel_posts = Post::queryImageFormatPosts();
+  if ($current_page == 1)
+      $carousel_posts = Post::queryImageFormatPosts(4);
 
   $per_page = 6;
   $total_count = Post::countAll(['approved' => '1']);
@@ -182,7 +166,7 @@ include SHARED_PATH . '/carousel.php';
                       </h2>
 
                       <div class="entry-meta">
-                        <span class="posted-on">Posted on <a href="<?php echo url_for('on-date/?pub=' . u(date('Y-m-d', strtotime($post->created_at)))) ?>" rel="bookmark">
+                        <span class="posted-on">Posted on <a href="<?php echo url_for('ondate/pub/?ymd=' . u(date('Y-m-d', strtotime($post->created_at)))) ?>" rel="bookmark">
                           <time class="entry-date published" datetime="<?php echo $post->created_at ?>">
                             <?php echo date('M j, Y', strtotime($post->created_at)) ?>
                           </time>
@@ -235,7 +219,7 @@ include SHARED_PATH . '/carousel.php';
                       <h2 class="entry-title text-center"><a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>"><?php echo h($post->title) ?></a></h2>
                       
                       <div class="entry-meta">
-                        <span class="posted-on">Posted on <a href="<?php echo url_for('on-date/?pub=' . u(date('Y-m-d', strtotime($post->created_at)))) ?>" rel="bookmark">
+                        <span class="posted-on">Posted on <a href="<?php echo url_for('ondate/pub/?ymd=' . u(date('Y-m-d', strtotime($post->created_at)))) ?>" rel="bookmark">
                           <time class="entry-date published" datetime="<?php echo $post->created_at ?>">
                             <?php echo date('M j, Y', strtotime($post->created_at)) ?>
                           </time>
