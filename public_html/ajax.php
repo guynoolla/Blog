@@ -23,10 +23,14 @@ function contact_form_submit($data) {
     $mailer = new \App\Contracts\Mailer;
     $text = strip_tags($message);
     
-    $mailer->send(ADMIN_EMAIL,'Contact Form', $text, $message);
-    $message = 'Thank you for your message!';
+    try {
+      $mailer->send(ADMIN_EMAIL,'Contact Form', $text, $message);
+      $message = 'Thank you for your message!';
+      exit(json_encode(['success', $message]));
     
-    exit(json_encode(['success', $message]));
+    } catch(Exception $e) {
+      exit(json_encode(['failed', 'Sorry, server error occured.']));
+    }
   }
 }
 

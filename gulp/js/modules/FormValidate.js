@@ -39,12 +39,15 @@ class FormValidate {
       return (this.event.type == "submit" && !this.hasError())
     };
 
-    this.responseMessage = (msg) => {
+    this.responseMessage = (msg, success) => {
       for (let key in this.validValues) {
         this.validValues[key].val("").removeClass("alert-valid");
       }
-      this.form.find(".response-message")
-        .text(msg).addClass("response-message--is-visible")
+      if (success) {
+        this.form.find(".response").text(msg).addClass("response--show-okey")
+      } else {
+        this.form.find(".response").text(msg).addClass("response--show-fail")
+      }
     }
 
     this.events()
@@ -52,16 +55,20 @@ class FormValidate {
 
   events() {
     this.form.on("submit change keyup", event => this.event = event)
-    this.form.find(".response-message.response-message--shade")
-      .on("click", e => $(e.target).removeClass("response-message--is-visible"))
+    this.form.find(".response.response--shade").on("click", e => {
+        $(e.target)
+          .removeClass("response--show-okey")
+          .removeClass("response--show-fail")
+    })
     $(document).on("keyup", e => {
       let key;
       if (e.key !== undefined) key = e.key
       else if (e.keyIdentifier !== undefined) key = e.keyIdentifier;
       else if (e.keyCode !== undefined) key = e.keyCode;
       if (key == 27 || key.toLowerCase() == "escape") {
-        this.form.find(".response-message.response-message--shade")
-          .removeClass("response-message--is-visible")
+        this.form.find(".response.response--shade")
+          .removeClass("response--show-okey")
+          .removeClass("response--show-fail")
       }
     })
   }

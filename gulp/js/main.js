@@ -86,10 +86,12 @@ $(() => {
           success: res => {
             let timer = setTimeout(() => {
               $(validate.form).find(".spinner-grow").addClass("d-none");
-  
+
               const data = JSON.parse(res);
               if (data[0] == "success") {
-                validate.responseMessage(data[1])
+                validate.responseMessage(data[1], true)
+              } else if (data[0] == "failed") {
+                validate.responseMessage(data[1], false)
               }
               clearTimeout(timer);
             }, 2000);

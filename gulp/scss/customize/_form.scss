@@ -7,7 +7,7 @@ form {
       background-color: #e1f6e1 !important;
     }
     .alert-error {
-      border: 1px solid #ebacb1 !important;
+      border: 1px solid #db646c !important;
       background-color: #f6e0e1 !important;
     }
     .field-validation-error {
@@ -18,7 +18,7 @@ form {
     }
   }
 
-  .response-message {
+  .response {
     font-family: 'Montserrat';
     font-weight: 500;
     color: $dark;
@@ -26,8 +26,6 @@ form {
     &--shade {
       position: absolute;
       top: 0; left: 0; bottom: 0; right: 0;
-      background-color: #8ecc8e;
-      color: white;
       display: inline-block;
       text-align: center;
       padding: 4rem 1rem;
@@ -35,7 +33,7 @@ form {
       margin-bottom: .3rem;
       opacity: 0;
       visibility: hidden;
-      transform: scale(.5);
+      transform: translateY(-5rem);
       transition: all 300ms ease-out;
       display: flex;
       align-items: center;
@@ -53,10 +51,19 @@ form {
         cursor: pointer;    
       }
     }
-    &--is-visible {
+    &--show-okey {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      background-color: #8ecc8e;
+      color: white;
+    }
+    &--show-fail {
       opacity: 1;
       visibility: visible;
       transform: scale(1);
+      background-color: #db646c;
+      color: white;
     }
   }
 }
