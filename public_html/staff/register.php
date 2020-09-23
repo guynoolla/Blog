@@ -16,49 +16,49 @@ if (is_post_request()) {
 
 $page_title = 'User Registration';
 include SHARED_PATH . '/public_header.php';
-?>
 
-<div class="container-fluid bg-other-lk">
+?>
+<div class="container-fluid bg-other-lk bg-other-lk--md">
 
   <div class="row justify-content-center h-100">
-    <div class="col col-md-8 col-lg-6 my-auto">
+    <div class="col col-md-10 col-lg-8 col-xl-6 my-auto">
 
-      <div class="py-5 my-4 rounded bg-white">
+      <div class="py-5 my-5 rounded bg-white px-0 px-sm-4 px-lg-5">
         <form id="registerForm" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
-          
-          <div class="px-2 px-sm-4"><?php
+
+          <div class="row ml-0"><h1>Register</h1></div>
+          <div class="row"><div class="col"><?php
             if (!empty($user->errors)) echo display_errors($user->errors);
-          ?></div>
+          ?></div></div>
 
-          <fieldset class="px-4 px-sm-5 mr-sm-2">
+          <div class="form-group row mb-0 mx-0">
+            <label for="username" class="col-sm-4 col-form-label pl-0">Username</label>
+            <input class="col-sm-8 form-control" id="username" type="text" name="user[username]" value="<?php echo h($user->username) ?>">
+            <span class="offset-sm-4 col-sm-8 text-danger field-validation-error"></span>
+          </div>
+          <div class="form-group row mb-0 mx-0">
+            <label for="email" class="col-sm-4 col-form-label pl-0">Email</label>
+            <input class="col-sm-8 form-control" id="email" type="email" name="user[email]" value="<?php echo h($user->email) ?>">
+            <span class="offset-sm-4 col-sm-8 text-danger field-validation-error"></span>
+          </div>
+          <div class="form-group row mb-0 mx-0">
+            <label for="password" class="col-sm-4 col-form-label pl-0">Password</label>
+            <input class="col-sm-8 form-control" id="password" type="password" name="user[password]" value="<?php echo $user->empty_password_field ? '' : $user->password ?>">
+            <span class="offset-sm-4 col-sm-8 text-danger field-validation-error"></span>
+          </div>
+          <div class="form-group row mb-0 mx-0">
+            <label for="confirm_password" class="col-sm-4 pl-0">Confirm Password</label>
+            <input class="col-sm-8 form-control" id="confirm_password" type="password" name="user[confirm_password]" value="<?php echo $user->empty_password_field ? '' : $user->confirm_password ?>">
+            <span class="offset-sm-4 col-sm-8 text-danger field-validation-error"></span>
+          </div>
+          <button type="submit" name="submit_button" class="btn btn-outline-default float-right">
+            <span class="spinner-grow spinner-grow-sm d-none" role="status" aria-hidden="true"></span>
+            Register
+          </button>
 
-            <legend class="mb-5 h1">Register</legend>
-            <div class="alert alert-dismissible d-none"></div>
+          <p class="text-center font-weight-bold">Or <a href="<?php echo url_for('staff/login.php') ?>">Log In</a></p>
+          <div class="response response--shade"></div>
 
-            <div class="form-group row mr-sm-0">
-              <label for="username" class="col-sm-4 col-form-label pl-0 pl-sm-3">Username</label>
-              <input class="col-sm-8 form-control" id="username" type="text" name="user[username]" value="<?php echo h($user->username) ?>">
-              <span class="text-danger field-validation-error"></span>
-            </div>
-            <div class="form-group row mr-sm-0">
-              <label for="email" class="col-sm-4 col-form-label pl-0 pl-sm-3">Email</label>
-              <input class="col-sm-8 form-control" id="email" type="email" name="user[email]" value="<?php echo h($user->email) ?>">
-              <span class="text-danger field-validation-error"></span>
-            </div>
-            <div class="form-group row mr-sm-0">
-              <label for="password" class="col-sm-4 col-form-label pl-0 pl-sm-3">Password</label>
-              <input class="col-sm-8 form-control" type="password" name="user[password]" value="<?php echo $user->empty_password_field ? '' : $user->password ?>">
-              <span class="text-danger field-validation-error"></span>
-            </div>
-            <div class="form-group row mr-sm-0">
-              <label for="confirm_password" class="col-sm-4 pl-0 pl-sm-3">Confirm Password</label>
-              <input class="col-sm-8 form-control" type="password" name="user[confirm_password]" value="<?php echo $user->empty_password_field ? '' : $user->confirm_password ?>">
-              <span class="text-danger field-validation-error"></span>
-            </div>
-            <p class="text-center mb-0 font-weight-bold">Or <a href="<?php echo url_for('staff/login.php') ?>">Sign In</a></p>
-            <button type="submit" name="submit_button" class="btn btn-outline-default float-right">Register</button>
-
-          </fieldset>
         </form>
       </div>
 

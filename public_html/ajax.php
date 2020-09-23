@@ -11,8 +11,28 @@ switch($target) {
         $session->isLoggedIn() ? cookie_ids_posts($_POST) : null;
   case 'contact_form':
         contact_form_submit($_POST);
+  case 'is_already_exist':
+        is_already_exist($_POST);
   default:
         exit(json_encode(['target' => 'error']));
+}
+
+function is_already_exist($data) {
+  $field = $data['field'] ?? '';
+  $value = $data['value'] ?? '';
+  $table = $data['table'] ?? '';
+
+  if ($field && $value && $table) {
+    if ($table == 'users') {
+      if ($field == 'username') {
+        $user = \App\Classes\User::findByUsername($value);
+      } else if ($field == 'email') {
+        $user = \App\Classes\User::findByEmail($value);
+      }
+      exit(($user ? 'true' : 'false'));
+    }
+  }
+  exit('error');
 }
 
 function contact_form_submit($data) {
@@ -29,7 +49,7 @@ function contact_form_submit($data) {
       exit(json_encode(['success', $message]));
     
     } catch(Exception $e) {
-      exit(json_encode(['failed', 'Sorry, server error occured.']));
+      exit(json_encode(['failed', 'Sorry, server error occured. Please try later.']));
     }
   }
 }

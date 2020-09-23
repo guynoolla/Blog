@@ -87,7 +87,7 @@ class User extends \App\Classes\DatabaseObject {
 
     if (is_blank($this->username)) {
       $this->errors[] = "Username cannot be blank"; // ru Нужно ввести имя пользователя
-    } elseif (!has_length($this->username, array('min' => 2, 'max' => 20))) {
+    } elseif (!has_length($this->username, array('min' => 4, 'max' => 20))) {
       $this->errors[] = "Username must be between 2 and 20 characters."; // ru Имя пользователя должно включать в себя от 4 до 20 символов.
     } elseif(!has_unique_username($this->username, $this->id ?? 0)) {
       $this->errors[] = "Username not allowed. Try another."; // ru Это имя пользователя недоступно. Попробуйте другое.
@@ -110,7 +110,7 @@ class User extends \App\Classes\DatabaseObject {
     if ($this->password_required) {
       if(is_blank($this->password)) {
         $this->errors[] = "Password cannot be blank."; // ruНужно ввести пароль.
-      } elseif(!has_length($this->password, array('min' => 8))) {
+      } elseif(!has_length($this->password, ['min' => 8, 'max' => 20 ])) {
         $this->errors[] = "Password must contain at least 8 characters"; // ru Пароль должен включать в себя не менее 8 символов.
       } elseif(!preg_match('/[A-Z]/', $this->password)) {
         $this->errors[] = "Password must contain at least 1 uppercase letter"; //ru Пароль должен включать в себя хотя бы 1 большую букву.

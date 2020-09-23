@@ -1,6 +1,5 @@
 import { forEach } from 'core-js/fn/array';
 import $ from 'jquery';
-var validator = require("email-validator");
 
 class FormValidate {
 
@@ -8,7 +7,8 @@ class FormValidate {
     this.form = $(`#${formId}`);
     
     this.settings = {
-      textSize: {}
+      fieldSize: {},
+      uniqueVal: {}
     };
 
     this.errors = {};
@@ -65,29 +65,25 @@ class FormValidate {
       if (e.key !== undefined) key = e.key
       else if (e.keyIdentifier !== undefined) key = e.keyIdentifier;
       else if (e.keyCode !== undefined) key = e.keyCode;
-      if (key == 27 || key.toLowerCase() == "escape") {
-        this.form.find(".response.response--shade")
-          .removeClass("response--show-okey")
-          .removeClass("response--show-fail")
+      if (key !== undefined) {
+        if (key == 27 || key.toLowerCase() == "escape") {
+          this.form.find(".response.response--shade")
+            .removeClass("response--show-okey")
+            .removeClass("response--show-fail")
+        }
       }
     })
   }
 
   checkField(fid, elem) {
-    const type = elem[0].type;
     const value = elem.val().trim();
 
     if (value != this.prevValue[fid]) {
       clearTimeout(this.typingTimer);
-
       this.typingTimer = setTimeout(() => {
-        switch (type) {
-          case "email":     this.email(fid);
-                            break;
-          case "textarea":  this.text(fid);
-                            break;
-        }
-      }, 600)
+        const func = this.fieldNameToCamelCase(fid);
+        this[func](fid);
+      }, 800)
     }
     this.prevValue[fid] = value;
   }
@@ -113,14 +109,14 @@ class FormValidate {
     this.onElementKeyup(fid, elem);
   }
 
-  getTextSize(fid) {
+  getFieldSize(fid) {
     const size = { min: 4, max: 100 }
-    size.min = this.settings.textSize[fid].min || size.min;
-    size.max = this.settings.textSize[fid].max || size.max;
+    size.min = this.settings.fieldSize[fid].min || size.min;
+    size.max = this.settings.fieldSize[fid].max || size.max;
     return size;
   }
 
-  goOn(fid) {
+  run(fid) {
     if (this.event.type == "submit") {
       return true;
     }
@@ -141,73 +137,20 @@ class FormValidate {
     }
   }
 
-  email(fid) {
-    return new Promise(resolve => {
-      if (!this.goOn(fid)) return resolve(false)
-  
-      const email = this.form.find(`#${fid}`)
-      this.errors[fid] = [];
-  
-      if (email.val().length == 0) {
-        this.errors[fid].push("Email cannot be blank.")
-      } else if (!validator.validate(email.val())) {
-        this.errors[fid].push("Email is incorrect.")
-      } else {
-        this.showValid(fid, email)
-        return resolve(email.val())
-      }
-  
-      this.showErrors(fid, email)
-      return resolve(false)
-    })
+  fieldNameToCamelCase(str) {
+    if (str.indexOf("_") > -1) {
+      let arr = str.split('_')
+      arr = arr.map((value, idx) => {
+        if (idx > 0) {
+          return value.charAt(0).toUpperCase() + value.slice(1);
+        } else {
+          return value;
+        }
+      })
+      str = arr.join("")
+    }
+    return str;
   }
-
-  text(fid) {
-    return new Promise(resolve => {
-      if (!this.goOn(fid)) return resolve(false);
-
-      const text = this.form.find(`#${fid}`)
-      this.errors[fid] = [];
-
-      const size = this.getTextSize(fid)
-
-      if (text.val().length == 0) {
-        this.errors[fid].push("Message cannot be blank.")
-      } else if (text.val().length < size.min) {
-        this.errors[fid].push("Message is too short.")
-      } else if (text.val().length > size.max) {
-        this.errors[fid].push("Message is too long.")
-      } else {
-        this.showValid(fid, text)
-        return resolve(text.val())
-      }
-
-      this.showErrors(fid, text)
-      return resolve(false)
-    })
-  }
-
-  // password(fid) {
-  //   this.errors[fid] = [];
-  //   pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-  //   const pass = this.form.find(`#${fid}`);
-  //   const size = this.getTextSize(fid);
-
-  //   if (pass.val().length == 0) {
-  //     this.errors[fid].push("Password cannot be blank.");
-  //   } else if (pass.val().length < size.min) {
-  //     this.errors[fid].push(`Password must contain at least ${size.min} characters.`);
-  //   } else if (pass.val().length > size.max) {
-  //     this.errors[fid].push(`Password cannot contain more than ${size.max} characters.`);
-  //   } else if (!pattern.test(pass.val())) {
-  //     this.errors[fid].push(`Password must be at least 8 characters long and contain at least 1 number 1 lowercase and 1 uppercase letter.`);
-  //   } else {
-  //     this.showValid(fid, pass);
-  //     return pass.val();
-  //   }
-
-  //   this.showErrors(fid, pass);
-  // }
 
 }
 

@@ -1,21 +1,50 @@
 form {
   position: relative;
 
-  .form-group {
-    .alert-valid {
-      border: 1px solid #8ecc8e !important;
-      background-color: #e1f6e1 !important;
+  .form-errors {
+    width: 100%;
+    margin-bottom: 1.5rem;
+
+    h4 {
+      margin: 0;
+      margin-bottom: .6rem;
+      color: $dark2;
     }
-    .alert-error {
-      border: 1px solid #db646c !important;
-      background-color: #f6e0e1 !important;
+    ul {
+      border-radius: .4rem;
+      border: none;
+      padding: 1.7rem 1.7rem;
+      padding-bottom: 1.2rem;
+      background-color:#f8d7da;
+      list-style: none;
+      li {
+        color: darken(#db646c, 10);
+        &::before {
+          content: "\2022";
+          color: lighten(#db646c, 5);
+          font-weight: bold;
+          display: inline-block;
+          width: .8em;
+          transform: scale(1.2);
+        }
+      }
     }
-    .field-validation-error {
-      display: block;
-      min-height: 1.8rem;
-      line-height: 1.7rem;
-      padding: 3px 0;
-    }
+  }
+
+  .alert-valid {
+    border: 1px solid #8ecc8e !important;
+    background-color: #e1f6e1 !important;
+  }
+  .alert-error {
+    border: 1px solid #db646c !important;
+    background-color: #f6e0e1 !important;
+  }
+  .field-validation-error {
+    display: block;
+    min-height: 1.8rem;
+    line-height: 1.8rem;
+    padding: 0;
+    padding-bottom: 4px;
   }
 
   .response {

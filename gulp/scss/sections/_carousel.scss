@@ -4,9 +4,25 @@
 .carousel {
   position: relative;
 
+  .carousel-spinner {
+    height: 27.5em;
+    .carousel-spinner--none {
+      display: none !important;
+    }
+  }
+
   .carousel-content {
     position: relative;
     z-index: 800;
+    background-color: tan;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 400ms ease-out;
+  
+    &--fade-in {
+      opacity: 1;
+      visibility: visible;
+    }
 
     .left-right-overlay {
       position: absolute;
@@ -117,6 +133,7 @@
   font-weight: 300;
   letter-spacing: .1em;
   text-transform: uppercase;
+
   &::after {
     content: "";
     clear: both;

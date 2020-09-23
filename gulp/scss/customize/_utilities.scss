@@ -3,10 +3,6 @@ $bg-other-lk: lighten($blue, 30);
 $bg-muted-lk: lighten(#444, 60);
 $bg-gray-lk: #e1e5eb;
 
-.bg-other-lk {
-  background-color: $bg-other-lk !important;
-}
-
 .bg-muted-lk {
   background-color: $bg-muted-lk !important;
 }
@@ -42,11 +38,16 @@ $bg-gray-lk: #e1e5eb;
 }
 
 .bg-other-lk {
-  background-color: $bg-other-lk !important;
+  background-color: #fff !important;
   font-weight: 500 !important;
   color: #5e5c5b !important;
-  a {
-    color: #5e5c5b !important;
+}
+
+@media (min-width: 992px) {
+  .bg-other-lk {
+    &--md {
+      background-color: $bg-other-lk !important;
+    }
   }
 }
 

@@ -111,7 +111,7 @@ $topics = Topic::findAll();
           <span class="spinner-grow spinner-grow-sm d-none mr-3" role="status" aria-hidden="true"></span>
           <?php echo $jsonstore->contactForm->buttonText ?>
         </button>
-        <div class="response response--shade">Okey</div>
+        <div class="response response--shade"></div>
       </form>
     </div>
   </section>

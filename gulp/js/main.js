@@ -6,7 +6,7 @@ import { preventExtensions } from 'core-js/fn/object';
 import Breakpoint from 'bootstrap-breakpoints';
 import Like from './modules/Like';
 import Posts from './modules/Posts';
-import FormValidate from './modules/FormValidate';
+import FieldValidate from './modules/FieldValidate';
 import { forEach } from 'core-js/fn/array';
 
 window.jQuery = $;
@@ -63,14 +63,14 @@ $(() => {
   })
 
   if ($("#contactForm").length) {
-    const validate = new FormValidate("contactForm");
-    validate.settings.textSize["message"] = { min: 20, max: 1000 };
+    const validate = new FieldValidate("contactForm");
+    validate.settings.fieldSize["message"] = { min: 20, max: 1000 };
 
-    validate.form.on("submit change", async (e) => {
+    validate.form.on("submit change", async e => {
       e.preventDefault();
 
-      const email = await validate.email("email")
-      const message = await validate.text("message")
+      const email = await validate.email("email");
+      const message = await validate.message("message");
 
       if (email && message) {
         $(validate.form).find(".spinner-grow").removeClass("d-none");
@@ -93,15 +93,40 @@ $(() => {
               } else if (data[0] == "failed") {
                 validate.responseMessage(data[1], false)
               }
+
               clearTimeout(timer);
             }, 2000);
           },
-          error: res => console.log(res)
+          error: error => console.log("Error -> ", error)
         })
       }
 
       return false;
     });
+  }
+
+  if ($("#registerForm").length) {
+    const validate = new FieldValidate("registerForm");
+    validate.settings.fieldSize["username"] = { min: 4, max: 20 };
+    validate.settings.fieldSize["password"] = { min: 8, max: 20 };
+    validate.settings.uniqueVal["username"] = true;
+    validate.settings.uniqueVal["email"] = true;
+
+    validate.form.on("submit change", async e => {
+      e.preventDefault();
+
+      const username = await validate.username("username");
+      const email = await validate.email("email");
+      const password = await validate.password("password");
+      const confirmPassword = await validate.confirmPassword("confirm_password");
+
+      if (username && email && password && confirmPassword) {
+        validate.form.off("submit");
+        validate.form.trigger("submit");
+      }
+
+      return false;
+    })
   }
 
   $(window).on("scroll", function() {
@@ -256,41 +281,53 @@ function navbarSearchBehavior() {
 
 function slickCarousel() {
   $(window).on("load", () => {
-    const slider = $(".slider");
+    const carousel = $(".carousel")
+    const content = carousel.find(".carousel-content");
+    const slider = carousel.find(".slider");
+
     if (typeof slider.slick == "function") {
-      slider.slick({
-        slidesToShow: 2,
-        slidesToScroll: 1,
-        autoplay: false,
-        autoplaySpeed: 2000,
-        nextArrow: $('.next'),
-        prevArrow: $('.prev'),
-        responsive: [{
-          breakpoint: 1201, // 1024,
-          settings: {
+      let timer = setInterval(() => {
+        let imgLen = slider.find("img").length;
+
+        if (imgLen => 2) {
+          slider.slick({
             slidesToShow: 2,
             slidesToScroll: 1,
-            infinite: true,
-            dots: false
-          }
-        },
-        {
-          breakpoint: 991, // 880,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 1,
-            infinite: true,
-            dots: false
-          }
-        },
-        {
-          breakpoint: 701,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1
-          }
-        }]
-      })
+            autoplay: false,
+            autoplaySpeed: 2000,
+            nextArrow: $('.next'),
+            prevArrow: $('.prev'),
+            responsive: [{
+              breakpoint: 1201, // 1024,
+              settings: {
+                slidesToShow: 2,
+                slidesToScroll: 1,
+                infinite: true,
+                dots: false
+              }
+            },
+            {
+              breakpoint: 991, // 880,
+              settings: {
+                slidesToShow: 2,
+                slidesToScroll: 1,
+                infinite: true,
+                dots: false
+              }
+            },
+            {
+              breakpoint: 701,
+              settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1
+              }
+            }]
+          })
+          clearTimeout(timer)
+          content.addClass("carousel-content--fade-in");
+          carousel.find(".carousel-spinner").addClass("hide");
+        }
+      }, 250)
     }
   })
 }

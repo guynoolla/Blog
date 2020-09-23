@@ -24,16 +24,16 @@ $page_title = 'Email confirmation';
 include(SHARED_PATH . '/public_header.php');
 
 ?>
-<div class="container-fluid bg-other-lk">
+<div class="container-fluid bg-other-lk--md">
 
   <div class="row justify-content-center h-100">
-    <div class="col col-md-8 col-lg-6 my-auto">
+    <div class="col col-md-10 col-lg-8 col-xl-6 my-auto">
 
-      <div class="p-4 px-sm-5 py-5 my-4 rounded bg-white">
+      <div class="py-3 pb-5 my-4 rounded bg-white px-0 px-sm-4 px-lg-5">
 
-        <?php if (!$user): ?>
+        <?php if (!isset($user) || !$user): ?>
           <h2><?php echo $page_title ?></h2>
-          <p class="h4">
+          <p>
             Email confirmation link is invalid or expired, please click 
             <a class="font-weight-bold" href="<?php echo url_for('password/forgot.php') ?>">here</a> 
             to request another one.

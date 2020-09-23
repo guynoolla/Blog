@@ -39,35 +39,31 @@ $page_title = 'User Login';
 include(SHARED_PATH . '/public_header.php');
 
 ?>
-<div class="container-fluid bg-other-lk">
+<div class="container-fluid bg-other-lk--md">
 
   <div class="row justify-content-center h-100">
-    <div class="col col-md-8 col-lg-6 my-auto">
+    <div class="col col-md-10 col-lg-8 col-xl-6 my-auto">
 
-      <div class="py-5 my-4 rounded bg-white">
-
-        <div class="px-2 px-sm-4"><?php
-          if (!empty($errors)) echo display_errors($errors);
-        ?></div>
-
+      <div class="py-5 my-5 rounded bg-white px-0 px-sm-4 px-lg-5">
         <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
-          <fieldset class="px-4 px-sm-5 mr-sm-2">
 
-            <legend class="mb-5 h1">Login</legend>
+          <div class="row ml-0"><h1>Login</h1></div>
+          <div class="row"><div class="col"><?php
+            if (!empty($errors)) echo display_errors($errors);
+          ?></div></div>
 
-            <div class="form-group row mr-sm-0">
-              <label for="username" class="col-sm-4 col-form-label pl-1 pl-sm-3">Username or Email</label>
-              <input class="col-sm-8 form-control" id="username" type="text" name="username" value="">
-            </div>
-            <div class="form-group row mr-sm-0">
-              <label for="password" class="col-sm-4 col-form-label pl-1 pl-sm-3">Password</label>
-              <input class="col-sm-8 form-control" type="password" name="password" value="">
-              <small class="small-nicer-lk ml-auto mt-1"><a href="<?php echo url_for('password/forgot.php') ?>">forgot password?</a></small>
-            </div>
-            <p class="text-center font-weight-bold">Or <a href="<?php echo url_for('staff/register.php') ?>">Sign Up</a></p>
-            <button type="submit" name="submit_button" class="btn btn-outline-default float-right">Login</button>
+          <div class="form-group row mx-0">
+            <label for="username" class="col-sm-4 col-form-label pl-0">Username or Email</label>
+            <input class="col-sm-8 form-control" id="username" type="text" name="username" value="">
+          </div>
+          <div class="form-group row mx-0">
+            <label for="password" class="col-sm-4 col-form-label pl-0">Password</label>
+            <input class="col-sm-8 form-control" type="password" name="password" value="">
+            <small class="small-nicer-lk ml-auto mt-1"><a href="<?php echo url_for('password/forgot.php') ?>">forgot password?</a></small>
+          </div>
+          <button type="submit" name="submit_button" class="btn btn-outline-default float-right">Login</button>
 
-          </fieldset>
+          <p class="text-center font-weight-bold">Or <a href="<?php echo url_for('staff/register.php') ?>">Register</a></p>
         </form>
       </div>
 
