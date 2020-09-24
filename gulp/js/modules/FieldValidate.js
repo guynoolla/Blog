@@ -193,6 +193,56 @@ class FieldValidate extends FormValidate {
     return value;
   }
 
+  async captcha(fid) {
+    if (!this.run(fid)) return false;
+
+    const captcha = $(`#${fid}`)
+    this.errors[fid] = []
+
+    const check = () => new Promise((resolve, reject) => {
+      if (captcha.val().trim().length == 0) {
+        this.errors[fid].push("Please enter captcha code.");
+      } else if (captcha.val().trim().length > 5) {
+        this.errors[fid].push("Please complete captcha code.");
+      } else {
+        return resolve(captcha.val());
+      }
+      return resolve(false);
+    })
+
+    const checkCode = () => new Promise((resolve, reject) => {
+      $.ajax({
+        url: server.baseUrl + '/ajax.php',
+        type: 'POST',
+        data: {
+          captcha: value,
+          target: 'validate_captcha'
+        },
+        success: res => {
+          const data = JSON.parse(res);
+
+          if (data[0] == "true") {
+            this.captchaValid(fid, captcha);
+            return resolve(true);
+          
+          } else if (data[0] == "false") {
+            this.errors[fid].push("Captcha validation failed, try again.");
+            this.captchaError(fid, captcha, data[1]);
+            return resolve(false);
+          
+          } else {
+            return new Error(res)
+          }
+        },
+        error: error => reject(error)
+      })
+    })
+
+    let value = await check();
+    if (value) value = await checkCode();
+
+    return value;
+  }
 }
 
 export default FieldValidate

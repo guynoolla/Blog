@@ -26,7 +26,7 @@ include SHARED_PATH . '/staff_header.php';
 
       <?php if (!$user->isEmailConfirmed()): ?>
         <p class="text-lk">
-          You are logged <strong><?php echo $user->username ?></strong>.<br>
+          You are logged in <strong><?php echo $user->username ?></strong>.<br>
           To add a Post you should <a class="underlined" href="<?php echo url_for('email/confirm_mail.php?email=' . $user->email) ?>" class="link-underlined"><u>confirm</u></a> your email address.
         </p>
 

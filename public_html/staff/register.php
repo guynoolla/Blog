@@ -6,12 +6,33 @@ require_once '../../src/initialize.php';
 
 if (is_post_request()) {
   $user = new User($_POST['user']);
-  if ($user->save()) {
-    $session->message('You have been registered, now you can log in!');
-    redirect_to(url_for('staff/login.php'));
+
+  if (strtoupper($_POST['captcha']) == strtoupper($_SESSION['captcha']['code'])) {
+    if ($user->save()) {
+      $session->message('You have been registered, now you can log in!');
+      redirect_to(url_for('staff/login.php'));
+    }
+  } else {
+    $session->store([
+      'reg_captcha_err' => 'Captcha validation failed, try again.',
+      'reg_user' => serialize($user),
+    ]);
+    redirect_to(url_for('staff/register.php'));
   }
+
 } else {
-  $user = new User();
+
+  include("../simple-php-captcha.php");
+  $_SESSION['captcha'] = simple_php_captcha();
+  $captcha_err = "";
+  $user = false;
+  
+  if ($session->store_of('reg_captcha_err')) {
+    $captcha_err = $session->store_of('reg_captcha_err', false);
+    $user = unserialize($session->store_of('reg_user', false));
+  }
+
+  $user = !$user ? new User() : $user;
 }
 
 $page_title = 'User Registration';
@@ -51,10 +72,19 @@ include SHARED_PATH . '/public_header.php';
             <input class="col-sm-8 form-control" id="confirm_password" type="password" name="user[confirm_password]" value="<?php echo $user->empty_password_field ? '' : $user->confirm_password ?>">
             <span class="offset-sm-4 col-sm-8 text-danger field-validation-error"></span>
           </div>
-          <button type="submit" name="submit_button" class="btn btn-outline-default float-right">
-            <span class="spinner-grow spinner-grow-sm d-none" role="status" aria-hidden="true"></span>
-            Register
-          </button>
+
+          <div class="form-group row my-0 mx-0">
+            <label for="confirm_password" class="col-sm-4 pl-0">Captcha Code</label>
+            <div class="form-group-captcha col-sm-8 px-0 d-flex align-items-start justify-content-start bg-light clearfix">
+              <img src="<?php echo $_SESSION['captcha']['image_src'] ?>" style="z-index:500">
+              <input type="text" name="captcha" id="captcha" class="captcha-field align-self-end bg-light border-0" placeholder="code">
+              <button type="submit" name="submit_button" class="btn btn-outline-default ml-auto rounded-0">
+                <span class="spinner-grow spinner-grow-sm d-none" role="status" aria-hidden="true"></span>
+                Register
+              </button>
+            </div>
+            <span class="offset-sm-4 col-sm-8 text-danger field-validation-error"><?php echo $captcha_err ?></span>
+          </div>
 
           <p class="text-center font-weight-bold">Or <a href="<?php echo url_for('staff/login.php') ?>">Log In</a></p>
           <div class="response response--shade"></div>

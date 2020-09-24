@@ -18,7 +18,14 @@ class FormValidate {
     this.typingTimer;
     this.event;
 
-    this.emptyErrors = () => this.errors = {}
+    this.getValidated = () => {
+      const keys = Object.keys(this.validValues);
+      let values = {};
+      keys.forEach(key => {
+        values[key] = this.validValues[key].val()
+      })
+      return values;
+    }
 
     this.hasError = (fid = false) => {
       if (fid == false) {
@@ -35,18 +42,23 @@ class FormValidate {
       }
     };
 
-    this.success = () => {
-      return (this.event.type == "submit" && !this.hasError())
-    };
+    this.validatedLen = () => {
+      if (!this.hasError()) {
+        return Object.keys(this.validValues).length;
+      }
+      return false;
+    }
 
-    this.responseMessage = (msg, success) => {
+    this.responseMessage = (data, success) => {
       for (let key in this.validValues) {
         this.validValues[key].val("").removeClass("alert-valid");
       }
       if (success) {
-        this.form.find(".response").text(msg).addClass("response--show-okey")
+        this.form.find(".response").text(data['alert']).addClass("response--show-okey")
+        this.captchaReset(data["image_src"]);
       } else {
-        this.form.find(".response").text(msg).addClass("response--show-fail")
+        this.form.find(".response").text(data['alert']).addClass("response--show-fail");
+        this.captchaReset(data["image_src"]);
       }
     }
 
@@ -92,9 +104,37 @@ class FormValidate {
     elem.on("keyup", () => this.checkField(fid, elem))
   }
 
-  showErrors(fid, elem) {
+  getErrors(fid) {
     let errors = "";
     this.errors[fid].forEach(value => errors += `${value} `)
+    return errors;
+  }
+
+  captchaReset(imageSrc) {
+    this.form.find("#captcha").val("");
+    this.form.find(".form-group-captcha img").attr("src", imageSrc);
+    this.form.find(".form-group-captcha .captcha-success").remove();    
+  }
+
+  captchaError(fid, elem, imageSrc) {
+    console.log("error here!");
+    elem.val("");
+    const error = this.getErrors(fid)
+    $(".form-group-captcha").next().text(error);
+    $(".form-group-captcha img").attr("src", imageSrc);
+    $(".form-group-captcha .captcha-success").remove();
+  }
+
+  captchaValid(fid, elem) {
+    console.log("valid here!")
+    this.validValues[fid] = elem;
+    $(".form-group-captcha").next().text("");
+    $(".form-group-captcha")
+      .append('<span class="captcha-success">&#10003;</span>');
+  }
+
+  showErrors(fid, elem) {
+    const errors = this.getErrors(fid);
     elem.removeClass("alert-error").next().text("");
     elem.addClass("alert-error").next().text(errors);
     elem.removeClass("alert-valid");
@@ -117,9 +157,6 @@ class FormValidate {
   }
 
   run(fid) {
-    if (this.event.type == "submit") {
-      return true;
-    }
     if (this.event.type == "keyup") {
       if (typeof this.validValues[fid] != "undefined") {
         return true

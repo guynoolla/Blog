@@ -119,5 +119,20 @@ class Session {
     }
   }
 
+  public function store_of($value, $store=true) {
+    if (isset($_SESSION['store'][$value])) {
+      if ($store == false) {
+        $bag = $_SESSION['store'][$value];
+        $_SESSION['store'][$value] = null;
+        unset($_SESSION['store'][$value]);
+        return $bag;
+      } else {
+        return $_SESSION['store'][$value];
+      }
+    } else {
+      return false;
+    }
+  }
+
 }
 ?>

@@ -71,9 +71,12 @@ $(() => {
 
       const email = await validate.email("email");
       const message = await validate.message("message");
+      const captcha = await validate.captcha("captcha");
 
-      if (email && message) {
+      if (e.type == "submit" && validate.validatedLen() == 3) {
+        
         $(validate.form).find(".spinner-grow").removeClass("d-none");
+        const { email, message, captcha } = validate.getValidated();
   
         $.ajax({
           url: server.baseUrl + '/ajax.php',
@@ -81,13 +84,15 @@ $(() => {
           data: { 
             email: email,
             message: message,
+            captcha: captcha,
             target: 'contact_form'
           },
           success: res => {
             let timer = setTimeout(() => {
-              $(validate.form).find(".spinner-grow").addClass("d-none");
 
+              $(validate.form).find(".spinner-grow").addClass("d-none");
               const data = JSON.parse(res);
+
               if (data[0] == "success") {
                 validate.responseMessage(data[1], true)
               } else if (data[0] == "failed") {
@@ -119,8 +124,9 @@ $(() => {
       const email = await validate.email("email");
       const password = await validate.password("password");
       const confirmPassword = await validate.confirmPassword("confirm_password");
+      const captcha = await validate.captcha("captcha");
 
-      if (username && email && password && confirmPassword) {
+      if (e.type == "submit" && validate.validatedLen() == 5) {
         validate.form.off("submit");
         validate.form.trigger("submit");
       }

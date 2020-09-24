@@ -13,6 +13,8 @@ switch($target) {
         contact_form_submit($_POST);
   case 'is_already_exist':
         is_already_exist($_POST);
+  case 'validate_captcha':
+        validate_captcha($_POST);
   default:
         exit(json_encode(['target' => 'error']));
 }
@@ -38,18 +40,55 @@ function is_already_exist($data) {
 function contact_form_submit($data) {
   $email = $data['email'] ?? '';
   $message = $data['message'] ?? '';
+  $captcha = $data['captcha'] ?? '';
 
-  if ($email && $message) {
-    $mailer = new \App\Contracts\Mailer;
-    $text = strip_tags($message);
-    
-    try {
-      $mailer->send(ADMIN_EMAIL,'Contact Form', $text, $message);
-      $message = 'Thank you for your message!';
-      exit(json_encode(['success', $message]));
-    
-    } catch(Exception $e) {
-      exit(json_encode(['failed', 'Sorry, server error occured. Please try later.']));
+  if ($email && $message && $captcha) {
+
+    if (isset($_SESSION['captcha_valid'])) {
+      $valid = $_SESSION['captcha_valid'];
+      unset($_SESSION['captcha_valid']);
+    } else {
+      $valid = "";
+    }
+
+    if (strtoupper($captcha) == strtoupper($valid)) {
+      $mailer = new \App\Contracts\Mailer;
+      $text = strip_tags($message);
+      try {
+        $mailer->send(ADMIN_EMAIL,'Contact Form', $text, $message);
+        $status = 'success';
+        $alert = 'Thank you for your message!';
+      
+      } catch(Exception $e) {
+        $status = 'failed';
+        $alert = 'Sorry, server error occured. Please try later.';
+      }
+
+      include("./simple-php-captcha.php");
+      $_SESSION['captcha'] = simple_php_captcha();
+      $image_src = $_SESSION['captcha']['image_src'];
+  
+      exit(json_encode([$status, ['alert' => $alert, 'image_src' => $image_src]]));
+    }
+
+    exit(json_encode(['error', ['alert' => 'Something went wrong.']]));;
+  }
+}
+
+function validate_captcha($data) {
+  $captcha = $data['captcha'] ?? '';
+
+  if ($captcha) {
+    if (strtoupper($captcha) == strtoupper($_SESSION['captcha']['code'])) {
+      $_SESSION['captcha_valid'] = $captcha;
+      exit(json_encode(['true']));
+
+    } else {
+      include("./simple-php-captcha.php");
+      $_SESSION['captcha'] = simple_php_captcha();
+      $image_src = $_SESSION['captcha']['image_src'];
+  
+      exit(json_encode(['false', $image_src]));
     }
   }
 }
