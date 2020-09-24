@@ -260,48 +260,58 @@ class Post extends \App\Classes\DatabaseObject {
   }
 
   static public function queryApprovedPosts(int $per_page, int $offset) {
-    $cond = <<<SQL
+    $sql = self::getJoins();
+    $sql .= <<<SQL
             WHERE p.approved = '1'
             ORDER BY p.created_at DESC
 SQL;
-    return self::selectWithJoins($cond, $per_page, $offset);
+    $sql .= " LIMIT {$per_page} OFFSET {$offset}";
+    return self::findBySql($sql);
   }
 
   static public function querySearchPosts($term, int $per_page, int $offset) {
     $term = self::$database->escape_string($term);
-    $cond = <<<SQL
+    $sql = self::getJoins();
+    $sql .= <<<SQL
             WHERE p.approved = 1
               AND ( p.title LIKE '%$term%' OR p.body LIKE '%$term%' )
             ORDER BY p.created_at DESC
 SQL;
-    return self::selectWithJoins($cond, $per_page, $offset);
+    $sql .= " LIMIT {$per_page} OFFSET {$offset}";
+    return self::findBySql($sql);
   }
 
   static public function queryPostsByTopic($topic_id, int $per_page, int $offset) {
     $tid = parent::escape($topic_id);
-    $cond = <<<SQL
+    $sql = self::getJoins();
+    $sql .= <<<SQL
             WHERE p.approved = '1' AND p.topic_id = $tid
             ORDER BY p.created_at DESC
 SQL;
-    return self::selectWithJoins($cond, $per_page, $offset);
+    $sql .= " LIMIT {$per_page} OFFSET {$offset}";
+    return self::findBySql($sql);
   }
 
   static public function queryPostsByAuthor($user_id, int $per_page, int $offset) {
     $uid = parent::escape($user_id);
-    $cond = <<<SQL
+    $sql = self::getJoins();
+    $sql .= <<<SQL
             WHERE p.approved = 1 AND p.user_id = $uid
             ORDER BY p.created_at DESC
 SQL;
-    return self::selectWithJoins($cond, $per_page, $offset);
+    $sql .= " LIMIT {$per_page} OFFSET {$offset}";
+    return self::findBySql($sql);
   }
 
   static public function queryPostsByDatePub(array $dates, int $per_page, int $offset) {
-    $cond = <<<SQL
+    $sql = self::getJoins();
+    $sql .= <<<SQL
             WHERE p.approved = '1'
             AND ( p.created_at >= '{$dates['date_min']}'
             AND p.created_at < '{$dates['date_max']}' )
 SQL;
-    return self::selectWithJoins($cond, $per_page, $offset);
+    $sql .= " LIMIT {$per_page} OFFSET {$offset}";
+    return self::findBySql($sql);
   }
 
   static public function queryAllWhere($ids, int $per_page, int $offset) {
@@ -311,33 +321,31 @@ SQL;
     }
     $ids_str = implode(",", $ids);
 
-    $cond = <<<SQL
+    $sql = self::getJoins();
+    $sql .= <<<SQL
           WHERE p.id in ($ids_str) AND p.approved = '1'
 SQL;
-    return self::selectWithJoins($cond, $per_page, $offset);
+    $sql .= " LIMIT {$per_page} OFFSET {$offset}";
+    return self::findBySql($sql);
   }
 
-  static public function queryImageFormatPosts(int $count = 6) {
-    $cond = <<<SQL
+  static public function queryImageFormatPosts(int $count=6) {
+    $sql = self::getJoins();
+    $sql .= <<<SQL
             WHERE p.approved = '1' AND format = 'image'
             ORDER BY p.created_at DESC
             LIMIT {$count};
 SQL;
-    return self::selectWithJoins($cond);
+    return self::findBySql($sql);
   } 
 
-  static protected function selectWithJoins($conditions='', $per_page=false, $offset=false) {
-    $sql = <<<SQL
+  static protected function getJoins() {
+    return <<<SQL
       SELECT p.*, u.username, t.name as topic
       FROM `posts` AS p
       LEFT JOIN `users` AS u ON p.user_id = u.id
       LEFT JOIN `topics` AS t ON p.topic_id = t.id
 SQL;
-    $sql .= $conditions;
-
-    if ($per_page && $offset) $sql .= " LIMIT {$per_page} OFFSET {$offset}";
-
-    return self::findBySql($sql);
   }
 
   public function getEntryVideo() {

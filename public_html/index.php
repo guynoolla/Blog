@@ -115,9 +115,9 @@ $type = 'default';
 } else {
   $type= 'default';
   $current_page = $_GET['page'] ?? 1;
-  if ($current_page == 1)
-      $carousel_posts = Post::queryImageFormatPosts(4);
-
+  if ($current_page == 1) {
+    $carousel_posts = Post::queryImageFormatPosts(4, 0);
+  }
   $per_page = 6;
   $total_count = Post::countAll(['approved' => '1']);
   $pagination = new Pagination($current_page, $per_page, $total_count, 'pagination-lg');
