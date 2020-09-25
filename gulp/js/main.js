@@ -6,7 +6,7 @@ import { preventExtensions } from 'core-js/fn/object';
 import Breakpoint from 'bootstrap-breakpoints';
 import Like from './modules/Like';
 import Posts from './modules/Posts';
-import FieldValidate from './modules/FieldValidate';
+import FormValidate from './modules/FormValidateRules';
 import { forEach } from 'core-js/fn/array';
 
 window.jQuery = $;
@@ -63,7 +63,7 @@ $(() => {
   })
 
   if ($("#contactForm").length) {
-    const validate = new FieldValidate("contactForm");
+    const validate = new FormValidate("contactForm");
     validate.settings.fieldSize["message"] = { min: 20, max: 1000 };
 
     validate.form.on("submit change", async e => {
@@ -111,7 +111,7 @@ $(() => {
   }
 
   if ($("#registerForm").length) {
-    const validate = new FieldValidate("registerForm");
+    const validate = new FormValidate("registerForm");
     validate.settings.fieldSize["username"] = { min: 4, max: 20 };
     validate.settings.fieldSize["password"] = { min: 8, max: 20 };
     validate.settings.uniqueVal["username"] = true;
@@ -292,7 +292,7 @@ function slickCarousel() {
     const slider = carousel.find(".slider");
 
     if (typeof slider.slick == "function") {
-      let timer = setInterval(() => {
+      //let timer = setInterval(() => {
         let imgLen = slider.find("img").length;
 
         if (imgLen => 2) {
@@ -329,11 +329,12 @@ function slickCarousel() {
               }
             }]
           })
-          clearTimeout(timer)
           content.addClass("carousel-content--fade-in");
           carousel.find(".carousel-spinner").addClass("hide");
+
+          //clearTimeout(timer)
         }
-      }, 250)
+      //}, 250)
     }
   })
 }

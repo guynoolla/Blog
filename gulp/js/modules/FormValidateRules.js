@@ -3,7 +3,7 @@ import $ from 'jquery'
 import FormValidate from './FormValidate'
 var validator = require("email-validator");
 
-class FieldValidate extends FormValidate {
+class FormValidateRules extends FormValidate {
 
   async isExist(value, fid, table) {
     return new Promise((resolve, reject) => {
@@ -245,4 +245,4 @@ class FieldValidate extends FormValidate {
   }
 }
 
-export default FieldValidate
+export default FormValidateRules
