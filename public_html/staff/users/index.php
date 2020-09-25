@@ -81,7 +81,10 @@ include SHARED_PATH . '/staff_header.php';
                   </a>
                 </td>
                 <td scope="colgroup" colspan="1">
-                  <a class="btn-lk btn-lk--danger" href="<?php echo url_for('/staff/users/index.php?id=' . $user->id . '&cmd=delete') ?>">
+                  <a class="btn-lk btn-lk--danger"
+                     data-delete="user"
+                     href="<?php echo url_for('/staff/users/index.php?id=' . $user->id . '&cmd=delete') ?>"
+                  >
                     Delete
                   </a>
                 </td>
