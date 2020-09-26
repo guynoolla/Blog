@@ -18,11 +18,11 @@ const
 	terser 					= require('gulp-terser'),
 	babelify 				= require('babelify'),
 	buffer 					= require('vinyl-buffer'),
-	sourcemaps 			= require('gulp-sourcemaps'),
+	//sourcemaps 			= require('gulp-sourcemaps'),
 	source 					= require('vinyl-source-stream'),
 	rename 					= require('gulp-rename'),
 	browserify 			= require('browserify'),
-	es 							= require('event-stream');
+	mergeStream			= require('merge-stream');
 	//	clean 					= require('gulp-clean'),
 
 	
@@ -90,22 +90,24 @@ gulp.task( 'js', () => {
 		});
 		bundler.transform( babelify, { presets: ['@babel/preset-env'] } )
 		return bundler.bundle()
-			.pipe( source( js.filenames[idx] ) )
-			.pipe( buffer() )
-			.pipe(sourcemaps.init({ loadMaps: true }))
+			.on('error', error => console.log(error))
+			.pipe(source(js.filenames[idx]))
+			.pipe(buffer())
+			//.pipe(sourcemaps.init({ loadMaps: true }))
 			//.pipe(stripdebug())
 			.pipe(terser())
-			.pipe(gulp.dest(js.build));
+			.pipe(gulp.dest(js.build))
 	})
 
-	return es.merge.apply(null, tasks);
+	return mergeStream(tasks[0], tasks[1])
+		.pipe(browsersync.stream({ once: true }))
 });
 
 // Browsersync options
 const syncOpts = {
 	proxy 				: 'activello.loc',
 //server          : "./public_html",
-	files 				: dir.build + '/**/**/*',
+	files 				: dir.build + '/*',
 	open 				  : false,
 	notify				: false,
 	ghostMode			: false,
@@ -123,15 +125,13 @@ gulp.task('browsersync', (done) => {
 	}
 });
 
-// watch for file changes
-gulp.task('watch', gulp.parallel('browsersync', () => {
-	gulp.watch(css.watch).on('change', gulp.series('css'), 
-		browsersync ? browsersync.reload({ stream: true }) : {}
-	);
-	gulp.watch(js.src).on('change', gulp.series('js'),
-		browsersync ? browsersync.reload({ stream: true }) : {}
-	);
-}))
+//watch for file changes
+gulp.task('change', () => {
+	gulp.watch(css.watch).on("change", gulp.series('css', browsersync.reload));
+	gulp.watch(js.src).on("change", gulp.series('js'));
+});
+
+gulp.task("watch", gulp.series("browsersync", "change"))
 
 // run all tasks
 gulp.task('build', gulp.parallel('css','js'));

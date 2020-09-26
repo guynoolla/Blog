@@ -1,1 +1,1 @@
-alert("That's right!");
+alert("Arnold Schwarzenegger");
