@@ -97,17 +97,17 @@ gulp.task( 'js', () => {
 			//.pipe(stripdebug())
 			.pipe(terser())
 			.pipe(gulp.dest(js.build))
-	})
+			.pipe(browsersync.stream({ match: [dir.src, entry] }))
+		})
 
 	return mergeStream(tasks[0], tasks[1])
-		.pipe(browsersync.stream({ once: true }))
 });
 
 // Browsersync options
 const syncOpts = {
 	proxy 				: 'activello.loc',
 //server          : "./public_html",
-	files 				: dir.build + '/*',
+	files 				: dir.build + '/*', // Was a solution of twice reload!
 	open 				  : false,
 	notify				: false,
 	ghostMode			: false,
@@ -128,7 +128,7 @@ gulp.task('browsersync', (done) => {
 //watch for file changes
 gulp.task('change', () => {
 	gulp.watch(css.watch).on("change", gulp.series('css', browsersync.reload));
-	gulp.watch(js.src).on("change", gulp.series('js'));
+	gulp.watch(js.src).on("change", gulp.series('js', browsersync.reload));
 });
 
 gulp.task("watch", gulp.series("browsersync", "change"))
