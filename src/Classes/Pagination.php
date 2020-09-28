@@ -91,7 +91,7 @@ class Pagination {
     $output = "";
     if ($this->totalPages() > 1) {
       $output .= "<nav class=\"pagination-nav\">";
-      $output .= "<ul class=\"<?php $this->css_class ?>\">";
+      $output .= "<ul class=\"{$this->css_class}\">";
       $output .= $this->previousLink($url);
       $output .= $this->numberLinks($url);
       $output .= $this->nextLink($url);

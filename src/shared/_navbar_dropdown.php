@@ -5,8 +5,8 @@
     <!-- TEMPORARY HIDE LOGIN BUTTON -->
     <!-- <a class="nav-link" href="<php echo url_for('staff/login.php') ?>">Login</a> -->
   <?php else: ?>
-    <a class="username-lk nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <?php echo $session->username ?>
+    <a class="username-lk nav-link<?php echo ($header_type == 'dashboard' ? ' nav-link--bg' : '' ) ?> dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <?php echo $session->username() ?>
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
       <?php if (!url_contain('staff')): ?>

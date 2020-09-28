@@ -37,7 +37,7 @@
     }
     .nav-item.logo {
       margin-bottom: .2rem;
-      background-color: #dccbb3 !important;
+      background-color: #e4dfd3 !important;
     }
   }
   &:hover {
@@ -84,10 +84,34 @@
 
 .page-admin {
   h2 {
+    display: block;
+    position: relative;
     text-align: center;
-    background-color:#EFE4D5;
+    background-color: #e4dfd3;
     padding: 1.5rem;
     margin: 0;
+
+    .headline-nav {
+      .chevron {
+        display: block;
+        position: absolute;
+        cursor: pointer;
+        color: darken($bg-secondary, 10);
+        
+        &:hover, &:focus {
+          color: lighten($plum-color, 10) !important;
+        }
+      
+        &--prev {
+          top: 1.5rem;
+          left: .2rem;
+        }
+        &--next {
+          top: 1.5rem;
+          right: .2rem;
+        }
+      }
+    }
   }
 
   a.btn.btn-outline-primary,

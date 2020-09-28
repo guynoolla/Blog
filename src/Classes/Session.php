@@ -6,7 +6,8 @@ namespace App\Classes;
 class Session {
 
   protected $user_id;
-  public $username;
+  protected $username;
+  protected $email;
   private $last_login;
   private $user_type;
 
@@ -26,6 +27,7 @@ class Session {
       $this->username = $_SESSION['username'] = $user->username;
       $this->last_login = $_SESSION['last_login'] = time();
       $this->user_type = $_SESSION['user_type'] = $user->user_type;
+      $this->email = $_SESSION['email'] = $user->email_confirmed ? $user->email : false;
     }
     return true;
   }
@@ -39,10 +41,12 @@ class Session {
     unset($_SESSION['username']);
     unset($_SESSION['last_login']);
     unset($_SESSION['user_type']);
+    unset($_SESSION['email']);
     unset($this->user_id);
     unset($this->username);
     unset($this->last_login);
     unset($this->user_type);
+    unset($this->email);
 
     unset($_SESSION['store']);
 
@@ -55,6 +59,7 @@ class Session {
       $this->username = $_SESSION['username'];
       $this->last_login = $_SESSION['last_login'];
       $this->user_type = $_SESSION['user_type'];
+      $this->email = $_SESSION['email'];
     }
   }
 
@@ -91,14 +96,30 @@ class Session {
     if (!$this->isLoggedIn()) {
       return false;
     } else {
-      return $this->user_type == 'admin';
+      return ($this->user_type == 'admin' && $this->email);
     }
   }
 
   public function isAuthor() {
     if (!$this->isLoggedIn()) return false;
       // admin also has author capability!
-    else return ($this->user_type == 'author' || $this->user_type == 'admin');
+    else return (
+      $this->user_type == 'author' && $this->email ||
+      $this->user_type == 'admin' && $this->email
+    );
+  }
+
+  public function emailFalse() {
+    $_SESSION['email'] = false;
+    $this->email = false;
+  }
+
+  public function userEmail() {
+    return $this->email;
+  }
+
+  public function username() {
+    return $this->username;
   }
 
   public function store(array $data=[]) {

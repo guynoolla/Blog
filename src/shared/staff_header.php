@@ -18,7 +18,7 @@ if (!isset($page_title) || $page_title == '') {
 
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top no-border-bottom">
-      <div class="container">
+      <div class="container-xl">
         <a class="navbar-brand w-25" href="<?php echo url_for('/') ?>">Light Kite</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -26,7 +26,7 @@ if (!isset($page_title) || $page_title == '') {
       
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav">
-            <?php include '_navbar_dropdown.php' ?>
+            <?php $header_type = 'dashboard'; include '_navbar_dropdown.php'; ?>
           </ul>
         </div>
 

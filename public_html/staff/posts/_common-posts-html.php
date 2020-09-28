@@ -86,11 +86,11 @@ function td_post_status($post) {
   $output = '';  
 
   if ($post->published == 0) {
-    $output .= '<td class="text-secondary font-weight-bold">draft</td>';
+    $output .= '<td class="text-secondary">draft</td>';
   } elseif ($post->published == 1 && $post->approved == 0) {
-    $output .= '<td class="text-primary font-weight-bold">published</td>';
+    $output .= '<td class="text-primary">published</td>';
   } elseif ($post->published == 1 && $post->approved == 1) {
-    $output .= '<td class="text-success font-weight-bold">approved</td>';
+    $output .= '<td class="text-success">approved</td>';
   }
 
   return $output;
@@ -121,8 +121,21 @@ function td_post_topic($post) {
   ob_start();
   
   ?><td scope="col">
-    <em><a href="<?php echo url_for('topic/' . u($post->topic) . '?id=' . $post->topic_id)
-    ?>"><?php echo $post->topic ?></a></em>
+    <span class="h5 font-italic"><a href="<?php echo url_for('topic/' . u($post->topic) . '?id=' . $post->topic_id)
+    ?>"><?php echo $post->topic ?></a></span>
+  </td><?php
+
+  $output = ob_get_contents();
+  ob_end_clean();
+
+  return $output;
+}
+
+function td_post_date($post) {
+  ob_start();
+
+  ?><td scope="col">
+    <span class="h5"><?php echo date('M j, Y', strtotime($post->updated_at)) ?></span>
   </td><?php
 
   $output = ob_get_contents();

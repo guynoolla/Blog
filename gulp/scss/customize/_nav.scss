@@ -9,19 +9,30 @@ nav {
       letter-spacing: .05em;
     }
   }
+
+  .navbar-brand {
+    &:hover, &:focus {
+      color: #fff !important;
+    }
+  }
 }
 
 @media (min-width: 768px) {
   nav {
     .navbar-nav {
       .nav-item .username-lk.nav-link {
-        border: 1px solid transparent;
-        padding-left: 1rem;
-        padding-right: 1rem;
+        border: 2px solid transparent;
+        border-radius: 1rem;
+        padding: .2rem 1rem;
+        &--bg {
+          background-color: $dark1;
+          &:hover, &:focus {
+            background-color: $dark2;
+          }
+        }
         &:hover, &:focus {
-          border-color: $light-dark-read-green;
           color: $light-dark-read-green !important;
-          border-radius: 5em;
+          border-radius: 1rem;
         }
       }
     }

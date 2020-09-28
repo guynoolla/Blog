@@ -5,27 +5,32 @@ class Posts {
 
   constructor() {
     this.cookieData = (this.getLikesCookie()).reverse();
-    this.perPage = 2;
+    this.perPage = 4;
     this.page = 1;
     this.onload();
     this.events();
   }
 
   events() {
-    $(".loadPostsJS").on("click", ".page-link", (e) => {
+    $(".paginationJS, .headline-nav").on("click", "a", (e) => {
       e.preventDefault();
 
       const target = $(e.target);
 
-      if (target.is("span")) {
-        target.closest(".page-link").trigger("click");
-        return;
-      }
-      if (target.parent().hasClass("active")) {
-        return;
-      }
-
       let url = target.attr("href");
+
+      if (target.hasClass("page-link")) {
+        if (target.is("span")) {
+          target.closest(".page-link").trigger("click");
+          return;
+        }
+        if (target.parent().hasClass("active")) {
+          return;
+        }
+      } else if (target.hasClass("svg-icon") || target.is("path")) {
+          target.closest(".chevron").trigger("click");
+          return;
+      } 
       
       if (url) {
         const params = url.split("?")[1];
@@ -33,8 +38,10 @@ class Posts {
         paramsArr.forEach(value => {
           if (value.split("=")[0] == 'page') {
             this.page = value.split("=")[1];
-            $(".pagination li.page-item").removeClass("active");
-            $(`#item-${this.page}`).addClass("active");
+            if (target.hasClass("page-link")) {
+              $(".pagination li.page-item").removeClass("active");
+              $(`#item-${this.page}`).addClass("active");
+            }
             this.loadPosts(this.cookieData);
             return false;
           }
@@ -49,7 +56,6 @@ class Posts {
 
   onload() {
     this.loadPosts(this.cookieData);
-    this.page++;
   }
 
   loadPosts(ids) {
@@ -57,8 +63,6 @@ class Posts {
       $(".loadPostsJS").fadeOut(600, () => {
         $(".loading").removeClass("d-none");
       });
-
-      console.log('IDS: ', ids.length);
 
       $.ajax({
         url: server.baseUrl + '/ajax.php',
@@ -79,10 +83,15 @@ class Posts {
               $(".loadPostsJS").fadeIn(() => {
                 $(".loading").addClass("d-none")
               })
-              $(".loadPostsJS").html(output)
+              $(".loadPostsJS").html(output);
+              $(".paginationJS").html(data[2].html);
+              this.setHeadlineChevrons(data[2].total_count);
               //clearTimeout(timer)
             //}, 1000)
+
             $('#page-' + this.page).addClass("active")
+
+            this.page++;
           }
         },
         error: res => console.log(res)
@@ -157,9 +166,24 @@ class Posts {
 
     if (len == 1) output += `</div>`;
 
-    output += pagination.html;
-
     return output;
+  }
+
+  setHeadlineChevrons(total) {
+    $(".headline-nav .chevron").addClass("d-none");
+
+    if (this.page < Math.ceil(total/this.perPage)) {
+      const next = $(".headline-nav .chevron--next");
+      next.removeClass("d-none");
+      const nextLink = $(".paginationJS").find(".pagination li:last a").attr('href');
+      next.attr("href", nextLink);
+    }
+    if (this.page > 1) {
+      const prev = $(".headline-nav .chevron--prev");
+      prev.removeClass("d-none");
+      const prevLink = $(".paginationJS").find(".pagination li:first a").attr('href');
+      prev.attr("href", prevLink);
+    }
   }
 
 }

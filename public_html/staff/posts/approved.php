@@ -64,7 +64,7 @@ include '_common-posts-html.php';
   <main class="main col-lg-9">
     <div class="main-content">
 
-      <h2><em class="text-success">Published & approved</em></h2>
+      <h2><em class="text-success">Published Approved</em></h2>
       <?php echo page_back_button() ?>
 
       <?php if (empty($posts)): ?>
@@ -101,9 +101,7 @@ include '_common-posts-html.php';
                     <td class="text-success font-weight-bold">approved</td><?php
                   endif; ?>
                 </td>
-                <td>
-                  <span><?php echo date('M j, Y', strtotime($post->updated_at)) ?></span>
-                </td>
+                <?php echo td_post_date($post) ?>
                 <?php echo td_actions_column_snd($post, $session->isAdmin()); ?>
               </tr>
             <?php endforeach; ?>

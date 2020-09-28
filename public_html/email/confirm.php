@@ -12,7 +12,7 @@ if (isset($_GET['token'])) {
 
     if ($user) {
       if ($user->confirmEmail()) {
-        $session->message('Thank you, your email was confirmed! Please log in to access author rights!');
+        $session->message('Thank you, your email was confirmed! Log in, please!');
         redirect_to(url_for('staff/logout.php'));
       }
     }

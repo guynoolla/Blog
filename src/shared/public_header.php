@@ -36,7 +36,7 @@ if (!isset($page_title)) {
           <li class="nav-item">
             <a class="nav-link" href="#widget-contact-form">Contact</a>
           </li>
-          <?php include '_navbar_dropdown.php' ?>
+          <?php $header_type = 'public'; include '_navbar_dropdown.php'; ?>
         </ul>
         <form id="navSearchForm" action="<?php echo url_for('index.php') ?>" method="get" class="form-inline mt-2 mt-md-0">
           <input name="s" class="form-control mr-sm-2 search-field-lk hide" type="text" placeholder="Search" aria-label="Search">

@@ -69,9 +69,9 @@ include SHARED_PATH . '/staff_header.php';
               <tr data-user="<?php echo $user->id ?>">
                 <th scope="row"><?php echo $key + 1 ?></th>
                 <td><a href="#"><?php echo $user->username ?></a></td>
-                <td><a href="mailto: <?php echo $user->email ?>"><?php echo $user->email ?></a></td>
+                <td><a href="mailto: <?php echo $user->email ?>" class="<?php echo ($user->email_confirmed ? 'text-success' : '') ?>"><?php echo $user->email ?></a></td>
                 <td><span class="text-primary"><?php echo $user->user_type ?></span></td>
-                <td><?php echo date('M j, Y', strtotime($user->created_at)) ?></td>
+                <td><span class="h5"><?php echo date('M j, Y', strtotime($user->created_at)) ?></span></td>
                 <td><?php echo $user->posted ?> - <span class="text-success font-weight-bold">
                   <?php echo $user->approved ?></span>
                 </td>

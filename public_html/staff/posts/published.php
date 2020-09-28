@@ -87,7 +87,7 @@ include '_common-posts-html.php';
           <thead class="bg-muted-lk text-muted">
             <tr>
               <th scope="col">#</th>
-              <th scope="col" colspan="2">Title</th>
+              <th scope="col">Title</th>
               <th scope="col">Topic</th>
               <th scope="col">Author</th>
               <th scope="col">Status</th>
@@ -100,13 +100,10 @@ include '_common-posts-html.php';
               <tr>
                 <th scope="row"><?php echo $key + 1 ?></th>
                 <?php echo td_post_title($post) ?>
-                <td><?php echo td_post_topic($post) ?></td>
+                <?php echo td_post_topic($post) ?>
                 <td><?php echo (User::findById($post->user_id))->username ?></td>
-                  <?php echo td_post_status($post) ?>
-                </td>
-                <td>
-                  <span><?php echo date('M j, Y', strtotime($post->updated_at)) ?></span>
-                </td>
+                <?php echo td_post_status($post) ?>
+                <?php echo td_post_date($post) ?>
                 <?php
                   echo td_actions_column_fst($post, $session->isAdmin());
                   echo td_actions_column_snd($post, $session->isAdmin());

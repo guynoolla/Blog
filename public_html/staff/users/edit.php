@@ -20,7 +20,12 @@ if (is_post_request()) {
 
   if ($user->save()) {
     $session->message("User '" . $user->username ."' settings was updated.");
-    redirect_to(url_for('/staff/users/edit.php?id=' . $user->id));
+    if ($user->email != $session->userEmail()) {
+      $session->emailFalse();
+      redirect_to(url_for('/staff/index.php'));
+    } else {
+      redirect_to(url_for('/staff/users/edit.php?id=' . $user->id));
+    }
   }
 
 } else {

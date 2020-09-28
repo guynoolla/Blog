@@ -98,9 +98,7 @@ include '_common-posts-html.php';
                     <?php echo h($user->email) ?>
                   </a>
                 </td>
-                <td>
-                  <span><?php echo date('M j, Y', strtotime($post->updated_at)) ?></span>
-                </td>
+                <?php echo td_post_date($post) ?>
                 <td>
                   <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('staff/posts/edit.php?id=' . $post->id) ?>">Edit</a>
                 </td>

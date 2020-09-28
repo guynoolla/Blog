@@ -137,7 +137,10 @@ include SHARED_PATH . '/carousel.php';
       <div class="main-content">
         <?php if ($headline): ?>
           <h1 class="text-center"><?php echo $headline ?></h1>
-        <?php endif;
+          <?php if ($type == 'topic' && $topic): ?>
+            <p class="lead text-center"><?php echo $topic->description ?></p>
+          <?php endif;
+        endif;
 
         $total = count($posts);
         

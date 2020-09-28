@@ -17,7 +17,7 @@ class User extends \App\Classes\DatabaseObject {
   public $about_image;
   public $about_text;
   public $about_appear;
-  protected $email_confirmed;
+  public $email_confirmed;
   protected $hashed_password;
   protected $password_reset_hash;
   protected $password_reset_expires_at;
@@ -30,6 +30,7 @@ class User extends \App\Classes\DatabaseObject {
   // extra property
   protected $password_required = true;
   public $empty_password_field = true;
+  protected $old_email;
 
   protected $image_obj;
 
@@ -82,6 +83,12 @@ class User extends \App\Classes\DatabaseObject {
     return $attr;
   }
 
+  protected function filterCheckboxValue($property) {
+    if (in_array($this->$property, ['on','1','checked'])) {
+      $this->$property = '1';
+    }
+  }
+
   protected function validate() {
     $this->errors = [];
 
@@ -130,7 +137,7 @@ class User extends \App\Classes\DatabaseObject {
       }
     }
 
-    if (!is_null($this->about_appear)) {
+    if ($this->about_appear != 0 && $this->image_obj) {
       if (!$this->image_obj->isFileSelected() && $this->about_image == "") {
         $this->errors[] = "About image is not selected.";
       }
@@ -173,6 +180,9 @@ class User extends \App\Classes\DatabaseObject {
   }
 
   public function mergeAttributes(array $args=[]) {
+    if ($args['email'] != $this->email) {
+      $this->email_confirmed = '0';
+    }
     if (isset($args['about'])) {
       if (!isset($args['about']['about_appear'])) {
         $args['about']['about_appear'] = '0';
@@ -303,9 +313,12 @@ class User extends \App\Classes\DatabaseObject {
   }
 
   public function confirmEmail() {
+    if ($this->user_type != 'admin') {
+      $user_type = 'author';
+    }
     $this->mergeAttributes([
       'email_confirmed' => '1',
-      'user_type' => 'author',
+      'user_type' => $user_type,
       'email_confirm_hash' => 'NULL',
       'email_confirm_expires_at' => 'NULL'
     ]);
@@ -322,12 +335,6 @@ class User extends \App\Classes\DatabaseObject {
           LIMIT $per_page OFFSET $offset
 SQL;
     return self::findBySql($sql);
-  }
-
-  protected function filterCheckboxValue($property) {
-    if (in_array($this->$property, ['on','1','checked'])) {
-      $this->$property = '1';
-    }
   }
 
 }

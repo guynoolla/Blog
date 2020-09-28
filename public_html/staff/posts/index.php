@@ -108,9 +108,7 @@ include '_common-posts-html.php';
                 <?php echo td_post_title($post) ?>
                 <?php echo td_post_topic($post) ?>
                 <?php echo td_post_status($post) ?>
-                <td>
-                  <span><?php echo date('M j, Y', strtotime($post->updated_at)) ?></span>
-                </td>
+                <?php echo td_post_date($post) ?>
                 <?php echo td_actions_column_fst($post, $session->isAdmin()) ?>
                 <?php echo td_actions_column_snd($post, $session->isAdmin()) ?>
               </tr>
