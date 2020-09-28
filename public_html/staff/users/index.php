@@ -41,10 +41,10 @@ include SHARED_PATH . '/staff_header.php';
   </aside>
 
   <main class="main col-lg-9">
-    <div class="main-content">
-      <?php echo page_back_button() ?>
+    <div class="main-content adminContentJS">
 
       <h2 style="text-align: center;"><?php echo $page_title ?></h2>
+      <?php echo page_back_button() ?>
 
       <?php if (empty($users)): ?>
         <p class="lead">There is no user yet.</p>
@@ -66,7 +66,7 @@ include SHARED_PATH . '/staff_header.php';
           </thead>
           <tbody>
             <?php foreach($users as $key => $user): ?>
-              <tr>
+              <tr data-user="<?php echo $user->id ?>">
                 <th scope="row"><?php echo $key + 1 ?></th>
                 <td><a href="#"><?php echo $user->username ?></a></td>
                 <td><a href="mailto: <?php echo $user->email ?>"><?php echo $user->email ?></a></td>
@@ -81,9 +81,14 @@ include SHARED_PATH . '/staff_header.php';
                   </a>
                 </td>
                 <td scope="colgroup" colspan="1">
-                  <a class="btn-lk btn-lk--danger" data-delete="user" href="<?php echo url_for('/staff/users/index.php?id=' . $user->id . '&cmd=delete') ?>">
-                    Delete
-                  </a>
+                  <?php $data = no_gaps_between("
+                    table-users,
+                    id-{$user->id},
+                    username-{$user->username}
+                  ") ?>
+                  <a data-delete="<?php echo $data ?>" class="btn-lk btn-lk--danger"
+                    href="<?php echo url_for('staff/delete.php?table=users&id=' . $user->id)
+                  ?>">Delete</a>
                 </td>
               </tr>
             <?php endforeach; ?>

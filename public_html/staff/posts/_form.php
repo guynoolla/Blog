@@ -14,12 +14,11 @@ $auth_user_id = $session->getUserId();
 // if not then it is in the context of post creating!
 $edit = isset($post->id) ? true : false;
 
+if (!$edit) echo '<h2 class="text-center">New Post</h2>';
+else echo '<h2 class="text-center">Update Post</h2>';
+
 ?>
 <form id="editPostForm" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data" class="py-3">
-  <?php
-    if (!$edit) echo '<legend class="text-center">New Post</legend>';
-    else echo '<legend class="text-center">Update Post</legend>'
-  ?>
 
   <?php echo display_errors($post->errors) ?>
 
@@ -113,9 +112,16 @@ $edit = isset($post->id) ? true : false;
   </div>
 
   <?php
-    if ($session->isAdmin() && (!$post->published && !$post->approved)): ?>
-      <button type="submit" name="delete" class="btn btn-danger ml-2 float-right">Delete</button><?php
-    endif;
+    if ($edit) {
+      if ($session->isAdmin() && (!$post->published && !$post->approved)):
+        $data = no_gaps_between("
+          table-posts,
+          id-{$post->id},
+          title-{$post->title}
+        ");
+        ?><a data-delete="<?php echo $data ?>" href="<?php echo url_for('staff/delete.php?table=posts&id=' . $post->id) ?>" class="btn btn-danger ml-2 float-right">Delete</a><?php
+      endif;
+    }
   ?>
   <button type="submit" name="create" class="btn btn-primary float-right">Save</button>
 </form>

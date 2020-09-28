@@ -53,6 +53,18 @@ $(() => {
     }         
   }
 
+  /*
+   * Require admin.js in user is logged in ---------------------------*/
+
+  if (server.isLoggedIn) {
+    require("./admin.js");
+  
+  } else {
+    console.log("require nothing...");
+  }
+
+  /* ------------------------------------------------------------------*/
+
   $("#navSearchForm, #asideSearchForm").on("submit", e => {
     const form = $(e.target)
     const term = form.find("input[name='s']").val()
@@ -108,7 +120,7 @@ $(() => {
 
       return false;
     });
-  }
+  } // <-- Contact Form
 
   if ($("#registerForm").length) {
     const validate = new FormValidate("registerForm");
@@ -133,7 +145,7 @@ $(() => {
 
       return false;
     })
-  }
+  } // <-- Register Form
 
   $(window).on("scroll", function() {
     checkScrollPosition();    
@@ -152,8 +164,6 @@ $(() => {
       }
     }
   })
-
-  alert("Exellent!");
 
 }); // $ function
 

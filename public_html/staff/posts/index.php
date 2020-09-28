@@ -80,9 +80,9 @@ include '_common-posts-html.php';
 
   <main class="main col-lg-9">
     <div class="main-content">
-      <?php echo page_back_button() ?>
-
+      
       <h2 style="text-align: center;"><?php echo $page_title ?></h2>
+      <?php echo page_back_button() ?>
 
       <?php if (empty($posts)): ?>
         <p class="lead">No posts here.</p>
@@ -111,7 +111,6 @@ include '_common-posts-html.php';
                 <td>
                   <span><?php echo date('M j, Y', strtotime($post->updated_at)) ?></span>
                 </td>
-
                 <?php echo td_actions_column_fst($post, $session->isAdmin()) ?>
                 <?php echo td_actions_column_snd($post, $session->isAdmin()) ?>
               </tr>

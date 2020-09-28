@@ -63,9 +63,9 @@ include '_common-posts-html.php';
 
   <main class="main col-lg-9">
     <div class="main-content">
-      <?php echo page_back_button() ?>
 
       <h2><em class="text-success">Published & approved</em></h2>
+      <?php echo page_back_button() ?>
 
       <?php if (empty($posts)): ?>
         <p class="lead">No posts here.</p>

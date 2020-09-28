@@ -34,11 +34,11 @@ include SHARED_PATH . '/staff_header.php';
   </aside>
 
   <main class="main col-lg-9">
-    <div class="main-content">
-      <?php echo page_back_button() ?>
-      <a class="btn btn-outline-primary btn-md" href="<?php echo url_for('staff/topics/create.php') ?>">New Topic</a>
+    <div class="main-content adminContentJS">
 
       <h2 style="text-align: center;"><?php echo $page_title ?></h2>
+      <?php echo page_back_button() ?>
+      <a class="btn btn-outline-primary btn-md" href="<?php echo url_for('staff/topics/create.php') ?>">New Topic</a>
 
       <?php if (empty($topics)): ?>
         <p class="lead">You have not topics yet.</p>
@@ -71,9 +71,16 @@ include SHARED_PATH . '/staff_header.php';
                   </a>
                 </td>
                 <td scope="colgroup" colspan="1">
-                  <a class="btn-lk btn-lk--danger" href="<?php echo url_for('/staff/topics/index.php?id=' . $topic->id . '&cmd=delete') ?>">
-                    Delete
-                  </a>
+                  <?php
+                    $data = no_gaps_between("
+                      table-topics,
+                      id-{$topic->id},
+                      name-{$topic->name}
+                    ")
+                  ?>
+                  <a data-delete="<?php echo $data ?>" class="btn-lk btn-lk--danger"
+                    href="<?php echo url_for('staff/delete.php?table=topics&id=' . $topic->id)
+                  ?>">Delete</a>
                 </td>
               </tr>
             <?php endforeach; ?>

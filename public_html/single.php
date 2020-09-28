@@ -8,6 +8,11 @@ require_once '../src/initialize.php';
 $id = $_GET['id'] ?? 0;
 
 $post = Post::findById($id);
+
+if (!$post) {
+  exit("Post not found!");
+}
+
 $url_parts = url_split_by_slash();
 $_title = urldecode(end($url_parts));
 $username = User::findById($post->user_id)->username;

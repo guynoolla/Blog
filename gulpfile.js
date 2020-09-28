@@ -76,9 +76,9 @@ gulp.task('css', gulp.series('img', () => {
 // Javascript settings
 const js = {
 	src 				: dir.src + '/js/**/*',
-	entries 		: [dir.src + '/js/main.js', dir.src + '/js/admin.js'],
+	entries 		: [dir.src + '/js/main.js'], // dir.src + '/js/admin.js'],
 	build 			: dir.build + '/assets/js/',
-	filenames		: ['main.js', 'admin.js'],
+	filenames		: ['main.js'], // 'admin.js'],
 };
 
 // Javascript processing
@@ -100,7 +100,8 @@ gulp.task( 'js', () => {
 			.pipe(browsersync.stream({ match: [dir.src, entry] }))
 		})
 
-	return mergeStream(tasks[0], tasks[1])
+	//return mergeStream(tasks[0], tasks[1])
+	return tasks[0];
 });
 
 // Browsersync options

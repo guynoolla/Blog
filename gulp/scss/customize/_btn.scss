@@ -78,3 +78,10 @@ table tr td a.btn-lk {
 .alert-dismissible .close {
   padding: .85rem 1.35rem;
 }
+
+.btn.btn-danger,
+.btn.btn-primary {
+  &:hover {
+    color: #FFF !important;
+  } 
+}

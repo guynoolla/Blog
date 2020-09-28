@@ -228,7 +228,9 @@ class Post extends \App\Classes\DatabaseObject {
   }
 
   public function delete() {
-    $this->deleteImages($this->image);
+    if ($this->image) {
+      $this->deleteImages($this->image);
+    }
     return parent::delete();
   }
 

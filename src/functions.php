@@ -115,4 +115,12 @@ function page_back_button($link='Back', $class_list='btn btn-outline-primary my-
   return $output;
 }
 
+function no_gaps_between($str) {
+  $arr = explode(",", $str);
+  foreach($arr as $key => $value) {
+    $arr[$key] = trim($value);
+  }
+  return implode(",", $arr);
+}
+
 ?>
