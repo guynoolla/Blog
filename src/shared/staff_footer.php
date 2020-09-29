@@ -7,7 +7,7 @@
 			<?php echo "{$jsonstore->copyright->sign} {$jsonstore->copyright->sitename} " . date('Y') . " {$jsonstore->copyright->delimeter} {$jsonstore->copyright->rights}" ?>
 		</div>
 	</div>
-	<a href="#topScrollElement" class="scroll-to-top" id="scrollToTopJS" style="display: block;"><i class="fa fa-angle-up"></i></a>
+	<a href="#page-top" class="scroll-to-top" id="scrollToTopJS" style="display: block;"><i class="fa fa-angle-up"></i></a>
 </footer>
 
   <?php echo pass_to_js() ?>

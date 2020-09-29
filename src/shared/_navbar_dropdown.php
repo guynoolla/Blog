@@ -9,7 +9,7 @@
       <?php echo $session->username() ?>
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-      <?php if (!url_contain('staff')): ?>
+      <?php if (!url_contain('/staff/')): ?>
         <a class="dropdown-item" href="<?php echo url_for('staff/index.php') ?>">Dashboard</a>
       <?php else: ?>
         <a class="dropdown-item" href="<?php echo url_for('/') ?>">Home</a>

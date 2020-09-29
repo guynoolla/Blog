@@ -17,7 +17,7 @@ if ($session->store_of('fp_captcha_err')) {
   $captcha_err = $session->store_of('fp_captcha_err', false);
 }
 
-if (url_contain(['post/','preview/'])) {
+if (url_contain(['/post/', '/preview/'])) {
   $user = User::findById($post->user_id);
 }
 
@@ -39,7 +39,7 @@ $topics = Topic::findAll();
     </div>
   </section>
 
-  <?php if (url_contain(['post/','preview/']) && $user->about_appear): ?>
+  <?php if (url_contain(['/post/','/preview/']) && $user->about_appear): ?>
     <section class="widget mt-5">
       <h3 class="title mb-3">About Author</h3>
 
@@ -106,35 +106,37 @@ $topics = Topic::findAll();
     </div>
   </section>
 
-  <section class="widget my-4" id="widget-contact-form">
-    <h3 class="title"><?php echo $jsonstore->contactForm->title ?></h3>
-    <div class="widget-contact-form pt-2">
-      <form id="contactForm" action="<?php echo url_for('form_post.php') ?>" method="post" name="contactForm">
-        <div class="form-group mb-0">
-          <label for="email" class="d-none">Email</label>
-          <input type="email" name="email" value="<?php echo $email ?>" class="form-control" id="email" placeholder="<?php echo $jsonstore->contactForm->emailPlaceholder ?>">
-          <span class="text-danger field-validation-error"></span>
-        </div>
-        <div class="form-group mb-0">
-          <label for="message" class="d-none">Message</label>
-          <textarea name="message" class="form-control" id="message" rows="3" placeholder="<?php echo $jsonstore->contactForm->messagePlaceholder ?>"><?php echo $message ?></textarea>
-          <span class="text-danger field-validation-error"></span>
-        </div>
-        <div class="form-group my-0">
-          <div class="form-group-captcha col px-0 d-flex align-items-start justify-content-start bg-light">
-            <img src="<?php echo $_SESSION['captcha']['image_src'] ?>" style="z-index:500">
-            <input type="text" name="captcha" id="captcha" class="captcha-field align-self-end bg-light border-0" placeholder="captcha">
-            <button type="submit" class="btn btn-lg btn-default ml-auto rounded-0" name="contactFormSubmit" id="contactSubmit">
-              <span class="spinner-grow spinner-grow-sm d-none mr-3" role="status" aria-hidden="true"></span>
-              <?php echo $jsonstore->contactForm->buttonText ?>
-            </button>
+  <?php if (is_homepage()): ?>
+    <section class="widget my-4" id="widget-contact-form">
+      <h3 class="title"><?php echo $jsonstore->contactForm->title ?></h3>
+      <div class="widget-contact-form pt-2">
+        <form id="contactForm" action="<?php echo url_for('form_post.php') ?>" method="post" name="contactForm">
+          <div class="form-group mb-0">
+            <label for="email" class="d-none">Email</label>
+            <input type="email" name="email" value="<?php echo $email ?>" class="form-control" id="email" placeholder="<?php echo $jsonstore->contactForm->emailPlaceholder ?>">
+            <span class="text-danger field-validation-error"></span>
           </div>
-          <span class="text-danger field-validation-error"><?php echo $captcha_err ?></span>
-        </div>
+          <div class="form-group mb-0">
+            <label for="message" class="d-none">Message</label>
+            <textarea name="message" class="form-control" id="message" rows="3" placeholder="<?php echo $jsonstore->contactForm->messagePlaceholder ?>"><?php echo $message ?></textarea>
+            <span class="text-danger field-validation-error"></span>
+          </div>
+          <div class="form-group my-0">
+            <div class="form-group-captcha col px-0 d-flex align-items-start justify-content-start bg-light">
+              <img src="<?php echo $_SESSION['captcha']['image_src'] ?>" style="z-index:500">
+              <input type="text" name="captcha" id="captcha" class="captcha-field align-self-end bg-light border-0" placeholder="captcha">
+              <button type="submit" class="btn btn-lg btn-default ml-auto rounded-0" name="contactFormSubmit" id="contactSubmit">
+                <span class="spinner-grow spinner-grow-sm d-none mr-3" role="status" aria-hidden="true"></span>
+                <?php echo $jsonstore->contactForm->buttonText ?>
+              </button>
+            </div>
+            <span class="text-danger field-validation-error"><?php echo $captcha_err ?></span>
+          </div>
 
-        <div class="response response--shade"></div>
-      </form>
-    </div>
-  </section>
+          <div class="response response--shade"></div>
+        </form>
+      </div>
+    </section>
+  <?php endif; ?>
 
 </div>

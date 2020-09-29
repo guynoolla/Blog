@@ -66,6 +66,14 @@ function url_contain($value) {
   return false;
 }
 
+function is_homepage() {
+  if ($_SERVER['REQUEST_URI'] == '/' || $_SERVER['REQUEST_URI'] == '/index.php') {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 function is_active($unique_url_part, $link, $icon='', $url_params='', $num=false) {
   $url = url_for($unique_url_part . '.php' . $url_params);
   if (url_contain($unique_url_part)) {

@@ -25,7 +25,7 @@ if (!isset($page_title)) {
 </head>
 <body>
 
-<header id="topScrollElement">
+<header id="page-top">
   <nav class="nav-ini-hide navbar navbar-expand-md navbar-light fixed-top bg-light" id="hideByScroll">
     <div class="container">
       <!-- <a class="navbar-brand d-sm-none" href="#">Kite</a> -->
@@ -38,7 +38,7 @@ if (!isset($page_title)) {
             <a class="nav-link" href="<?php echo url_for('/') ?>">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#widget-contact-form">Contact</a>
+            <a class="nav-link" href="<?php echo url_for('/#widget-contact-form') ?>">Contact</a>
           </li>
           <?php $header_type = 'public'; include '_navbar_dropdown.php'; ?>
         </ul>
