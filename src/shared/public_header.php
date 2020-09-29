@@ -18,6 +18,10 @@ if (!isset($page_title)) {
   <!-- Add the slick-theme.css if you want default styling -->
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick-theme.css"/>
   <link rel="stylesheet" href="<?php echo url_for('assets/css/style.css') ?>">
+  <link rel="apple-touch-icon" sizes="180x180" href="<?php echo url_for('/apple-touch-icon.png') ?>">
+  <link rel="icon" type="image/png" sizes="32x32" href="<?php echo url_for('/favicon-32x32.png') ?>">
+  <link rel="icon" type="image/png" sizes="16x16" href="<?php echo url_for('/favicon-16x16.png') ?>">
+  <link rel="manifest" href="<?php echo url_for('/site.webmanifest') ?>">
 </head>
 <body>
 
