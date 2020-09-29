@@ -5,7 +5,7 @@ var validator = require("email-validator");
 
 class FormValidateRules extends FormValidate {
 
-  async isExist(value, fid, table) {
+  async isUnique(value, fid, table) {
     return new Promise((resolve, reject) => {
       $.ajax({
         url: server.baseUrl + '/ajax.php',
@@ -17,10 +17,10 @@ class FormValidateRules extends FormValidate {
           target: 'is_already_exist'
         },
         success: res => {
-          if (res == "false") {
+          if (res == "true") {
             return resolve(value);
           
-          } else if (res == "true") {
+          } else if (res == "false") {
             if (fid == "username") {
               this.errors[fid].push("This username is not available.");
             } else if (fid == "email") {
@@ -53,11 +53,8 @@ class FormValidateRules extends FormValidate {
       } else if (mess.val().length > size.max) {
         this.errors[fid].push(`Username cannot contain more than ${size.max}. characters.`)
       } else {
-        this.showValid(fid, mess)
         return resolve(mess.val())
       }
-
-      this.showErrors(fid, mess)
       return resolve(false)
     })
 
@@ -83,14 +80,13 @@ class FormValidateRules extends FormValidate {
       } else {
         return resolve(email.val())
       }
-
       return resolve(false)
     })
 
     let value = await check();
 
     if (value && typeof this.settings.uniqueVal[fid] != "undefined") {
-      value = await this.isExist(value, fid, 'users');
+      value = await this.isUnique(value, fid, 'users');
     }
 
     if (value == false) this.showErrors(fid, email);
@@ -120,14 +116,13 @@ class FormValidateRules extends FormValidate {
       } else {
         return resolve(username.val())
       }
-  
       return resolve(false);
     });
 
     let value = await check();
 
     if (value && typeof this.settings.uniqueVal[fid] != "undefined") {
-      value = await this.isExist(value, fid, 'users');
+      value = await this.isUnique(value, fid, 'users');
     }
 
     if (value == false) this.showErrors(fid, username);
@@ -157,7 +152,6 @@ class FormValidateRules extends FormValidate {
       } else {
         return resolve(pass.val())
       }
-
       return resolve(false)
     });
 
@@ -181,7 +175,6 @@ class FormValidateRules extends FormValidate {
       } else {
         return resolve(pass.val())
       }
-
       return resolve(false)
     })
 
@@ -243,6 +236,39 @@ class FormValidateRules extends FormValidate {
 
     return value;
   }
+
+  async aboutText(fid) {
+    if (!this.run(fid)) return false;
+
+    const about = this.form.find(`#${fid}`)
+    this.errors[fid] = [];
+
+    const check = () => new Promise(resolve => {
+      const size = this.getFieldSize(fid)
+
+      if (about.val().length != 0) {
+        if (about.val().length < size.min) {
+          this.errors[fid].push(`About text must contain at least ${size.min} characters.`)
+        } else if (about.val().length > size.max) {
+          this.errors[fid].push(`About text cannot contain more than ${size.max}. characters.`)
+        } else {
+          return resolve(about.val())
+        }
+        return resolve(false)
+
+      } else {
+        this.showErrors(fid, about);
+      }
+    })
+
+    let value = await check();
+
+    if (value == false) this.showErrors(fid, about)
+    else this.showValid(fid, about)
+
+    return value;
+  }
+
 }
 
 export default FormValidateRules

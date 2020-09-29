@@ -1,41 +1,77 @@
 import $ from 'jquery';
+import FormValidate from './modules/FormValidateRules';
 
-console.log("admin.js is running...");
+$(() => {
 
-const admin = $(".adminContentJS");
+  console.log("admin.js is running...");
 
-if ($("table a[data-delete]").length || $("a.btn.btn-danger").length) {
-  appendModalToBody();
-
-  admin.find("table a[data-delete], a.btn.btn-danger").on("click", e => {
-    e.preventDefault();
+  const admin = $(".adminContentJS");
   
-    const link = $(e.target);
-    const data = parseCsvDash(link.data("delete"));
-    const urlToPost = link.attr("href").split("?")[0];
-    let title = "";
-    let body = "";
+  if ($("table a[data-delete]").length || $("a.btn.btn-danger").length) {
+    appendModalToBody();
   
-    if (data.table == "users") {
-      title = "Delete User";
-      body = `<p>Are you sure you want to delete the user
-        <strong class="font-weight-bold">${data.username}</strong>?<br>
-        If user posts exists they also will be permanently deleted!</p>`;
+    admin.find("table a[data-delete], a.btn.btn-danger").on("click", e => {
+      e.preventDefault();
     
-      } else if (data.table == "topics") {
-      title = "Delete Topic";
-      body = `<p>Are you sure you want to delete the topic <strong class="font-weight-bold">${data.name}</strong>?<br>
-      If there are posts under this topic you can't delete it, unless you delete those posts first!</p>`;
+      const link = $(e.target);
+      const data = parseCsvDash(link.data("delete"));
+      const urlToPost = link.attr("href").split("?")[0];
+      let title = "";
+      let body = "";
     
-    } else if (data.table == "posts") {
-      title = "Delete Post";
-      body = `<p>Are you sure you want to delete the post <strong class="font-weight-bold">${data.title}</strong>?<br>
-      This post will be permanently deleted!</p>`;
-    }
+      if (data.table == "users") {
+        title = "Delete User";
+        body = `<p>Are you sure you want to delete the user
+          <strong class="font-weight-bold">${data.username}</strong>?<br>
+          If user posts exists they also will be permanently deleted!</p>`;
+      
+        } else if (data.table == "topics") {
+        title = "Delete Topic";
+        body = `<p>Are you sure you want to delete the topic <strong class="font-weight-bold">${data.name}</strong>?<br>
+        If there are posts under this topic you can't delete it, unless you delete those posts first!</p>`;
+      
+      } else if (data.table == "posts") {
+        title = "Delete Post";
+        body = `<p>Are you sure you want to delete the post <strong class="font-weight-bold">${data.title}</strong>?<br>
+        This post will be permanently deleted!</p>`;
+      }
+    
+      currentModal(title, body, data, urlToPost);
+    });
+  }
   
-    currentModal(title, body, data, urlToPost);
-  });
-}
+  if ($("#userEditForm").length) {
+    const validate = new FormValidate("userEditForm");
+    validate.settings.fieldSize["username"] = { min: 4, max: 20 };
+    validate.settings.fieldSize["password"] = { min: 8, max: 20 };
+    validate.settings.fieldSize["about_text"] = { min: 30, max: 300 };
+    validate.settings.uniqueVal["username"] = true;
+    validate.settings.uniqueVal["email"] = true;
+
+    validate.form.on("submit change", async e => {
+      e.preventDefault();
+  
+      console.log("submit, change");
+  
+      const username = await validate.username("username");
+      const email = await validate.email("email");
+      const password = await validate.password("password");
+      const confirmPassword = await validate.confirmPassword("confirm_password");
+      const aboutText = await validate.aboutText("about_text");
+  
+      if (e.type == "submit" && validate.validatedLen() == 4) {
+        validate.form.off("submit");
+        validate.form.trigger("submit");
+      }
+  
+      return false;
+    })
+  } // <-- Register Form
+
+})
+
+/*
+ * Functions ---------------------------------------------------------*/
 
 function currentModal(title, body, data, urlToPost) {
   const modal = $("#deleteModal");

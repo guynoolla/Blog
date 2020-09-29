@@ -43,10 +43,19 @@ $bg-gray-lk: #e1e5eb;
   color: #5e5c5b !important;
 }
 
+.bg-light-lk {
+  background-color: #fff !important;
+}
+
 @media (min-width: 992px) {
   .bg-other-lk {
     &--md {
       background-color: $bg-other-lk !important;
+    }
+  }
+  .bg-light-lk {
+    &--md {
+      background-color: #f7f7f7 !important;
     }
   }
 }

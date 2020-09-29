@@ -20,18 +20,22 @@ switch($target) {
 }
 
 function is_already_exist($data) {
+  global $session;
+
   $field = $data['field'] ?? '';
   $value = $data['value'] ?? '';
   $table = $data['table'] ?? '';
 
   if ($field && $value && $table) {
     if ($table == 'users') {
+      $uid = $session->isLoggedIn() ? $session->getUserId() : "0";
+
       if ($field == 'username') {
-        $user = \App\Classes\User::findByUsername($value);
+        $unique = has_unique_username($value, $uid);
       } else if ($field == 'email') {
-        $user = \App\Classes\User::findByEmail($value);
+        $unique = has_unique_email($value, $uid);
       }
-      exit(($user ? 'true' : 'false'));
+      exit(($unique ? 'true' : 'false'));
     }
   }
   exit('error');
@@ -61,7 +65,7 @@ function contact_form_submit($data) {
       
       } catch(Exception $e) {
         $status = 'failed';
-        $alert = 'Sorry, server error occured. Please try later.';
+        $alert = 'Sorry, server error occured. Please try again later.';
       }
 
       include("./simple-php-captcha.php");

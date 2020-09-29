@@ -136,9 +136,11 @@ class FormValidate {
   showErrors(fid, elem) {
     const errors = this.getErrors(fid);
     elem.removeClass("alert-error").next().text("");
-    elem.addClass("alert-error").next().text(errors);
     elem.removeClass("alert-valid");
-    this.onElementKeyup(fid, elem);
+    if (errors.length > 0) {
+      elem.addClass("alert-error").next().text(errors);
+      this.onElementKeyup(fid, elem);
+    }
   }
 
   showValid(fid, elem) {

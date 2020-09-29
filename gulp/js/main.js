@@ -167,9 +167,8 @@ $(() => {
 
 }); // $ function
 
-/**
- * Functions
- */
+/*
+ * Functions ---------------------------------------------------------*/
 
 function deviceMediaEmbedResponsive(embedResp1, embedResp2) {
   if (Breakpoint.is("md")) {
