@@ -10,7 +10,7 @@ $headline = '';
 $type = 'default';
 
 /*
-  GET POSTS BY SEARCH TERM ///////////////////////////////////////*/
+  GET POSTS BY SEARCH TERM ------------------------------------------*/
 
  if (isset($_GET['s'])) {
   $type = 'search';
@@ -34,7 +34,7 @@ $type = 'default';
   }
 
 /*
-  GET POSTS BY TOPIC /////////////////////////////////////////////*/
+  GET POSTS BY TOPIC ------------------------------------------------*/
 
 } elseif (isset($_GET['tid'])) {
   $type = 'topic';
@@ -60,7 +60,7 @@ $type = 'default';
   }
 
 /*
- GET POSTS BY AUTHOR ////////////////////////////////////////////*/
+ GET POSTS BY AUTHOR ------------------------------------------------*/
 
 } elseif (isset($_GET['uid'])) {
   $type = 'author';
@@ -86,7 +86,7 @@ $type = 'default';
   }
 
 /*
-  GET POSTS ON DATE //////////////////////////////////////////// */
+  GET POSTS ON DATE ------------------------------------------------ */
   
 } elseif (isset($_GET['date'])) {
   $type = 'ondate';
@@ -110,7 +110,7 @@ $type = 'default';
   );
 
 /*
-  GET FRONTEND RECENT POSTS ///////////////////////////////////*/
+  GET FRONTEND RECENT POSTS ----------------------------------------*/
 
 } else {
   $type= 'default';

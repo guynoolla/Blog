@@ -57,8 +57,10 @@ include SHARED_PATH . '/staff_header.php';
   <main class="main col-lg-9 bg-light-lk bg-light-lk--md">
     <div class="main-content bg-white">
 
-      <h2 class="text-center"><?php echo $page_title ?></h2>
-      <?php echo page_back_button() ?>
+      <h2 class="text-center mb-4">
+        <?php echo $page_title ?>
+        <div class="back-btn-pos"><?php echo page_back_button() ?></div>
+      </h2>
 
       <div class="row justify-content-center h-100">
         <div class="col col-md-10">

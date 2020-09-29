@@ -113,6 +113,14 @@
         }
       }
     }
+
+    .back-btn-pos {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding-left: 1px;
+      padding-bottom: 1px;
+    }
   }
 
   a.btn.btn-outline-primary,

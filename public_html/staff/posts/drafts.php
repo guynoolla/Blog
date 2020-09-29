@@ -60,8 +60,10 @@ include '_common-posts-html.php';
   <main class="main col-lg-9">
     <div class="main-content">
      
-      <h2 style="text-align: center;"><em class="text-dark">Drafts</em></h2>
-      <?php echo page_back_button() ?>
+      <h2 class="text-center <?php echo $header_mb ?>">
+        <em class="text-dark">Drafts</em>
+        <div class="back-btn-pos"><?php echo page_back_button() ?></div>
+      </h2>
 
       <?php if (empty($posts)): ?>
         <p class="lead">No posts here.</p>
@@ -69,7 +71,7 @@ include '_common-posts-html.php';
       <?php else: ?>
         <?php echo display_session_message('msg success') ?>
 
-        <table class="table table-bordered table-hover table-light table-sm">
+        <table class="table table-bordered table-hover table-light <?php echo $table_size ?>">
           <thead class="bg-muted-lk text-muted">
             <tr>
               <th scope="col">#</th>

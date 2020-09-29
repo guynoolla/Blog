@@ -82,7 +82,7 @@ $topics = Topic::findAll();
           <label class="screen-reader-text" for="s">Search for:</label>
           <input name="s" type="text" class="form-control search-query" placeholder="Search…" value="" title="Search for:">
           <div class="input-group-append">
-            <button type="submit" class="btn btn-default" name="submit" id="searchSubmit" value="Search">Search</button>
+            <button type="submit" class="btn btn-default" id="searchSubmit">Search</button>
           </div>
         </div>
       </form>

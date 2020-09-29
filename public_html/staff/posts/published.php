@@ -11,7 +11,7 @@ if (!$session->isAdmin()) redirect_to(url_for('index.php'));
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Check Admin
 
 if (isset($_GET['id'])) {
-
+  
   $cmd = $_GET['cmd'] ?? false;
   $post = Post::findById($_GET['id']);
 
@@ -41,25 +41,51 @@ if (isset($_GET['id'])) {
 
 }
 
-$current_page = $_GET['page'] ?? 1;
-$per_page = DASHBOARD_PER_PAGE;
-$total_count = Post::countAll([
-  'published' => '1',
-  'approved' => '0',
-  'user_id' => ['!=' => $session->getUserId()]
-]);
-$pagination = new Pagination($current_page, $per_page, $total_count);
+if (isset($_GET['s'])) {
+  $term = u($_GET['s']);
 
-$sql = "SELECT p.*, u.username, t.id AS tid, t.name AS topic";
-$sql .= " FROM `posts` AS p";
-$sql .= " LEFT JOIN `users` AS u ON p.user_id = u.id";
-$sql .= " LEFT JOIN `topics` AS t ON p.topic_id = t.id";
-$sql .= " WHERE p.published='1' AND p.approved='0'";
-$sql .= " AND p.user_id != '{$session->getUserId()}'";
-$sql .= " ORDER BY p.updated_at DESC";
-$sql .= " LIMIT {$per_page}";
-$sql .= " OFFSET {$pagination->offset()}";
-$posts = Post::findBySql($sql);
+  $current_page = $_GET['page'] ?? 1;
+  $per_page = DASHBOARD_PER_PAGE;
+  $total_count = Post::countAll([
+    'published' => '1',
+    'user_id' => ['!=' => $session->getUserId()],
+    ["( title LIKE '%?%' OR body LIKE '%?%' )", $term, $term]
+  ]);
+  $pagination = new Pagination($current_page, $per_page, $total_count);
+
+  $sql = "SELECT p.*, u.username, t.id AS tid, t.name AS topic";
+  $sql .= " FROM `posts` AS p";
+  $sql .= " LEFT JOIN `users` AS u ON p.user_id = u.id";
+  $sql .= " LEFT JOIN `topics` AS t ON p.topic_id = t.id";
+  $sql .= " WHERE p.published='1' AND p.approved='0'";
+  $sql .= " AND p.user_id != '{$session->getUserId()}'";
+  $sql .= " AND ( title LIKE '%$term%' OR body LIKE '%$term%' )";
+  $sql .= " ORDER BY p.updated_at DESC";
+  $sql .= " LIMIT {$per_page}";
+  $sql .= " OFFSET {$pagination->offset()}";
+  $posts = Post::findBySql($sql);
+
+} else {
+  $current_page = $_GET['page'] ?? 1;
+  $per_page = DASHBOARD_PER_PAGE;
+  $total_count = Post::countAll([
+    'published' => '1',
+    'approved' => '0',
+    'user_id' => ['!=' => $session->getUserId()]
+  ]);
+  $pagination = new Pagination($current_page, $per_page, $total_count);
+
+  $sql = "SELECT p.*, u.username, t.id AS tid, t.name AS topic";
+  $sql .= " FROM `posts` AS p";
+  $sql .= " LEFT JOIN `users` AS u ON p.user_id = u.id";
+  $sql .= " LEFT JOIN `topics` AS t ON p.topic_id = t.id";
+  $sql .= " WHERE p.published='1' AND p.approved='0'";
+  $sql .= " AND p.user_id != '{$session->getUserId()}'";
+  $sql .= " ORDER BY p.updated_at DESC";
+  $sql .= " LIMIT {$per_page}";
+  $sql .= " OFFSET {$pagination->offset()}";
+  $posts = Post::findBySql($sql);
+}
 
 $page_title = 'Author\'s Published Posts';
 include SHARED_PATH . '/staff_header.php';
@@ -74,8 +100,10 @@ include '_common-posts-html.php';
   <main class="main col-lg-9">
     <div class="main-content">
 
-      <h2 style="text-align: center;"><em class="text-primary">Published</em></h2>
-      <?php echo page_back_button() ?>
+      <h2 class="text-center <?php echo $header_mb ?>">
+        <em class="text-primary">Published</em>
+        <div class="back-btn-pos"><?php echo page_back_button() ?></div>
+      </h2>
 
       <?php if (empty($posts)): ?>
         <p class="lead">No posts here.</p>
@@ -83,7 +111,7 @@ include '_common-posts-html.php';
       <?php else: ?>
         <?php echo display_session_message('msg success') ?>
 
-        <table class="table table-bordered table-hover table-light table-sm">
+        <table class="table table-bordered table-hover table-light <?php echo $table_size ?>">
           <thead class="bg-muted-lk text-muted">
             <tr>
               <th scope="col">#</th>
@@ -112,7 +140,7 @@ include '_common-posts-html.php';
             <?php endforeach; ?>
           </tbody>
         </table>
-  
+
         <?php
           $url = url_for('staff/posts/published.php');
           echo $pagination->pageLinks($url);

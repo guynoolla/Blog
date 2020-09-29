@@ -114,7 +114,7 @@ function page_back_url() {
   }  
 }
 
-function page_back_button($link='Back', $class_list='btn btn-outline-primary my-1 ml-1') {
+function page_back_button($link='Back', $class_list='btn btn-outline-secondary rounded-0') {
   $url = page_back_url();
   $output = "<a href=\"" . ($url ? $url : url_for('index.php')) . "\"";
   $output .= " class=\"" . $class_list . "\" >";

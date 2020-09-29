@@ -1,6 +1,6 @@
 <?php $loggedIn = $session->isLoggedIn() ?>
 
-<li class="position-relative nav-item<?php $loggedIn ? ' dropdown' : '' ?>">
+<li class="position-relative nav-item<?php $loggedIn ? ' dropdown' : '' ?>" style="max-width:6.4rem;margin-top:.2rem;">
   <?php if (!$loggedIn): ?>
     <!-- TEMPORARY HIDE LOGIN BUTTON -->
     <!-- <a class="nav-link" href="<php echo url_for('staff/login.php') ?>">Login</a> -->

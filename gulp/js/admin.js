@@ -68,7 +68,36 @@ $(() => {
     })
   } // <-- Register Form
 
-})
+  $("#adminSearchForm").on("submit", e => {
+    e.preventDefault();
+
+    const loadBox = $(".loadPostsJS");
+
+    $.ajax({
+      url: server.baseUrl + '/staff/admin_search.php',
+      type: "POST",
+      data: {
+        target: $(e.target).data("target"),
+        data: ($(e.target)).serialize()
+      },
+      success: res => {
+        const data = JSON.parse(res);
+        
+        if (data[0] == 'success') {
+          loadBox.html("");
+          loadBox.html(data[1]);
+          loadBox.append(data[2]);
+        } else if (data[0] == 'failed') {
+          console.log("failed");
+        }
+      },
+      error: err => console.log(err)
+    })
+
+    return false;
+  })
+
+}) // <-- jQuery
 
 /*
  * Functions ---------------------------------------------------------*/

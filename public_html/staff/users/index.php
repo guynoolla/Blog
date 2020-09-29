@@ -43,8 +43,10 @@ include SHARED_PATH . '/staff_header.php';
   <main class="main col-lg-9">
     <div class="main-content adminContentJS">
 
-      <h2 style="text-align: center;"><?php echo $page_title ?></h2>
-      <?php echo page_back_button() ?>
+      <h2 class="text-center mb-1">
+        <?php echo $page_title ?>
+        <div class="back-btn-pos"><?php echo page_back_button() ?></div>
+      </h2>
 
       <?php if (empty($users)): ?>
         <p class="lead">There is no user yet.</p>
@@ -52,7 +54,7 @@ include SHARED_PATH . '/staff_header.php';
       <?php else: ?>
         <?php echo display_session_message('msg success') ?>
 
-        <table class="table table-striped table-bordered table-hover table-light table-sm">
+        <table class="table table-striped table-bordered table-hover table-light table-md">
           <thead class="bg-muted-lk text-muted">
             <tr>
               <th scope="col">#</th>

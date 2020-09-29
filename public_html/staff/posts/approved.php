@@ -64,8 +64,25 @@ include '_common-posts-html.php';
   <main class="main col-lg-9">
     <div class="main-content">
 
-      <h2><em class="text-success">Published Approved</em></h2>
-      <?php echo page_back_button() ?>
+      <h2 class="text-center <?php echo $header_mb ?>">
+        <em class="text-success">Published Approved</em>
+        <div class="back-btn-pos"><?php echo page_back_button() ?></div>
+      </h2>
+
+      <div class="d-flex">
+        <div class="search-widget flex-grow-1 py-1">
+          <form id="adminSearchForm" data-target="user_post_by_status" method="post" action="<?php echo url_for($_SERVER['PHP_SELF']) ?>" class="form-search w-100" role="search">
+            <div class="input-group">
+              <input type="hidden" name="status" value="approved">
+              <label class="screen-reader-text" for="s">Search for:</label>
+              <input name="s" type="text" class="form-control search-query" placeholder="Post title" value="">
+              <div class="input-group-append">
+                <button type="submit" class="btn btn-outline-primary rounded-0">Search</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
 
       <?php if (empty($posts)): ?>
         <p class="lead">No posts here.</p>
@@ -73,45 +90,46 @@ include '_common-posts-html.php';
       <?php else: ?>
         <?php echo display_session_message('msg success') ?>
 
-        <table class="table table-bordered table-hover table-light table-sm">
-          <thead class="bg-muted-lk text-muted">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Title</th>
-              <th scope="col">Topic</th>
-              <th scope="col">Author</th>
-              <th scope="col">Status</th>
-              <th scope="col">Edited</th>
-              <th scope="colgroup" colspan="1">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach($posts as $key => $post): ?>
+        <div class="loadPostsJS">
+          <table class="table table-bordered table-hover table-light table-md">
+            <thead class="bg-muted-lk text-muted">
               <tr>
-                <th scope="row"><?php echo $key + 1 ?></th>
-                <?php echo td_post_title($post) ?>
-                <?php echo td_post_topic($post) ?>
-                <td><?php echo (User::findById($post->user_id))->username ?></td>
-                  <?php
-                  if ($post->published == 0): ?>
-                    <td class="text-secondary font-weight-bold">draft</td><?php
-                  elseif ($post->published == 1 && $post->approved == 0): ?>
-                    <td class="text-danger font-weight-bold">published</td><?php
-                  elseif ($post->published == 1 && $post->approved == 1): ?>
-                    <td class="text-success font-weight-bold">approved</td><?php
-                  endif; ?>
-                </td>
-                <?php echo td_post_date($post) ?>
-                <?php echo td_actions_column_snd($post, $session->isAdmin()); ?>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Topic</th>
+                <th scope="col">Author</th>
+                <th scope="col">Status</th>
+                <th scope="col">Edited</th>
+                <th scope="colgroup" colspan="1">Action</th>
               </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-        
-        <?php
-          $url = url_for('staff/posts/approved.php');
-          echo $pagination->pageLinks($url);
-        ?>
+            </thead>
+            <tbody>
+              <?php foreach($posts as $key => $post): ?>
+                <tr>
+                  <th scope="row"><?php echo $key + 1 ?></th>
+                  <?php echo td_post_title($post) ?>
+                  <?php echo td_post_topic($post) ?>
+                  <td><?php echo (User::findById($post->user_id))->username ?></td>
+                    <?php
+                    if ($post->published == 0): ?>
+                      <td class="text-secondary font-weight-bold">draft</td><?php
+                    elseif ($post->published == 1 && $post->approved == 0): ?>
+                      <td class="text-danger font-weight-bold">published</td><?php
+                    elseif ($post->published == 1 && $post->approved == 1): ?>
+                      <td class="text-success font-weight-bold">approved</td><?php
+                    endif; ?>
+                  </td>
+                  <?php echo td_post_date($post) ?>
+                  <?php echo td_actions_column_snd($post, $session->isAdmin()); ?>
+                </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+          <?php
+            $url = url_for('staff/posts/approved.php');
+            echo $pagination->pageLinks($url);
+          ?>
+        </div>
 
       <?php endif; ?>
 

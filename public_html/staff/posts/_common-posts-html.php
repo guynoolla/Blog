@@ -1,13 +1,18 @@
 <?php
 
-function td_actions_column_fst($post, $is_admin=false) {
+$header_mb = 'mb-1'; 
+$table_size = 'table-md';
 
-  if (url_contain('staff/posts/index')) {
-    $url = 'staff/posts/index.php';
-  } elseif (url_contain('staff/posts/published')) {
-    $url = 'staff/posts/published.php';
-  } elseif (url_contain('staff/post/approved')) {
-    $url = 'staff/posts/approved.php';
+function td_actions_column_fst($post, $is_admin=false, $url="") {
+
+  if (!$url) {
+    if (url_contain('staff/posts/index')) {
+      $url = 'staff/posts/index.php';
+    } elseif (url_contain('staff/posts/published')) {
+      $url = 'staff/posts/published.php';
+    } elseif (url_contain('staff/post/approved')) {
+      $url = 'staff/posts/approved.php';
+    }
   }
 
   ob_start();
@@ -40,15 +45,17 @@ function td_actions_column_fst($post, $is_admin=false) {
   return $output;
 }
 
-function td_actions_column_snd($post, $is_admin) {
+function td_actions_column_snd($post, $is_admin, $url="") {
   if ($is_admin) {
 
-    if (url_contain('staff/posts/index')) {
-      $url = 'staff/posts/index.php';
-    } elseif (url_contain('staff/posts/published')) {
-      $url = 'staff/posts/published.php';
-    } elseif (url_contain('staff/posts/approved')) {
-      $url = 'staff/posts/approved.php';
+    if (!$url) {
+      if (url_contain('staff/posts/index')) {
+        $url = 'staff/posts/index.php';
+      } elseif (url_contain('staff/posts/published')) {
+        $url = 'staff/posts/published.php';
+      } elseif (url_contain('staff/posts/approved')) {
+        $url = 'staff/posts/approved.php';
+      }
     }
 
     ob_start();

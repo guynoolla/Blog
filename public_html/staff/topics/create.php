@@ -25,13 +25,12 @@ include SHARED_PATH . '/staff_header.php'
 
 ?>
 <div class="row">
-  <aside class="sidebar col-lg-3">
+  <aside class="sidebar col-lg-3 pt-1">
     <?php include SHARED_PATH . '/staff_sidebar.php' ?>
   </aside>
   
   <div class="main col-lg-9">
     <div class="main-content">
-      <?php echo page_back_button() ?>
       <?php include('./_form.php') ?>
     </div>
   </div>
