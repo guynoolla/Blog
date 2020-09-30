@@ -88,7 +88,7 @@ include '_common-posts-html.php';
 
       <div class="d-flex">
         <div class="search-widget flex-grow-1 py-1">
-          <form id="adminSearchForm" data-target="own_post_by_title" method="post" action="<?php echo url_for($_SERVER['PHP_SELF']) ?>" class="form-search w-100" role="search">
+          <form id="adminSearchForm" data-type="term" data-access="own_post" method="post" action="<?php echo url_for($_SERVER['PHP_SELF']) ?>" class="form-search w-100" role="search">
             <div class="input-group">
               <input type="hidden" name="status" value="any">
               <label class="screen-reader-text" for="s">Search for:</label>

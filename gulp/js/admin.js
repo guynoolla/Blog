@@ -1,9 +1,11 @@
 import $ from 'jquery';
 import FormValidate from './modules/FormValidateRules';
+import Posts from './modules/Posts';
 
 $(() => {
-
   console.log("admin.js is running...");
+
+  const posts = new Posts();
 
   const admin = $(".adminContentJS");
   
@@ -68,20 +70,43 @@ $(() => {
     })
   } // <-- Register Form
 
+  const pagData = { // Current Page Settings
+    params(type, value, access, total) {
+      [type] = type;
+      [value] = value;
+      [access] = access;
+      [total] = total;
+    },
+    page: 1,
+    pageNum(page=false) {
+      if (page) pagData.page = page;
+      else return pagData.page;
+    }
+  };
+
+  pagData.params("title", "", "own_post", 0);
+
   $("#adminSearchForm").on("submit", e => {
     e.preventDefault();
+
+    const form = $(e.target);
+    const type = form.attr("data-type");
+    const value = form.find("#s").val();
+    const access = form.attr("data-access");
 
     $.ajax({
       url: server.baseUrl + '/staff/admin_search.php',
       type: "POST",
       data: {
-        target: $(e.target).data("target"),
-        data: ($(e.target)).serialize()
+        target: access + '_by_' + type,
+        data: `type=${type}&value=${value}&access=${access}`
       },
       success: res => {
-        //console.log('FROM RES', res)
         const data = JSON.parse(res);
-        loadPostBox(data)
+        loadPostBox(data);
+        pagData.params(type, value, access, data[2].total_count);
+
+        console.log('pagData.total', pagData.total);
       },
       error: err => console.log(err)
     })
@@ -89,17 +114,10 @@ $(() => {
     return false;
   }) // <-- Admin Search Form
 
-  const CPS = { // Current Page Settings
-    type: "title",
-    value: "",
-    access: "own_post",
-    page: 1,
-    total: 0
-  };
-
   $(".loadPostsJS").on("click", ".click-load", e => {
-    const link = $(e.target);
+    e.preventDefault();
 
+    const link = $(e.target);
     const type = link.attr("data-type");
     const value = link.attr("data-value");
     const access = link.attr("data-access");
@@ -113,38 +131,36 @@ $(() => {
           data: `type=${type}&value=${value}`
         },
         success: res => {
-          console.log('A RES', res);
           const data = JSON.parse(res);
           loadPostBox(data);
+          pagData.params(type, value, access, data[2].total_count);
 
-          CPS.type = type;
-          CPS.value = value;
-          CPS.access = access;
-          CPS.total = data[2].total_count;
+          console.log('pagData.total', pagData.total);
         },
         error: err => console.log(err)
       })
     }
-  })
+
+    return false;
+  }) // <-- Click-Load Link
 
   $(".loadPostsJS").on("click", ".page-link", e => {
     e.preventDefault();
 
-    CPS.page = getPageNum($(e.target));
-    console.log('Page', CPS.page);
+    const page = getPageNum($(e.target));
+    console.log('PAGE', page);
 
     $.ajax({
       url: server.baseUrl + '/staff/admin_search.php',
       type: 'POST',
       data: {
-        target: CPS.access + '_by_' + CPS.type,
-        data: `type=${CPS.type}&value=${CPS.value}&page=${CPS.page}`
+        target: pagData.access + '_by_' + pagData.type,
+        data: `type=${pagData.type}&value=${pagData.value}&page=${page}`
       },
       success: res => {
         const data = JSON.parse(res);
-        console.log('DATA', data);
-
         loadPostBox(data);
+        pagData.pageNum(page)
       },
       error: err => console.log(err)
     })

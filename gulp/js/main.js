@@ -5,7 +5,6 @@ import animatedScrollTo from 'animated-scroll-to';
 import { preventExtensions } from 'core-js/fn/object';
 import Breakpoint from 'bootstrap-breakpoints';
 import Like from './modules/Like';
-import Posts from './modules/Posts';
 import FormValidate from './modules/FormValidateRules';
 import { forEach } from 'core-js/fn/array';
 
@@ -21,7 +20,6 @@ $(() => {
   editPostFormElementsBehavior();
 
   const like = new Like();
-  const posts = new Posts();
 
   var rtime;
   var timeout = false;

@@ -13,7 +13,7 @@ if (!$session->isLoggedIn()) {
 }
 
 switch($target) {
-  case 'own_post_by_title':
+  case 'own_post_by_term':
         own_post_search($_POST['data']);
   case 'own_post_by_status':
         own_post_search($_POST['data']);
@@ -70,7 +70,7 @@ function own_post_search($data) {
   } elseif ($term == "") { // Default
     $total_count = Post::countAll([
       'user_id' => $session->getUserId(),
-    ]);    
+    ]);
   }
   $pagination = new Pagination($current_page, $per_page, $total_count);
   
@@ -96,7 +96,7 @@ function own_post_search($data) {
   $sql .= " LIMIT {$per_page} OFFSET {$pagination->offset()}";
   $posts = Post::findBySql($sql);
 
-  $page_url = url_for('staff/posts/index');
+  $page_url = url_for('staff/posts/index.php');
 
   require './posts/_common-posts-html.php';
   ob_start();
@@ -133,7 +133,7 @@ function own_post_search($data) {
   $pag = [
     'total_count' => $total_count,
     'html' => $pagination->pageLinks('staff/index.php')
-  ];  
+  ];
 
   if ($output) {
     exit(json_encode(['success', $output, $pag]));
