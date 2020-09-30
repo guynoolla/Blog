@@ -13,39 +13,90 @@ if (!$session->isLoggedIn()) {
 }
 
 switch($target) {
+  case 'own_post_by_title':
+        own_post_search($_POST['data']);
   case 'own_post_by_status':
-        own_post_by_status($_POST['data']);
+        own_post_search($_POST['data']);
+  case 'own_post_by_topic':
+        own_post_search($_POST['data']);
   case 'user_post_by_status':
-        user_post_by_status($_POST['data']);
+        user_post_search($_POST['data']);
   default:
         exit(json_encode(['target' => 'error']));
 }
 
-function own_post_by_status($data) {
+function own_post_search($data) {
   global $session;
   parse_str($data, $params);
   $term = $params['s'] ?? "";
+  $type = $params['type'] ?? "";
+  $value = $params['value'] ?? "";
   
-  if ($params['status'] == 'any') {
-    $current_page = $_GET['page'] ?? 1;
-    $per_page = DASHBOARD_PER_PAGE;
+  $current_page = $params['page'] ?? 1;
+  $per_page = DASHBOARD_PER_PAGE;
+
+  if ($type && $value) { // Search by status
+    if ($type == 'status') {
+      if ($value ==  'draft') {
+        $total_count = Post::countAll([
+          'user_id' => $session->getUserId(),
+          'published' => '0'
+        ]);
+      } else if ($value == 'published') {
+        $total_count = Post::countAll([
+          'user_id' => $session->getUserId(),
+          'published' => '1',
+          'approved' => '0'
+          ]);
+      } else if ($value == 'approved') {
+        $total_count = Post::countAll([
+          'user_id' => $session->getUserId(),
+          'approved' => '1'
+        ]);        
+      } // <--status
+
+    } else if ($type == 'topic') {
+      $total_count = Post::countAll([
+        'user_id' => $session->getUserId(),
+        'topic_id' => $value
+      ]);
+    } // <--topic
+
+  } elseif ($term != "") { // Search by term
     $total_count = Post::countAll([
       'user_id' => $session->getUserId(),
       ["( title LIKE '%?%' OR body LIKE '%?%' )", $term, $term]
     ]);
-    $pagination = new Pagination($current_page, $per_page, $total_count);
-    
-    $sql = "SELECT p.*, u.username, t.id AS tid, t.name AS topic";
-    $sql .= " FROM `posts` AS p";
-    $sql .= " LEFT JOIN `users` AS u ON p.user_id = u.id";
-    $sql .= " LEFT JOIN `topics` AS t ON p.topic_id = t.id";
-    $sql .= " WHERE p.user_id='{$session->getUserId()}'";
-    $sql .= " AND ( title LIKE '%$term%' OR body LIKE '%$term%' )";
-    $sql .= " ORDER BY p.updated_at DESC";
-    $sql .= " LIMIT {$per_page}";
-    $sql .= " OFFSET {$pagination->offset()}";
-    $posts = Post::findBySql($sql);    
+  } elseif ($term == "") { // Default
+    $total_count = Post::countAll([
+      'user_id' => $session->getUserId(),
+    ]);    
   }
+  $pagination = new Pagination($current_page, $per_page, $total_count);
+  
+  $sql = "SELECT p.*, u.username, t.id AS tid, t.name AS topic";
+  $sql .= " FROM `posts` AS p";
+  $sql .= " LEFT JOIN `users` AS u ON p.user_id = u.id";
+  $sql .= " LEFT JOIN `topics` AS t ON p.topic_id = t.id";
+  $sql .= " WHERE p.user_id='{$session->getUserId()}'";
+  if ($type == 'status') {
+    if ($value ==  'draft') {
+      $sql .= " AND p.published = '0'";
+    } else if ($value == 'published') {
+      $sql .= " AND p.published = '1' AND p.approved = '0'";
+    } else if ($value == 'approved') {
+      $sql .= " AND p.approved = '1'";
+    }
+  } else if ($type == 'topic') {
+    $sql .= " AND p.topic_id = {$value}";
+  } else if ($term) {
+    $sql .= " AND ( title LIKE '%$term%' OR body LIKE '%$term%' )";
+  }
+  $sql .= " ORDER BY p.updated_at DESC";
+  $sql .= " LIMIT {$per_page} OFFSET {$pagination->offset()}";
+  $posts = Post::findBySql($sql);
+
+  $page_url = url_for('staff/posts/index');
 
   require './posts/_common-posts-html.php';
   ob_start();
@@ -66,11 +117,11 @@ function own_post_by_status($data) {
         <tr>
           <th scope="row"><?php echo $key + 1 ?></th>
           <?php echo td_post_title($post) ?>
-          <?php echo td_post_topic($post) ?>
-          <?php echo td_post_status($post) ?>
+          <?php echo td_post_topic($post, 'own_post') ?>
+          <?php echo td_post_status($post, 'own_post') ?>
           <?php echo td_post_date($post) ?>
-          <?php echo td_actions_column_fst($post, $session->isAdmin(), url_for('staff/posts/index')) ?>
-          <?php echo td_actions_column_snd($post, $session->isAdmin(), url_for('staff/posts/index')) ?>
+          <?php echo td_actions_column_fst($post, $session->isAdmin(), $page_url) ?>
+          <?php echo td_actions_column_snd($post, $session->isAdmin(), $page_url) ?>
         </tr>
       <?php endforeach; ?>
     </tbody>
@@ -78,11 +129,12 @@ function own_post_by_status($data) {
 
   $output = ob_get_contents();
   ob_end_clean();
+ 
+  $pag = [
+    'total_count' => $total_count,
+    'html' => $pagination->pageLinks('staff/index.php')
+  ];  
 
-  $output = $output ? $output : "false";
-  $pag = $pagination->pageLinks('staff/posts/index.php');
-  $page = $pag ? $pag : "false";
-  
   if ($output) {
     exit(json_encode(['success', $output, $pag]));
   } else {
@@ -90,7 +142,7 @@ function own_post_by_status($data) {
   }
 }
 
-function user_post_by_status($data) {
+function user_post_search($data) {
   global $session;
   parse_str($data, $params);
   $term = $params['s'] ?? "";

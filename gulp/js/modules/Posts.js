@@ -15,23 +15,20 @@ class Posts {
     $(".paginationJS, .headline-nav").on("click", "a", (e) => {
       e.preventDefault();
 
-      const target = $(e.target);
-
-      let url = target.attr("href");
+      let target = $(e.target);
 
       if (target.hasClass("page-link")) {
-        if (target.is("span")) {
-          target.closest(".page-link").trigger("click");
-          return;
-        }
         if (target.parent().hasClass("active")) {
           return;
         }
+      } else if (target.is("span")) {
+        target = target.closest(".page-link");
       } else if (target.hasClass("svg-icon") || target.is("path")) {
-          target.closest(".chevron").trigger("click");
-          return;
+        target = target.closest(".chevron");
       } 
-      
+
+      let url = target.attr("href");
+
       if (url) {
         const params = url.split("?")[1];
         const paramsArr = params.split("&");
@@ -63,6 +60,7 @@ class Posts {
       $(".loadPostsJS").fadeOut(600, () => {
         $(".loading").removeClass("d-none");
       });
+      $(".pagination-nav").hide();
 
       $.ajax({
         url: server.baseUrl + '/ajax.php',
@@ -79,19 +77,20 @@ class Posts {
           const data = JSON.parse(res);
           if (data[0] == 'success') {
             const output = this.makeHtml(data[1], data[2])
-            //let timer = setTimeout(() => {
+            let timer = setTimeout(() => {
+
               $(".loadPostsJS").fadeIn(() => {
                 $(".loading").addClass("d-none")
               })
               $(".loadPostsJS").html(output);
               $(".paginationJS").html(data[2].html);
               this.setHeadlineChevrons(data[2].total_count);
-              //clearTimeout(timer)
-            //}, 1000)
+              $(".pagination-nav").show();
+              
+              clearTimeout(timer)
+            }, 1200)
 
             $('#page-' + this.page).addClass("active")
-
-            this.page++;
           }
         },
         error: res => console.log(res)

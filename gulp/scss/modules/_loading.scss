@@ -3,8 +3,8 @@
 
 .loading {
   position: relative;
-  padding-top: 5rem;
-  padding-bottom: 5rem;
+  padding-top: 50%;
+  transform: translateY(-50%);
   display: flex;
   justify-content: center;
   align-items: center;

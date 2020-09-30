@@ -89,20 +89,6 @@ function td_actions_column_snd($post, $is_admin, $url="") {
   return '';
 }
 
-function td_post_status($post) {
-  $output = '';  
-
-  if ($post->published == 0) {
-    $output .= '<td class="text-secondary">draft</td>';
-  } elseif ($post->published == 1 && $post->approved == 0) {
-    $output .= '<td class="text-primary">published</td>';
-  } elseif ($post->published == 1 && $post->approved == 1) {
-    $output .= '<td class="text-success">approved</td>';
-  }
-
-  return $output;
-}
-
 function td_post_title($post, $group=false) {
   ob_start();
   
@@ -124,29 +110,50 @@ function td_post_title($post, $group=false) {
   return $output;
 }
 
-function td_post_topic($post) {
-  ob_start();
-  
-  ?><td scope="col">
-    <span class="h5 font-italic"><a href="<?php echo url_for('topic/' . u($post->topic) . '?id=' . $post->topic_id)
-    ?>"><?php echo $post->topic ?></a></span>
-  </td><?php
+function td_post_status($post, $access="") {
+  $output = '';
 
-  $output = ob_get_contents();
-  ob_end_clean();
+  if (!$access) {
+    if (url_contain('staff/posts/index')) {
+      $access = 'own_post';
+    } elseif (url_contain('staff/posts/approved')) {
+      $access = 'user_post';
+    }
+  }
+
+  if ($post->published == 0) {
+    $output .= '<td class="text-secondary"><a href="#draft" class="click-load" data-type="status" data-value="draft" data-access="' . $access . '">draft</a></td>';
+  } elseif ($post->published == 1 && $post->approved == 0) {
+    $output .= '<td class="text-primary"><a href="#published" class="click-load" data-type="status" data-value="published" data-access="' .  $access . '">published</a></td>';
+  } elseif ($post->published == 1 && $post->approved == 1) {
+    $output .= '<td class="text-success"><a href="#approved" class="click-load" data-type="status" data-value="approved" data-access="' . $access . '">approved</a></td>';
+  }
+
+  return $output;
+}
+
+function td_post_topic($post, $access="") {
+  $output = '';
+
+  if (!$access) {
+    if (url_contain('staff/posts/index')) {
+      $access = 'own_post';
+    } elseif (url_contain('staff/posts/approved')) {
+      $access = 'user_post';
+    }
+  }
+  
+  $output .= '<td scope="col">
+    <span class="h5 font-italic"><a href="#' . u($post->topic) . '" class="click-load"
+      data-type="topic" data-value="' . $post->topic_id . '" data-access="' . $access . '"
+    >' . $post->topic . '</a></span>
+  </td>';
 
   return $output;
 }
 
 function td_post_date($post) {
-  ob_start();
-
-  ?><td scope="col">
-    <span class="h5"><?php echo date('M j, Y', strtotime($post->updated_at)) ?></span>
-  </td><?php
-
-  $output = ob_get_contents();
-  ob_end_clean();
-
-  return $output;
+  return '<td scope="col">
+    <span class="h5">' . date('M j, Y', strtotime($post->updated_at)) . '</span>
+  </td>';
 }

@@ -88,13 +88,13 @@ include '_common-posts-html.php';
 
       <div class="d-flex">
         <div class="search-widget flex-grow-1 py-1">
-          <form id="adminSearchForm" data-target="own_post_by_status" method="post" action="<?php echo url_for($_SERVER['PHP_SELF']) ?>" class="form-search w-100" role="search">
+          <form id="adminSearchForm" data-target="own_post_by_title" method="post" action="<?php echo url_for($_SERVER['PHP_SELF']) ?>" class="form-search w-100" role="search">
             <div class="input-group">
               <input type="hidden" name="status" value="any">
               <label class="screen-reader-text" for="s">Search for:</label>
-              <input name="s" type="text" class="form-control search-query" placeholder="Post title" value="">
+              <input id="s" name="s" type="text" class="form-control search-query" placeholder="Search..." value="">
               <div class="input-group-append">
-                <button type="submit" class="btn btn-outline-primary rounded-0">Search</button>
+                <button type="submit" name="submit" class="btn btn-outline-primary rounded-0">Search</button>
               </div>
             </div>
           </form>

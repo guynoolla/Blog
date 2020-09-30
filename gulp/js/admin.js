@@ -71,8 +71,6 @@ $(() => {
   $("#adminSearchForm").on("submit", e => {
     e.preventDefault();
 
-    const loadBox = $(".loadPostsJS");
-
     $.ajax({
       url: server.baseUrl + '/staff/admin_search.php',
       type: "POST",
@@ -81,26 +79,123 @@ $(() => {
         data: ($(e.target)).serialize()
       },
       success: res => {
+        //console.log('FROM RES', res)
         const data = JSON.parse(res);
-        
-        if (data[0] == 'success') {
-          loadBox.html("");
-          loadBox.html(data[1]);
-          loadBox.append(data[2]);
-        } else if (data[0] == 'failed') {
-          console.log("failed");
-        }
+        loadPostBox(data)
       },
       error: err => console.log(err)
     })
 
     return false;
+  }) // <-- Admin Search Form
+
+  const CPS = { // Current Page Settings
+    type: "title",
+    value: "",
+    access: "own_post",
+    page: 1,
+    total: 0
+  };
+
+  $(".loadPostsJS").on("click", ".click-load", e => {
+    const link = $(e.target);
+
+    const type = link.attr("data-type");
+    const value = link.attr("data-value");
+    const access = link.attr("data-access");
+
+    if (type && value && access) {
+      $.ajax({
+        url: server.baseUrl + '/staff/admin_search.php',
+        type: 'POST',
+        data: {
+          target: access + '_by_' + type,
+          data: `type=${type}&value=${value}`
+        },
+        success: res => {
+          console.log('A RES', res);
+          const data = JSON.parse(res);
+          loadPostBox(data);
+
+          CPS.type = type;
+          CPS.value = value;
+          CPS.access = access;
+          CPS.total = data[2].total_count;
+        },
+        error: err => console.log(err)
+      })
+    }
+  })
+
+  $(".loadPostsJS").on("click", ".page-link", e => {
+    e.preventDefault();
+
+    CPS.page = getPageNum($(e.target));
+    console.log('Page', CPS.page);
+
+    $.ajax({
+      url: server.baseUrl + '/staff/admin_search.php',
+      type: 'POST',
+      data: {
+        target: CPS.access + '_by_' + CPS.type,
+        data: `type=${CPS.type}&value=${CPS.value}&page=${CPS.page}`
+      },
+      success: res => {
+        const data = JSON.parse(res);
+        console.log('DATA', data);
+
+        loadPostBox(data);
+      },
+      error: err => console.log(err)
+    })
   })
 
 }) // <-- jQuery
 
 /*
  * Functions ---------------------------------------------------------*/
+
+function getPageNum(target) {
+  let page = false;
+
+  if (target.hasClass("page-link")) {
+    if (target.parent().hasClass("active")) {
+      return;
+    }
+  } else if (target.is("span")) {
+    target = target.closest(".page-link");
+  }
+
+  let url = target.attr("href");
+
+  if (url) {
+    const params = url.split("?")[1];
+    const paramsArr = params.split("&");
+    
+    paramsArr.forEach(value => {
+      if (value.split("=")[0] == 'page') {
+        page = value.split("=")[1];
+        $(".pagination li.page-item").removeClass("active");
+        $(`#item-${page}`).addClass("active");
+        return false;
+      }
+    });
+  }
+
+  return page;
+}
+
+function loadPostBox(data) {
+  const loadBox = $(".loadPostsJS");
+
+  if (data[0] == 'success') {
+    loadBox.html("");
+    loadBox.html(data[1]);
+    loadBox.append(data[2].html);
+  } else if (data[0] == 'failed') {
+    console.log("failed");
+  }
+}
 
 function currentModal(title, body, data, urlToPost) {
   const modal = $("#deleteModal");
