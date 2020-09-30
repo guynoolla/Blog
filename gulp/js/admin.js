@@ -1,11 +1,11 @@
 import $ from 'jquery';
 import FormValidate from './modules/FormValidateRules';
-import Posts from './modules/Posts';
+import LikedPosts from './modules/LikedPosts';
 
 $(() => {
   console.log("admin.js is running...");
 
-  const posts = new Posts();
+  new LikedPosts();
 
   const admin = $(".adminContentJS");
   
@@ -70,21 +70,23 @@ $(() => {
     })
   } // <-- Register Form
 
-  const pagData = { // Current Page Settings
-    params(type, value, access, total) {
-      [type] = type;
-      [value] = value;
-      [access] = access;
-      [total] = total;
-    },
+  const pagData = {
+    type: "search",
+    value: "",
+    access: $("#adminSearchForm").data("access"),
+    total: 0,
     page: 1,
+    params(type, value, access, total) {
+      pagData.type = type;
+      pagData.value = value;
+      pagData.access = access;
+      pagData.total = total;
+    },
     pageNum(page=false) {
       if (page) pagData.page = page;
       else return pagData.page;
     }
   };
-
-  pagData.params("title", "", "own_post", 0);
 
   $("#adminSearchForm").on("submit", e => {
     e.preventDefault();
@@ -93,6 +95,8 @@ $(() => {
     const type = form.attr("data-type");
     const value = form.find("#s").val();
     const access = form.attr("data-access");
+
+    console.log("s", value);
 
     $.ajax({
       url: server.baseUrl + '/staff/admin_search.php',
@@ -128,7 +132,7 @@ $(() => {
         type: 'POST',
         data: {
           target: access + '_by_' + type,
-          data: `type=${type}&value=${value}`
+          data: `type=${type}&value=${value}&access=${access}`
         },
         success: res => {
           const data = JSON.parse(res);
@@ -155,10 +159,16 @@ $(() => {
       type: 'POST',
       data: {
         target: pagData.access + '_by_' + pagData.type,
-        data: `type=${pagData.type}&value=${pagData.value}&page=${page}`
+        data: `type=${pagData.type}&value=${pagData.value}&access=${pagData.access}&page=${page}`
       },
       success: res => {
         const data = JSON.parse(res);
+
+        console.log('pd.access', pagData.access);
+        console.log('pd.type', pagData.type);
+        console.log('pd.value', pagData.value);
+        console.log('page', page);
+
         loadPostBox(data);
         pagData.pageNum(page)
       },
