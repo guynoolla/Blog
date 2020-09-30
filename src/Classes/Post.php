@@ -37,8 +37,9 @@ class Post extends \App\Classes\DatabaseObject {
             ];
 
   // Relational data by foreign key in posts
-  public $username = '';  // user->username
-  public $topic = '';     // topic->name
+  public $username = '';    // user->username
+  public $topic = '';       // topic->name
+  public $user_email = '';  // user->email
 
   public function __construct(array $args=[]) {
     $this->user_id = $args['user_id'] ?? '';

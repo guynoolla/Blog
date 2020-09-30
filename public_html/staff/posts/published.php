@@ -75,7 +75,7 @@ if (isset($_GET['s'])) {
   ]);
   $pagination = new Pagination($current_page, $per_page, $total_count);
 
-  $sql = "SELECT p.*, u.username, t.id AS tid, t.name AS topic";
+  $sql = "SELECT p.*, u.username, u.email AS user_email, t.id AS tid, t.name AS topic";
   $sql .= " FROM `posts` AS p";
   $sql .= " LEFT JOIN `users` AS u ON p.user_id = u.id";
   $sql .= " LEFT JOIN `topics` AS t ON p.topic_id = t.id";
@@ -101,7 +101,7 @@ include '_common-posts-html.php';
     <div class="main-content">
 
       <h2 class="text-center <?php echo $header_mb ?>">
-        <em class="text-primary">Published</em>
+        <span class="text-primary">Published</span>
         <div class="back-btn-pos"><?php echo page_back_button() ?></div>
       </h2>
 
@@ -116,10 +116,9 @@ include '_common-posts-html.php';
             <tr>
               <th scope="col">#</th>
               <th scope="col">Title</th>
-              <th scope="col">Topic</th>
               <th scope="col">Author</th>
-              <th scope="col">Status</th>
-              <th scope="col">Edited</th>
+              <th scope="col">Email</th>
+              <th scope="col">Published</th>
               <th scope="colgroup" colspan="2">Action</th>
             </tr>
           </thead>
@@ -128,9 +127,8 @@ include '_common-posts-html.php';
               <tr>
                 <th scope="row"><?php echo $key + 1 ?></th>
                 <?php echo td_post_title($post) ?>
-                <?php echo td_post_topic($post) ?>
                 <td><?php echo (User::findById($post->user_id))->username ?></td>
-                <?php echo td_post_status($post) ?>
+                <td><a href="mailto: <?php echo $post->user_email ?>" class="<?php echo ($user->email_confirmed ? 'text-success' : '') ?>"><?php echo $post->user_email ?></a></td>
                 <?php echo td_post_date($post) ?>
                 <?php
                   echo td_actions_column_fst($post, $session->isAdmin());

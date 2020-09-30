@@ -40,7 +40,7 @@ $total_count = Post::countAll([
 ]);
 $pagination = new Pagination($current_page, $per_page, $total_count);
 
-$sql = "SELECT p.*, u.username, t.id AS tid, t.name AS topic";
+$sql = "SELECT p.*, u.username, u.email AS user_email, t.id AS tid, t.name AS topic";
 $sql .= " FROM `posts` AS p";
 $sql .= " LEFT JOIN `users` AS u ON p.user_id = u.id";
 $sql .= " LEFT JOIN `topics` AS t ON p.topic_id = t.id";
@@ -65,7 +65,7 @@ include '_common-posts-html.php';
     <div class="main-content">
 
       <h2 class="text-center <?php echo $header_mb ?>">
-        <em class="text-success">Published Approved</em>
+        <span class="text-success">Approved</span>
         <div class="back-btn-pos"><?php echo page_back_button() ?></div>
       </h2>
 
@@ -98,8 +98,8 @@ include '_common-posts-html.php';
                 <th scope="col">Title</th>
                 <th scope="col">Topic</th>
                 <th scope="col">Author</th>
-                <th scope="col">Status</th>
-                <th scope="col">Edited</th>
+                <th scope="col">Email</th>
+                <th scope="col">Approved</th>
                 <th scope="colgroup" colspan="1">Action</th>
               </tr>
             </thead>
@@ -110,15 +110,7 @@ include '_common-posts-html.php';
                   <?php echo td_post_title($post) ?>
                   <?php echo td_post_topic($post) ?>
                   <td><?php echo (User::findById($post->user_id))->username ?></td>
-                    <?php
-                    if ($post->published == 0): ?>
-                      <td class="text-secondary font-weight-bold">draft</td><?php
-                    elseif ($post->published == 1 && $post->approved == 0): ?>
-                      <td class="text-danger font-weight-bold">published</td><?php
-                    elseif ($post->published == 1 && $post->approved == 1): ?>
-                      <td class="text-success font-weight-bold">approved</td><?php
-                    endif; ?>
-                  </td>
+                  <td><a href="mailto: <?php echo $post->user_email ?>" class="<?php echo ($user->email_confirmed ? 'text-success' : '') ?>"><?php echo $post->user_email ?></a></td>
                   <?php echo td_post_date($post) ?>
                   <?php echo td_actions_column_snd($post, $session->isAdmin()); ?>
                 </tr>

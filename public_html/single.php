@@ -2,6 +2,7 @@
 use App\Classes\Post;
 use App\Classes\User;
 use App\Classes\Like;
+use App\Classes\Topic;
 
 require_once '../src/initialize.php';
 
@@ -54,13 +55,17 @@ include(SHARED_PATH . '/public_header.php');
 
 ?><div class="container-xl">
   <div class="row">
+
+    <div class="col-12 text-center border-soft border-top border-bottom px-1">
+      <h3 class="my-3"><?php echo (Topic::findById($post->topic_id))->name ?></h3>
+    </div>
     
     <main class="main col-lg-8" role="main">
       <div class="main-content">
           <div class="lg-one-article-row">
             <article class="single">
               <div class="w-100 px-1 clearfix pr-3">
-                <?php if ($session->getUserId() == $post->user_id): ?>
+                <?php if ($session->getUserId() == $post->user_id || $session->isAdmin()): ?>
                   <a class="btn btn-sm btn-outline-secondary" href="<?php echo url_for('staff/posts/edit.php') . '?id=' . $post->id . '&cmd=edit' ?>">Edit</a>
                   <a class="btn btn-sm btn-outline-secondary" href="<?php echo page_back_url() ?>">Back</a>
                 <?php endif; ?>

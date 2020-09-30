@@ -14,8 +14,17 @@ $auth_user_id = $session->getUserId();
 // if not then it is in the context of post creating!
 $edit = isset($post->id) ? true : false;
 
-if (!$edit) echo '<h2 class="text-center">New Post</h2>';
-else echo '<h2 class="text-center">Update Post</h2>';
+if (!$edit) {
+  echo '<h2 class="text-center">
+    New Post
+    <div class="back-btn-pos">' . page_back_button() . '</div>  
+  </h2>';
+} else {
+  echo '<h2 class="text-center">
+    Update Post
+    <div class="back-btn-pos">' . page_back_button() . '</div>  
+  </h2>';
+}
 
 ?>
 <form id="editPostForm" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data" class="py-3">

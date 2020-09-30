@@ -78,7 +78,6 @@ include '_common-posts-html.php';
               <th scope="col">Title</th>
               <th scope="col">Topic</th>
               <th scope="col">Author</th>
-              <th scope="col">Status</th>
               <th scope="col">Email</th>
               <th scope="col">Edited</th>
               <th scope="col">Action</th>
@@ -94,7 +93,6 @@ include '_common-posts-html.php';
                   <?php $user = User::findById($post->user_id) ?>
                   <a><?php echo h($user->username) ?></a>
                 </td>
-                <?php echo td_post_status($post) ?>
                 <td>
                   <a href="mailto: <?php echo $user->email ?>">
                     <?php echo h($user->email) ?>

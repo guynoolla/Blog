@@ -71,7 +71,6 @@ include SHARED_PATH . '/staff_header.php';
   
   <div class="main col-lg-9">
     <div class="main-content adminContentJS">
-      <?php echo page_back_button() ?>
       <?php include('./_form.php') ?>
     </div>
   </div>
