@@ -18,7 +18,7 @@ $type = 'default';
   $term = $_GET['s'] ?? '';
 
   $current_page = $_GET['page'] ?? 1;
-  $per_page = 6;
+  $per_page = FRONTEND_PER_PAGE;
   $total_count = Post::countAll([
     'approved' => '1',
     ["( title LIKE '%?%' OR body LIKE '%?%' )", $term, $term]
@@ -44,7 +44,7 @@ $type = 'default';
   if (!$topic) redirect_to(url_for('index.php'));  
 
   $current_page = $_GET['page'] ?? 1;
-  $per_page = 6;
+  $per_page = FRONTEND_PER_PAGE;
   $total_count = Post::countAll([
     'approved' => 1,
     'topic_id' => $topic_id,
@@ -70,7 +70,7 @@ $type = 'default';
   if (!$user) redirect_to(url_for('index.php'));  
 
   $current_page = $_GET['page'] ?? 1;
-  $per_page = 6;
+  $per_page = FRONTEND_PER_PAGE;
   $total_count = Post::countAll([
     'approved' => 1,
     'user_id' => $user_id
@@ -88,15 +88,15 @@ $type = 'default';
 /*
   GET POSTS ON DATE ------------------------------------------------ */
   
-} elseif (isset($_GET['date'])) {
+} elseif (isset($_GET['ymd'])) {
   $type = 'ondate';
 
-  $created_at = urldecode($_GET['date']);
+  $created_at = urldecode($_GET['ymd']);
   $date_publ = date('Y-m-d', strtotime($created_at));
   $date_next = date('Y-m-d', strtotime('+ 1 day', strtotime($created_at)));
 
   $current_page = $_GET['page'] ?? 1;
-  $per_page = 6;
+  $per_page = FRONTEND_PER_PAGE;
   $total_count = Post::countAll([
     'approved' => 1,
     ["( created_at >= '?' AND created_at < '?' )", $date_publ, $date_next],
@@ -118,7 +118,7 @@ $type = 'default';
   if ($current_page == 1) {
     $carousel_posts = Post::queryImageFormatPosts(4, 0);
   }
-  $per_page = 6;
+  $per_page = FRONTEND_PER_PAGE;
   $total_count = Post::countAll(['approved' => '1']);
   $pagination = new Pagination($current_page, $per_page, $total_count, 'pagination-lg');
 

@@ -31,7 +31,7 @@ if (is_post_request()) {
   $post->mergeAttributes($_POST['post']);
 
   if ($post->save()) {
-    $session->message("Post was updated, you can view it by clicking on its title!");
+    $session->message("Post was updated. View it by clicking on its title!");
     
     if ($session->isAdmin()) {
       if ($post->user_id == $session->getUserId()) {

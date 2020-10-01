@@ -36,7 +36,8 @@ $total_count = Post::countAll([
 ]);
 $pagination = new Pagination($current_page, $per_page, $total_count, 'pagination-md');
 
-$sql = "SELECT p.*, u.username, t.id AS tid, t.name AS topic";
+$sql = "SELECT p.*, t.id AS tid, t.name AS topic,";
+$sql .= " u.username, u.email AS user_email, u.email_confirmed AS ue_confirmed";
 $sql .= " FROM `posts` AS p";
 $sql .= " LEFT JOIN `users` AS u ON p.user_id = u.id";
 $sql .= " LEFT JOIN `topics` AS t ON p.topic_id = t.id";
@@ -61,56 +62,50 @@ include '_common-posts-html.php';
     <div class="main-content">
      
       <h2 class="text-center <?php echo $header_mb ?>">
-        <em class="text-dark">Drafts</em>
+        <span class="text-dark">Drafts</span>
         <div class="back-btn-pos"><?php echo page_back_button() ?></div>
       </h2>
 
       <?php if (empty($posts)): ?>
-        <p class="lead">No posts here.</p>
+        <p class="lead text-center bg-secondary text-white py-5">No posts here</p>
       
       <?php else: ?>
+        <?php include '_common-search-form.php' ?>
         <?php echo display_session_message('msg success') ?>
 
-        <table class="table table-bordered table-hover table-light <?php echo $table_size ?>">
-          <thead class="bg-muted-lk text-muted">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Title</th>
-              <th scope="col">Topic</th>
-              <th scope="col">Author</th>
-              <th scope="col">Email</th>
-              <th scope="col">Edited</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach($posts as $key => $post): ?>
+        <div class="loadPostsJS" data-access="user_post">
+          <table class="table table-bordered table-hover table-light <?php echo $table_size ?>">
+            <thead class="bg-muted-lk text-muted">
               <tr>
-                <th scope="row"><?php echo $key + 1 ?></th>
-                <?php echo td_post_title($post) ?>
-                <?php echo td_post_topic($post) ?>
-                <td>
-                  <?php $user = User::findById($post->user_id) ?>
-                  <a><?php echo h($user->username) ?></a>
-                </td>
-                <td>
-                  <a href="mailto: <?php echo $user->email ?>">
-                    <?php echo h($user->email) ?>
-                  </a>
-                </td>
-                <?php echo td_post_date($post) ?>
-                <td>
-                  <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('staff/posts/edit.php?id=' . $post->id) ?>">Edit</a>
-                </td>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Topic</th>
+                <th scope="col">Author</th>
+                <th scope="col">Email</th>
+                <th scope="col">Created</th>
+                <th scope="col">Action</th>
               </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <?php foreach($posts as $key => $post): ?>
+                <tr>
+                  <th scope="row"><?php echo $key + 1 ?></th><?php
+                  echo td_post_title($post);
+                  echo td_post_topic($post, 'user_post');
+                  echo td_post_author($post, 'user_post');
+                  echo td_post_author_email($post);
+                  echo td_post_date($post, 'user_post'); ?>
+                  <td><a class="btn-lk btn-lk--secondary" href="<?php echo url_for('staff/posts/edit.php?id=' . $post->id) ?>">Edit</a></td>
+                </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
 
-        <?php
-          $url = url_for('staff/posts/drafts.php');
-          echo $pagination->pageLinks($url);
-        ?>
+          <?php
+            $url = url_for('staff/posts/drafts.php');
+            echo $pagination->pageLinks($url);
+          ?>
+        </div>
   
       <?php endif; ?>
 

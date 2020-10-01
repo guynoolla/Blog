@@ -36,7 +36,8 @@ define('ADMIN_EMAIL', 'yusupovgz@yandex.ru');
 define("SECRET_KEY", "jaItYP0KmKp6wcWCCkCKrxMEVT0yIdqn");
 
 // Pagination
-define("DASHBOARD_PER_PAGE", 5);
+define("DASHBOARD_PER_PAGE", 4);
+define("FRONTEND_PER_PAGE", 6);
 
 // Functions
 require_once('functions.php');
@@ -59,10 +60,8 @@ function pass_to_js() {
   $server['baseUrl'] = WWW_ROOT;
   $server['isLoggedIn'] = $session->isLoggedIn();
   $server['userId'] = $session->isLoggedIn() ? $session->getUserId() : 0;
-  $server['singlePost'] = (url_contain('post/') && url_contain('?id='))
-                        ? $_GET['id'] : false;
-  $server['dashboardMain'] = (url_contain('staff/index'))
-                           ? true : false;
+  $server['singlePost'] = (url_contain('post/') && url_contain('?id=')) ? $_GET['id'] : false;
+  $server['dashboardMain'] = (url_contain('staff/index')) ? true : false;
 
   $script = '<script>';
   $script .= 'var server = ' . json_encode($server);

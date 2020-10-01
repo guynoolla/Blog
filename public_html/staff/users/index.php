@@ -31,7 +31,7 @@ $pagination = new Pagination($current_page, $per_page, $total_count);
 
 $users = User::queryUsersWithPostsNum($per_page, $pagination->offset());
 
-$page_title = 'List Users';
+$page_title = 'Users';
 include SHARED_PATH . '/staff_header.php';
 
 ?>

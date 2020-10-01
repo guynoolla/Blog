@@ -70,10 +70,14 @@ $(() => {
     })
   } // <-- Register Form
 
+  /*
+   XHR Post Search ----------------------------------------------------*/
+
   const pagData = {
+    pathname: window.location.pathname,
     type: "search",
     value: "",
-    access: $("#adminSearchForm").data("access"),
+    access: $(".loadPostsJS").data("access"),
     total: 0,
     page: 1,
     params(type, value, access, total) {
@@ -94,29 +98,30 @@ $(() => {
     const form = $(e.target);
     const type = form.attr("data-type");
     const value = form.find("#s").val();
-    const access = form.attr("data-access");
+    const access = $(".loadPostsJS").data("access");
 
-    console.log("s", value);
-
+    loading(1);
     $.ajax({
-      url: server.baseUrl + '/staff/admin_search.php',
+      url: server.baseUrl + '/staff/xhr_post_search.php',
       type: "POST",
       data: {
         target: access + '_by_' + type,
-        data: `type=${type}&value=${value}&access=${access}`
+        data: `type=${type}&value=${value}&access=${access}&pathname=${pagData.pathname}`
       },
       success: res => {
+        loading(0);
         const data = JSON.parse(res);
+
         loadPostBox(data);
         pagData.params(type, value, access, data[2].total_count);
-
-        console.log('pagData.total', pagData.total);
       },
       error: err => console.log(err)
     })
 
     return false;
   }) // <-- Admin Search Form
+
+  if ($(".loadPostsJS").length) appendSpinnerToMainContent();
 
   $(".loadPostsJS").on("click", ".click-load", e => {
     e.preventDefault();
@@ -127,15 +132,18 @@ $(() => {
     const access = link.attr("data-access");
 
     if (type && value && access) {
+      loading(1);
       $.ajax({
-        url: server.baseUrl + '/staff/admin_search.php',
+        url: server.baseUrl + '/staff/xhr_post_search.php',
         type: 'POST',
         data: {
           target: access + '_by_' + type,
-          data: `type=${type}&value=${value}&access=${access}`
+          data: `type=${type}&value=${value}&access=${access}&pathname=${pagData.pathname}`
         },
         success: res => {
+          loading(0);
           const data = JSON.parse(res);
+
           loadPostBox(data);
           pagData.params(type, value, access, data[2].total_count);
 
@@ -152,25 +160,32 @@ $(() => {
     e.preventDefault();
 
     const page = getPageNum($(e.target));
-    console.log('PAGE', page);
+    if (!page) return false;
 
+    loading(1);
     $.ajax({
-      url: server.baseUrl + '/staff/admin_search.php',
+      url: server.baseUrl + '/staff/xhr_post_search.php',
       type: 'POST',
       data: {
         target: pagData.access + '_by_' + pagData.type,
-        data: `type=${pagData.type}&value=${pagData.value}&access=${pagData.access}&page=${page}`
+        data: `type=${pagData.type}&value=${pagData.value}&access=${pagData.access}&page=${page}&pathname=${pagData.pathname}`
       },
       success: res => {
-        const data = JSON.parse(res);
-
-        console.log('pd.access', pagData.access);
-        console.log('pd.type', pagData.type);
-        console.log('pd.value', pagData.value);
-        console.log('page', page);
-
-        loadPostBox(data);
-        pagData.pageNum(page)
+        //let timer = setTimeout(() => {
+          loading(0);
+          const data = JSON.parse(res);
+  
+          // console.log('pd.access', pagData.access);
+          // console.log('pd.type', pagData.type);
+          // console.log('pd.value', pagData.value);
+          // console.log('page', page);
+          
+          loadPostBox(data);
+          pagData.pageNum(page);
+          $('#item-' + page).addClass("active");
+          
+          //clearTimeout(timer);
+        //}, 1200)
       },
       error: err => console.log(err)
     })
@@ -181,8 +196,23 @@ $(() => {
 /*
  * Functions ---------------------------------------------------------*/
 
+function loading(wait=0) {
+  if (wait == 1) {
+    $(".loadPostsJS").hide();
+    $(".loading").removeClass("d-none");
+  } else if (wait == 0) {
+    $(".loading").addClass("d-none");
+    $(".loadPostsJS").show();
+  }
+}
+
 function getPageNum(target) {
   let page = false;
+
+  if (target.closest("li").hasClass("active")) {
+    console.log('this link is active ' + target.text());
+    return false;
+  }
 
   if (target.hasClass("page-link")) {
     if (target.parent().hasClass("active")) {
@@ -248,7 +278,7 @@ function appendModalToBody() {
         <div class="modal-body alert alert-warning mb-0 py-4"></div>
         <div class="modal-footer">
           <button id="modalCancelBtn" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <form action="" method="post">
+          <form action="" method="post" class="my-3">
             <input type="hidden" name="table" value="">
             <button class="btn btn-danger btn-md delete" name="delete" value="">Delete</button>
           </form>
@@ -258,6 +288,15 @@ function appendModalToBody() {
   </div>`;
 
   $("body").append(modal);
+}
+
+function appendSpinnerToMainContent() {
+  const spinner = `<div class="loading d-none">
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>`;
+  $(".main .main-content").append(spinner);
 }
 
 function parseCsvDash(str) {

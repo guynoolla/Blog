@@ -133,25 +133,23 @@ include SHARED_PATH . '/staff_header.php';
 
   <main class="main col-lg-9">
     <div class="main-content adminContentJS">
-      <h2 style="text-align: center;"><?php echo $page_title ?></h2>
+      
+      <h2 class="text-center">
+        <?php echo $page_title ?>
+        <div class="back-btn-pos"><?php
+          if ($table == 'users') $back_url = 'staff/users/index.php';
+          elseif ($table == 'topics') $back_url = 'staff/topics/index.php';
+          elseif ($table == 'posts') $back_url = 'staff/posts/index.php';
+          ?><a class="btn btn-outline-secondary btn-md rounded-0"
+              href="<?php echo url_for($back_url) ?>">Back</a>
+        </div>
+      </h2>
 
-      <div class="my-2">
-        <?php
-        if ($table == 'users'): ?>
-          <a class="btn btn-outline-primary btn-md" href="<?php echo url_for('staff/users/index.php') ?>">Back</a>
-        <?php elseif ($table == 'topics'): ?>
-          <a class="btn btn-outline-primary btn-md" href="<?php echo url_for('staff/topics/index.php') ?>">Back</a>
-        <?php elseif ($table ==  'posts'): ?>
-          <a class="btn btn-outline-primary btn-md" href="<?php echo url_for('staff/posts/index.php') ?>">Back</a>
-        <?php endif;
-        ?>
-      </div>
+      <div class="row">
 
-      <div class="row d-flex justify-content-center">
-
-        <div class="align-self-center my-4">
-          <div class="p-5 alert <?php echo ($forbidden ? 'alert-info' : 'alert-warning') ?>">
-            <?php echo $warning ?>
+        <div class="col my-4 w-100">
+          <div class="text-center p-5 text-white <?php echo ($forbidden ? 'bg-info' : 'bg-warning') ?>">
+            <p class="lead"><?php echo $warning ?></p>
           </div>
         </div>
 

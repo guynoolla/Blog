@@ -110,50 +110,41 @@ function td_post_title($post, $group=false) {
   return $output;
 }
 
-function td_post_status($post, $access="") {
-  $output = '';
+function td_post_author($post, $access) {
+  return
+    "<td><a href=\"#{$post->username}\" class=\"click-load\" data-type=\"author\" data-value=\"{$post->user_id}\" data-access=\"{$access}\">{$post->username}</a></td>";
+}
 
-  if (!$access) {
-    if (url_contain('staff/posts/index')) {
-      $access = 'own_post';
-    } elseif (url_contain('staff/posts/approved')) {
-      $access = 'user_post';
-    }
-  }
+function td_post_author_email($post) {
+  return
+    "<td><a href=\"mailto:{$post->user_email}\" class=\"" . ($post->ue_confirmed ? 'text-success' : '') . "\">{$post->user_email}</a></td>";
+}
+
+function td_post_status($post, $access) {
+  $output = '';
 
   if ($post->published == 0) {
-    $output .= '<td class="text-secondary"><a href="#draft" class="click-load" data-type="status" data-value="draft" data-access="' . $access . '">draft</a></td>';
+    $output .= "<td class=\"text-secondary\"><a href=\"#draft\" class=\"click-load\" data-type=\"status\" data-value=\"draft\" data-access=\"{$access}\">draft</a></td>";
   } elseif ($post->published == 1 && $post->approved == 0) {
-    $output .= '<td class="text-primary"><a href="#published" class="click-load" data-type="status" data-value="published" data-access="' .  $access . '">published</a></td>';
+    $output .= "<td class=\"text-primary\"><a href=\"#published\" class=\"click-load\" data-type=\"status\" data-value=\"published\" data-access=\"{$access}\">published</a></td>";
   } elseif ($post->published == 1 && $post->approved == 1) {
-    $output .= '<td class="text-success"><a href="#approved" class="click-load" data-type="status" data-value="approved" data-access="' . $access . '">approved</a></td>';
+    $output .= "<td class=\"text-success\"><a href=\"#approved\" class=\"click-load\" data-type=\"status\" data-value=\"approved\" data-access=\"{$access}\">approved</a></td>";
   }
 
   return $output;
 }
 
-function td_post_topic($post, $access="") {
-  $output = '';
-
-  if (!$access) {
-    if (url_contain('staff/posts/index')) {
-      $access = 'own_post';
-    } elseif (url_contain('staff/posts/approved')) {
-      $access = 'user_post';
-    }
-  }
-  
-  $output .= '<td scope="col">
-    <span class="h5 font-italic"><a href="#' . u($post->topic) . '" class="click-load"
-      data-type="topic" data-value="' . $post->topic_id . '" data-access="' . $access . '"
-    >' . $post->topic . '</a></span>
-  </td>';
-
-  return $output;
+function td_post_topic($post, $access) {
+  return "<td scope=\"col\">
+    <span class=\"h5 font-italic\"><a href=\"#{u($post->topic)}\" class=\"click-load\"
+      data-type=\"topic\" data-value=\"{$post->topic_id}\" data-access=\"{$access}\"
+    >{$post->topic}</a></span>
+  </td>";
 }
 
-function td_post_date($post) {
-  return '<td scope="col">
-    <span class="h5">' . date('M j, Y', strtotime($post->updated_at)) . '</span>
-  </td>';
+function td_post_date($post, $access) {
+  return
+    "<td scope=\"col\"><a href=\"#ondate\" data-type=\"date\" data-value=\"{$post->created_at}\" data-access=\"{$access}\" class=\"click-load h5\">" . date('M j, Y', strtotime($post->created_at)) . "</a></td>";
 }
+
+?>

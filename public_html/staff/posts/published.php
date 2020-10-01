@@ -41,51 +41,26 @@ if (isset($_GET['id'])) {
 
 }
 
-if (isset($_GET['s'])) {
-  $term = u($_GET['s']);
+$current_page = $_GET['page'] ?? 1;
+$per_page = DASHBOARD_PER_PAGE;
+$total_count = Post::countAll([
+  'published' => '1',
+  'approved' => '0',
+  'user_id' => ['!=' => $session->getUserId()]
+]);
+$pagination = new Pagination($current_page, $per_page, $total_count);
 
-  $current_page = $_GET['page'] ?? 1;
-  $per_page = DASHBOARD_PER_PAGE;
-  $total_count = Post::countAll([
-    'published' => '1',
-    'user_id' => ['!=' => $session->getUserId()],
-    ["( title LIKE '%?%' OR body LIKE '%?%' )", $term, $term]
-  ]);
-  $pagination = new Pagination($current_page, $per_page, $total_count);
-
-  $sql = "SELECT p.*, u.username, t.id AS tid, t.name AS topic";
-  $sql .= " FROM `posts` AS p";
-  $sql .= " LEFT JOIN `users` AS u ON p.user_id = u.id";
-  $sql .= " LEFT JOIN `topics` AS t ON p.topic_id = t.id";
-  $sql .= " WHERE p.published='1' AND p.approved='0'";
-  $sql .= " AND p.user_id != '{$session->getUserId()}'";
-  $sql .= " AND ( title LIKE '%$term%' OR body LIKE '%$term%' )";
-  $sql .= " ORDER BY p.updated_at DESC";
-  $sql .= " LIMIT {$per_page}";
-  $sql .= " OFFSET {$pagination->offset()}";
-  $posts = Post::findBySql($sql);
-
-} else {
-  $current_page = $_GET['page'] ?? 1;
-  $per_page = DASHBOARD_PER_PAGE;
-  $total_count = Post::countAll([
-    'published' => '1',
-    'approved' => '0',
-    'user_id' => ['!=' => $session->getUserId()]
-  ]);
-  $pagination = new Pagination($current_page, $per_page, $total_count);
-
-  $sql = "SELECT p.*, u.username, u.email AS user_email, t.id AS tid, t.name AS topic";
-  $sql .= " FROM `posts` AS p";
-  $sql .= " LEFT JOIN `users` AS u ON p.user_id = u.id";
-  $sql .= " LEFT JOIN `topics` AS t ON p.topic_id = t.id";
-  $sql .= " WHERE p.published='1' AND p.approved='0'";
-  $sql .= " AND p.user_id != '{$session->getUserId()}'";
-  $sql .= " ORDER BY p.updated_at DESC";
-  $sql .= " LIMIT {$per_page}";
-  $sql .= " OFFSET {$pagination->offset()}";
-  $posts = Post::findBySql($sql);
-}
+$sql = "SELECT p.*, t.id AS tid, t.name AS topic,";
+$sql .= " u.username, u.email AS user_email, u.email_confirmed AS ue_confirmed";
+$sql .= " FROM `posts` AS p";
+$sql .= " LEFT JOIN `users` AS u ON p.user_id = u.id";
+$sql .= " LEFT JOIN `topics` AS t ON p.topic_id = t.id";
+$sql .= " WHERE p.published='1' AND p.approved='0'";
+$sql .= " AND p.user_id != '{$session->getUserId()}'";
+$sql .= " ORDER BY p.updated_at DESC";
+$sql .= " LIMIT {$per_page}";
+$sql .= " OFFSET {$pagination->offset()}";
+$posts = Post::findBySql($sql);
 
 $page_title = 'Author\'s Published Posts';
 include SHARED_PATH . '/staff_header.php';
@@ -106,43 +81,44 @@ include '_common-posts-html.php';
       </h2>
 
       <?php if (empty($posts)): ?>
-        <p class="lead">No posts here.</p>
+        <p class="lead text-center bg-secondary text-white py-5">No posts here</p>
       
       <?php else: ?>
+        <?php include '_common-search-form.php' ?>
         <?php echo display_session_message('msg success') ?>
 
-        <table class="table table-bordered table-hover table-light <?php echo $table_size ?>">
-          <thead class="bg-muted-lk text-muted">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Title</th>
-              <th scope="col">Author</th>
-              <th scope="col">Email</th>
-              <th scope="col">Published</th>
-              <th scope="colgroup" colspan="2">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach($posts as $key => $post): ?>
+        <div class="loadPostsJS" data-access="user_post">
+          <table class="table table-bordered table-hover table-light <?php echo $table_size ?>">
+            <thead class="bg-muted-lk text-muted">
               <tr>
-                <th scope="row"><?php echo $key + 1 ?></th>
-                <?php echo td_post_title($post) ?>
-                <td><?php echo (User::findById($post->user_id))->username ?></td>
-                <td><a href="mailto: <?php echo $post->user_email ?>" class="<?php echo ($user->email_confirmed ? 'text-success' : '') ?>"><?php echo $post->user_email ?></a></td>
-                <?php echo td_post_date($post) ?>
-                <?php
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Author</th>
+                <th scope="col">Email</th>
+                <th scope="col">Created</th>
+                <th scope="colgroup" colspan="2">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach($posts as $key => $post): ?>
+                <tr>
+                  <th scope="row"><?php echo $key + 1 ?></th><?php
+                  echo td_post_title($post);
+                  echo td_post_author($post, 'user_post');
+                  echo td_post_author_email($post);
+                  echo td_post_date($post, 'user_post');
                   echo td_actions_column_fst($post, $session->isAdmin());
                   echo td_actions_column_snd($post, $session->isAdmin());
-                ?>
-              </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
+                ?></tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
 
-        <?php
-          $url = url_for('staff/posts/published.php');
-          echo $pagination->pageLinks($url);
-        ?>
+          <?php
+            $url = url_for('staff/posts/published.php');
+            echo $pagination->pageLinks($url);
+          ?>
+        </div>
 
       <?php endif; ?>
 

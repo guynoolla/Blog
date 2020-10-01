@@ -21,7 +21,7 @@ if (!$edit) {
   </h2>';
 } else {
   echo '<h2 class="text-center">
-    Update Post
+    Post Update
     <div class="back-btn-pos">' . page_back_button() . '</div>  
   </h2>';
 }

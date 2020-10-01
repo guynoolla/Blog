@@ -66,8 +66,8 @@ include(SHARED_PATH . '/public_header.php');
             <article class="single">
               <div class="w-100 px-1 clearfix pr-3">
                 <?php if ($session->getUserId() == $post->user_id || $session->isAdmin()): ?>
-                  <a class="btn btn-sm btn-outline-secondary" href="<?php echo url_for('staff/posts/edit.php') . '?id=' . $post->id . '&cmd=edit' ?>">Edit</a>
-                  <a class="btn btn-sm btn-outline-secondary" href="<?php echo page_back_url() ?>">Back</a>
+                  <a class="btn btn-md btn-outline-secondary" href="<?php echo url_for('staff/posts/edit.php') . '?id=' . $post->id . '&cmd=edit' ?>">Edit</a>
+                  <a class="btn btn-md btn-outline-secondary" href="<?php echo page_back_url() ?>">Back</a>
                 <?php endif; ?>
 
                 <div class="like-box like-box--white<?php echo $class ?>"

@@ -90,7 +90,7 @@ class Posts {
               clearTimeout(timer)
             }, 1200)
 
-            $('#page-' + this.page).addClass("active")
+            $('#item-' + this.page).addClass("active")
           }
         },
         error: res => console.log(res)

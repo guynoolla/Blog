@@ -86,27 +86,14 @@ include '_common-posts-html.php';
         <div class="back-btn-pos"><?php echo page_back_button() ?></div>
       </h2>
 
-      <div class="d-flex">
-        <div class="search-widget flex-grow-1 py-1">
-          <form id="adminSearchForm" data-type="search" data-access="own_post" method="post" action="<?php echo url_for($_SERVER['PHP_SELF']) ?>" class="form-search w-100" role="search">
-            <div class="input-group">
-              <label class="screen-reader-text" for="s">Search for:</label>
-              <input id="s" name="s" type="text" class="form-control search-query" placeholder="Search..." value="">
-              <div class="input-group-append">
-                <button type="submit" name="submit" class="btn btn-outline-primary rounded-0">Search</button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-
       <?php if (empty($posts)): ?>
-        <p class="lead">No posts here.</p>
+        <p class="lead text-center bg-secondary text-white py-5">No posts here</p>
       
       <?php else: ?>
+        <?php include '_common-search-form.php' ?>
         <?php echo display_session_message('msg success') ?>
 
-        <div class="loadPostsJS">
+        <div class="loadPostsJS" data-access="own_post">
           <table class="table table-bordered table-hover table-light <?php echo $table_size ?>">
             <thead class="bg-muted-lk text-muted">
               <tr>
@@ -114,21 +101,21 @@ include '_common-posts-html.php';
                 <th scope="col">Title</th>
                 <th scope="col">Topic</th>
                 <th scope="col">Status</th>
-                <th scope="col">Edited</th>
+                <th scope="col">Created</th>
                 <th scope="colgroup" colspan="3">Action</th>
               </tr>
             </thead>
             <tbody>
               <?php foreach($posts as $key => $post): ?>
                 <tr>
-                  <th scope="row"><?php echo $key + 1 ?></th>
-                  <?php echo td_post_title($post) ?>
-                  <?php echo td_post_topic($post) ?>
-                  <?php echo td_post_status($post) ?>
-                  <?php echo td_post_date($post) ?>
-                  <?php echo td_actions_column_fst($post, $session->isAdmin()) ?>
-                  <?php echo td_actions_column_snd($post, $session->isAdmin()) ?>
-                </tr>
+                  <th scope="row"><?php echo $key + 1 ?></th><?php
+                  echo td_post_title($post);
+                  echo td_post_topic($post, 'own_post');
+                  echo td_post_status($post, 'own_post');
+                  echo td_post_date($post, 'own_post');
+                  echo td_actions_column_fst($post, $session->isAdmin());
+                  echo td_actions_column_snd($post, $session->isAdmin());
+                ?></tr>
               <?php endforeach; ?>
             </tbody>
           </table>

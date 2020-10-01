@@ -188,3 +188,10 @@ table tr td a.btn-lk {
     color: #FFF !important;
   } 
 }
+
+.btn.btn--lk {
+  text-transform: uppercase !important;
+  &:hover, &:focus {
+    color: $plum-color !important;
+  }
+}
