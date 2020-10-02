@@ -61,19 +61,18 @@ include '_common-posts-html.php';
   <main class="main col-lg-9">
     <div class="main-content">
      
-      <h2 class="text-center <?php echo $header_mb ?>">
+      <h1 class="dashboard-headline">
         <span class="text-dark">Drafts</span>
         <div class="back-btn-pos"><?php echo page_back_button() ?></div>
-      </h2>
+      </h1>
 
       <?php if (empty($posts)): ?>
-        <p class="lead text-center bg-secondary text-white py-5">No posts here</p>
+        <p class="lead text-center bg-secondary text-white py-5">This table is empty</p>
       
       <?php else: ?>
-        <?php include '_common-search-form.php' ?>
-        <?php echo display_session_message('msg success') ?>
+        <?php include '../_common-search-form.php' ?>
 
-        <div class="loadPostsJS" data-access="user_post">
+        <div class="loadContentJS" data-access="user_post">
           <table class="table table-bordered table-hover table-light <?php echo $table_size ?>">
             <thead class="bg-muted-lk text-muted">
               <tr>

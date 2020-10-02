@@ -1,34 +1,27 @@
 <?php
-use App\Classes\User;
 use App\Classes\Post;
-use App\Classes\Topic;
 use App\Classes\Pagination;
 
 require_once '../../src/initialize.php';
 
 $target = $_POST['target'] ?? "";
+$user_id = $_POST['uid'] ?? "";
 
-if (!$session->isLoggedIn()) {
+if (!$session->isLoggedIn() || $user_id != $session->getUserId()) {
   exit;
 }
 
 switch($target) {
   case 'own_post_by_search':
-        own_post_data($_POST['data']);
   case 'own_post_by_status':
-        own_post_data($_POST['data']);
   case 'own_post_by_topic':
-        own_post_data($_POST['data']);
   case 'own_post_by_date':
         own_post_data($_POST['data']);
   case 'user_post_by_search':
-        user_post_data($_POST['data']);
   case 'user_post_by_topic':
-        user_post_data($_POST['data']);
   case 'user_post_by_author':
-        user_post_data($_POST['data']);
   case 'user_post_by_date':
-        user_post_data($_POST['data']);
+        if ($session->isAdmin()) user_post_data($_POST['data']);
   default:
         exit(json_encode(['target' => 'error']));
 }

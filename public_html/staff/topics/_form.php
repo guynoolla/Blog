@@ -4,10 +4,10 @@
 
   <?php $title = ((!isset($topic->id)) ? 'New Topic' : 'Update Topic')  ?>
   
-  <h2 class="text-center mb-4">
+  <h1 class="dashboard-headline mb-4">
     <?php echo $title ?>
     <div class="back-btn-pos"><?php echo page_back_button() ?></div>
-  </h2>
+  </h1>
 
   <?php echo display_errors($topic->errors); ?>
   

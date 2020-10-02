@@ -74,7 +74,17 @@ EOT;
         if ($user->delete()) {
           $session->message("The user '" . $user->username . "' was deleted.");
           redirect_to(url_for('staff/users/index.php'));
-        } 
+        } else {
+          $posts_count = Post::countAll(['user_id' => $id]);
+          if ($posts_count > 0) {
+            $dep_word = $posts_count > 1 ? 'posts' : 'post'; 
+            $session->store([
+              'table' => $table,
+              'warning' => "This user can not be deleted because user has {$posts_count} {$dep_word}."
+            ]);
+            redirect_to(url_for('staff/delete.php'));
+          }          
+        }
       }
 
     } else if ($table == 'topics') { // topics table
@@ -92,10 +102,10 @@ EOT;
         } else {
           $posts_count = Post::countAll(['topic_id' => $id]);
           if ($posts_count > 0) {
-            $dep_word = $posts_count > 1 ? 'posts' : 'post'; 
+            $deps_arr = $posts_count > 1 ? ['are', 'posts'] : ['is', 'post']; 
             $session->store([
               'table' => $table,
-              'warning' => "This topic can't be deleted. It has {$posts_count} {$dep_word}."
+              'warning' => "This topic can not be deleted, because there {$deps_arr[0]} {$posts_count} {$deps_arr[1]} in it."
             ]);
             redirect_to(url_for('staff/delete.php'));
           }
@@ -134,8 +144,9 @@ include SHARED_PATH . '/staff_header.php';
   <main class="main col-lg-9">
     <div class="main-content adminContentJS">
       
-      <h2 class="text-center">
+      <h1 class="dashboard-headline">
         <?php echo $page_title ?>
+
         <div class="back-btn-pos"><?php
           if ($table == 'users') $back_url = 'staff/users/index.php';
           elseif ($table == 'topics') $back_url = 'staff/topics/index.php';
@@ -143,12 +154,12 @@ include SHARED_PATH . '/staff_header.php';
           ?><a class="btn btn-outline-secondary btn-md rounded-0"
               href="<?php echo url_for($back_url) ?>">Back</a>
         </div>
-      </h2>
+      </h1>
 
       <div class="row">
 
         <div class="col my-4 w-100">
-          <div class="text-center p-5 text-white <?php echo ($forbidden ? 'bg-info' : 'bg-warning') ?>">
+          <div class="py-5 px-2 text-center text-muted alert <?php echo ($forbidden ? 'alert-danger' : 'alert-warning') ?>">
             <p class="lead"><?php echo $warning ?></p>
           </div>
         </div>

@@ -16,6 +16,11 @@ $light-dark-read-brown: #f3e7d9; //#D99858;
 $light-dark-read-blue: #42a6f7;
 $light-dark-read-green: #1bd6bd;
 
+$warning-dark: darken(#f2a60e, 2);
+$bg-other-lk: lighten($blue, 30);
+$bg-muted-lk: lighten(#444, 60);
+$bg-gray-lk: #e1e5eb;
+
 /*
  Duration -------------------------------- */
 

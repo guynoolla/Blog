@@ -25,12 +25,15 @@ $(() => {
         title = "Delete User";
         body = `<p>Are you sure you want to delete the user
           <strong class="font-weight-bold">${data.username}</strong>?<br>
-          If user posts exists they also will be permanently deleted!</p>`;
+          You can not delete the user which has posts, unless
+          you delete the user posts first!</p>`;
       
         } else if (data.table == "topics") {
         title = "Delete Topic";
-        body = `<p>Are you sure you want to delete the topic <strong class="font-weight-bold">${data.name}</strong>?<br>
-        If there are posts under this topic you can't delete it, unless you delete those posts first!</p>`;
+        body = `<p>Are you sure you want to delete the topic
+          <strong class="font-weight-bold">${data.name}</strong>?<br>
+          If there are posts under this topic you can not delete it,
+           unless you delete those posts first!</p>`;
       
       } else if (data.table == "posts") {
         title = "Delete Post";
@@ -77,7 +80,7 @@ $(() => {
     pathname: window.location.pathname,
     type: "search",
     value: "",
-    access: $(".loadPostsJS").data("access"),
+    access: $(".loadContentJS").data("access"),
     total: 0,
     page: 1,
     params(type, value, access, total) {
@@ -89,6 +92,18 @@ $(() => {
     pageNum(page=false) {
       if (page) pagData.page = page;
       else return pagData.page;
+    },
+    script() {
+      const pathitems = pagData.pathname.split("/");
+      const path = `${pathitems[1]}/${pathitems[2]}`;
+      switch (path) {
+        case 'staff/posts':
+              return "xhr_search_post.php";
+        case 'staff/users':
+              return pagData.requestUrl = "xhr_search_user.php";
+        default: 
+              return false;
+      }
     }
   };
 
@@ -98,17 +113,19 @@ $(() => {
     const form = $(e.target);
     const type = form.attr("data-type");
     const value = form.find("#s").val();
-    const access = $(".loadPostsJS").data("access");
+    const access = $(".loadContentJS").data("access");
 
     loading(1);
     $.ajax({
-      url: server.baseUrl + '/staff/xhr_post_search.php',
+      url: server.baseUrl + '/staff/' + pagData.script(),
       type: "POST",
       data: {
         target: access + '_by_' + type,
-        data: `type=${type}&value=${value}&access=${access}&pathname=${pagData.pathname}`
+        data: `type=${type}&value=${value}&access=${access}&pathname=${pagData.pathname}`,
+        uid: server.userId
       },
       success: res => {
+        console.log('here', res)
         loading(0);
         const data = JSON.parse(res);
 
@@ -121,9 +138,9 @@ $(() => {
     return false;
   }) // <-- Admin Search Form
 
-  if ($(".loadPostsJS").length) appendSpinnerToMainContent();
+  if ($(".loadContentJS").length) appendSpinnerToMainContent();
 
-  $(".loadPostsJS").on("click", ".click-load", e => {
+  $(".loadContentJS").on("click", ".click-load", e => {
     e.preventDefault();
 
     const link = $(e.target);
@@ -134,13 +151,15 @@ $(() => {
     if (type && value && access) {
       loading(1);
       $.ajax({
-        url: server.baseUrl + '/staff/xhr_post_search.php',
+        url: server.baseUrl + '/staff/' + pagData.script(),
         type: 'POST',
         data: {
           target: access + '_by_' + type,
-          data: `type=${type}&value=${value}&access=${access}&pathname=${pagData.pathname}`
+          data: `type=${type}&value=${value}&access=${access}&pathname=${pagData.pathname}`,
+          uid: server.userId
         },
         success: res => {
+          console.log('RES', res)
           loading(0);
           const data = JSON.parse(res);
 
@@ -156,7 +175,7 @@ $(() => {
     return false;
   }) // <-- Click-Load Link
 
-  $(".loadPostsJS").on("click", ".page-link", e => {
+  $(".loadContentJS").on("click", ".page-link", e => {
     e.preventDefault();
 
     const page = getPageNum($(e.target));
@@ -164,11 +183,12 @@ $(() => {
 
     loading(1);
     $.ajax({
-      url: server.baseUrl + '/staff/xhr_post_search.php',
+      url: server.baseUrl + '/staff/' + pagData.script(),
       type: 'POST',
       data: {
         target: pagData.access + '_by_' + pagData.type,
-        data: `type=${pagData.type}&value=${pagData.value}&access=${pagData.access}&page=${page}&pathname=${pagData.pathname}`
+        data: `type=${pagData.type}&value=${pagData.value}&access=${pagData.access}&page=${page}&pathname=${pagData.pathname}`,
+        uid: server.userId
       },
       success: res => {
         //let timer = setTimeout(() => {
@@ -191,6 +211,39 @@ $(() => {
     })
   })
 
+  /*
+   XHR Search User ----------------------------------------------------*/
+
+//   $("#searchUserForm").on("submit", e => {
+//     e.preventDefault();
+
+//     const form = $(e.target);
+//     const type = form.attr("data-type");
+//     const value = form.find("#s").val();
+//     const access = $(".loadContentJS").data("access");
+
+//     loading(1);
+//     $.ajax({
+//       url: server.baseUrl + '/staff/xhr_search_user.php',
+//       type: "POST",
+//       data: {
+//         target: access + '_by_' + type,
+//         data: `type=${type}&value=${value}&access=${access}&pathname=${pagData.pathname}`
+//       },
+//       success: res => {
+//         console.log("u res", res)
+//         loading(0);
+//         const data = JSON.parse(res);
+
+//         loadPostBox(data);
+//         pagData.params(type, value, access, data[2].total_count);
+//       },
+//       error: err => console.log(err)
+//     })
+
+//     return false;
+//   })
+
 }) // <-- jQuery
 
 /*
@@ -198,11 +251,11 @@ $(() => {
 
 function loading(wait=0) {
   if (wait == 1) {
-    $(".loadPostsJS").hide();
+    $(".loadContentJS").hide();
     $(".loading").removeClass("d-none");
   } else if (wait == 0) {
     $(".loading").addClass("d-none");
-    $(".loadPostsJS").show();
+    $(".loadContentJS").show();
   }
 }
 
@@ -242,7 +295,7 @@ function getPageNum(target) {
 }
 
 function loadPostBox(data) {
-  const loadBox = $(".loadPostsJS");
+  const loadBox = $(".loadContentJS");
 
   if (data[0] == 'success') {
     loadBox.html("");

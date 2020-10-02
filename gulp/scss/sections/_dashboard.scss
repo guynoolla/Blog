@@ -84,13 +84,38 @@
  Heading ---------------------------------- */
 
 .page-admin {
-  h2 {
+  .search-widget form {
+    margin-bottom: .25rem;
+
+    .input-group {
+      .input-group-prepend {
+        background-color: #E8E8E8;
+        border: 1px solid #E8E8E8;
+        border-top-left-radius: 5px !important;
+        border-bottom-left-radius: 5px !important;
+        .btn {
+          width: 2rem;
+          &:hover, &:focus {
+            background-color: #E8E8E8 !important;
+          }
+        }
+      }
+      .input-group-append .btn {
+        border: 1px solid #E8E8E8;
+        border-left: none;
+        margin-right: 2px;
+      }
+    }
+  }
+
+  .dashboard-headline {
     display: block;
     position: relative;
     text-align: center;
     background-color: #e2dfd5;
     padding: 1.5rem;
     margin: 0;
+    margin-bottom: .3rem;
 
     .headline-nav {
       .chevron {

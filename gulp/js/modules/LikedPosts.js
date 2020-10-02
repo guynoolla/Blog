@@ -72,29 +72,33 @@ class Posts {
           per_page: this.perPage,
           offset: this.offset(),
           page: this.page
-        },
-        success: res => {
-          const data = JSON.parse(res);
-          if (data[0] == 'success') {
-            const output = this.makeHtml(data[1], data[2])
-            let timer = setTimeout(() => {
+        }
+      })
+      .always(res => {
+        const data = JSON.parse(res)
+        if (data[0] == 'empty') {
+          $(".loadPostsJS .alert").removeClass("d-none")
+        }
+        $(".loadPostsJS").fadeIn(() => $(".loading").addClass("d-none"))
+      })
+      .done(res => {
+        const data = JSON.parse(res);
+        if (data[0] == 'success') {
+          const output = this.makeHtml(data[1], data[2])
+          let timer = setTimeout(() => {
 
-              $(".loadPostsJS").fadeIn(() => {
-                $(".loading").addClass("d-none")
-              })
-              $(".loadPostsJS").html(output);
-              $(".paginationJS").html(data[2].html);
-              this.setHeadlineChevrons(data[2].total_count);
-              $(".pagination-nav").show();
-              
-              clearTimeout(timer)
-            }, 1200)
+            $(".loadPostsJS").html(output);
+            $(".paginationJS").html(data[2].html);
+            this.setHeadlineChevrons(data[2].total_count);
+            $(".pagination-nav").show();
+            
+            clearTimeout(timer)
+          }, 1200)
 
-            $('#item-' + this.page).addClass("active")
-          }
-        },
-        error: res => console.log(res)
-      });
+          $('#item-' + this.page).addClass("active")
+        }
+      })
+      .fail(res => console.log(res))
     }
   }
 

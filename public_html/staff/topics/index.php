@@ -36,7 +36,7 @@ include SHARED_PATH . '/staff_header.php';
   <main class="main col-lg-9">
     <div class="main-content adminContentJS">
 
-      <h2 class="text-center mb-1">
+      <h1 class="dashboard-headline">
         <?php echo $page_title ?>
         <div class="back-btn-pos"><?php echo page_back_button() ?></div>
         <a
@@ -44,11 +44,11 @@ include SHARED_PATH . '/staff_header.php';
           href="<?php echo url_for('staff/topics/create.php') ?>"
           style="position:absolute;bottom:0;left:0;"
         >New Topic</a>
-      </h2>
+      </h1>
 
       <?php if (empty($topics)): ?>
-        <p class="lead">You have not topics yet.</p>
-      
+        <p class="lead text-center bg-secondary text-white py-5">This table is empty</p>
+
       <?php else: ?>
         <?php echo display_session_message('msg success') ?>
 

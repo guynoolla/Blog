@@ -36,7 +36,7 @@ if (is_post_request()) {
 
   if ($result === true) {
     if ($post->published) {
-      $session->message("Thank you for your post! Now it is awaiting admin proof.");
+      $session->message("Thank you for your post! It is awaiting admin moderation.");
     } else {
       $session->message("Your Post '" . $post->title . "' saved as draft!");
     }

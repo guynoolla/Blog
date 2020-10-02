@@ -22,7 +22,7 @@ include SHARED_PATH . '/staff_header.php';
   <main class="main col-lg-9">
     <div class="main-content">
 
-      <h2 class="mt-0">
+      <h1 class="dashboard-headline mt-0">
         <div class="headline-nav paginateLinksJS">
           Liked Posts
           <a href="" class="chevron chevron--next d-none" style="width:2rem;height:2rem;">
@@ -34,7 +34,7 @@ include SHARED_PATH . '/staff_header.php';
             <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-left" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="svg-icon svg-inline--fa fa-chevron-left fa-w-10 fa-3x"><path fill="currentColor" d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z" class=""></path></svg>
           </a>
         </div>
-      </h2>
+      </h1>
 
       <?php if (!$user->isEmailConfirmed()): ?>
         <p class="text-lk">
@@ -45,7 +45,9 @@ include SHARED_PATH . '/staff_header.php';
       <?php endif; ?>
 
       <!-- Email Confirmed User -->
-      <div class="loadPostsJS">You liked no one post yet.</div>
+      <div class="loadPostsJS">
+        <div class="alert alert-info text-muted text-center d-none py-5 mt-1">You liked no one post yet</div>
+      </div>
       <div class="paginationJS"></div>
 
       <div class="loading d-none">

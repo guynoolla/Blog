@@ -43,37 +43,38 @@ include SHARED_PATH . '/staff_header.php';
   <main class="main col-lg-9">
     <div class="main-content adminContentJS">
 
-      <h2 class="text-center mb-1">
+      <h1 class="dashboard-headline">
         <?php echo $page_title ?>
         <div class="back-btn-pos"><?php echo page_back_button() ?></div>
-      </h2>
+      </h1>
 
       <?php if (empty($users)): ?>
-        <p class="lead">There is no user yet.</p>
-      
-      <?php else: ?>
-        <?php echo display_session_message('msg success') ?>
+        <p class="lead text-center bg-secondary text-white py-5">This table is empty</p>
 
-        <table class="table table-striped table-bordered table-hover table-light table-md">
-          <thead class="bg-muted-lk text-muted">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Username</th>
-              <th scope="col">Email</th>
-              <th scope="col">Type</th>
-              <th scope="col">Since</th>
-              <th scope="col">Posted</th>
-              <th scope="colgroup" colspan="2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach($users as $key => $user): ?>
+      <?php else: ?>
+        <?php include '../_common-search-form.php' ?>
+
+        <div class="loadContentJS" data-access="admin_user">
+          <table class="table table-striped table-bordered table-hover table-light table-md">
+            <thead class="bg-muted-lk text-muted">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Username</th>
+                <th scope="col">Email</th>
+                <th scope="col">Type</th>
+                <th scope="col">Since</th>
+                <th scope="col">Posted</th>
+                <th scope="colgroup" colspan="2">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach($users as $key => $user): ?>
               <tr data-user="<?php echo $user->id ?>">
                 <th scope="row"><?php echo $key + 1 ?></th>
                 <td><a href="#"><?php echo $user->username ?></a></td>
                 <td><a href="mailto: <?php echo $user->email ?>" class="<?php echo ($user->email_confirmed ? 'text-success' : '') ?>"><?php echo $user->email ?></a></td>
-                <td><span class="text-primary"><?php echo $user->user_type ?></span></td>
-                <td><span class="h5"><?php echo date('M j, Y', strtotime($user->created_at)) ?></span></td>
+                <td><a href="#user-type" data-type="user_type" data-value="<?php echo $user->user_type ?>" data-access="admin_user" class="click-load"><?php echo $user->user_type ?></a></td>
+                <td><a href="#ondate" data-type="date" data-value="<?php echo $user->created_at ?>" data-access="admin_user" class="click-load"><?php echo date('M j, Y', strtotime($user->created_at)) ?></a></td>
                 <td><?php echo $user->posted ?> - <span class="text-success font-weight-bold">
                   <?php echo $user->approved ?></span>
                 </td>
@@ -93,14 +94,15 @@ include SHARED_PATH . '/staff_header.php';
                   ?>">Delete</a>
                 </td>
               </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-
-        <?php
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+          
+          <?php
           $url = url_for('staff/users/index.php');
           echo $pagination->pageLinks($url);
         ?>
+        </div>
   
       <?php endif; ?>
 
