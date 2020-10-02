@@ -74,7 +74,9 @@ $(() => {
   } // <-- Register Form
 
   /*
-   XHR Post Search ----------------------------------------------------*/
+   XHR Post, User, Topic Search -------------------------------------------*/
+
+  if ($(".loadContentJS").length) appendSpinnerToMainContent();
 
   const pagData = {
     pathname: window.location.pathname,
@@ -100,7 +102,8 @@ $(() => {
         case 'staff/posts':
               return "xhr_search_post.php";
         case 'staff/users':
-              return pagData.requestUrl = "xhr_search_user.php";
+        case 'staff/topics':
+              return "xhr_search.php";
         default: 
               return false;
       }
@@ -125,7 +128,7 @@ $(() => {
         uid: server.userId
       },
       success: res => {
-        console.log('here', res)
+
         loading(0);
         const data = JSON.parse(res);
 
@@ -137,8 +140,6 @@ $(() => {
 
     return false;
   }) // <-- Admin Search Form
-
-  if ($(".loadContentJS").length) appendSpinnerToMainContent();
 
   $(".loadContentJS").on("click", ".click-load", e => {
     e.preventDefault();
@@ -159,7 +160,7 @@ $(() => {
           uid: server.userId
         },
         success: res => {
-          console.log('RES', res)
+
           loading(0);
           const data = JSON.parse(res);
 
@@ -210,39 +211,6 @@ $(() => {
       error: err => console.log(err)
     })
   })
-
-  /*
-   XHR Search User ----------------------------------------------------*/
-
-//   $("#searchUserForm").on("submit", e => {
-//     e.preventDefault();
-
-//     const form = $(e.target);
-//     const type = form.attr("data-type");
-//     const value = form.find("#s").val();
-//     const access = $(".loadContentJS").data("access");
-
-//     loading(1);
-//     $.ajax({
-//       url: server.baseUrl + '/staff/xhr_search_user.php',
-//       type: "POST",
-//       data: {
-//         target: access + '_by_' + type,
-//         data: `type=${type}&value=${value}&access=${access}&pathname=${pagData.pathname}`
-//       },
-//       success: res => {
-//         console.log("u res", res)
-//         loading(0);
-//         const data = JSON.parse(res);
-
-//         loadPostBox(data);
-//         pagData.params(type, value, access, data[2].total_count);
-//       },
-//       error: err => console.log(err)
-//     })
-
-//     return false;
-//   })
 
 }) // <-- jQuery
 

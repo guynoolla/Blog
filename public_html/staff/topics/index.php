@@ -1,5 +1,6 @@
 <?php
 use App\Classes\Topic;
+use App\Classes\Pagination;
 
 require_once('../../../src/initialize.php');
 
@@ -22,7 +23,12 @@ if (isset($_GET['id'])) {
   }
 }
 
-$topics = Topic::findAll();
+$current_page = $_GET['page'] ?? 1;
+$per_page = DASHBOARD_PER_PAGE;
+$total_count = Topic::countAll();
+$pagination = new Pagination($current_page, $per_page, $total_count);
+
+$topics = Topic::find($per_page, $pagination->offset());
 
 $page_title = 'Topics';
 include SHARED_PATH . '/staff_header.php';
@@ -50,48 +56,53 @@ include SHARED_PATH . '/staff_header.php';
         <p class="lead text-center bg-secondary text-white py-5">This table is empty</p>
 
       <?php else: ?>
-        <?php echo display_session_message('msg success') ?>
+        <?php include '../_common-search-form.php' ?>
 
-        <table class="table table-striped table-bordered table-hover table-light table-md">
-          <thead class="bg-muted-lk text-muted">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Name</th>
-              <th scope="col">Description</th>
-              <th scope="col">Created</th>
-              <th scope="colgroup" colspan="2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach($topics as $key => $topic): ?>
+        <div class="loadContentJS" data-access="admin_topic">
+          <table class="table table-striped table-bordered table-hover table-light table-md">
+            <thead class="bg-muted-lk text-muted">
               <tr>
-                <th scope="row"><?php echo $key + 1 ?></th>
-                <td><span class="h5"><?php echo $topic->name ?></span></td>
-                <td><?php echo $topic->description ?></td>
-                <td>
-                  <span class="h5"><?php echo date('M j, Y', strtotime($topic->created_at)) ?></span>
-                </td>
-                <td scope="colgroup" colspan="1">
-                  <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('/staff/topics/edit.php?id=' . $topic->id) ?>">
-                    Edit
-                  </a>
-                </td>
-                <td scope="colgroup" colspan="1">
-                  <?php
-                    $data = no_gaps_between("
-                      table-topics,
-                      id-{$topic->id},
-                      name-{$topic->name}
-                    ")
-                  ?>
-                  <a data-delete="<?php echo $data ?>" class="btn-lk btn-lk--danger"
-                    href="<?php echo url_for('staff/delete.php?table=topics&id=' . $topic->id)
-                  ?>">Delete</a>
-                </td>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Created</th>
+                <th scope="colgroup" colspan="2">Actions</th>
               </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <?php foreach($topics as $key => $topic): ?>
+                <tr>
+                  <th scope="row"><?php echo $key + 1 ?></th>
+                  <td><span class="h5"><?php echo $topic->name ?></span></td>
+                  <td><?php echo $topic->description ?></td>
+                  <td><a href="#ondate" class="click-load h5" data-type="date" data-value="<?php echo $topic->created_at ?>" data-access="admin_topic"><?php echo date('M j, Y', strtotime($topic->created_at)) ?></span></td>
+                  <td scope="colgroup" colspan="1">
+                    <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('/staff/topics/edit.php?id=' . $topic->id) ?>">
+                      Edit
+                    </a>
+                  </td>
+                  <td scope="colgroup" colspan="1">
+                    <?php
+                      $data = no_gaps_between("
+                        table-topics,
+                        id-{$topic->id},
+                        name-{$topic->name}
+                      ")
+                    ?>
+                    <a data-delete="<?php echo $data ?>" class="btn-lk btn-lk--danger"
+                      href="<?php echo url_for('staff/delete.php?table=topics&id=' . $topic->id)
+                    ?>">Delete</a>
+                  </td>
+                </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+
+          <?php
+            $url = url_for('staff/topics/index.php');
+            echo $pagination->pageLinks($url);
+          ?>
+        </div>
   
       <?php endif; ?>
 

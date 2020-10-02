@@ -1,12 +1,14 @@
 <?php
 use App\Classes\User;
+use App\Classes\Topic;
 use App\Classes\Pagination;
 
 require_once '../../src/initialize.php';
 
 $target = $_POST['target'] ?? "";
+$user_id = $_POST['uid'] ?? "";
 
-if (!$session->isAdmin()) {
+if (!$session->isLoggedIn() || $user_id != $session->getUserId()) {
   exit;
 }
 
@@ -14,14 +16,110 @@ switch($target) {
   case 'admin_user_by_search':
   case 'admin_user_by_user_type':
   case 'admin_user_by_date':
-        admin_user_data($_POST['data']);
+        if ($session->isAdmin()) admin_user_data($_POST['data']);
+  case 'admin_topic_by_search':
+  case 'admin_topic_by_date':
+        if ($session->isAdmin()) admin_topic_data($_POST['data']);
   default:
-    exit(json_encode(['target' => 'error']));
+        exit(json_encode(['target' => 'error']));
+}
+
+function admin_topic_data($data) {
+  parse_str($data, $params);
+  $type = $params['type'] ?? "";
+  $value = $params['value'] ?? "";
+
+  if ($type == 'search') {
+    
+    if ($value != "") {  // search
+      $cond_arr = [["name LIKE '%?%'", $value]];
+      $cond_str = "WHERE name LIKE '%{$value}%'";
+
+    } elseif ($value == "") { // default
+      $cond_arr = [];
+      $cond_str = "";
+    }
+
+  } else if ($type == 'date') {
+
+    $created = date('Y-m-d', strtotime($value));
+    $nextday = date('Y-m-d', strtotime('+ 1 day', strtotime($value)));
+    $cond_arr = [[
+      "( created_at >= '?' AND created_at < '?' )",
+      $created,
+      $nextday
+    ]];
+    $cond_str = "WHERE created_at >= '{$created}' AND created_at < '{$nextday}'";
+
+  }
+
+  $total_count = Topic::countAll($cond_arr);
+  $current_page = $params['page'] ?? 1;
+  $per_page = DASHBOARD_PER_PAGE;
+  $pagination = new Pagination($current_page, $per_page, $total_count);
+
+  $topics = Topic::find(
+    $per_page, $pagination->offset(),
+    "{$cond_str} ORDER BY name ASC"
+  );
+
+  ob_start();
+
+  ?><table class="table table-striped table-bordered table-hover table-light table-md">
+    <thead class="bg-muted-lk text-muted">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Created</th>
+        <th scope="colgroup" colspan="2">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach($topics as $key => $topic): ?>
+        <tr>
+          <th scope="row"><?php echo $key + 1 ?></th>
+          <td><span class="h5"><?php echo $topic->name ?></span></td>
+          <td><?php echo $topic->description ?></td>
+          <td><a href="#ondate" class="click-load h5" data-type="date" data-value="<?php echo $topic->created_at ?>" data-access="admin_topic"><?php echo date('M j, Y', strtotime($topic->created_at)) ?></span></td>
+          <td scope="colgroup" colspan="1">
+            <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('/staff/topics/edit.php?id=' . $topic->id) ?>">
+              Edit
+            </a>
+          </td>
+          <td scope="colgroup" colspan="1">
+            <?php
+              $data = no_gaps_between("
+                table-topics,
+                id-{$topic->id},
+                name-{$topic->name}
+              ")
+            ?>
+            <a data-delete="<?php echo $data ?>" class="btn-lk btn-lk--danger"
+              href="<?php echo url_for('staff/delete.php?table=topics&id=' . $topic->id)
+            ?>">Delete</a>
+          </td>
+        </tr>
+      <?php endforeach; ?>
+    </tbody>
+  </table><?php
+
+  $output = ob_get_contents();
+  ob_end_clean();
+
+  $pag = [
+    'total_count' => $total_count,
+    'html' => $pagination->pageLinks($params['pathname'])
+  ];
+
+  if ($output) {
+    exit(json_encode(['success', $output, $pag]));
+  } else {
+    exit(json_encode(['failed']));
+  }
 }
 
 function admin_user_data($data) {
-  global $session;
-  
   parse_str($data, $params);
   $type = $params['type'] ?? "";
   $value = $params['value'] ?? "";
@@ -46,9 +144,9 @@ function admin_user_data($data) {
   } elseif ($type == 'date') {
 
     $created = date('Y-m-d', strtotime($value));
-    $date_next = date('Y-m-d', strtotime('+ 1 day', strtotime($value)));
+    $nextday = date('Y-m-d', strtotime('+ 1 day', strtotime($value)));
     $total_count = User::countAll([
-      ["( created_at >= '?' AND created_at < '?' )", $created, $date_next]
+      ["( created_at >= '?' AND created_at < '?' )", $created, $nextday]
     ]);
 
   }
@@ -66,7 +164,7 @@ function admin_user_data($data) {
   } else if ($type == 'user_type') {
     $sql .= " WHERE u.user_type = '{$value}'";
   } else if ($type == 'date') {
-    $sql .= " WHERE u.created_at >= '{$created}' AND u.created_at < '{$date_next}'";
+    $sql .= " WHERE u.created_at >= '{$created}' AND u.created_at < '{$nextday}'";
   }
   $sql .= " GROUP BY u.id ORDER BY u.username";
   $sql .= " LIMIT {$per_page} OFFSET {$pagination->offset()}";

@@ -26,6 +26,9 @@ switch($target) {
         exit(json_encode(['target' => 'error']));
 }
 
+/*
+ -- Admin search user post data -------------------------------------------- */
+
 function user_post_data($data) {
   global $session;
   
@@ -35,65 +38,59 @@ function user_post_data($data) {
 
   if (trim($params['pathname'], '/') == 'staff/posts/approved.php') {
     $status = 'approved';
-    $cond_arr = [
-      'approved' => '1',
-    ];
-    $cond_str = "approved = '1'";
+    $cond_arr = ['approved' => '1'];
+    $cond_str = "p.approved = '1'";
 
   } else if (trim($params['pathname'], '/') == 'staff/posts/published.php') {
     $status = 'published';
-    $cond_arr = [
-      'published' => '1',
-      'approved' => '0',
-    ];
-    $cond_str = "published = '1' AND approved = '0'"; 
+    $cond_arr = ['published' => '1','approved' => '0'];
+    $cond_str = "p.published = '1' AND p.approved = '0'"; 
 
   } else if (trim($params['pathname'], '/') == 'staff/posts/drafts.php') {
     $status = 'draft';
-    $cond_arr = [
-      'published' => '0',
-    ];
-    $cond_str = "published = '0'";
+    $cond_arr = ['published' => '0'];
+    $cond_str = "p.published = '0'";
   }
 
   if ($type == 'author') {
-    $total_count = Post::countAll(array_merge($cond_arr, [
-      'user_id' => $value
-    ]));
+    $cond_arr = array_merge(['user_id' => $value], $cond_arr);
+    $cond_str .= " AND p.user_id = {$value}";
 
-  } else if ($type == 'topic') {
+  } else {
+    $cond_arr = array_merge(
+      ['user_id' => ['!=' => $session->getUserId()]],
+      $cond_arr     
+    );
+    $cond_str .= " AND p.user_id != {$session->getUserId()}";
+  }
 
-    $total_count = Post::countAll(array_merge($cond_arr, [
-      'user_id' => ['!=' => $session->getUserId()],
-      'topic_id' => $value
-    ]));
+  if ($type == 'topic') {
+    $cond_arr = array_merge(['topic_id' => $value], $cond_arr);
+    $cond_str .= " AND p.topic_id = {$value}";
 
   } else if ($type == 'search') {
-    
-    if ($value != "") {  // search
-      $total_count = Post::countAll(array_merge($cond_arr, [
-        'user_id' => ['!=' => $session->getUserId()],
-        ["( title LIKE '%?%' OR body LIKE '%?%' )", $value, $value]
-      ]));
-
-    } elseif ($value == "") { // default
-      $total_count = Post::countAll(array_merge($cond_arr, [
-        'user_id' => ['!=' => $session->getUserId()]
-      ]));
+    if ($value != "") {
+      $cond_arr = array_merge(
+        [["( title LIKE '%?%' OR body LIKE '%?%' )", $value, $value]],
+        $cond_arr
+      );
+      $cond_str .= " AND (p.title LIKE '%{$value}%' OR p.body LIKE '%{$value}%')";
+    } else {
+      // no conditions to add
     }
 
   } elseif ($type == 'date') {
-
     $created = date('Y-m-d', strtotime($value));
-    $date_next = date('Y-m-d', strtotime('+ 1 day', strtotime($value)));
+    $nextday = date('Y-m-d', strtotime('+ 1 day', strtotime($value)));
+    $cond_arr = array_merge(
+      [["(created_at >= '?' AND created_at < '?')", $created, $nextday]],
+      $cond_arr
+    );
+    $cond_str .= " AND (p.created_at >= '{$created}' AND p.created_at < '{$nextday}')";
 
-    $total_count = Post::countAll(array_merge($cond_arr, [
-      'user_id' => ['!=' => $session->getUserId()],
-      ["( created_at >= '?' AND created_at < '?' )", $created, $date_next]
-    ]));
+  } // conditions on type
 
-  } // conditions on $type
-
+  $total_count = Post::countAll($cond_arr);
   $current_page = $params['page'] ?? 1;
   $per_page = DASHBOARD_PER_PAGE;
   $pagination = new Pagination($current_page, $per_page, $total_count);
@@ -103,26 +100,14 @@ function user_post_data($data) {
   $sql .= " FROM `posts` AS p";
   $sql .= " LEFT JOIN `users` AS u ON p.user_id = u.id";
   $sql .= " LEFT JOIN `topics` AS t ON p.topic_id = t.id";
-  $sql .= " WHERE {$cond_str}";
-  if ($type == 'author') {
-    $sql .= " AND p.user_id = {$value}";
-  } else {
-    $sql .= " AND p.user_id != '{$session->getUserId()}'";
-    if ($type == 'topic') {
-      $sql .= " AND p.topic_id = {$value}";
-    } else if ($type == 'search' && $value != "") {
-      $sql .= " AND ( p.title LIKE '%$value%' OR p.body LIKE '%$value%' )";
-    } else if ($type == 'date') {
-      $sql .= " AND ( p.created_at >= '{$created}' AND p.created_at < '{$date_next}' )";
-    }
-  }
+  $sql .= $cond_str ? " WHERE {$cond_str}" : "";
   $sql .= " ORDER BY p.updated_at DESC";
   $sql .= " LIMIT {$per_page} OFFSET {$pagination->offset()}";
   $posts = Post::findBySql($sql);
   
   $page_url = url_for($params['pathname']);
-
   require './posts/_common-posts-html.php';
+
   ob_start();
 
   if ($status == 'approved') {
@@ -214,7 +199,7 @@ function user_post_data($data) {
       </tbody>
     </table><?php
 
-  } // <-- render table by status
+  } // <-- render table by post status
 
   $output = ob_get_contents();
   ob_end_clean();
@@ -224,13 +209,13 @@ function user_post_data($data) {
     'html' => $pagination->pageLinks($params['pathname'])
   ];
 
-  if ($output) {
-    exit(json_encode(['success', $output, $pag]));
-  } else {
-    exit(json_encode(['failed']));
-  }
+  if ($output) exit(json_encode(['success', $output, $pag]));
+  else exit(json_encode(['failed']));
 
-} // <-- user posts search function
+} // <-- function
+
+/*
+ -- Author search own post data ----------------------------------------------*/
 
 function own_post_data($data) {
   global $session;
@@ -239,61 +224,51 @@ function own_post_data($data) {
   $type = $params['type'] ?? "";
   $value = $params['value'] ?? "";
 
-  if ($type == 'status') { // search by status
+  if ($type == 'status') {
 
     if ($value ==  'draft') {
-      $total_count = Post::countAll([
-        'user_id' => $session->getUserId(),
-        'published' => '0'
-      ]);
+      $cond_arr = ['published' => '0'];
+      $cond_str = "p.published = '0'";
 
     } else if ($value == 'published') {
-      $total_count = Post::countAll([
-        'user_id' => $session->getUserId(),
-        'published' => '1',
-        'approved' => '0'
-      ]);
+      $cond_arr = ['published' => '1','approved' => '0'];
+      $cond_str = "p.published = '1' AND p.approved = '0'";
 
     } else if ($value == 'approved') {
-      $total_count = Post::countAll([
-        'user_id' => $session->getUserId(),
-        'approved' => '1'
-      ]);        
+      $cond_arr = ['approved' => '1'];
+      $cond_str = "p.approved = '1'"; 
     }
 
-  } else if ($type == 'topic') { // search by topic
+  } else if ($type == 'topic') {
 
-    $total_count = Post::countAll([
-      'user_id' => $session->getUserId(),
-      'topic_id' => $value
-    ]);
+    $cond_arr = ['topic_id' => $value];
+    $cond_str = "p.topic_id = {$value}";
 
-  } elseif ($type == 'search') { // search by term
+  } elseif ($type == 'search') {
     
-    if ($value != "") { // search
-      $total_count = Post::countAll([
-        'user_id' => $session->getUserId(),
-        ["( title LIKE '%?%' OR body LIKE '%?%' )", $value, $value]
-      ]);
-
-    } elseif ($value == "") { // default
-      $total_count = Post::countAll([
-        'user_id' => $session->getUserId(),
-      ]);
+    if ($value != "") {
+      $cond_arr = [
+        ["(title LIKE '%?%' OR body LIKE '%?%')", $value, $value]
+      ];
+      $cond_str = "(p.title LIKE '%{$value}%' OR p.body LIKE '%{$value}%')";
+    } else {
+      $cond_arr = [];
+      $cond_str = "";
     }
 
   } elseif ($type == 'date') {
 
     $created = date('Y-m-d', strtotime($value));
-    $date_next = date('Y-m-d', strtotime('+ 1 day', strtotime($value)));
+    $nextday = date('Y-m-d', strtotime('+ 1 day', strtotime($value)));
+    $cond_arr = [
+      ["(created_at >= '?' AND created_at < '?')", $created, $nextday]
+    ];
+    $cond_str = "(p.created_at >= '{$created}' AND p.created_at < '{$nextday}')";
 
-    $total_count = Post::countAll([
-      'user_id' => $session->getUserId(),
-      ["( created_at >= '?' AND created_at < '?' )", $created, $date_next]
-    ]);
+  } // <-- conditions on param type
 
-  } // conditions on $type
-
+  $cond = array_merge(['user_id' => $session->getUserId()], $cond_arr);
+  $total_count = Post::countAll($cond);
   $current_page = $params['page'] ?? 1;
   $per_page = DASHBOARD_PER_PAGE;
   $pagination = new Pagination($current_page, $per_page, $total_count);
@@ -303,28 +278,14 @@ function own_post_data($data) {
   $sql .= " LEFT JOIN `users` AS u ON p.user_id = u.id";
   $sql .= " LEFT JOIN `topics` AS t ON p.topic_id = t.id";
   $sql .= " WHERE p.user_id='{$session->getUserId()}'";
-  if ($type == 'status') {
-    if ($value ==  'draft') {
-      $sql .= " AND p.published = '0'";
-    } else if ($value == 'published') {
-      $sql .= " AND p.published = '1' AND p.approved = '0'";
-    } else if ($value == 'approved') {
-      $sql .= " AND p.approved = '1'";
-    }
-  } else if ($type == 'topic') {
-    $sql .= " AND p.topic_id = {$value}";
-  } else if ($type == 'search' && $value != "") {
-    $sql .= " AND ( p.title LIKE '%$value%' OR p.body LIKE '%$value%' )";
-  } else if ($type == 'date') {
-    $sql .= " AND ( p.created_at >= '{$created}' AND p.created_at < '{$date_next}' )";
-  }
+  $sql .= $cond_str ? " AND {$cond_str}" : "";
   $sql .= " ORDER BY p.updated_at DESC";
   $sql .= " LIMIT {$per_page} OFFSET {$pagination->offset()}";
   $posts = Post::findBySql($sql);
 
   $page_url = url_for($params['pathname']);
-
   require './posts/_common-posts-html.php';
+
   ob_start();
 
   ?><table class="table table-bordered table-hover table-light <?php echo $table_size ?>">
@@ -340,15 +301,15 @@ function own_post_data($data) {
     </thead>
     <tbody>
       <?php foreach($posts as $key => $post): ?>
-        <tr>
-          <th scope="row"><?php echo $key + 1 ?></th>
-          <?php echo td_post_title($post) ?>
-          <?php echo td_post_topic($post, $params['access']) ?>
-          <?php echo td_post_status($post, $params['access']) ?>
-          <?php echo td_post_date($post, $params['access']) ?>
-          <?php echo td_actions_column_fst($post, $session->isAdmin(), $page_url) ?>
-          <?php echo td_actions_column_snd($post, $session->isAdmin(), $page_url) ?>
-        </tr>
+      <tr>
+        <th scope="row"><?php echo $key + 1 ?></th>
+        <?php echo td_post_title($post) ?>
+        <?php echo td_post_topic($post, $params['access']) ?>
+        <?php echo td_post_status($post, $params['access']) ?>
+        <?php echo td_post_date($post, $params['access']) ?>
+        <?php echo td_actions_column_fst($post, $session->isAdmin(), $page_url) ?>
+        <?php echo td_actions_column_snd($post, $session->isAdmin(), $page_url) ?>
+      </tr>
       <?php endforeach; ?>
     </tbody>
   </table><?php
@@ -361,10 +322,7 @@ function own_post_data($data) {
     'html' => $pagination->pageLinks($params['pathname'])
   ];
 
-  if ($output) {
-    exit(json_encode(['success', $output, $pag]));
-  } else {
-    exit(json_encode(['failed']));
-  }
+  if ($output) exit(json_encode(['success', $output, $pag]));
+  else exit(json_encode(['failed']));
 
-} // <-- own posts search function
+} // <-- function

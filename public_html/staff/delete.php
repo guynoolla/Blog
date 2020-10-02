@@ -105,7 +105,7 @@ EOT;
             $deps_arr = $posts_count > 1 ? ['are', 'posts'] : ['is', 'post']; 
             $session->store([
               'table' => $table,
-              'warning' => "This topic can not be deleted, because there {$deps_arr[0]} {$posts_count} {$deps_arr[1]} in it."
+              'warning' => "This topic can not be deleted, because there {$deps_arr[0]} {$posts_count} {$deps_arr[1]} under it."
             ]);
             redirect_to(url_for('staff/delete.php'));
           }
@@ -159,7 +159,7 @@ include SHARED_PATH . '/staff_header.php';
       <div class="row">
 
         <div class="col my-4 w-100">
-          <div class="py-5 px-2 text-center text-muted alert <?php echo ($forbidden ? 'alert-danger' : 'alert-warning') ?>">
+          <div class="py-5 px-2 text-center text-muted alert <?php echo ($forbidden ? 'alert-warning' : 'alert-danger') ?>">
             <p class="lead"><?php echo $warning ?></p>
           </div>
         </div>

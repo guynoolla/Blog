@@ -85,7 +85,11 @@
 
 .page-admin {
   .search-widget form {
-    margin-bottom: .25rem;
+    padding-top: .2rem;
+    padding-bottom: .25rem;
+    margin-top: .05rem;
+    margin-bottom: .05rem;
+    background-color: #E8E8E8;
 
     .input-group {
       .input-group-prepend {
@@ -103,7 +107,7 @@
       .input-group-append .btn {
         border: 1px solid #E8E8E8;
         border-left: none;
-        margin-right: 2px;
+        margin-right: 2rem;
       }
     }
   }
@@ -115,7 +119,7 @@
     background-color: #e2dfd5;
     padding: 1.5rem;
     margin: 0;
-    margin-bottom: .3rem;
+    margin-bottom: .2rem;
 
     .headline-nav {
       .chevron {

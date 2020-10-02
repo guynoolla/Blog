@@ -61,6 +61,15 @@ class DatabaseObject {
     return static::findBySql($sql);
   }
 
+  static public function find($limit, $offset, $append="") {
+    $sql = "SELECT * FROM " . static::$table_name;
+    if ($append) $sql .= " {$append}";
+    else $sql .= " ORDER BY id DESC";
+    $sql .= " LIMIT {$limit}";
+    $sql .= " OFFSET {$offset}";
+    return static::findBySql($sql);
+  }
+
   static public function findById($id) {
     $id = strval($id);
     $sql = "SELECT * FROM " . static::$table_name;
@@ -179,7 +188,7 @@ class DatabaseObject {
     return array_shift($row);
   }
 
-  static protected function concatWhereToSql($sql, $where) {
+  static protected function concatWhereToSql($sql, array $where) {
     if (!empty($where)) {
       $i = 0;
       foreach ($where as $column => $value) {

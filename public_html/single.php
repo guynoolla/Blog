@@ -1,4 +1,5 @@
 <?php
+
 use App\Classes\Post;
 use App\Classes\User;
 use App\Classes\Like;
@@ -52,6 +53,13 @@ if ($session->isLoggedIn()) {
 
 $page_title = $post->title;
 include(SHARED_PATH . '/public_header.php');
+
+$marr = [['mary', 'I am\' Mary']];
+if (empty($marr)) {
+  echo 'It is empty!';
+} else {
+  echo 'No, it is not!';
+}
 
 ?><div class="container-xl">
   <div class="row">

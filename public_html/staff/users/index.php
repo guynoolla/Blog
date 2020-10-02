@@ -99,9 +99,9 @@ include SHARED_PATH . '/staff_header.php';
           </table>
           
           <?php
-          $url = url_for('staff/users/index.php');
-          echo $pagination->pageLinks($url);
-        ?>
+            $url = url_for('staff/users/index.php');
+            echo $pagination->pageLinks($url);
+          ?>
         </div>
   
       <?php endif; ?>

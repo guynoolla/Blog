@@ -6,11 +6,11 @@ body::-webkit-scrollbar {
 }
 
 body::-webkit-scrollbar-track {
-  background-color: $bg-secondary;
+  background-color: $bg-primary;
 }
 
 body::-webkit-scrollbar-thumb {
 @import './common/vars';
 @import './common/vars';
-  background-color: #e2d2bc;
+  background-color: darken($bg-secondary, 5);
 }
