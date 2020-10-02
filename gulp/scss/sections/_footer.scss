@@ -33,8 +33,11 @@ footer {
   
   .scroll-to-top:hover,
   .scroll-to-top:focus {
-    background: #a161bf;
+    background-color: #a161bf;
     opacity: .8;
+    svg {
+      color: #FFF !important;
+    }
   }
 
 }

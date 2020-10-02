@@ -63,6 +63,12 @@ $(() => {
 
   /* ------------------------------------------------------------------*/
 
+  const halfWidth = $(".container").width() / 2;
+  $("#scrollToTopJS").css({
+    right: "50%",
+    marginRight: -(halfWidth) + 'px'
+  })
+
   $("#navSearchForm, #asideSearchForm").on("submit", e => {
     const form = $(e.target)
     const term = form.find("input[name='s']").val()

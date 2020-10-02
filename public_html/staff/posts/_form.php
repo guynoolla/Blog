@@ -45,6 +45,10 @@ if (!$edit): ?>
     <input type="text" name="post[title]" value="<?php echo h($post->title) ?>" class="form-control" id="title" aria-describedby="emailHelp">
   </div>
   <div class="form-group">
+    <label for="meta_desc">Meta Description for SEO</label>
+    <input type="text" name="post[meta_desc]" value="<?php echo ($post->meta_desc ? h($post->meta_desc) : '') ?>" class="form-control" id="meta_desc" aria-describedby="emailHelp">
+  </div>
+  <div class="form-group">
     <label for="postBody">Content</label>
     <ul class="list-group list-group-horizontal-md" style="margin-bottom:1px">
       <li class="list-group-item bg-muted-lk">

@@ -6,12 +6,13 @@ namespace App\Classes;
 class Post extends \App\Classes\DatabaseObject {
 
   static protected $table_name = "`posts`";
-  static protected $db_columns = ['id','user_id','topic_id','title','format','image','video','body','video_urls','published','approved','created_at','updated_at'];
+  static protected $db_columns = ['id','user_id','topic_id','title','meta_desc','format','image','video','body','video_urls','published','approved','created_at','updated_at'];
 
   public $id;
   public $user_id;
   public $topic_id;
   public $title;
+  public $meta_desc;
   public $format;
   public $image;
   public $video;
@@ -46,6 +47,7 @@ class Post extends \App\Classes\DatabaseObject {
     $this->user_id = $args['user_id'] ?? '';
     $this->topic_id = $args['topic_id'] ?? '';
     $this->title = $args['title'] ?? '';
+    $this->meta_desc = $args['meta_desc'] ?? '';
     $this->format = $args['format'] ?? '';
     $this->image = $args['image'] ?? '';
     $this->video = $args['video'] ?? '';
@@ -104,7 +106,12 @@ class Post extends \App\Classes\DatabaseObject {
     if ($this->topic_id == 0) {
       $this->errors[] = 'Please select a topic.';
     }
-
+    if (!is_blank($this->meta_desc)) {
+      if (!has_length($this->meta_desc, ['max' => 160])) {
+        $this->errors[] = 'Meta description can not be more than 160 character.';
+      }
+    }
+    
     if (is_blank($this->body)) {
       $this->errors[] = 'Post content cannot be blank.';
     }

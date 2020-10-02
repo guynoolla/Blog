@@ -10,6 +10,9 @@ if (!isset($page_title)) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?php echo $page_title ?></title>
+  <?php if (url_contain(['/post/','/preview/'])):
+    ?><meta name="description" content="<?php echo $post->meta_desc ?>">
+  <?php endif; ?>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
   <!-- Awesome fonts replaced with awesome svg -->
   <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
