@@ -51,6 +51,12 @@ $(() => {
     }         
   }
 
+  const halfWidth = $(".containerJS").width() / 2;
+  $("#scrollToTopJS").css({
+    right: "50%",
+    marginRight: -(halfWidth) + 'px'
+  })
+
   /*
    * Require admin.js in user is logged in ---------------------------*/
 
@@ -62,12 +68,6 @@ $(() => {
   }
 
   /* ------------------------------------------------------------------*/
-
-  const halfWidth = $(".container").width() / 2;
-  $("#scrollToTopJS").css({
-    right: "50%",
-    marginRight: -(halfWidth) + 'px'
-  })
 
   $("#navSearchForm, #asideSearchForm").on("submit", e => {
     const form = $(e.target)

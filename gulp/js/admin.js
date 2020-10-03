@@ -46,6 +46,7 @@ $(() => {
   }
   
   if ($("#userEditForm").length) {
+
     const validate = new FormValidate("userEditForm");
     validate.settings.fieldSize["username"] = { min: 4, max: 20 };
     validate.settings.fieldSize["password"] = { min: 8, max: 20 };
@@ -64,13 +65,24 @@ $(() => {
       const confirmPassword = await validate.confirmPassword("confirm_password");
       const aboutText = await validate.aboutText("about_text");
   
-      if (e.type == "submit" && validate.validatedLen() == 4) {
+      if (e.type == "submit" && !validate.hasError()) {
         validate.form.off("submit");
         validate.form.trigger("submit");
       }
-  
       return false;
     })
+
+    $("#about_image").on("change", e => {
+      const input = e.target;
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = (e) => {
+          $('#aboutImage').attr('src', e.target.result).removeClass("d-none");
+        }
+        reader.readAsDataURL(input.files[0]);
+      }
+    });
+
   } // <-- Register Form
 
   /*

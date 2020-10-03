@@ -38,7 +38,7 @@ if (!isset($page_title) || $page_title == '') {
     </nav>
   </header>
 
-  <div class="container-xl">
+  <div class="container-xl containerJS">
     <div class="page-admin">
 
       <div class="row">

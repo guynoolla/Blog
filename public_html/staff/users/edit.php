@@ -101,16 +101,19 @@ include SHARED_PATH . '/staff_header.php';
                 <hr class="mt-4">
                 <h3 class="text-center">About author</h3>
                 <div class="form-group row mb-4 mx-0">
-                  <label for="about_image" class="col-sm-4 pl-0 pt-3">Your Image</label>
-                  <?php if ($user->about_image): ?>
-                    <div class="col-sm-8">
-                      <?php if ($user->isAdmin()): ?>
-                        <h5 class="my-0">Image: <?php echo $user->about_image ?></h5>
-                      <?php endif; ?>
-                      <img class="d-block float-left my-3" id="aboutImage" src="<?php echo url_for('/assets/images/' . $user->about_image) ?>" style="width:160px;height:auto;">
-                    </div>
-                  <?php endif; ?>
-                  <input class="col-sm-8 form-control-file" type="file" name="about_image" id="about_image">
+                  <label for="about_image" class="col-sm-4 pl-0">Your Image</label>
+                  <div class="col-sm-4">
+                    <input class="form-control-file mb-3 pl-0" type="file" name="about_image" id="about_image">
+                    <?php if ($user->isAdmin()): ?>
+                      <h5 class="my-0">Image: <?php echo $user->about_image ?></h5>
+                    <?php endif; ?>
+                  </div>
+                  <div class="col-sm-4">
+                    <img class="<?php echo ((isset($user->about_image)) ? 'd-block' : 'd-none')
+                      ?> rounded-circle float-left" style="width:100%;height:auto;" id="aboutImage"
+                      src="<?php echo url_for('/assets/images/' . $user->about_image)
+                    ?>">
+                  </div>
                 </div>
                 <div class="form-group row mb-0 mx-0">
                   <label for="aboutText" class="col-sm-4 pl-0">About Text</label>

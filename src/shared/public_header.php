@@ -67,7 +67,7 @@ if (!isset($page_title)) {
 
 <div><!--Content wrapper div open-->
 
-  <div class="container-md">
+  <div class="container-md containerJS">
     <div class="row">
       <div class="col">
         <?php echo display_session_message('alert alert-success alert-dismissible py-3 my-2 text-center h4 '); ?>
