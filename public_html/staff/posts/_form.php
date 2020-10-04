@@ -70,34 +70,74 @@ if (!$edit): ?>
     <small id="bodyHelp" class="form-text text-muted">External links are not allowed excerpt YouTube and Vimeo video links.</small>
   </div>
 
-  <div class="form-group">
-    <label>Post Format</label>
-    <div class="form-check">
-      <input class="form-check-input" type="radio" name="post[format]" id="format1" value="image" <?php echo (($post->format == 'image' || !$edit) ? 'checked' : '') ?>>
-      <label class="form-check-label" for="format1">
-        Image
-      </label>
+  <div class="form-group row pl-0">
+    <div class="col-sm-6">
+      <label>Post Format</label>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="post[format]" id="formatImage" value="image" <?php echo (($post->format == 'image' || !$edit) ? 'checked' : '') ?>>
+        <label class="form-check-label" for="formatImage">Image</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="post[format]" id="formatVideo" value="video" <?php echo ($post->format == 'video' ? 'checked' : '') ?>>
+        <label class="form-check-label" for="formatVideo">Video</label>
+      </div>
+      <?php
+        $_format = $edit ? $post->format : "false";
+        $_image = ((isset($post->image) && $post->image) ? $post->image : "false");
+        $_video = ((isset($post->video) && $post->video) ? $post->video : "false");
+        $post->videoSplitter();
+      ?>
+      <div class="preview preview-image mt-sm-4">
+        <?php if ($session->isAdmin()): ?>
+          <p><?php echo ($_image != 'false' ? $post->image : '') ?></p>
+        <?php endif; ?>
+      </div>
     </div>
-    <div class="form-check">
-      <input class="form-check-input" type="radio" name="post[format]" id="format2" value="video" <?php echo ($post->format == 'video' ? 'checked' : '') ?>>
-      <label class="form-check-label" for="format2">
-        Video
-      </label>
+
+    <div class="col-sm-6 media-preview" data-format="<?php echo $_format ?>">
+
+      <div class="preview preview-image <?php // image format
+                  echo $_format != 'image' ? 'd-none' : ''
+      ?>" data-value="<?php echo $_image ?>">
+        <img id="previewImage" class="ml-auto" src="<?php
+          echo ($_image != 'false' ? url_for('/assets/images/' . $post->image) : '')
+        ?>" style="width:100%;height:auto;">
+      </div>
+
+      <div class="preview preview-video mt-4 mt-sm-0 <?php // video format
+                  echo $_format != 'video' ? 'd-none' : ''
+      ?>" data-value="<?php echo $_video ?>">
+        <div class="embed-responsive embed-responsive-16by9">
+        
+        <?php if ($post->video['source'] == 'youtube'): // youtube ?>
+          <iframe id="previewVideo" class="embed-responsive-item" src="<?php
+            echo ($_video != 'false' ? $post->video['embed'] : '') 
+            ?>" frameborder="0" allowfullscreen>
+          </iframe>
+        
+          <?php elseif ($post->video['source'] == 'vimeo'): // vimeo ?>
+          <iframe id="previewVideo" class="embed-responsive-item" src="<?php
+            echo ($_video != 'false' ? $post->video['embed'] : '') ?>"
+            frameborder="0" webkitallowfullscreen mozallowfullscreen'
+            allowfullscreen>
+          </iframe>
+        <?php endif; ?>
+        
+        </div><!-- embed-responsive -->
+      </div>
+
     </div>
   </div>
 
-  <?php $post->videoSplitter(); ?>
-
-  <div class="form-group mt-2">
-    <?php if ($edit && $post->image): ?>
-      <div class="d-flex align-items-bottom">
-        <h5>Image: <?php echo $post->image ?></h5>
-        <img class="ml-auto" id="postImage" src="<?php echo url_for('/assets/images/' . $post->image) ?>" style="width:200px;height:auto;">
-      </div>
-    <?php endif; ?>
-    <input type="file" name="image" class="form-control-file" id="image" <?php echo ($post->format == 'video' ? 'disabled' : '') ?>>
-    <small id="fileHelp" class="form-text small-nicer-lk">Image aspect ratio (width x height) must be between 7x5 9x5)</small>
-    <input type="text" name="post[video]" value="<?php echo (isset($post->video['url']) ? $post->video['url'] : '') ?>" class="form-control mt-1" id="video" placeholder="URL of Video" <?php echo (($post->format == 'image' || !$edit) ? 'disabled' : '') ?>>
+  <div class="form-group row mt-2">
+    <div class="col-sm-6">
+      <input type="file" name="image" class="form-control-file" id="image" <?php echo ($post->format == 'video' ? 'disabled' : '') ?>>
+      <small id="fileHelp" class="form-text small-nicer-lk">Image aspect ratio must be between 7x5 9x5)</small>
+    </div>
+    <div class="col-sm-6">
+      <label for="video" class="mb-1">Video</label>
+      <input type="text" name="post[video]" value="<?php echo (isset($post->video['url']) ? $post->video['url'] : '') ?>" class="form-control mt-1" id="video" placeholder="URL of Video" <?php echo (($post->format == 'image' || !$edit) ? 'disabled' : '') ?>>
+    </div>
   </div>
   <div class="form-group mt-4">
     <label for="topic">Topic</label>

@@ -25,6 +25,7 @@ if (!isset($page_title)) {
   <link rel="icon" type="image/png" sizes="32x32" href="<?php echo url_for('/favicon-32x32.png') ?>">
   <link rel="icon" type="image/png" sizes="16x16" href="<?php echo url_for('/favicon-16x16.png') ?>">
   <link rel="manifest" href="<?php echo url_for('/site.webmanifest') ?>">
+  <script src="<?php echo url_for('assets/js/vendor.js') ?>"></script>
 </head>
 <body>
 

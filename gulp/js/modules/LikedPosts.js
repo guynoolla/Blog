@@ -57,9 +57,8 @@ class Posts {
 
   loadPosts(ids) {
     if (server.dashboardMain) {
-      $(".loadPostsJS").fadeOut(600, () => {
-        $(".loading").removeClass("d-none");
-      });
+      $(".loadPostsJS").hide();
+      $(".loading").removeClass("d-none");
       $(".pagination-nav").hide();
 
       $.ajax({
@@ -79,7 +78,6 @@ class Posts {
         if (data[0] == 'empty') {
           $(".loadPostsJS .alert").removeClass("d-none")
         }
-        $(".loadPostsJS").fadeIn(() => $(".loading").addClass("d-none"))
       })
       .done(res => {
         const data = JSON.parse(res);
@@ -87,8 +85,9 @@ class Posts {
           const output = this.makeHtml(data[1], data[2])
           let timer = setTimeout(() => {
 
-            $(".loadPostsJS").html(output);
-            $(".paginationJS").html(data[2].html);
+            $(".loading").addClass("d-none");
+            $(".loadPostsJS").html(output).fadeIn();
+            $(".paginationJS").html(data[2].html).fadeIn();
             this.setHeadlineChevrons(data[2].total_count);
             $(".pagination-nav").show();
             

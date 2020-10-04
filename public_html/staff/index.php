@@ -51,7 +51,7 @@ include SHARED_PATH . '/staff_header.php';
       <div class="paginationJS"></div>
 
       <div class="loading d-none">
-        <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+        <div class="spinner-grow" style="width: 2rem; height: 2rem;" role="status">
           <span class="sr-only">Loading...</span>
         </div>
       </div>

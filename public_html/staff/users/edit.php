@@ -102,10 +102,10 @@ include SHARED_PATH . '/staff_header.php';
                 <h3 class="text-center">About author</h3>
                 <div class="form-group row mb-4 mx-0">
                   <label for="about_image" class="col-sm-4 pl-0">Your Image</label>
-                  <div class="col-sm-4">
+                  <div class="col-sm-4 pl-0">
                     <input class="form-control-file mb-3 pl-0" type="file" name="about_image" id="about_image">
-                    <?php if ($user->isAdmin()): ?>
-                      <h5 class="my-0">Image: <?php echo $user->about_image ?></h5>
+                    <?php if ($session->isAdmin()): ?>
+                      <h5 class="my-0"><?php echo $user->about_image ?></h5>
                     <?php endif; ?>
                   </div>
                   <div class="col-sm-4">

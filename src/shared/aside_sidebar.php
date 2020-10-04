@@ -23,7 +23,7 @@ if (url_contain(['/post/', '/preview/'])) {
 
 $posts = App\Classes\Post::findWhere(
   ['approved' => '1', 'format' => 'image'],
-  'ORDER BY RAND() LIMIT 3'
+  'ORDER BY created_at DESC'
 );
 
 $topics = Topic::findAll();
@@ -45,7 +45,7 @@ $topics = Topic::findAll();
 
       <div class="about-widget">
         <div class="about-image d-flex align-items-center justify-content-center">
-          <img class="rounded-circle" src="<?php echo url_for('assets/images' . $user->about_image) ?>" alt="About Us">
+          <img class="rounded-circle lazyload" data-sizes="auto" data-src="<?php echo url_for('assets/images' . $user->about_image) ?>" alt="About Us">
         </div>
         <div class="about-text">
           <p><?php echo $user->about_text ?></p>

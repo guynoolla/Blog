@@ -17,7 +17,6 @@ $(() => {
   slickCarousel();
   navbarSearchBehavior();
   homePagePaginationBehavior();
-  editPostFormElementsBehavior();
 
   const like = new Like();
 
@@ -217,20 +216,6 @@ function cleanEmbedResponsive(embedResp1=false, embedResp2=false) {
     embedResp2.removeClass('embed-responsive-16by9');
     embedResp2.removeClass('embed-responsive-21by9');
   }
-}
-
-function editPostFormElementsBehavior() {
-  const Form = $("#editPostForm");
-  
-  Form.find(".form-check-input").on("change", (e) => {
-    if (e.target.value == "image") {
-      Form.find("#image").prop("disabled", false);
-      Form.find("#video").prop("disabled", true);
-    } else if (e.target.value == "video") {
-      Form.find("#image").prop("disabled", true);
-      Form.find("#video").prop("disabled", false);        
-    }
-  })
 }
 
 function homePagePaginationBehavior() {

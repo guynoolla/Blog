@@ -183,7 +183,7 @@ include SHARED_PATH . '/carousel.php';
                         <?php if ($post->format == 'image'): ?>
                           <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
                             <div class="ard ard--wide-md">
-                              <img class="ard-image ard-image--wide" srcset="<?php echo Post::responsive($post->image) ?>" alt="<?php $post->title ?>">
+                              <img class="ard-image ard-image--wide lazyload" data-sizes="auto" data-srcset="<?php echo Post::responsive($post->image) ?>" alt="<?php $post->title ?>">
                             </div>
                           </a>
                         <?php elseif ($post->format == 'video'): ?>
@@ -236,7 +236,7 @@ include SHARED_PATH . '/carousel.php';
                         <?php if ($post->format == 'image'): ?>
                           <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">  
                             <div class="ard ard--mid-md ard--tall-lg ard--mid-xl">
-                              <img class="ard-image ard-image--center ard-image--wide" srcset="<?php echo Post::responsive($post->image) ?>" alt="<?php $post->title ?>">
+                              <img class="ard-image ard-image--center ard-image--wide lazyload" data-sizes="auto" data-srcset="<?php echo Post::responsive($post->image) ?>" alt="<?php $post->title ?>">
                             </div>
                           </a>
                         <?php elseif ($post->format == 'video'): ?>

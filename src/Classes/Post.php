@@ -164,12 +164,6 @@ class Post extends \App\Classes\DatabaseObject {
     }
   }
 
-  /**
-   * Video embed URL examples:
-   * https://www.youtube.com/watch?v=GDeJtgjvXTk
-   * https://youtu.be/GDeJtgjvXTk
-   * https://vimeo.com/440413540
-  */
   protected function getBodyVideoUrls() {
     $links = has_links($this->body, true);
     $data = [];
@@ -365,9 +359,9 @@ SQL;
     $embed_url = $this->video['embed'];
 
     if ($this->format == 'video') {
-      $youtube = '<iframe src="%s" class="embed-responsive-item"';
+      $youtube = '<iframe data-src="%s" class="embed-responsive-item lazyload"';
       $youtube .= ' frameborder="0" allowfullscreen></iframe>';
-      $vimeo = '<iframe src="%s" class="embed-responsive-item"';
+      $vimeo = '<iframe data-src="%s" class="embed-responsive-item lazyload"';
       $vimeo .= ' frameborder="0" webkitallowfullscreen mozallowfullscreen';
       $vimeo .= ' allowfullscreen></iframe>';
       $host = parse_url($url)['host'];
@@ -389,9 +383,9 @@ SQL;
     if (!empty($video_urls)) {
       foreach ($video_urls as $url => $embed_url) {
         $div = '<div class="embed-responsive embed-responsive-16by9">%s</div>';
-        $youtube = '<iframe src="%s" class="embed-responsive-item"';
+        $youtube = '<iframe data-src="%s" class="embed-responsive-item lazyload"';
         $youtube .= ' controls="0" showinfo="0" frameborder="0" allowfullscreen></iframe>';
-        $vimeo = '<iframe src="%s" class="embed-responsive-item"';
+        $vimeo = '<iframe data-src="%s" class="embed-responsive-item lazyload"';
         $vimeo .= ' frameborder="0" webkitallowfullscreen mozallowfullscreen';
         $vimeo .= ' allowfullscreen></iframe>';
         $host = parse_url($url)['host'];
@@ -429,6 +423,12 @@ SQL;
     }
   }
 
+  /**
+   * Video embed URL examples:
+   * https://www.youtube.com/watch?v=GDeJtgjvXTk
+   * https://youtu.be/GDeJtgjvXTk
+   * https://vimeo.com/440413540
+  */
   function videoSplitter() {
     if (isset($this->video) && $this->video != "") {
       $arr = (array) json_decode($this->video);
@@ -436,6 +436,14 @@ SQL;
       $this->video = [];
       $this->video['url'] = $url;
       $this->video['embed'] = $arr[$url];
+      $host = parse_url($url)['host'];
+      switch($host) {
+        case "www.youtube.com":
+        case "youtu.be":
+              $this->video['source'] = 'youtube';
+        case 'vimeo.com':
+              $this->video['source'] = 'vimeo';
+      }
       return $this->video;
     }
     return "";

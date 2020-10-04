@@ -1,6 +1,9 @@
 import $ from 'jquery';
 import FormValidate from './modules/FormValidateRules';
 import LikedPosts from './modules/LikedPosts';
+import urlParser from 'js-video-url-parser/lib/base';
+import 'js-video-url-parser/lib/provider/vimeo';
+import 'js-video-url-parser/lib/provider/youtube';
 
 $(() => {
   console.log("admin.js is running...");
@@ -45,6 +48,9 @@ $(() => {
     });
   }
   
+  /*
+   User Edit Form ------------------------------------------------------- */
+
   if ($("#userEditForm").length) {
 
     const validate = new FormValidate("userEditForm");
@@ -83,7 +89,60 @@ $(() => {
       }
     });
 
-  } // <-- Register Form
+  }
+
+  /*
+   Edit Post Form ------------------------------------------------------------ */
+
+  if ($("#editPostForm").length) {
+    const postForm = $("#editPostForm");
+
+    editPostFormElementsBehavior(postForm);
+
+    postForm.find("#image").on("change", e => {
+      const input = e.target;
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = (e) => {
+          postForm.find("#previewImage").attr("src", e.target.result);
+          postForm.find(".preview-image").removeClass("d-block").addClass("d-block");
+          postForm.find(".preview-image").attr("data-value", "true");
+        }
+        reader.readAsDataURL(input.files[0]);
+      }
+    });
+
+    postForm.find("#video").on("change", e => {
+      const targetUrl = $(e.target).val();
+      const video = urlParser.parse(targetUrl);
+      let videoUrl = "";
+      let iframe = "";
+
+      if (video.provider == 'youtube') {
+        videoUrl = `//www.youtube.com/embed/${video.id}`;
+        iframe = `<iframe id="previewVideo" class="embed-responsive-item"
+                    src="${videoUrl}" frameborder="0" allowfullscreen>
+                  </iframe>`;
+      } else if (video.provider == 'vimeo') {
+        videoUrl = `//player.vimeo.com/video/${video.id}`;
+        iframe = `<iframe id="previewVideo" class="embed-responsive-item"
+                    src="${videoUrl}" frameborder="0" webkitallowfullscreen
+                    mozallowfullscreen' allowfullscreen>
+                  </iframe>`;
+      }
+      if (videoUrl) {
+        postForm.find(".preview.preview-video .embed-responsive")
+                .html(iframe);
+        postForm.find(".preview.preview-video")
+                .removeClass("d-block")
+                .addClass("d-block")
+                .attr("data-value", "true");
+      } else {
+        alert("Sorry, only youtube and vimeo videos are allowed");
+      }
+    })
+
+  }
 
   /*
    XHR Post, User, Topic Search -------------------------------------------*/
@@ -207,12 +266,7 @@ $(() => {
         //let timer = setTimeout(() => {
           loading(0);
           const data = JSON.parse(res);
-  
-          // console.log('pd.access', pagData.access);
-          // console.log('pd.type', pagData.type);
-          // console.log('pd.value', pagData.value);
-          // console.log('page', page);
-          
+
           loadPostBox(data);
           pagData.pageNum(page);
           $('#item-' + page).addClass("active");
@@ -228,6 +282,37 @@ $(() => {
 
 /*
  * Functions ---------------------------------------------------------*/
+
+function editPostFormElementsBehavior(form) {
+  form.find(".form-check-input").on("change", (e) => {
+    if (e.target.value == "image") {
+      form.find("#image").prop("disabled", false);
+      form.find("#video").prop("disabled", true);
+      form.find(".media-preview").attr("data-format", "image");
+    } else if (e.target.value == "video") {
+      form.find("#image").prop("disabled", true);
+      form.find("#video").prop("disabled", false);
+      form.find(".media-preview").attr("data-format", "video");
+    }
+    if (form.find(".media-preview").attr("data-format") == "image") {
+      form.find(".preview").removeClass("d-none d-block");
+      form.find(".preview-video").addClass("d-none");
+      if (form.find(".preview-image").attr("data-value") != "false") {
+        form.find(".preview-image").addClass("d-block");
+      } else {
+        form.find(".preview-image").addClass("d-none");
+      }
+    } else if (form.find(".media-preview").attr("data-format") == "video") {
+      form.find(".preview").removeClass("d-none d-block");
+      form.find(".preview-image").addClass("d-none");
+      if (form.find(".preview-video").attr("data-value") != "false") {
+        form.find(".preview-video").addClass("d-block");
+      } else {
+        form.find(".preview-video").addClass("d-none");
+      }
+    }
+  })
+}
 
 function loading(wait=0) {
   if (wait == 1) {
