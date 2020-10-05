@@ -13,19 +13,23 @@ if (is_post_request()) {
 
   if (!$user) redirect_to(url_for('index.php'));
 
-  $image = new File($_FILES['about_image']);
-  $user->fileInstance($image);
+  if ($user->user_type == 'author') {
+    $image = new File($_FILES['about_image']);
+    $user->fileInstance($image);
+  }
 
   $user->mergeAttributes($_POST['user']);
 
   if ($user->save()) {
     $session->message("User '" . $user->username ."' settings was updated.");
-    if ($user->email != $session->userEmail()) {
-      $session->emailFalse();
-      redirect_to(url_for('/staff/index.php'));
-    } else {
-      redirect_to(url_for('/staff/users/edit.php?id=' . $user->id));
+
+    if ($session->getUserId() == $user->id) {
+      if ($user->email != $session->userEmail()) {
+        $session->emailFalse();
+      }
     }
+
+    redirect_to(url_for('/staff/users/edit.php?id=' . $user->id));
   }
 
 } else {
@@ -96,7 +100,7 @@ include SHARED_PATH . '/staff_header.php';
                 <span class="offset-sm-4 col-sm-8 text-danger field-validation-error"></span>
               </div>
 
-              <?php if ($session->isAuthor()): ?>
+              <?php if ($user->isEmailConfirmed()): ?>
 
                 <hr class="mt-4">
                 <h3 class="text-center">About author</h3>
@@ -104,9 +108,6 @@ include SHARED_PATH . '/staff_header.php';
                   <label for="about_image" class="col-sm-4 pl-0">Your Image</label>
                   <div class="col-sm-4 pl-0">
                     <input class="form-control-file mb-3 pl-0" type="file" name="about_image" id="about_image">
-                    <?php if ($session->isAdmin()): ?>
-                      <h5 class="my-0"><?php echo $user->about_image ?></h5>
-                    <?php endif; ?>
                   </div>
                   <div class="col-sm-4">
                     <img class="<?php echo ((isset($user->about_image)) ? 'd-block' : 'd-none')

@@ -8,14 +8,15 @@ require_once('../../../src/initialize.php');
 if (!$session->isAuthor()) redirect_to(url_for('index.php'));
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Check Author
 
-function posts_creation_limit($count=2) {
+function posts_creation_limit() {
   global $session;
+  $limit = 10;
   $count = Post::countAll([
     'user_id' => $session->getUserId(),
     ['?', 'DATE(`created_at`) = CURDATE()']
   ]);
 
-  if ($count > 1) {
+  if ($count >= $limit) {
     $session->message('Sorry, you reached the maximum  posts per day (' . $count . ')');
     redirect_to(url_for('staff/posts/index.php'));
   }
@@ -23,7 +24,7 @@ function posts_creation_limit($count=2) {
 
 if (is_post_request()) {
 
-  posts_creation_limit(3);
+  posts_creation_limit();
 
   $post = new Post($_POST['post']);
 

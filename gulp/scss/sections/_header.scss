@@ -4,6 +4,11 @@
 header {
   border-bottom: 2px solid #FFF;
 
+  .navbar-brand {
+    color: #9096a2 !important;
+    letter-spacing: .025em;
+  }
+
   nav {
     transition: padding .2s linear, opacity .2s ease-in;
     &.scroll {

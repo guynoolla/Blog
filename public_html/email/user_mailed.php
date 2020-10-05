@@ -16,7 +16,7 @@ require_once '../../src/initialize.php';
 
       <div class="py-3 pb-5 my-4 rounded bg-white px-0 px-sm-4 px-lg-5">
         <h2><?php echo $page_title ?></h2>
-        <p>Confirmation email was sent. Please check you email.</p>
+        <p>Confirmation email was sent. Please check your email.</p>
       </div>
 
     </div>

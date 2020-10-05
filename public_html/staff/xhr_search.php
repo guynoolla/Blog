@@ -17,9 +17,11 @@ switch($target) {
   case 'admin_user_by_user_type':
   case 'admin_user_by_date':
         if ($session->isAdmin()) admin_user_data($_POST['data']);
+        break;
   case 'admin_topic_by_search':
   case 'admin_topic_by_date':
         if ($session->isAdmin()) admin_topic_data($_POST['data']);
+        break;
   default:
         exit(json_encode(['target' => 'error']));
 }

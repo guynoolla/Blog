@@ -20,11 +20,11 @@ $(() => {
 
   const like = new Like();
 
-  var rtime;
-  var timeout = false;
-  var delta = 200;
-  var er1 = $(".embed-responsive");
-  var er2 = $(".embed-responsive");
+  let rtime;
+  let timeout = false;
+  const delta = 200;
+  const er1 = $(".embed-responsive");
+  const er2 = $(".embed-responsive");
 
   deviceMediaEmbedResponsive(er1, er2);
 
@@ -80,6 +80,7 @@ $(() => {
   if ($("#contactForm").length) {
     const validate = new FormValidate($("#contactForm"));
     validate.settings.fieldSize["message"] = { min: 20, max: 1000 };
+    validate.settings.validateOnSubmit = true;
 
     validate.form.on("submit change", async e => {
       e.preventDefault();
@@ -131,6 +132,7 @@ $(() => {
     validate.settings.fieldSize["password"] = { min: 8, max: 20 };
     validate.settings.uniqueVal["username"] = true;
     validate.settings.uniqueVal["email"] = true;
+    validate.settings.validateOnSubmit = true;
 
     validate.form.on("submit change", async e => {
       e.preventDefault();

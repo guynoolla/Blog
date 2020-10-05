@@ -43,9 +43,9 @@ class Like extends \App\Classes\DatabaseObject {
       SELECT * FROM `likes` WHERE
       post_id = $pid AND user_id = $uid
 SQL;
-    $like = parent::findBySql($sql)[0];
+    $like = parent::findBySql($sql);
 
-    return $like;
+    return (!empty($like) ? $like[0] : false);
   }
 
   public function process($action) {

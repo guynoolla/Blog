@@ -87,8 +87,10 @@ include '_common-posts-html.php';
       </h1>
 
       <?php if (empty($posts)): ?>
-        <p class="lead text-center bg-secondary text-white py-5">This table is empty</p>
-      
+        <div class="py-4 px-2 mt-1 text-center alert alert-info">
+          <p class="h4">This table is empty</p>
+        </div>
+
       <?php else: ?>
         <?php include '../_common-search-form.php' ?>
 

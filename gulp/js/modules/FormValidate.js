@@ -112,7 +112,6 @@ class FormValidate {
   }
 
   captchaError(fid, elem, imageSrc) {
-    console.log("error here!");
     elem.val("");
     const error = this.getErrors(fid)
     $(".form-group-captcha").next().text(error);
@@ -121,7 +120,6 @@ class FormValidate {
   }
 
   captchaValid(fid, elem) {
-    console.log("valid here!")
     this.validValues[fid] = elem;
     $(".form-group-captcha").next().text("");
     $(".form-group-captcha")
@@ -191,7 +189,11 @@ class FormValidate {
       return true
     }
     if (this.event.type == "change") {
-      return true;
+      if (this.event.target.id == fid) {
+        return true
+      } else {
+        return false
+      }
     }
     if (this.event.type == "submit" && this.settings.validateOnSubmit) {
       return true;

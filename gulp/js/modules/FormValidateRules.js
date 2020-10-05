@@ -344,6 +344,7 @@ class FormValidateRules extends FormValidate {
     
     if (value == false) {
       this.errors[fid].push("The post topic is not selected.");
+      this.showErrors(fid, elem);
       return false;
     } else {
       this.showValid(fid, elem);

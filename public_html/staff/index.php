@@ -46,7 +46,10 @@ include SHARED_PATH . '/staff_header.php';
 
       <!-- Email Confirmed User -->
       <div class="loadPostsJS">
-        <div class="alert alert-info text-muted text-center d-none py-5 mt-1">You liked no one post yet</div>
+        <div class="py-4 px-2 mt-1 text-center alert alert-info">
+          <p class="h4">You liked no one post yet</p>
+        </div>
+
       </div>
       <div class="paginationJS"></div>
 

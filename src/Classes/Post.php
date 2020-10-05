@@ -73,7 +73,7 @@ class Post extends \App\Classes\DatabaseObject {
       }
       if ($prop === 'video_urls') {
         $this->getBodyVideoUrls();
-        $attr[$prop] = $this->video_urls == "" ? 'NULL' : $this->video_urls;
+        $attr[$prop] = $this->video_urls;
       
       } elseif ($prop === 'published') {
         $this->filterCheckboxValue($prop);
@@ -430,25 +430,23 @@ SQL;
    * https://vimeo.com/440413540
   */
   function videoSplitter() {
-    if (isset($this->id)) {
-      if (isset($this->video) && $this->video != "") {
-        $arr = (array) json_decode($this->video);
-        $url = key($arr);
-        $this->video = [];
-        $this->video['url'] = $url;
-        $this->video['embed'] = $arr[$url];
-        $host = parse_url($url)['host'];
-        switch($host) {
-          case "www.youtube.com":
-          case "youtu.be":
-                $this->video['source'] = 'youtube';
-          case 'vimeo.com':
-                $this->video['source'] = 'vimeo';
-        }
-        return $this->video;
+    if (isset($this->id) && isset($this->video)) {
+      $arr = (array) json_decode($this->video);
+      $url = key($arr);
+      $this->video = [];
+      $this->video['url'] = $url;
+      $this->video['embed'] = $arr[$url];
+      $host = parse_url($url)['host'];
+      switch($host) {
+        case "www.youtube.com":
+        case "youtu.be":
+              $this->video['provider'] = 'youtube';
+              break;
+        case 'vimeo.com':
+              $this->video['provider'] = 'vimeo';
+              break;
       }
     }
-    $this->video = false;
   }
 
   function videoMerger() {

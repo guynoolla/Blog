@@ -54,7 +54,7 @@ if (!$edit): ?>
     <label for="postBody">Content</label>
     <ul class="list-group list-group-horizontal-md" style="margin-bottom:1px">
       <li class="list-group-item bg-muted-lk">
-        <span class="font-weight-bold text-secondary">HTML</span>
+        <span class="h4 tex-muted">HTML</span>
         <?php
           $tags = explode('><', $post->allowable_tags);
           $tags = implode('> <', $tags);
@@ -62,11 +62,11 @@ if (!$edit): ?>
         <span class="d-inline text-muted"><?php echo h($tags) ?></span>
         <small id="bodyHelp" class="d-inline form-text text-muted">External links are not allowed excerpt YouTube and Vimeo video links.</small>
       </li>
-      <li class="list-group-item font-weight-bold bg-muted-lk flex-grow-1 d-none d-md-block">
-        <span class="text-muted">YouTube</span>
+      <li class="list-group-item bg-muted-lk flex-grow-1 d-none d-md-block">
+        <div class="d-flex align-items-center"><span class="h4 text-muted">YouTube</span></div>
       </li>
-      <li class="list-group-item font-weight-bold bg-muted-lk flex-grow-1 d-none d-md-block">
-        <span class="text-muted">Vimeo</span>
+      <li class="list-group-item bg-muted-lk flex-grow-1 d-none d-md-block">
+        <div class="d-flex align-items-center"><span class="h4 text-muted">Vimeo</span></div>
       </li>
     </ul>
     <textarea name="post[body]" value="<?php $post->body ?>" class="form-control" id="body" rows="10"><?php echo $post->body ?></textarea>
@@ -86,47 +86,44 @@ if (!$edit): ?>
       </div>
       <?php
         $post->videoSplitter();
-        $_format = $edit ? $post->format : "false";
-        $_image = (isset($post->image) && $post->image ? $post->image : "false");
-        $_video = (isset($post->video) && $post->video ? $post->video : "false");
+        $format_v = ($post->format != '') ? $post->format : 'false';
+        $image_v = ($post->image != '') ? 'true' : 'false';
+        $video_v = ($post->video != '') ? 'true' : 'false';
       ?>
-      <div class="preview preview-image">
-        <?php if ($session->isAdmin()): ?>
-          <p><?php echo ($_image != 'false' ? $_image : '') ?></p>
-        <?php endif; ?>
-      </div>
     </div>
  
-    <div class="col-sm-6 media-preview" data-format="<?php echo $_format ?>">
+    <div class="col-sm-6 media-preview" data-format="<?php echo $format_v ?>">
 
-      <div class="preview preview-image <?php // image format
-        echo $_format != 'image' ? 'd-none' : '' ?>" data-value="<?php
-      echo $_image ?>">
+      <div class="preview preview-image <?php // Image format output
+        echo $format_v != 'image' ? 'd-none' : '' ?>" data-value="<?php
+      echo $image_v ?>">
         <img id="previewImage" class="ml-auto" src="<?php
-          echo ($_image != 'false' ? url_for('/assets/images/' . $_image) : '')
+          echo ($image_v != 'false' ? url_for('/assets/images/' . $post->image) : '')
         ?>" style="width:100%;height:auto;">
       </div>
 
-      <div class="preview preview-video <?php // video format
-        echo $_format != 'video' ? 'd-none' : '' ?>" data-value="<?php
-      echo $_video ?>">
+      <?php //dd($post->video, 1, 'Look') ?>
 
-        <?php if ($_video !== 'false'): ?>
+      <div class="preview preview-video <?php // Video format output
+        echo $format_v != 'video' ? 'd-none' : '' ?>" data-value="<?php
+      echo $video_v ?>">
+
+        <?php if ($video_v != 'false'): ?>
         <div class="embed-responsive embed-responsive-16by9">
           
-          <?php if ($_video['source'] == 'youtube'): ?>
+          <?php if ($post->video['provider'] == 'youtube'): ?>
 
           <iframe id="previewVideo" class="embed-responsive-item" src="<?php
-            echo ($_video != 'false' ? $_video['embed'] : '') ?>" frameborder="0" allowfullscreen>
+            echo $post->video['embed'] ?>" frameborder="0" allowfullscreen>
           </iframe>
         
-          <?php elseif ($_video['source'] == 'vimeo'): ?>
+          <?php elseif ($post->video['provider'] == 'vimeo'): ?>
 
           <iframe id="previewVideo" class="embed-responsive-item" src="<?php
-            echo ($_video != 'false' ? $_video['embed'] : '') ?>"
-            frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>
+            echo $post->video['embed'] ?>" frameborder="0" webkitallowfullscreen
+            mozallowfullscreen allowfullscreen>
           </iframe>
-          
+
           <?php endif; ?>
           
         </div><!-- embed-responsive -->

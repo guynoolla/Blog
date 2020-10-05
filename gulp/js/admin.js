@@ -160,7 +160,7 @@ $(() => {
     const validate = new FormValidate(postForm);
     validate.settings.fieldSize["title"] = { min: 6, max: 200 };
     validate.settings.fieldSize["meta_desc"] = { min: 20, max: 160 };
-    validate.settings.fieldSize["body"] = { min: 200, max: 65000 };
+    validate.settings.fieldSize["body"] = { min: 500, max: 65000 };
     validate.settings.validateOnSubmit = true;
 
     validate.form.on("submit change", async e => {
@@ -176,10 +176,12 @@ $(() => {
       const video = await validate.video("video");
       const topic = await validate.topic("topic");
 
-      if (e.type == "submit" && validate.validatedLen() == 6) {
+      if (e.type == "submit" && validate.validatedLen() == 5) {
+        console.log("Len okey", validate.validatedLen());
         validate.form.off("submit");
         validate.form.trigger("submit");
       } else {
+        console.log("Len wrong", validate.validatedLen());
         validate.errorsSummary();
       }
 

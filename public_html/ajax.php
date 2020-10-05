@@ -7,14 +7,19 @@ $target = $_POST['target'] ?? '';
 switch($target) {
   case 'like':
         $session->isLoggedIn() ? user_like_post($_POST) : null;
+        break;
   case 'posts_by_ids':
         $session->isLoggedIn() ? cookie_ids_posts($_POST) : null;
+        break;
   case 'contact_form':
         contact_form_submit($_POST);
+        break;
   case 'is_already_exist':
         is_already_exist($_POST);
+        break;
   case 'validate_captcha':
         validate_captcha($_POST);
+        break;
   default:
         exit(json_encode(['target' => 'error']));
 }
@@ -42,6 +47,8 @@ function is_already_exist($data) {
 }
 
 function contact_form_submit($data) {
+  global $jsonstore;
+
   $email = $data['email'] ?? '';
   $message = $data['message'] ?? '';
   $captcha = $data['captcha'] ?? '';
@@ -59,7 +66,7 @@ function contact_form_submit($data) {
       $mailer = new \App\Contracts\Mailer;
       $text = strip_tags($message);
       try {
-        $mailer->send(ADMIN_EMAIL,'Contact Form', $text, $message);
+        $mailer->send(ADMIN_EMAIL, $jsonstore->header->siteName, $text, $message);
         $status = 'success';
         $alert = 'Thank you for your message!';
       
@@ -150,7 +157,7 @@ function cookie_ids_posts($data) {
     if ($posts) {
       foreach ($posts as $key => $post) {
         $arr[$j]['title'] = $post->title;
-        $arr[$j]['excerpt'] = \App\Classes\Post::excerpt($post->body);
+        $arr[$j]['excerpt'] = $post->excerpt($post->body);
         $arr[$j]['created_at'] = date('F j, Y', strtotime($post->created_at));
         $arr[$j]['format'] = $post->format;
         if ($post->format == 'image') $arr[$j]['image'] = \App\Classes\Post::responsive($post->image);

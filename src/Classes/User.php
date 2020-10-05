@@ -180,8 +180,10 @@ class User extends \App\Classes\DatabaseObject {
   }
 
   public function mergeAttributes(array $args=[]) {
-    if ($args['email'] != $this->email) {
-      $this->email_confirmed = '0';
+    if (isset($args['email'])) {
+      if ($args['email'] != $this->email) {
+        $this->email_confirmed = '0';
+      }
     }
     if (isset($args['about'])) {
       if (!isset($args['about']['about_appear'])) {
@@ -313,9 +315,9 @@ class User extends \App\Classes\DatabaseObject {
   }
 
   public function confirmEmail() {
-    if ($this->user_type != 'admin') {
-      $user_type = 'author';
-    }
+    $user_type = $this->user_type == 'simple'
+                ? 'author' : $this->user_type;
+
     $this->mergeAttributes([
       'email_confirmed' => '1',
       'user_type' => $user_type,

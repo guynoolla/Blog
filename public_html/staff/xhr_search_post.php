@@ -17,11 +17,13 @@ switch($target) {
   case 'own_post_by_topic':
   case 'own_post_by_date':
         own_post_data($_POST['data']);
+        break;
   case 'user_post_by_search':
   case 'user_post_by_topic':
   case 'user_post_by_author':
   case 'user_post_by_date':
         if ($session->isAdmin()) user_post_data($_POST['data']);
+        break;
   default:
         exit(json_encode(['target' => 'error']));
 }

@@ -76,7 +76,8 @@ class Posts {
       .always(res => {
         const data = JSON.parse(res)
         if (data[0] == 'empty') {
-          $(".loadPostsJS .alert").removeClass("d-none")
+          $(".loadPostsJS .alert").removeClass("d-none");
+          $(".loading").addClass("d-none");
         }
       })
       .done(res => {
