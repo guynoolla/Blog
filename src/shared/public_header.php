@@ -71,7 +71,7 @@ if (!isset($page_title)) {
   <div class="container-md containerJS">
     <div class="row">
       <div class="col">
-        <?php echo display_session_message('alert alert-success alert-dismissible py-3 my-2 text-center h4 '); ?>
+        <?php echo display_session_message('alert alert-success alert-dismissible py-3 my-2 mx-sm-3 text-center h4 '); ?>
       </div>
     </div>
   </div>

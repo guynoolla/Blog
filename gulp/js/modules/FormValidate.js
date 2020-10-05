@@ -3,12 +3,13 @@ import $ from 'jquery';
 
 class FormValidate {
 
-  constructor(formId) {
-    this.form = $(`#${formId}`);
+  constructor(form) {
+    this.form = form;
     
     this.settings = {
       fieldSize: {},
-      uniqueVal: {}
+      uniqueVal: {},
+      validateOnSubmit: false
     };
 
     this.errors = {};
@@ -104,12 +105,6 @@ class FormValidate {
     elem.on("keyup", () => this.checkField(fid, elem))
   }
 
-  getErrors(fid) {
-    let errors = "";
-    this.errors[fid].forEach(value => errors += `${value} `)
-    return errors;
-  }
-
   captchaReset(imageSrc) {
     this.form.find("#captcha").val("");
     this.form.find(".form-group-captcha img").attr("src", imageSrc);
@@ -131,6 +126,34 @@ class FormValidate {
     $(".form-group-captcha").next().text("");
     $(".form-group-captcha")
       .append('<span class="captcha-success">&#10003;</span>');
+  }
+
+  errorsSummary() {
+    console.log("errors", this.errors)
+    this.form.find(".form-control, .form-control-file")
+             .removeClass("alert-valid")
+             .removeClass("alert-error");
+    for (let fid in this.errors) {
+      const elem = $(`.errsum-${fid}`);
+      if (this.errors[fid].length > 0) {
+        elem.siblings(".form-control, .form-control-file")
+            .addClass("alert-error")
+        elem.text(this.errors[fid]);
+        this.onElementKeyup(fid, elem);
+      } else {
+        elem.text("");
+      }
+    }
+    for (let fid in this.validValues) {
+      const elem = $(`#${fid}`);
+      elem.addClass("alert-valid");
+    }
+  }
+
+  getErrors(fid) {
+    let errors = "";
+    this.errors[fid].forEach(value => errors += `${value} `)
+    return errors;
   }
 
   showErrors(fid, elem) {
@@ -168,11 +191,10 @@ class FormValidate {
       return true
     }
     if (this.event.type == "change") {
-      if (this.event.target.id == fid) {
-        return true
-      } else {
-        return false
-      }
+      return true;
+    }
+    if (this.event.type == "submit" && this.settings.validateOnSubmit) {
+      return true;
     }
   }
 

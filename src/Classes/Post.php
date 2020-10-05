@@ -430,23 +430,25 @@ SQL;
    * https://vimeo.com/440413540
   */
   function videoSplitter() {
-    if (isset($this->video) && $this->video != "") {
-      $arr = (array) json_decode($this->video);
-      $url = key($arr);
-      $this->video = [];
-      $this->video['url'] = $url;
-      $this->video['embed'] = $arr[$url];
-      $host = parse_url($url)['host'];
-      switch($host) {
-        case "www.youtube.com":
-        case "youtu.be":
-              $this->video['source'] = 'youtube';
-        case 'vimeo.com':
-              $this->video['source'] = 'vimeo';
+    if (isset($this->id)) {
+      if (isset($this->video) && $this->video != "") {
+        $arr = (array) json_decode($this->video);
+        $url = key($arr);
+        $this->video = [];
+        $this->video['url'] = $url;
+        $this->video['embed'] = $arr[$url];
+        $host = parse_url($url)['host'];
+        switch($host) {
+          case "www.youtube.com":
+          case "youtu.be":
+                $this->video['source'] = 'youtube';
+          case 'vimeo.com':
+                $this->video['source'] = 'vimeo';
+        }
+        return $this->video;
       }
-      return $this->video;
     }
-    return "";
+    $this->video = false;
   }
 
   function videoMerger() {

@@ -86,7 +86,7 @@ include SHARED_PATH . '/public_header.php';
             <span class="offset-sm-4 col-sm-8 text-danger field-validation-error"><?php echo $captcha_err ?></span>
           </div>
 
-          <p class="text-center font-weight-bold">Or <a href="<?php echo url_for('staff/login.php') ?>">Log In</a></p>
+          <p class="text-center font-weight-bold mt-0">Or <a href="<?php echo url_for('staff/login.php') ?>">Log In</a></p>
           <div class="response response--shade"></div>
 
         </form>

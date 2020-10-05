@@ -52,8 +52,8 @@ $(() => {
    User Edit Form ------------------------------------------------------- */
 
   if ($("#userEditForm").length) {
-
-    const validate = new FormValidate("userEditForm");
+    
+    const validate = new FormValidate($("#userEditForm"));
     validate.settings.fieldSize["username"] = { min: 4, max: 20 };
     validate.settings.fieldSize["password"] = { min: 8, max: 20 };
     validate.settings.fieldSize["about_text"] = { min: 30, max: 300 };
@@ -99,47 +99,91 @@ $(() => {
 
     editPostFormElementsBehavior(postForm);
 
-    postForm.find("#image").on("change", e => {
-      const input = e.target;
-      if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = (e) => {
-          postForm.find("#previewImage").attr("src", e.target.result);
-          postForm.find(".preview-image").removeClass("d-block").addClass("d-block");
-          postForm.find(".preview-image").attr("data-value", "true");
+    const onVideoChange = (e) => new Promise((resolve, reject) => {
+      if (e.type == "change" && e.target.id == "video") {
+        const targetUrl = $(e.target).val();
+        if (targetUrl.trim() == "") {
+          $(".preview.preview-video").attr("data-value", "false").html("");
+          return;
         }
-        reader.readAsDataURL(input.files[0]);
-      }
-    });
+        const video = urlParser.parse(targetUrl);
+        let videoUrl = "";
+        let iframe = "";
+  
+        if (video.provider == 'youtube') {
+          videoUrl = `//www.youtube.com/embed/${video.id}`;
+          iframe = `<iframe id="previewVideo" class="embed-responsive-item"
+                      src="${videoUrl}" frameborder="0" allowfullscreen>
+                    </iframe>`;
+        } else if (video.provider == 'vimeo') {
+          videoUrl = `//player.vimeo.com/video/${video.id}`;
+          iframe = `<iframe id="previewVideo" class="embed-responsive-item"
+                      src="${videoUrl}" frameborder="0" webkitallowfullscreen
+                      mozallowfullscreen' allowfullscreen>
+                    </iframe>`;
+        }
+  
+        iframe = `<div class="embed-responsive embed-responsive-16by9">${iframe}</div>`;
+        
+        if (videoUrl) {
+          postForm.find(".preview.preview-video").html(iframe);
+          postForm.find(".preview.preview-video").attr("data-value", "true");
+          postForm.find(".preview.preview-video").removeClass("d-none d-block");
+          postForm.find(".preview.preview-video").hide().fadeIn();
+          return resolve(true)
+        }
 
-    postForm.find("#video").on("change", e => {
-      const targetUrl = $(e.target).val();
-      const video = urlParser.parse(targetUrl);
-      let videoUrl = "";
-      let iframe = "";
-
-      if (video.provider == 'youtube') {
-        videoUrl = `//www.youtube.com/embed/${video.id}`;
-        iframe = `<iframe id="previewVideo" class="embed-responsive-item"
-                    src="${videoUrl}" frameborder="0" allowfullscreen>
-                  </iframe>`;
-      } else if (video.provider == 'vimeo') {
-        videoUrl = `//player.vimeo.com/video/${video.id}`;
-        iframe = `<iframe id="previewVideo" class="embed-responsive-item"
-                    src="${videoUrl}" frameborder="0" webkitallowfullscreen
-                    mozallowfullscreen' allowfullscreen>
-                  </iframe>`;
-      }
-      if (videoUrl) {
-        postForm.find(".preview.preview-video .embed-responsive")
-                .html(iframe);
-        postForm.find(".preview.preview-video")
-                .removeClass("d-block")
-                .addClass("d-block")
-                .attr("data-value", "true");
-      } else {
         alert("Sorry, only youtube and vimeo videos are allowed");
       }
+      return resolve(false)
+    })
+
+    const onImageChange = (e) => new Promise((resolve, reject) => {
+      if (e.type == "change" && e.target.id == 'image') {
+        console.log("Image change captured!");
+        const input = e.target;
+        if (input.files && input.files[0]) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            postForm.find("#previewImage").attr("src", e.target.result);
+          }
+          reader.readAsDataURL(input.files[0]);
+          postForm.find(".preview.preview-image").removeClass("d-none d-block");
+          postForm.find(".preview.preview-image").hide().fadeIn();
+          postForm.find(".preview.preview-image").attr("data-value", "true");
+          return resolve(true);
+        }
+      }
+      return resolve(false);
+    })
+
+    const validate = new FormValidate(postForm);
+    validate.settings.fieldSize["title"] = { min: 6, max: 200 };
+    validate.settings.fieldSize["meta_desc"] = { min: 20, max: 160 };
+    validate.settings.fieldSize["body"] = { min: 200, max: 65000 };
+    validate.settings.validateOnSubmit = true;
+
+    validate.form.on("submit change", async e => {
+      e.preventDefault();
+
+      const imageChange = await onImageChange(e);
+      const videoChange = await onVideoChange(e);
+
+      const title = await validate.title("title");
+      const meta_desc = await validate.metaDesc("meta_desc");
+      const body = await validate.body("body");
+      const image = await validate.image("image");
+      const video = await validate.video("video");
+      const topic = await validate.topic("topic");
+
+      if (e.type == "submit" && validate.validatedLen() == 6) {
+        validate.form.off("submit");
+        validate.form.trigger("submit");
+      } else {
+        validate.errorsSummary();
+      }
+
+      return false;
     })
 
   }
@@ -296,19 +340,19 @@ function editPostFormElementsBehavior(form) {
     }
     if (form.find(".media-preview").attr("data-format") == "image") {
       form.find(".preview").removeClass("d-none d-block");
-      form.find(".preview-video").addClass("d-none");
+      form.find(".preview-video").hide();
       if (form.find(".preview-image").attr("data-value") != "false") {
-        form.find(".preview-image").addClass("d-block");
+        form.find(".preview-image").fadeIn();
       } else {
-        form.find(".preview-image").addClass("d-none");
+        form.find(".preview-image").fadeOut();
       }
     } else if (form.find(".media-preview").attr("data-format") == "video") {
       form.find(".preview").removeClass("d-none d-block");
-      form.find(".preview-image").addClass("d-none");
+      form.find(".preview-image").hide();
       if (form.find(".preview-video").attr("data-value") != "false") {
-        form.find(".preview-video").addClass("d-block");
+        form.find(".preview-video").fadeIn();
       } else {
-        form.find(".preview-video").addClass("d-none");
+        form.find(".preview-video").fadeOut();
       }
     }
   })

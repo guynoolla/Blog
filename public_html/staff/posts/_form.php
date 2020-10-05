@@ -43,10 +43,12 @@ if (!$edit): ?>
   <div class="form-group">
     <label for="title">Title</label>
     <input type="text" name="post[title]" value="<?php echo h($post->title) ?>" class="form-control" id="title" aria-describedby="emailHelp">
+    <span class="errsum-title text-danger field-validation-error"></span>
   </div>
   <div class="form-group">
     <label for="meta_desc">Meta Description for SEO</label>
     <input type="text" name="post[meta_desc]" value="<?php echo ($post->meta_desc ? h($post->meta_desc) : '') ?>" class="form-control" id="meta_desc" aria-describedby="emailHelp">
+    <span class="errsum-meta_desc text-danger field-validation-error"></span>
   </div>
   <div class="form-group">
     <label for="postBody">Content</label>
@@ -57,7 +59,8 @@ if (!$edit): ?>
           $tags = explode('><', $post->allowable_tags);
           $tags = implode('> <', $tags);
         ?>
-        <span class="h5 text-muted"><?php echo h($tags) ?></span>
+        <span class="d-inline text-muted"><?php echo h($tags) ?></span>
+        <small id="bodyHelp" class="d-inline form-text text-muted">External links are not allowed excerpt YouTube and Vimeo video links.</small>
       </li>
       <li class="list-group-item font-weight-bold bg-muted-lk flex-grow-1 d-none d-md-block">
         <span class="text-muted">YouTube</span>
@@ -66,8 +69,8 @@ if (!$edit): ?>
         <span class="text-muted">Vimeo</span>
       </li>
     </ul>
-    <textarea name="post[body]" value="<?php $post->body ?>" class="form-control" id="postBody" rows="10"><?php echo $post->body ?></textarea>
-    <small id="bodyHelp" class="form-text text-muted">External links are not allowed excerpt YouTube and Vimeo video links.</small>
+    <textarea name="post[body]" value="<?php $post->body ?>" class="form-control" id="body" rows="10"><?php echo $post->body ?></textarea>
+    <span class="errsum-body text-danger field-validation-error"></span>
   </div>
 
   <div class="form-group row pl-0">
@@ -82,68 +85,77 @@ if (!$edit): ?>
         <label class="form-check-label" for="formatVideo">Video</label>
       </div>
       <?php
-        $_format = $edit ? $post->format : "false";
-        $_image = ((isset($post->image) && $post->image) ? $post->image : "false");
-        $_video = ((isset($post->video) && $post->video) ? $post->video : "false");
         $post->videoSplitter();
+        $_format = $edit ? $post->format : "false";
+        $_image = (isset($post->image) && $post->image ? $post->image : "false");
+        $_video = (isset($post->video) && $post->video ? $post->video : "false");
       ?>
-      <div class="preview preview-image mt-sm-4">
+      <div class="preview preview-image">
         <?php if ($session->isAdmin()): ?>
-          <p><?php echo ($_image != 'false' ? $post->image : '') ?></p>
+          <p><?php echo ($_image != 'false' ? $_image : '') ?></p>
         <?php endif; ?>
       </div>
     </div>
-
+ 
     <div class="col-sm-6 media-preview" data-format="<?php echo $_format ?>">
 
       <div class="preview preview-image <?php // image format
-                  echo $_format != 'image' ? 'd-none' : ''
-      ?>" data-value="<?php echo $_image ?>">
+        echo $_format != 'image' ? 'd-none' : '' ?>" data-value="<?php
+      echo $_image ?>">
         <img id="previewImage" class="ml-auto" src="<?php
-          echo ($_image != 'false' ? url_for('/assets/images/' . $post->image) : '')
+          echo ($_image != 'false' ? url_for('/assets/images/' . $_image) : '')
         ?>" style="width:100%;height:auto;">
       </div>
 
-      <div class="preview preview-video mt-4 mt-sm-0 <?php // video format
-                  echo $_format != 'video' ? 'd-none' : ''
-      ?>" data-value="<?php echo $_video ?>">
+      <div class="preview preview-video <?php // video format
+        echo $_format != 'video' ? 'd-none' : '' ?>" data-value="<?php
+      echo $_video ?>">
+
+        <?php if ($_video !== 'false'): ?>
         <div class="embed-responsive embed-responsive-16by9">
-        
-        <?php if ($post->video['source'] == 'youtube'): // youtube ?>
+          
+          <?php if ($_video['source'] == 'youtube'): ?>
+
           <iframe id="previewVideo" class="embed-responsive-item" src="<?php
-            echo ($_video != 'false' ? $post->video['embed'] : '') 
-            ?>" frameborder="0" allowfullscreen>
+            echo ($_video != 'false' ? $_video['embed'] : '') ?>" frameborder="0" allowfullscreen>
           </iframe>
         
-          <?php elseif ($post->video['source'] == 'vimeo'): // vimeo ?>
+          <?php elseif ($_video['source'] == 'vimeo'): ?>
+
           <iframe id="previewVideo" class="embed-responsive-item" src="<?php
-            echo ($_video != 'false' ? $post->video['embed'] : '') ?>"
-            frameborder="0" webkitallowfullscreen mozallowfullscreen'
-            allowfullscreen>
+            echo ($_video != 'false' ? $_video['embed'] : '') ?>"
+            frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>
           </iframe>
-        <?php endif; ?>
-        
+          
+          <?php endif; ?>
+          
         </div><!-- embed-responsive -->
+        <?php endif; ?>
+
       </div>
 
     </div>
   </div>
 
-  <div class="form-group row mt-2">
+  <div class="form-group row">
     <div class="col-sm-6">
-      <input type="file" name="image" class="form-control-file" id="image" <?php echo ($post->format == 'video' ? 'disabled' : '') ?>>
+      <label for="image">Image</label>
+      <input type="file" name="image" class="form-control-file rounded p-1" id="image" <?php echo ($post->format == 'video' ? 'disabled' : '') ?>>
       <small id="fileHelp" class="form-text small-nicer-lk">Image aspect ratio must be between 7x5 9x5)</small>
+      <span class="errsum-image text-danger field-validation-error"></span>
     </div>
     <div class="col-sm-6">
-      <label for="video" class="mb-1">Video</label>
-      <input type="text" name="post[video]" value="<?php echo (isset($post->video['url']) ? $post->video['url'] : '') ?>" class="form-control mt-1" id="video" placeholder="URL of Video" <?php echo (($post->format == 'image' || !$edit) ? 'disabled' : '') ?>>
+      <label for="video">Video</label>
+      <input type="text" name="post[video]" class="form-control mt-1" id="video" value="<?php echo (isset($post->video['url']) ? $post->video['url'] : '') ?>" placeholder="URL of Video" <?php echo (($post->format == 'image' || !$edit) ? 'disabled' : '') ?>>
+      <span class="errsum-video text-danger field-validation-error"></span>
     </div>
   </div>
+
   <div class="form-group mt-4">
     <label for="topic">Topic</label>
     <select class="form-control" name="post[topic_id]" id="topic">
       <?php if (!$edit): ?>
-        <option value="">Select topic</option>
+        <option value="0">Select topic</option>
       <?php endif; ?>
       <?php foreach($topics as $topic): ?>
         <option value="<?php echo $topic->id ?>"
@@ -153,6 +165,7 @@ if (!$edit): ?>
         </option>
       <?php endforeach; ?>
     </select>
+    <span class="errsum-topic text-danger field-validation-error"></span>
   </div>
   <div class="custom-control custom-switch mt-4">
     <input name="post[published]" type="checkbox" class="custom-control-input" id="publishSwitch"<?php echo ($post->published == '1' ? ' checked' : '') ?>>

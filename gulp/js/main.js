@@ -78,7 +78,7 @@ $(() => {
   })
 
   if ($("#contactForm").length) {
-    const validate = new FormValidate("contactForm");
+    const validate = new FormValidate($("#contactForm"));
     validate.settings.fieldSize["message"] = { min: 20, max: 1000 };
 
     validate.form.on("submit change", async e => {
@@ -126,7 +126,7 @@ $(() => {
   } // <-- Contact Form
 
   if ($("#registerForm").length) {
-    const validate = new FormValidate("registerForm");
+    const validate = new FormValidate($("#registerForm"));
     validate.settings.fieldSize["username"] = { min: 4, max: 20 };
     validate.settings.fieldSize["password"] = { min: 8, max: 20 };
     validate.settings.uniqueVal["username"] = true;

@@ -269,6 +269,139 @@ class FormValidateRules extends FormValidate {
     return value;
   }
 
+  async title(fid) {
+    if (!this.run(fid)) return false;
+    
+    return this.fieldLength(fid);
+  }
+
+  async metaDesc(fid) {
+    if (!this.run(fid)) return false;
+    
+    return this.fieldLength(fid);
+  }
+
+  async body(fid) {
+    if (!this.run(fid)) return false;
+
+    return this.fieldLength(fid);
+  }
+
+  async image(fid) {
+    if (!this.run(fid)) return false;
+    
+    const elem = $(`#${fid}`);
+    this.errors[fid] = [];
+
+    const value = await this.checkFormatInputs(fid);
+
+    if (value == false) {
+      this.errors[fid].push("Image is not uploaded for image format.");
+      this.showErrors(fid, elem);
+      return false;
+    } else if (value == true) {
+      this.showValid(fid, elem);
+      return true;
+    } else if (value == -1) {
+      return true;
+    }
+  }
+
+  async video(fid) {
+    if (!this.run(fid)) return false;
+
+    const elem = $(`#${fid}`);
+    this.errors[fid] = [];
+
+    const value = await this.checkFormatInputs(fid);
+
+    if (value == false) {
+      this.errors[fid].push("Video URL is not set for video format.");
+      this.showErrors(fid, elem);
+      return false;
+    } else if (value == true) {
+      this.showValid(fid, elem);
+      return true;
+    } else if (value == -1) {
+      return true;
+    }
+  }
+
+  async topic(fid) {
+    if (!this.run(fid)) return false;
+
+    const elem = this.form.find(`#${fid}`)
+    this.errors[fid] = [];
+
+    const check = () => new Promise(resolve => {
+      const selected = $("#topic").children("option:selected").val();
+      
+      if (selected != 0) return resolve(true);
+      else return resolve(false);
+    })
+
+    const value = await check();
+    
+    if (value == false) {
+      this.errors[fid].push("The post topic is not selected.");
+      return false;
+    } else {
+      this.showValid(fid, elem);
+      return true;
+    }
+  }
+
+  async checkFormatInputs(fid) {
+    if (!this.run(fid)) return false;
+
+    const elem = this.form.find(`#${fid}`)
+    this.errors[fid] = [];
+
+    const check = () => new Promise(resolve => {
+      const checked = $('input[name="post[format]"]:checked').val()
+      if (checked == fid) {
+        if ($(`.preview.preview-${fid}`).attr("data-value") == "true") {
+          console.log("value is true");
+          return resolve(true);
+        } else {
+          console.log("value is false");
+          return resolve(false);
+        }
+      }
+      return resolve(-1);
+    })
+
+    return await check();
+  }
+
+  async fieldLength(fid) {
+    const text = this.form.find(`#${fid}`)
+    this.errors[fid] = [];
+
+    const check = () => new Promise(resolve => {
+      const size = this.getFieldSize(fid)
+      const field = fid == 'body' ? 'content' : fid;
+
+      if (text.val().length == 0) {
+        this.errors[fid].push(`The ${field} cannot be blank.`)
+      } else if (text.val().length < size.min) {
+        this.errors[fid].push(`The ${field} must contain at least ${size.min} characters.`)
+      } else if (text.val().length > size.max) {
+        this.errors[fid].push(`The ${field} cannot contain more than ${size.max}. characters.`)
+      } else {
+        return resolve(text.val())
+      }
+      return resolve(false)
+    })
+
+    const value = await check();
+
+    if (value == false) this.showErrors(fid, text)
+    else this.showValid(fid, text)
+
+    return value;
+  }
+
 }
 
 export default FormValidateRules
