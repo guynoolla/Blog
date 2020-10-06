@@ -73,19 +73,25 @@ class Session {
     }
   }
 
-  public function message($msg="") {
+  public function message($msg="", $msg_type="success") {
     if (!empty($msg)) {
       // Then this is a "set" message
       $_SESSION['message'] = $msg;
+      $_SESSION['message_type'] = $msg_type;
       return true;
     } else {
       // Then this is a "get" message
-      return $_SESSION['message'] ?? '';
+      if (isset($_SESSION['message'])) {
+        return [$_SESSION['message'], $_SESSION['message_type']];
+      } else {
+        return ["", ""];
+      }
     }
   }
 
   public function clearMessage() {
     unset($_SESSION['message']);
+    unset($_SESSION['message_type']);
   }
 
   public function getUserId() {

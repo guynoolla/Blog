@@ -67,7 +67,7 @@ function admin_topic_data($data) {
 
   ob_start();
 
-  ?><table class="table table-striped table-bordered table-hover table-light table-md">
+  ?><table class="table table-striped table-bordered table-hover table-light <?php echo TABLE_SIZE ?>">
     <thead class="bg-muted-lk text-muted">
       <tr>
         <th scope="col">#</th>

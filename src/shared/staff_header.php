@@ -44,7 +44,7 @@ if (!isset($page_title) || $page_title == '') {
 
       <div class="row">
         <div class="topbox col-12 pt-3">
-          <?php echo display_session_message('alert alert-success alert-dismissible py-3 my-2 mx-sm-3 text-center h4 '); ?>
+          <?php echo display_session_message(); ?>
         </div>
       </div>
 

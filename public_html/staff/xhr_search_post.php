@@ -114,7 +114,7 @@ function user_post_data($data) {
 
   if ($status == 'approved') {
 
-    ?><table class="table table-bordered table-hover table-light <?php echo $table_size ?>">
+    ?><table class="table table-bordered table-hover table-light <?php echo TABLE_SIZE ?>">
       <thead class="bg-muted-lk text-muted">
         <tr>
           <th scope="col">#</th>
@@ -143,7 +143,7 @@ function user_post_data($data) {
 
   } else if ($status == 'published') { ?>
 
-    <table class="table table-bordered table-hover table-light <?php echo $table_size ?>">
+    <table class="table table-bordered table-hover table-light <?php echo TABLE_SIZE ?>">
       <thead class="bg-muted-lk text-muted">
         <tr>
           <th scope="col">#</th>
@@ -172,7 +172,7 @@ function user_post_data($data) {
   } else if ($status == 'draft') { ?>
 
     <div class="loadPostsJS" data-access="user_post">
-    <table class="table table-bordered table-hover table-light <?php echo $table_size ?>">
+    <table class="table table-bordered table-hover table-light <?php echo TABLE_SIZE ?>">
       <thead class="bg-muted-lk text-muted">
         <tr>
           <th scope="col">#</th>
@@ -290,7 +290,7 @@ function own_post_data($data) {
 
   ob_start();
 
-  ?><table class="table table-bordered table-hover table-light <?php echo $table_size ?>">
+  ?><table class="table table-bordered table-hover table-light <?php echo TABLE_SIZE ?>">
     <thead class="bg-muted-lk text-muted">
       <tr>
         <th scope="col">#</th>

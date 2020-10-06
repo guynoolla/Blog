@@ -26,19 +26,36 @@ function display_errors($errors=array(), $top_text="Please fix the following err
   return $output;
 }
 
-function display_session_message($class_list='informer') {
+function display_session_message($dismissible=true) {
   global $session;
-  $msg = $session->message();
 
-  if (isset($msg) && $msg != '') {
-    $session->clearMessage();
-    $output = '';
-    $output .= "<div class=\"" . $class_list . "\">";
-    if (strpos($class_list, 'alert-dismissible') !== false) {
-      $output .= "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>";
+  list ($msg, $type) = $session->message();
+
+  if (isset($msg) && $msg != "") {
+    switch($type) {
+      case 'success': $alert_type = 'alert-success';
+                    break;
+      case 'danger': $alert_type = 'alert-danger';
+                    break;
+      case 'warning': $alert_type = 'alert-warning';
+                    break;
+      case 'info': $alert_type = 'alert-info';
+                  break;
+      default: $alert_type = "";
     }
-    $output .=  h($msg) . "</div>";
-    
+    $styles = 'py-3 my-2 mx-sm-3 text-center h4';
+    $styles .= $dismissible ? ' alert-dismissible' : '';
+
+    $session->clearMessage();
+    $output = "<div class=\"alert {$alert_type} {$styles}\">";
+
+    if ($dismissible) {
+      $output .= '<button type="button" class="close" data-dismiss="alert">';
+      $output .= '&times;';
+      $output .= '</button>';
+    }
+
+    $output .=  h($msg) . '</div>';
     return $output;
   }
 }

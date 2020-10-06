@@ -32,6 +32,7 @@ $topics = Topic::find($per_page, $pagination->offset());
 
 $page_title = 'Topics';
 include SHARED_PATH . '/staff_header.php';
+include '../_common-html-render.php';
 
 ?>
 <div class="row">
@@ -52,16 +53,15 @@ include SHARED_PATH . '/staff_header.php';
         >New Topic</a>
       </h1>
 
-      <?php if (empty($topics)): ?>
-        <div class="py-4 px-2 mt-1 text-center alert alert-info">
-          <p class="h4">This table is empty</p>
-        </div>
+      <?php
+      if (empty($topics)):
+        echo tableIsEmpty();
         
-      <?php else: ?>
-        <?php include '../_common-search-form.php' ?>
+      else: ?>
+        <?php echo tableSearchForm() ?>
 
         <div class="loadContentJS" data-access="admin_topic">
-          <table class="table table-striped table-bordered table-hover table-light table-md">
+          <table class="table table-striped table-bordered table-hover table-light <?php echo TABLE_SIZE ?>">
             <thead class="bg-muted-lk text-muted">
               <tr>
                 <th scope="col">#</th>

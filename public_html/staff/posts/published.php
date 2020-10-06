@@ -65,6 +65,7 @@ $posts = Post::findBySql($sql);
 $page_title = 'Author\'s Published Posts';
 include SHARED_PATH . '/staff_header.php';
 include '_common-posts-html.php';
+include '../_common-html-render.php';
 
 ?>
 <div class="row">
@@ -80,16 +81,15 @@ include '_common-posts-html.php';
         <div class="back-btn-pos"><?php echo page_back_button() ?></div>
       </h1>
 
-      <?php if (empty($posts)): ?>
-        <div class="py-4 px-2 mt-1 text-center alert alert-info">
-          <p class="h4">This table is empty</p>
-        </div>
+      <?php
+      if (empty($posts)):
+        echo tableIsEmpty();
 
-      <?php else: ?>
-        <?php include '../_common-search-form.php' ?>
+      else: ?>
+        <?php echo tableSearchForm() ?>
 
         <div class="loadContentJS" data-access="user_post">
-          <table class="table table-bordered table-hover table-light <?php echo $table_size ?>">
+          <table class="table table-bordered table-hover table-light <?php echo TABLE_SIZE ?>">
             <thead class="bg-muted-lk text-muted">
               <tr>
                 <th scope="col">#</th>

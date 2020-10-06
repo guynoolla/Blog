@@ -30,9 +30,7 @@ include SHARED_PATH . '/staff_header.php'
   </aside>
   
   <div class="main col-lg-9">
-    <div class="main-content">
-      <?php include('./_form.php') ?>
-    </div>
+    <div class="main-content"><?php include('./_form.php') ?></div>
   </div>
 
 </div>

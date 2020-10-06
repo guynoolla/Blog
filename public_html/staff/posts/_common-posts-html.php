@@ -1,8 +1,5 @@
 <?php
 
-$header_mb = 'mb-1'; 
-$table_size = 'table-md';
-
 function td_actions_column_fst($post, $is_admin=false, $url="") {
 
   if (!$url) {

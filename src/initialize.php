@@ -38,6 +38,7 @@ define("SECRET_KEY", "jaItYP0KmKp6wcWCCkCKrxMEVT0yIdqn");
 // Pagination
 define("DASHBOARD_PER_PAGE", 4);
 define("FRONTEND_PER_PAGE", 6);
+define("TABLE_SIZE", 'table-md');
 
 // Functions
 require_once('functions.php');
