@@ -18,13 +18,6 @@ if (is_post_request()) {
   $image = new File($_FILES['image']);
   $post->fileInstance($image);
 
-  if (isset($_POST['delete'])) {
-    if ($post->delete()) {
-      $session->message("The post ' . $post->title . ' was deleted.");
-      redirect_to(url_for('staff/posts/index.php'));
-    }
-  }
-
   if (!isset($_POST['post']['published'])) {
     $_POST['post']['published'] = '0';
   } 

@@ -159,8 +159,8 @@ include SHARED_PATH . '/staff_header.php';
       <div class="row">
 
         <div class="col my-4 w-100">
-          <div class="py-5 px-2 text-center text-muted alert <?php echo ($forbidden ? 'alert-warning' : 'alert-danger') ?>">
-            <p class="lead"><?php echo $warning ?></p>
+          <div class="py-5 px-2 text-center alert <?php echo ($forbidden ? 'alert-warning' : 'alert-danger') ?>">
+            <p class="h4 text-muted"><?php echo $warning ?></p>
           </div>
         </div>
 

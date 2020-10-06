@@ -8,21 +8,6 @@ require_once('../../../src/initialize.php');
 if (!$session->isAdmin()) redirect_to(url_for('/index.php'));
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Check Admin
 
-if (isset($_GET['id']) && isset($_GET['cmd'])) {
-  $id = $_GET['id'] ?? 0;
-  $cmd = $_GET['cmd'] ?? 0;
-
-  if ($id && $cmd) {
-    if ($cmd === 'delete') {
-      $user = User::findById($id);
-  
-      if ($user->delete() === true) {
-        $session->message("The user '" . $user->username . "' was deleted.");
-        redirect_to(url_for('/staff/users/index.php'));
-      }
-    }
-  }
-}
 
 $current_page = $_GET['page'] ?? 1;
 $per_page = DASHBOARD_PER_PAGE;

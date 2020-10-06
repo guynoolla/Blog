@@ -296,7 +296,7 @@ class FormValidateRules extends FormValidate {
     const value = await this.checkFormatInputs(fid);
 
     if (value == false) {
-      this.errors[fid].push("Image is not uploaded for image format.");
+      this.errors[fid].push("Image is not uploaded.");
       this.showErrors(fid, elem);
       return false;
     } else if (value == true) {
@@ -316,7 +316,7 @@ class FormValidateRules extends FormValidate {
     const value = await this.checkFormatInputs(fid);
 
     if (value == false) {
-      this.errors[fid].push("Video URL is not set for video format.");
+      this.errors[fid].push("Video URL is not set.");
       this.showErrors(fid, elem);
       return false;
     } else if (value == true) {

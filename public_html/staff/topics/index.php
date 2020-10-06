@@ -8,20 +8,6 @@ require_once('../../../src/initialize.php');
 if (!$session->isAdmin()) redirect_to(url_for('index.php'));
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Check Admin
 
-if (isset($_GET['id'])) {
-  $cmd = $_GET['cmd'] ?? false;
-  $topic = Topic::findById($_GET['id']);
-
-  if (!$cmd || !$topic) {
-    redirect_to(url_for('/staff/topics/index.php'));
-  }
-
-  if ($cmd == 'delete') {
-    $result = $topic->delete();
-    $session->message("The topic '" . $topic->name . "' was deleted.");
-    redirect_to(url_for('/staff/topics/index.php'));
-  }
-}
 
 $current_page = $_GET['page'] ?? 1;
 $per_page = DASHBOARD_PER_PAGE;
