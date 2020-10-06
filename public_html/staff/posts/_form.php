@@ -27,7 +27,7 @@ if (!$edit): ?>
 <?php endif;
 
 ?>
-<form id="editPostForm" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data" class="py-3">
+<form id="postEditForm" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data" class="py-3">
 
   <?php echo display_errors($post->errors) ?>
 

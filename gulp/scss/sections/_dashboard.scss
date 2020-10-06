@@ -92,11 +92,17 @@
     background-color: #E8E8E8;
 
     .input-group {
+      input.form-control {
+        border-top-left-radius: .rem !important;
+        border-bottom-left-radius: .5rem !important;
+      }
+      .btn {
+        border-top-right-radius: .5rem !important;
+        border-bottom-right-radius: .5rem !important;        
+      }
       .input-group-prepend {
         background-color: #E8E8E8;
         border: 1px solid #E8E8E8;
-        border-top-left-radius: 5px !important;
-        border-bottom-left-radius: 5px !important;
         .btn {
           width: 2rem;
           &:hover, &:focus {

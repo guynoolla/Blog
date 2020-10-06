@@ -38,12 +38,12 @@ class Topic extends \App\Classes\DatabaseObject {
     if (is_blank($this->name)) {
       $this->errors[] = 'Topic name cannot be blank.';
     } elseif(!has_length($this->name, ['max' => 50])) {
-      $this->errors[] = 'Topic name must be less than 100 characters.';
+      $this->errors[] = 'Topic name can not contain more than 50 characters.';
     }
 
     if (!is_blank($this->description)) {
-      if (!has_length($this->description, ['min' => 30, 'max' => 300])) {
-        $this->errors[] = 'Description must be between 10 and 1000 characters.';
+      if (!has_length($this->description, ['min' => 0, 'max' => 255])) {
+        $this->errors[] = 'Topic description can not contain more than 255 characters.';
       }
     }
 

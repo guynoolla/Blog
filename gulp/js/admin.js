@@ -11,6 +11,9 @@ $(() => {
   new LikedPosts();
 
   const admin = $(".adminContentJS");
+
+  /*
+   -- Delete Modal ------------------------------------------------------- */
   
   if ($("table a[data-delete]").length || $("a.btn.btn-danger").length) {
     appendModalToBody();
@@ -49,21 +52,20 @@ $(() => {
   }
   
   /*
-   User Edit Form ------------------------------------------------------- */
+   -- User Edit Form ------------------------------------------------------- */
 
   if ($("#userEditForm").length) {
     
     const validate = new FormValidate($("#userEditForm"));
     validate.settings.fieldSize["username"] = { min: 4, max: 20 };
     validate.settings.fieldSize["password"] = { min: 8, max: 20 };
-    validate.settings.fieldSize["about_text"] = { min: 30, max: 300 };
+    validate.settings.fieldSize["about_text"] = { min: 30, max: 255 };
     validate.settings.uniqueVal["username"] = true;
     validate.settings.uniqueVal["email"] = true;
+    validate.settings.validateOnSubmit = false;
 
     validate.form.on("submit change", async e => {
       e.preventDefault();
-  
-      console.log("submit, change");
   
       const username = await validate.username("username");
       const email = await validate.email("email");
@@ -71,7 +73,7 @@ $(() => {
       const confirmPassword = await validate.confirmPassword("confirm_password");
       const aboutText = await validate.aboutText("about_text");
   
-      if (e.type == "submit" && !validate.hasError()) {
+      if (e.type == "submit" && validate.validatedLen() == 1) {
         validate.form.off("submit");
         validate.form.trigger("submit");
       }
@@ -92,10 +94,35 @@ $(() => {
   }
 
   /*
-   Edit Post Form ------------------------------------------------------------ */
+   -- Topic Edit Form --------------------------------------------------------*/ 
 
-  if ($("#editPostForm").length) {
-    const postForm = $("#editPostForm");
+  if ($("#topicEditForm").length) {
+    
+    const validate = new FormValidate($("#topicEditForm"));
+    validate.settings.fieldSize["name"] = { min: 0, max: 50 };
+    validate.settings.fieldSize["description"] = { min: 0, max: 255 };
+    validate.settings.validateOnSubmit = false;
+
+    validate.form.on("submit change", async e => {
+      e.preventDefault();
+
+      const name = await validate.name("name");
+      const description = await validate.description("description");
+
+      if (e.type == "submit" && validate.validatedLen() == 1) {
+        validate.form.off("submit");
+        validate.form.trigger("submit");
+      }
+
+      return false;
+    })
+  }
+
+  /*
+   -- Edit Post Form ------------------------------------------------------------ */
+
+  if ($("#postEditForm").length) {
+    const postForm = $("#postEditForm");
 
     editPostFormElementsBehavior(postForm);
 
@@ -177,11 +204,9 @@ $(() => {
       const topic = await validate.topic("topic");
 
       if (e.type == "submit" && validate.validatedLen() == 5) {
-        console.log("Len okey", validate.validatedLen());
         validate.form.off("submit");
         validate.form.trigger("submit");
       } else {
-        console.log("Len wrong", validate.validatedLen());
         validate.errorsSummary();
       }
 
@@ -191,7 +216,7 @@ $(() => {
   }
 
   /*
-   XHR Post, User, Topic Search -------------------------------------------*/
+   -- XHR Post, User, Topic Search -------------------------------------------*/
 
   if ($(".loadContentJS").length) appendSpinnerToMainContent();
 
@@ -235,6 +260,11 @@ $(() => {
     const value = form.find("#s").val();
     const access = $(".loadContentJS").data("access");
 
+    if (value == pagData.value) {
+      console.log("The same value ajax sf forbidden!");
+      return;
+    }
+
     loading(1);
     $.ajax({
       url: server.baseUrl + '/staff/' + pagData.script(),
@@ -265,6 +295,11 @@ $(() => {
     const type = link.attr("data-type");
     const value = link.attr("data-value");
     const access = link.attr("data-access");
+
+    if (value == pagData.value) {
+      console.log("The same value ajax cl forbidden!");
+      return;
+    }
 
     if (type && value && access) {
       loading(1);

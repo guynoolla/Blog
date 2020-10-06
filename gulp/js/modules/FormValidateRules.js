@@ -375,6 +375,22 @@ class FormValidateRules extends FormValidate {
     return await check();
   }
 
+  async name(fid) {
+    if (!this.run(fid)) return false;
+    
+    return this.fieldLength(fid);    
+  }
+
+  async description(fid) {
+    if (!this.run(fid)) return false;
+    
+    if (this.form.find(`#${fid}`).val().trim() != 0) {
+      return this.fieldLength(fid);
+    } else {
+      return true;
+    }
+  }
+
   async fieldLength(fid) {
     const text = this.form.find(`#${fid}`)
     this.errors[fid] = [];

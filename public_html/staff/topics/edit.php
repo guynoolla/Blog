@@ -41,8 +41,8 @@ include SHARED_PATH . '/staff_header.php'
     <?php include SHARED_PATH . '/staff_sidebar.php' ?>
   </aside>
   
-  <div class="main col-lg-9">
-    <div class="main-content">
+  <div class="main col-lg-9 bg-light-lk bg-light-lk--md">
+    <div class="main-content bg-white">
       <?php include('./_form.php') ?>
     </div>
   </div>

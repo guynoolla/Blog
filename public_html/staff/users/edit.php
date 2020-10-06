@@ -66,7 +66,7 @@ include SHARED_PATH . '/staff_header.php';
         <div class="back-btn-pos"><?php echo page_back_button() ?></div>
       </h1>
 
-      <div class="row justify-content-center h-100">
+      <div class="row justify-content-left h-100">
         <div class="col col-md-10">
 
           <div class="py-2 my-4 rounded bg-white px-0 px-sm-4 px-lg-5">
@@ -81,7 +81,7 @@ include SHARED_PATH . '/staff_header.php';
               <?php endif; ?>
               <div class="form-group row mb-0 mx-0">
                 <label for="username" class="col-sm-4 col-form-label pl-0">Username</label>
-                <input class="col-sm-8 form-control" id="username" type="text" name="user[username]" value="<?php echo h($user->username) ?>" <?php if ($session->getUserId() != $user->id) echo 'disabled' ?>>
+                <input class="col-sm-8 form-control" id="username" type="text" name="user[username]" value="<?php echo h($user->username) ?>">
                 <span class="offset-sm-4 col-sm-8 text-danger field-validation-error"></span>
               </div>
               <div class="form-group row mb-0 mx-0">
