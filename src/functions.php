@@ -21,7 +21,11 @@ function h($string="") {
 }
 
 function error_404() {
-  header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
+  if (file_exists(WWW_ROOT . '404.php')) {
+    header("Location: " . url_for('404.php/#error-status'));
+  } else {
+    header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
+  }
   exit();
 }
 

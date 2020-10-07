@@ -34,7 +34,18 @@
 }
 
 /*
- Adapt for theme ---------------------------------*/ 
+ Adapt for theme ---------------------------------*/
+
+@media (min-width: 576px) {
+  .ard {
+    &--mid-sm {
+      padding-bottom: 56.4%;
+    }
+    &--tall-sm {
+      padding-bottom: 75%;
+    }
+  }
+}
 
 @media (min-width: 768px) {
   .ard {

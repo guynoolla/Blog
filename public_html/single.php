@@ -12,7 +12,7 @@ $id = $_GET['id'] ?? 0;
 $post = Post::findById($id);
 
 if (!$post) {
-  exit("Post not found!");
+  error_404();
 }
 
 $url_parts = url_split_by_slash();

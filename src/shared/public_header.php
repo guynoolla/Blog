@@ -13,7 +13,7 @@ if (!isset($page_title)) {
   <?php if (url_contain(['/post/','/preview/'])):
     ?><meta name="description" content="<?php echo $post->meta_desc ?>">
   <?php endif; ?>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
   <!-- Awesome fonts replaced with awesome svg -->
   <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
   <!-- Add the slick-theme.css if you want default styling -->
@@ -58,12 +58,14 @@ if (!isset($page_title)) {
       </div>
     </div>
   </nav>
-  <section class="logo">
-    <div class="logo-content">
-      <h1 class="brand"><a href="/"><?php echo $jsonstore->header->siteName ?></a></h1>
-      <div class="description"><?php echo $jsonstore->header->siteDescription ?></div>
-    </div>
-  </section>
+  <?php if (!(isset($banner_none))): ?>
+    <section class="logo">
+      <div class="logo-content">
+        <h1 class="brand"><a href="/"><?php echo $jsonstore->header->siteName ?></a></h1>
+        <div class="description"><?php echo $jsonstore->header->siteDescription ?></div>
+      </div>
+    </section>
+  <?php endif; ?>
 </header>
 
 <div><!--Content wrapper div open-->
