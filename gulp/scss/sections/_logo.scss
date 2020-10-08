@@ -1,9 +1,12 @@
 /**
  Section Logo */
 
+.first-top-padding {
+  padding-top: 5.5rem;
+}
+
 .logo {
   position: relative;
-  padding-top: 5.5rem;
   padding-bottom: 3.5rem;
   background-color: #f8f9fa;
   font-size: 1rem;
@@ -30,6 +33,5 @@
       letter-spacing: .05em;
       color: $dark1;
     }
-
   }
 }

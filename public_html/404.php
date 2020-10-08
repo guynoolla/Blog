@@ -2,17 +2,24 @@
 require_once '../src/initialize.php';
 
 $page_title = '404';
-$banner_none = true;
+$top_banner_hide = 'topBannerHideJS';
 include(SHARED_PATH . '/public_header.php');
 
-?><div class="container-xl">
+?>
+<div class="container-md">
   <div class="row">
     
     <main class="main col" role="main">
       <div class="main-content">
 
+        <div class="row pt-5 firstTopPaddingJS">
+          <div class="col">
+            <h2 class="my-2 d-block text-center"><?php echo $jsonstore->header->siteName ?></h2>
+          </div>
+        </div>
+
         <div class="row">
-          <div class="col" id="#page-top">
+          <div class="col">
             <div class="not-found ard ard--square ard--tall-sm ard--mid-md">
               <div class="not-found-content">
                 <div class="error-status"">

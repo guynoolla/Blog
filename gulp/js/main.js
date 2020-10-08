@@ -56,6 +56,34 @@ $(() => {
     marginRight: -(halfWidth) + 'px'
   })
 
+/*
+  -- Adapt content height for device screen -------------------------------- */
+
+  let bodyHeight = $(document.body).height();
+  const windowHeight = $(window).height();
+  
+  if (windowHeight > bodyHeight) {
+    $("footer").attr("style", "position:fixed !important; bottom:0");
+    $(".firstTopPaddingJS").attr("style", "padding-top: 0 !important;");
+    
+  } else {
+    const logoHeight = $("section.logo").height();
+    const footerHeight = $("footer").height();
+
+    if ($("section.logo.topBannerHideJS").length) {
+      if (windowHeight < (bodyHeight - logoHeight)) {
+        $("section.logo.topBannerHideJS")
+          .attr("style", "display: none !important;");
+
+        if (windowHeight > (bodyHeight - logoHeight - footerHeight)) {
+          $("footer").attr("style", "position:fixed !important; bottom:0");
+        }
+      } else {
+        $(".firstTopPaddingJS").attr("style", "padding-top: 0 !important;");
+      }
+    }
+  }
+
   /*
    * Require admin.js in user is logged in ---------------------------*/
 
@@ -351,6 +379,11 @@ function slickCarousel() {
       }
       clearTimeout(timeout);
     }, 5000)
+  
+  } else {
+    content.css("display", "none");
+    carousel.find(".carousel-spinner").removeClass("d-flex").addClass("d-none");
+    console.log("Failed to load Slick Carousel?!");
   }
 
 }

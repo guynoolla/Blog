@@ -54,7 +54,7 @@ if ($session->isLoggedIn()) {
 $page_title = $post->title;
 include(SHARED_PATH . '/public_header.php');
 
-?><div class="container-xl">
+?><div class="container-md">
   <div class="row">
 
     <div class="col-12 text-center border-soft border-top border-bottom px-1">

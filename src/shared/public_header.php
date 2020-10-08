@@ -30,6 +30,7 @@ if (!isset($page_title)) {
 <body>
 
 <header id="page-top">
+
   <nav class="nav-ini-hide navbar navbar-expand-md navbar-light fixed-top bg-light" id="hideByScroll">
     <div class="container">
       <!-- <a class="navbar-brand d-sm-none" href="#">Kite</a> -->
@@ -58,14 +59,16 @@ if (!isset($page_title)) {
       </div>
     </div>
   </nav>
-  <?php if (!(isset($banner_none))): ?>
-    <section class="logo">
-      <div class="logo-content">
-        <h1 class="brand"><a href="/"><?php echo $jsonstore->header->siteName ?></a></h1>
-        <div class="description"><?php echo $jsonstore->header->siteDescription ?></div>
-      </div>
-    </section>
-  <?php endif; ?>
+
+  <?php $top_banner_hide = $top_banner_hide ?? ""; ?>
+
+  <section class="logo first-top-padding<?php echo " {$top_banner_hide}" ?>">
+    <div class="logo-content">
+      <h1 class="brand"><a href="/"><?php echo $jsonstore->header->siteName ?></a></h1>
+      <div class="description"><?php echo $jsonstore->header->siteDescription ?></div>
+    </div>
+  </section>
+
 </header>
 
 <div><!--Content wrapper div open-->
