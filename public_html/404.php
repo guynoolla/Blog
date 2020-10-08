@@ -12,7 +12,7 @@ include(SHARED_PATH . '/public_header.php');
       <div class="main-content">
 
         <div class="row">
-          <div class="col">
+          <div class="col" id="#page-top">
             <div class="not-found ard ard--square ard--tall-sm ard--mid-md">
               <div class="not-found-content">
                 <div class="error-status"">

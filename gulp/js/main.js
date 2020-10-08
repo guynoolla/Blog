@@ -288,55 +288,69 @@ function navbarSearchBehavior() {
 }
 
 function slickCarousel() {
-  $(window).on("load", () => {
-    const carousel = $(".carousel")
-    const content = carousel.find(".carousel-content");
-    const slider = carousel.find(".slider");
+  const carousel = $(".carousel")
+  const content = carousel.find(".carousel-content");
+  const slider = carousel.find(".slider");
 
-    if (typeof slider.slick == "function") {
-      //let timer = setInterval(() => {
-        let imgLen = slider.find("img").length;
+  if (typeof slider.slick == "function") {
+    carousel.find(".carousel-spinner").removeClass("d-none");
 
-        if (imgLen => 2) {
-          slider.slick({
+    slider.slick({
+      autoplay: false,
+      autoplaySpeed: 2000,
+      slidesToShow: 2,
+      slidesToScroll: 1,
+      nextArrow: $('.next'),
+      prevArrow: $('.prev'),
+      cssEase: "linear",
+      responsive: [
+        {
+          breakpoint: 1201, // 1024,
+          settings: {
             slidesToShow: 2,
             slidesToScroll: 1,
-            autoplay: false,
-            autoplaySpeed: 2000,
-            nextArrow: $('.next'),
-            prevArrow: $('.prev'),
-            responsive: [{
-              breakpoint: 1201, // 1024,
-              settings: {
-                slidesToShow: 2,
-                slidesToScroll: 1,
-                infinite: true,
-                dots: false
-              }
-            },
-            {
-              breakpoint: 991, // 880,
-              settings: {
-                slidesToShow: 2,
-                slidesToScroll: 1,
-                infinite: true,
-                dots: false
-              }
-            },
-            {
-              breakpoint: 701,
-              settings: {
-                slidesToShow: 1,
-                slidesToScroll: 1
-              }
-            }]
-          })
-          content.addClass("carousel-content--fade-in");
-          carousel.find(".carousel-spinner").addClass("hide");
-
-          //clearTimeout(timer)
+            infinite: true,
+            dots: false
+          }
+        },
+        {
+          breakpoint: 991, // 880,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 1,
+            infinite: true,
+            dots: false
+          }
+        },
+        {
+          breakpoint: 701,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
         }
-      //}, 250)
-    }
-  })
+      ]
+    })
+
+    let imgLen = slider.find("img").length;
+    let started = false;
+
+    let interval = setInterval(() => {
+      if (imgLen >= 2) {
+        started = true;
+        carousel.find(".carousel-spinner").removeClass("d-flex").addClass("d-none");
+        content.addClass("carousel-content--fade-in");
+        clearTimeout(interval);
+      }
+    }, 250)
+
+    let timeout = setTimeout(() => {
+      if (!started) {
+        content.css("display", "none");
+        carousel.find(".carousel-spinner").removeClass("d-flex").addClass("d-none");
+      }
+      clearTimeout(timeout);
+    }, 5000)
+  }
+
 }
