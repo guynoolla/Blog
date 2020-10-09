@@ -1,0 +1,40 @@
+{
+    "site": {
+        "siteName": "Light Kight",
+        "siteDescription": "Just another project by Gainulla"
+    },
+    "contactForm": {
+        "title": "Contact Us",
+        "emailPlaceholder": "Email",
+        "messagePlaceholder": "Message...",
+        "buttonText": "Send",
+        "alertSuccess": "Thanks for your message!"
+    },
+    "copyright": "&#9400; Light Kite &#124; All rights reserved",
+    "social": {
+        "facebook": {
+            "have": true,
+            "link": "https://www.facebook.com"
+        },
+        "twitter": {
+            "have": true,
+            "link": "https://www.twitter.com"
+        },
+        "googlePlus": {
+            "have": false,
+            "link": "https://www.plus.google.com"
+        },
+        "youtube": {
+            "have": true,
+            "link": "https://www.youtube.com"
+        },
+        "instagram": {
+            "have": true,
+            "link": "https://www.instagram.com"
+        },
+        "github": {
+            "have": true,
+            "link": "https://www.github.com"
+        }
+    }
+}

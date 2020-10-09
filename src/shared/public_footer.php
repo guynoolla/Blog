@@ -15,9 +15,7 @@
 		<div class="social-links-widget more-space-between">
 			<?php include '_social_links_list.php' ?>
 		</div>
-		<div class="copyright mt-4">
-			<?php echo "{$jsonstore->copyright->sign} {$jsonstore->copyright->sitename} " . date('Y') . " {$jsonstore->copyright->delimeter} {$jsonstore->copyright->rights}" ?>
-		</div>
+		<div class="copyright mt-4"><?php echo $jsonstore->copyright ?></div>
 	</div>
 	<a href="#page-top" class="scroll-to-top" id="scrollToTopJS" style="display:block;width:2.5rem;height:2.5rem;">
 		<!--<i class="fa fa-angle-up"></i>-->

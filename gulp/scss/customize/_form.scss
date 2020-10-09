@@ -1,7 +1,7 @@
 form {
   position: relative;
 
-  .form-errors {
+  .form-alert {
     width: 100%;
     margin-bottom: 1.5rem;
 
@@ -10,23 +10,44 @@ form {
       margin-bottom: .6rem;
       color: $dark2;
     }
+    
+    h4 {
+      font-weight: 600;
+      &::first-letter {
+        text-transform: capitalize;
+      } 
+    }
+
     ul {
       border-radius: .4rem;
       border: none;
       padding: 1.7rem 1.7rem;
       padding-bottom: 1.2rem;
-      background-color:#f8d7da;
       list-style: none;
       li {
-        color: darken(#db646c, 10);
         &::before {
           content: "\2022";
-          color: lighten(#db646c, 5);
           font-weight: bold;
           display: inline-block;
           width: .8em;
           transform: scale(1.2);
         }
+      }
+    }
+    &--error {
+      ul {
+        background-color:#f8d7da;
+      }
+      li, h4 {
+        color: darken(#db646c, 10);
+      }
+    }
+    &--right {
+      ul {
+        background-color: #e1f6e1;
+      }
+      li, h4 {
+        color: darken(#8ecc8e, 10);
       }
     }
   }
@@ -67,6 +88,7 @@ form {
       display: flex;
       align-items: center;
       justify-content: center;
+
       &::before {
         content: "x";
         color: #fff;

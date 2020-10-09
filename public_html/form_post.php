@@ -13,7 +13,7 @@ if (is_post_request()) {
       $mailer = new \App\Contracts\Mailer;
       $text = strip_tags($message);
       
-      $mailer->send(ADMIN_EMAIL, $jsonstore->header->siteName, $text, $message);
+      $mailer->send(ADMIN_EMAIL, $jsonstore->site->siteName, $text, $message);
       $session->message('Thank you for your message!');
       redirect_to(url_for('index.php'));
     

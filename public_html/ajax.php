@@ -20,8 +20,36 @@ switch($target) {
   case 'validate_captcha':
         validate_captcha($_POST);
         break;
+  case 'user_site_data':
+        $session->isAdmin() ? user_site_data($_POST) : null;
   default:
         exit(json_encode(['target' => 'error']));
+}
+
+function user_site_data($data) {
+  $json = $data['json'] ?? false;
+  $path = PUBLIC_PATH . '/staff/site/user-site-data.json';
+  //$path2 = PUBLIC_PATH . '/user-site-data.json';
+  
+  if ($json == "false") {
+    exit(json_encode(['okey', file_get_contents($path)]));
+  
+  } else {
+    list ($is_json, $data) = is_json($json);
+  
+    if ($is_json) {
+      $data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+
+      if (file_put_contents($path, $data) !== false) {
+        exit(json_encode(['done', file_get_contents($path)]));
+      } else {
+        exit(json_encode(['error','Server failed to update json file.']));
+      }
+
+    } else {
+      exit(json_encode(['error','Submitted data is not a true json string.']));
+    }
+  } 
 }
 
 function is_already_exist($data) {
@@ -66,9 +94,9 @@ function contact_form_submit($data) {
       $mailer = new \App\Contracts\Mailer;
       $text = strip_tags($message);
       try {
-        $mailer->send(ADMIN_EMAIL, $jsonstore->header->siteName, $text, $message);
+        $mailer->send(ADMIN_EMAIL, $jsonstore->site->siteName, $text, $message);
         $status = 'success';
-        $alert = 'Thank you for your message!';
+        $alert = $jsonstore->contactForm->alertSuccess;
       
       } catch(Exception $e) {
         $status = 'failed';

@@ -21,7 +21,7 @@ function h($string="") {
 }
 
 function error_404() {
-  if (file_exists(WWW_ROOT . '404.php')) {
+  if (file_exists(PUBLIC_PATH . '/404.php')) {
     header("Location: " . url_for('404.php'));
   } else {
     header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
@@ -133,6 +133,11 @@ function no_gaps_between($str) {
     $arr[$key] = trim($value);
   }
   return implode(",", $arr);
+}
+
+function is_json($string) {
+  $decoded = json_decode($string);
+  return [(json_last_error() == JSON_ERROR_NONE), $decoded];
 }
 
 ?>

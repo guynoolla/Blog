@@ -31,14 +31,14 @@ $(() => {
         title = "Delete User";
         body = `<p>Are you sure you want to delete the user
           <strong class="font-weight-bold">${data.username}</strong>?<br>
-          You can not delete the user which has posts, unless
-          you delete the user posts first!</p>`;
+          You can not delete the user which has posts,<br>
+          unless you delete those posts first!</p>`;
       
         } else if (data.table == "topics") {
         title = "Delete Topic";
         body = `<p>Are you sure you want to delete the topic
           <strong class="font-weight-bold">${data.name}</strong>?<br>
-          If there are posts under this topic you can not delete it,
+          If there are posts under this topic you can not delete it,<br>
            unless you delete those posts first!</p>`;
       
       } else if (data.table == "posts") {
@@ -47,7 +47,7 @@ $(() => {
         This post will be permanently deleted!</p>`;
       }
     
-      currentModal(title, body, data, urlToPost);
+      currentModal("warning", title, body, data, urlToPost);
     });
   }
   
@@ -359,6 +359,66 @@ $(() => {
     })
   })
 
+  /*
+   -- Edit Json in Form --------------------------------------------- */
+
+    if ($("#jsonEditForm").length) {
+      appendModalToBody();
+
+      const jsonForm = $("#jsonEditForm");
+      let loadedData = "";
+      $(window).on("load", requestServer());
+
+      jsonForm.on("submit", e => {
+        e.preventDefault();
+
+        let data = jsonForm.find("#json").val();
+        if (data == loadedData) {
+          formAlert("right", "Your data have true JSON format!");
+          return;
+        }
+
+        if (isJson(data)) {
+          data = JSON.parse(data);
+          requestServer(data);
+        } else {
+          formAlert("error", "Please correct JSON data in form!");
+        }
+
+        return false;
+      })
+
+      function requestServer(json=false) {
+        let data = {};
+
+        if (json == false) {
+          data = { target: "user_site_data", json: "false" }
+        } else {
+          data = { target: "user_site_data", json: JSON.stringify(json) }
+        }
+
+        $.ajax({
+          url: server.baseUrl + '/ajax.php',
+          type: "post",
+          data: data,
+          success: res => {
+            const data = JSON.parse(res);
+
+            if (data[0] == "okey" || data[0] == "done") {
+              loadedData = data[1];
+              jsonForm.find("#json").val(data[1]);
+              if (data[0] == "done") {
+                formAlert("right", "Your site settings is successfully updated!")
+              }
+            } else if (data[0] == "error") {
+              console.log("Err ->", data[1]);
+            }
+          },
+          error: res => console.log('Err', res)
+        })
+      }
+    }
+
 }) // <-- jQuery
 
 /*
@@ -366,26 +426,32 @@ $(() => {
 
 function editPostFormElementsBehavior(form) {
   form.find(".form-check-input").on("change", (e) => {
+    
     if (e.target.value == "image") {
       form.find("#image").prop("disabled", false);
       form.find("#video").prop("disabled", true);
       form.find(".media-preview").attr("data-format", "image");
+    
     } else if (e.target.value == "video") {
       form.find("#image").prop("disabled", true);
       form.find("#video").prop("disabled", false);
       form.find(".media-preview").attr("data-format", "video");
     }
+    
     if (form.find(".media-preview").attr("data-format") == "image") {
       form.find(".preview").removeClass("d-none d-block");
       form.find(".preview-video").hide();
+      
       if (form.find(".preview-image").attr("data-value") != "false") {
         form.find(".preview-image").fadeIn();
       } else {
         form.find(".preview-image").fadeOut();
       }
+    
     } else if (form.find(".media-preview").attr("data-format") == "video") {
       form.find(".preview").removeClass("d-none d-block");
       form.find(".preview-image").hide();
+      
       if (form.find(".preview-video").attr("data-value") != "false") {
         form.find(".preview-video").fadeIn();
       } else {
@@ -447,35 +513,49 @@ function loadPostBox(data) {
     loadBox.html("");
     loadBox.html(data[1]);
     loadBox.append(data[2].html);
+  
   } else if (data[0] == 'failed') {
     console.log("failed");
   }
 }
 
-function currentModal(title, body, data, urlToPost) {
-  const modal = $("#deleteModal");
+function currentModal(type, title, body, data=false, urlToPost=false) {
+  const modal = $("#dashboardModal");
+
   modal.on("show.bs.modal", e => {
     modal.find(".modal-title").text(title);
     modal.find(".modal-body").html(body);
-    modal.find("form").attr("action", urlToPost);
-    modal.find("form input[name='table']").val(data.table);
-    modal.find("form button[name='delete']").val(data.id);
+    modal.find(".modal-body").addClass(`alert-${type}`);
+    modal.find(".modal-title").addClass(`text-${type}`);
+    
+    if (data !== false && urlToPost !== false) {
+      modal.find("form").attr("action", urlToPost);
+      modal.find("form input[name='table']").val(data.table);
+      modal.find("form button[name='delete']").val(data.id);
+    
+    } else {
+      modal.find("form").addClass("d-none");
+      modal.find("#modalCancelBtn").addClass("d-none");
+      modal.find("#modalOkBtn").removeClass("d-none");
+    }
   })
+
   modal.modal();
 }
 
 function appendModalToBody() {
-  const modal = `<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
+  const modal = `<div class="modal fade" id="dashboardModal" tabindex="-1" role="dialog" aria-labelledby="dashboardModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h3 class="modal-title" id="deleteModalTitle"></h3>
+          <h3 class="modal-title alert-heading" id="dashboardModalTitle"></h3>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="padding:.7rem 1rem;">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body alert alert-warning mb-0 py-4"></div>
+        <div class="modal-body alert text-center mb-0 py-4"></div>
         <div class="modal-footer">
+          <button id="modalOkBtn" type="button" class="btn btn-primary my-3 d-none" data-dismiss="modal">Ok</button>
           <button id="modalCancelBtn" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
           <form action="" method="post" class="my-3">
             <input type="hidden" name="table" value="">
@@ -507,4 +587,20 @@ function parseCsvDash(str) {
     return obj[prop] = value;
   })
   return obj;
+}
+
+function isJson(str) {
+  try {
+    return JSON.parse(str);
+  } catch (e) {
+    console.log("Error ->", e);
+    return false;
+  }
+}
+
+function formAlert(type, text) {
+  $(".form-alert")
+    .removeClass(`form-alert--error form-alert--right`)
+    .addClass(`form-alert--${type}`)
+    .html( `<ul><h4>${type}</h4><li>${text}</li></ul>`);
 }

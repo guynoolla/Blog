@@ -64,8 +64,8 @@ if (!isset($page_title)) {
 
   <section class="logo first-top-padding<?php echo " {$top_banner_hide}" ?>">
     <div class="logo-content">
-      <h1 class="brand"><a href="/"><?php echo $jsonstore->header->siteName ?></a></h1>
-      <div class="description"><?php echo $jsonstore->header->siteDescription ?></div>
+      <h1 class="brand"><a href="/"><?php echo $jsonstore->site->siteName ?></a></h1>
+      <div class="description"><?php echo $jsonstore->site->siteDescription ?></div>
     </div>
   </section>
 

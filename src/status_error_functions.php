@@ -11,10 +11,9 @@ function require_login($redirect='staff/login.php') {
 }
 
 function display_errors($errors=array(), $top_text="Please fix the following errors") {
-  //msg-lk errors-lk
   $output = '';
   if (!empty($errors)) {
-    $output .= "<div class=\"form-errors\">";
+    $output .= "<div class=\"form-alert form-alert--error\">";
     $output .= "<ul>";
     $output .= '<h4>' . $top_text . '</h4>';
     foreach($errors as $error) {

@@ -3,9 +3,7 @@
 
 <footer class="footer" role="contentinfo" id="scrollTestContact">
 	<div class="footer-content">
-		<div class="copyright mt-0">
-			<?php echo "{$jsonstore->copyright->sign} {$jsonstore->copyright->sitename} " . date('Y') . " {$jsonstore->copyright->delimeter} {$jsonstore->copyright->rights}" ?>
-		</div>
+		<div class="copyright mt-0"><?php echo $jsonstore->copyright ?></div>
 	</div>
 	<a href="#page-top" class="scroll-to-top" id="scrollToTopJS" style="display:block;width:2.5rem;height:2.5rem;">
 		<!--<i class="fa fa-angle-up"></i>-->

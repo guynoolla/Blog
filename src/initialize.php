@@ -71,7 +71,7 @@ function pass_to_js() {
   return $script;
 }
 
-$json = file_get_contents(PUBLIC_PATH . '/user-site-data.json');
+$json = file_get_contents(PUBLIC_PATH . '/staff/site/user-site-data.json');
 // Is used globally in pages
 $jsonstore = json_decode($json);
 
