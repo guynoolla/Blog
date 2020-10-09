@@ -29,7 +29,7 @@ $posts = App\Classes\Post::findWhere(
 $topics = Topic::findAll();
 
 ?>
-<div class="sidebar-content mt-2 pt-1">
+<div class="sidebar-content mt-2 mb-4 py-1">
 
   <section class="widget">
     <h3 class="title">Follow Us</h3>

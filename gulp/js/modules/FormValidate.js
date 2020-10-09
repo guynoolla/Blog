@@ -135,7 +135,7 @@ class FormValidate {
       const elem = $(`.errsum-${fid}`);
       if (this.errors[fid].length > 0) {
         elem.siblings(".form-control, .form-control-file")
-            .addClass("alert-error")
+            .addClass("alert-error");
         elem.text(this.errors[fid]);
         this.onElementKeyup(fid, elem);
       } else {
@@ -156,10 +156,14 @@ class FormValidate {
 
   showErrors(fid, elem) {
     const errors = this.getErrors(fid);
-    elem.removeClass("alert-error").next().text("");
+    elem.removeClass("alert-error")
+        .next(".field-validation-error")
+        .text("");
     elem.removeClass("alert-valid");
     if (errors.length > 0) {
-      elem.addClass("alert-error").next().text(errors);
+      elem.addClass("alert-error")
+          .next(".field-validation-error")
+          .text(errors);
       this.onElementKeyup(fid, elem);
     }
   }

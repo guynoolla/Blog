@@ -375,6 +375,7 @@ $(() => {
         let data = jsonForm.find("#json").val();
         if (data == loadedData) {
           formAlert("right", "Your data have true JSON format!");
+          $("#json").addClass("border-success");
           return;
         }
 
@@ -383,6 +384,7 @@ $(() => {
           requestServer(data);
         } else {
           formAlert("error", "Please correct JSON data in form!");
+          $("#json").addClass("border-danger");
         }
 
         return false;
@@ -409,6 +411,7 @@ $(() => {
               jsonForm.find("#json").val(data[1]);
               if (data[0] == "done") {
                 formAlert("right", "Your site settings is successfully updated!")
+                $("#json").addClass("border-success");
               }
             } else if (data[0] == "error") {
               console.log("Err ->", data[1]);

@@ -329,6 +329,7 @@ SQL;
     $sql = self::getJoins();
     $sql .= <<<SQL
           WHERE p.id in ($ids_str) AND p.approved = '1'
+          ORDER BY p.created_at DESC
 SQL;
     $sql .= " LIMIT {$per_page} OFFSET {$offset}";
     return self::findBySql($sql);

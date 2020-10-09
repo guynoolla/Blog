@@ -10,7 +10,6 @@
         "buttonText": "Send",
         "alertSuccess": "Thanks for your message!"
     },
-    "copyright": "&#9400; Light Kite &#124; All rights reserved",
     "social": {
         "facebook": {
             "have": true,
@@ -36,5 +35,6 @@
             "have": true,
             "link": "https://www.github.com"
         }
-    }
+    },
+    "copyright": "&#9400; Light Kite &#124; All rights reserved"
 }
