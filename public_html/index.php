@@ -41,7 +41,13 @@ $type = 'default';
 
   $topic_id = $_GET['tid'] ?? 0;
   $topic = Topic::findById($topic_id);
-  if (!$topic) redirect_to(url_for('index.php'));  
+
+  $url_parts = url_split_by_slash();
+  $_name = urldecode(end($url_parts));
+  
+  if (!$topic || $_name !== $topic->name) {
+    error_404();
+  }
 
   $current_page = $_GET['page'] ?? 1;
   $per_page = FRONTEND_PER_PAGE;
@@ -116,7 +122,7 @@ $type = 'default';
   $type= 'default';
   $current_page = $_GET['page'] ?? 1;
   if ($current_page == 1) {
-    $carousel_posts = Post::queryImageFormatPosts(4, 0);
+    $carousel_posts = Post::queryImageFormatPosts(6, 0);
   }
   $per_page = FRONTEND_PER_PAGE;
   $total_count = Post::countAll(['approved' => '1']);

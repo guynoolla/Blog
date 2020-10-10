@@ -22,11 +22,6 @@ include SHARED_PATH . '/staff_header.php'
       <h1 class="dashboard-headline">
         <?php echo $page_title ?>
         <div class="back-btn-pos"><?php echo page_back_button() ?></div>
-        <a
-          class="btn btn-outline-primary rounded-0 btn-md"
-          href="<?php echo url_for('staff/topics/create.php') ?>"
-          style="position:absolute;bottom:0;left:0;"
-        >New Topic</a>
       </h1>
 
       <div class="row justify-content-left h-100">
@@ -44,7 +39,8 @@ include SHARED_PATH . '/staff_header.php'
                 <span class="errsum-json text-danger field-validation-error"></span>
               </div>
 
-              <button type="submit" class="btn btn-primary float-right">Save</button>
+              <button type="submit" name="submit" class="btn btn-primary float-right">Save</button>
+              <button type="submit" name="reload" class="btn btn-success float-right mr-2">Reload</button>
             </form>
           </div>
 

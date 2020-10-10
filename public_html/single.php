@@ -11,17 +11,14 @@ $id = $_GET['id'] ?? 0;
 
 $post = Post::findById($id);
 
-if (!$post) {
-  error_404();
-}
-
 $url_parts = url_split_by_slash();
 $_title = urldecode(end($url_parts));
-$username = User::findById($post->user_id)->username;
 
 if (!$post || $_title !== $post->title) {
   error_404();
 }
+
+$username = User::findById($post->user_id)->username;
 
 if (!$post->approved) {
   $access = false;
@@ -60,8 +57,14 @@ include(SHARED_PATH . '/public_header.php');
     <div class="col-12 text-center border-soft border-top border-bottom px-1">
       <h3 class="my-3"><?php echo (Topic::findById($post->topic_id))->name ?></h3>
     </div>
-    
-    <main class="main col-lg-8" role="main">
+  
+    <?php $colClass = $jsonstore->singlePage->fullWidth ? 'col-lg-12' : 'col-lg-8'; ?>
+    <?php
+      $colClass = ( $jsonstore->singlePage->fullWidth && 
+                    $jsonstore->singlePage->fullWidthNarrow
+                  ) ? 'offset-lg-1 col-lg-10' : $colClass;
+    ?>
+    <main class="main <?php echo $colClass ?>" role="main">
       <div class="main-content">
           <div class="lg-one-article-row">
             <article class="single">
@@ -134,9 +137,11 @@ include(SHARED_PATH . '/public_header.php');
       </div> <!--main content-->
     </main> <!-- main -->
 
-    <aside class="sidebar col-lg-4" role="complementary">  
-      <?php include SHARED_PATH . '/aside_sidebar.php' ?>
-    </aside>
+    <?php if (!$jsonstore->singlePage->fullWidth): ?>
+      <aside class="sidebar col-lg-4" role="complementary">  
+        <?php include SHARED_PATH . '/aside_sidebar.php' ?>
+      </aside>
+    <?php endif; ?>
 
   </div>
 </div> <!--container-->

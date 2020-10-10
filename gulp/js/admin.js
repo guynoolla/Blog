@@ -73,7 +73,7 @@ $(() => {
       const confirmPassword = await validate.confirmPassword("confirm_password");
       const aboutText = await validate.aboutText("about_text");
   
-      if (e.type == "submit" && validate.validatedLen() == 1) {
+      if (e.type == "submit" && !validate.hasError()) {
         validate.form.off("submit");
         validate.form.trigger("submit");
       }
@@ -369,8 +369,16 @@ $(() => {
       let loadedData = "";
       $(window).on("load", requestServer());
 
-      jsonForm.on("submit", e => {
+      jsonForm.on("click", "button", e => {
         e.preventDefault();
+
+        if (e.target.name == "reload") {
+          $.when(requestServer()).then(() => {
+            formAlert();
+            jsonBorder();
+          });
+          return;
+        }
 
         let data = jsonForm.find("#json").val();
         if (data == loadedData) {
@@ -403,24 +411,24 @@ $(() => {
         $.ajax({
           url: server.baseUrl + '/ajax.php',
           type: "post",
-          data: data,
-          success: res => {
-            const data = JSON.parse(res);
-
-            if (data[0] == "okey" || data[0] == "done") {
-              loadedData = data[1];
-              jsonForm.find("#json").val(data[1]);
-              if (data[0] == "done") {
-                formAlert("right", "Your site settings data is updated!");
-                jsonBorder("border-success");
-              }
-            } else if (data[0] == "error") {
-              formAlert("error", data[1], "Error");
-              jsonBorder("border-danger");
-            }
-          },
-          error: res => console.log('Err', res)
+          data: data
         })
+        .done(res => {
+          const data = JSON.parse(res);
+
+          if (data[0] == "okey" || data[0] == "done") {
+            loadedData = data[1];
+            jsonForm.find("#json").val(data[1]);
+            if (data[0] == "done") {
+              formAlert("right", "Your site settings data is updated!");
+              jsonBorder("border-success");
+            }
+          } else if (data[0] == "error") {
+            formAlert("error", data[1], "Error");
+            jsonBorder("border-danger");
+          }
+        })
+        .fail(res => console.log('Err', res))
       }
     }
 
@@ -603,20 +611,30 @@ function isJson(str) {
   }
 }
 
-function formAlert(type, text, title=false) {
+function formAlert(type="", text="", title=false) {
+  $(".form-alert")
+    .removeClass("form-alert--error form-alert--right");
+  
+  if (type == "") {
+    $(".form-alert").html("");  
+    return;
+  }
+
   if (!title) {
     title = (type == "right") ? "correct format" : "wrong format";
   }
+  
   $(".form-alert")
-    .removeClass(`form-alert--error form-alert--right`)
-    .hide()
+    .slideUp()
     .addClass(`form-alert--${type}`)
     .html( `<ul><h4>${title}</h4><li>${text}</li></ul>`)
-    .fadeIn();
+    .slideDown();
 }
 
-function jsonBorder(currClass) {
-  $("#json")
-    .removeClass("border-success border-danger")
-    .addClass(currClass);
+function jsonBorder(currClass="") {
+  $("#json").removeClass("border-success border-danger");
+  
+  if (currClass == "") return;
+
+  $("#json").addClass(currClass);
 }

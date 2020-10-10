@@ -28,17 +28,22 @@ if (!isset($page_title)) {
   <style>
   <?php if ($jsonstore->color->lineUnderTitle != ""): ?>
     .sidebar .sidebar-content .widget .title::after {
-      border-bottom: 2px solid <?php echo $jsonstore->color->lineUnderTitle; ?>
+      border-bottom: 2px solid <?php echo $jsonstore->color->lineUnderTitle; ?> !important;
     }
     .category.category--dark::after {
-      border-bottom: 2px solid <?php echo $jsonstore->color->lineUnderTitle; ?>
+      border-bottom: 2px solid <?php echo $jsonstore->color->lineUnderTitle; ?> !important;
     }
   <?php endif; ?>
   <?php if ($jsonstore->color->siteName != ""): ?>
     .logo .logo-content .brand a {
-      color: <?php echo $jsonstore->color->siteName ?>
+      color: <?php echo $jsonstore->color->siteName ?> !important;
     }
   <?php endif; ?>
+  <?php if ($jsonstore->color->toTopBtnHover != ""): ?>
+    .scroll-to-top:hover, .scroll-to-top:focus {
+      background-color: <?php echo $jsonstore->color->toTopBtnHover ?> !important;
+    }
+  <?php endif ?>
   </style>
   <script src="<?php echo url_for('assets/js/vendor.js') ?>"></script>
 </head>
@@ -66,7 +71,14 @@ if (url_contain(['/pasword/', '/email/', '/staff/login', '/staff/register'])) {
             <a class="nav-link" href="<?php echo url_for('/') ?>">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="<?php echo url_for('/#widget-contact-form') ?>">Contact</a>
+            <?php
+              if ($jsonstore->sidebarWidget->contact->show) {
+                $contact_url = url_for('/#contact-form');
+              } else {
+                $contact_url = url_for('contact.php');
+              }
+            ?>
+            <a class="nav-link" href="<?php echo $contact_url ?>">Contact</a>
           </li>
           <?php $header_type = 'public'; include '_navbar_dropdown.php'; ?>
         </ul>

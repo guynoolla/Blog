@@ -1,52 +1,83 @@
 {
     "site": {
-        "siteName": "Light Kight",
-        "siteDescription": "Just another project by Gainulla"
+        "siteName": "White Color",
+        "siteDescription": "Just another theme by Gainulla"
+    },
+    "slider": {
+        "slidesToShow": 2,
+        "slidesToScroll": 2
     },
     "sidebarWidget": {
-        "title": {
-            "about": "About Me",
-            "follow": "Follow Me",
-            "posts": "Recent Posts",
-            "topics": "Categories",
-            "contact": "Contact Me"
+        "about": {
+            "show": true,
+            "title": "About Us"
+        },
+        "follow": {
+            "show": true,
+            "title": "Follow Us"
+        },
+        "posts": {
+            "show": true,
+            "title": "Recent Posts"
+        },
+        "search": {
+            "show": true
+        },
+        "topics": {
+            "show": true,
+            "title": "Topics"
+        },
+        "contact": {
+            "show": false,
+            "title": "Contact Us"
         }
     },
     "color": {
+        "siteName": "#5aaee2",
         "lineUnderTitle": "#5aaee2",
-        "siteName": "#5aaee2"
+        "toTopBtnHover": "#5aaee2"
     },
     "contactForm": {
-        "emailPlaceholder": "Email",
-        "messagePlaceholder": "Message...",
-        "buttonText": "Send",
+        "title": "Contact Us",
+        "emailLabel": "Email",
+        "messageLabel": "Message",
+        "placeholder": true,
+        "buttonText": "Submit",
         "alertSuccess": "Thank you for your message!"
+    },
+    "captcha": {
+        "label": "Captcha",
+        "placeholder": "code"
     },
     "social": {
         "facebook": {
-            "have": true,
+            "show": true,
             "link": "https://www.facebook.com"
         },
         "twitter": {
-            "have": true,
+            "show": true,
             "link": "https://www.twitter.com"
         },
         "googlePlus": {
-            "have": false,
+            "show": false,
             "link": "https://www.plus.google.com"
         },
         "youtube": {
-            "have": true,
+            "show": true,
             "link": "https://www.youtube.com"
         },
         "instagram": {
-            "have": true,
+            "show": true,
             "link": "https://www.instagram.com"
         },
         "github": {
-            "have": true,
+            "show": true,
             "link": "https://www.github.com"
         }
+    },
+    "singlePage": {
+        "fullWidth": true,
+        "fullWidthNarrow": true
     },
     "copyright": "&#9400; Light Kite &#124; All rights reserved"
 }

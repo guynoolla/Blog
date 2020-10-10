@@ -47,7 +47,7 @@ include(SHARED_PATH . '/public_header.php');
   <div class="row justify-content-center h-100">
     <div class="col col-md-10 col-lg-8 col-xl-6 my-auto">
 
-      <div class="py-3 pb-5 my-5 rounded bg-white px-0 px-sm-4 px-lg-5">
+      <div class="pt-3 pb-5 my-5 rounded bg-white px-0 px-sm-4 px-lg-5">
       
         <?php if (isset($_GET['r']) && $_GET['r'] == 'reset'): ?>
           <p class="mb-5 h1"><?php echo $page_title ?></p>

@@ -10,7 +10,11 @@
 
     <div class="carousel-content">
       <div class="left-right-overlay"></div>
-      <div class="slider">
+
+      <div class="slider" data-slides_to_show="<?php 
+        echo $jsonstore->slider->slidesToShow ?>" data-slides_to_scroll="<?php
+        echo $jsonstore->slider->slidesToScroll
+      ?>">
         <?php if (isset($carousel_posts)) {
           foreach ($carousel_posts as $post): ?>
             <div>

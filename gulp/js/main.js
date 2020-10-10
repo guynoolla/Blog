@@ -324,11 +324,14 @@ function slickCarousel() {
   if (typeof slider.slick == "function") {
     carousel.find(".carousel-spinner").removeClass("d-none");
 
+    const slidesToShow = slider.data("slides_to_show");
+    const slidesToScroll = slider.data("slides_to_scroll");
+
     slider.slick({
       autoplay: false,
       autoplaySpeed: 2000,
-      slidesToShow: 2,
-      slidesToScroll: 1,
+      slidesToShow: slidesToShow,
+      slidesToScroll: slidesToScroll,
       nextArrow: $('.next'),
       prevArrow: $('.prev'),
       cssEase: "linear",
@@ -336,8 +339,8 @@ function slickCarousel() {
         {
           breakpoint: 1201, // 1024,
           settings: {
-            slidesToShow: 2,
-            slidesToScroll: 1,
+            slidesToShow: slidesToShow,
+            slidesToScroll: slidesToScroll,
             infinite: true,
             dots: false
           }
@@ -345,8 +348,8 @@ function slickCarousel() {
         {
           breakpoint: 991, // 880,
           settings: {
-            slidesToShow: 2,
-            slidesToScroll: 1,
+            slidesToShow: slidesToShow,
+            slidesToScroll: slidesToScroll,
             infinite: true,
             dots: false
           }
@@ -354,8 +357,8 @@ function slickCarousel() {
         {
           breakpoint: 701,
           settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1
+            slidesToShow: slidesToShow,
+            slidesToScroll: slidesToScroll
           }
         }
       ]

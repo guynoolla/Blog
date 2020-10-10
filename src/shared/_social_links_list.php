@@ -1,5 +1,5 @@
 <ul>
-  <?php if ($jsonstore->social->facebook->have): ?>
+  <?php if ($jsonstore->social->facebook->show): ?>
     <li class="menu-item">
       <a class="svg-social-btn" href="<?php echo $jsonstore->social->facebook->link ?>">
         <!-- <i class="social_icon fa fa-facebook"><span>Facebook</span></i> -->
@@ -8,7 +8,7 @@
     </li>
   <?php endif; ?>
 
-  <?php if ($jsonstore->social->twitter->have): ?>
+  <?php if ($jsonstore->social->twitter->show): ?>
     <li class="menu-item">
       <a class="svg-social-btn" href="<?php echo $jsonstore->social->twitter->link ?>">
         <!-- <i class="social_icon fa fa-twitter"><span>Twitter</span></i> -->
@@ -17,7 +17,7 @@
     </li>
   <?php endif; ?>
 
-  <?php if ($jsonstore->social->youtube->have): ?>
+  <?php if ($jsonstore->social->youtube->show): ?>
     <li class="menu-item">
       <a class="svg-social-btn svg-social-btn--more1" href="<?php echo $jsonstore->social->youtube->link ?>">
         <!-- <i class="social_icon fa fa-youtube"><span>youtube</span></i></a> -->
@@ -26,7 +26,7 @@
     </li>
   <?php endif; ?>
 
-  <?php if ($jsonstore->social->googlePlus->have): ?>
+  <?php if ($jsonstore->social->googlePlus->show): ?>
     <li class="menu-item">
       <a class="svg-social-btn svg-social-btn--more2" href="<?php echo $jsonstore->social->googlePlus->link ?>">
         <!-- <i class="social_icon fa fa-google-plus"><span>Google+</span></i> -->
@@ -35,7 +35,7 @@
     </li>
   <?php endif; ?>
 
-  <?php if ($jsonstore->social->instagram->have): ?>
+  <?php if ($jsonstore->social->instagram->show): ?>
     <li class="menu-item">
       <a class="svg-social-btn" href="<?php echo $jsonstore->social->instagram->link ?>">
         <!-- <i class="social_icon fa fa-instagram"><span>Instagram</span></i> -->
@@ -44,7 +44,7 @@
     </li>
   <?php endif; ?>
 
-  <?php if ($jsonstore->social->github->have): ?>
+  <?php if ($jsonstore->social->github->show): ?>
     <li class="menu-item">
       <a class="svg-social-btn" href="<?php echo $jsonstore->social->github->link ?>">
         <!-- <i class="social_icon fa fa-github"><span>Github</span></i> -->

@@ -44,7 +44,7 @@ include SHARED_PATH . '/public_header.php';
   <div class="row justify-content-center h-100">
     <div class="col col-md-10 col-lg-8 col-xl-6 my-auto">
 
-      <div class="py-5 my-5 rounded bg-white px-0 px-sm-4 px-lg-5">
+      <div class="pt-3 pb-5 my-5 rounded bg-white px-0 px-sm-4 px-lg-5">
         <form id="registerForm" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
 
           <div class="row ml-0"><h1>Register</h1></div>
@@ -74,10 +74,12 @@ include SHARED_PATH . '/public_header.php';
           </div>
 
           <div class="form-group row my-0 mx-0">
-            <label for="confirm_password" class="col-sm-4 pl-0">Captcha Code</label>
+            <label for="confirm_password" class="col-sm-4 pl-0">
+              <?php echo $jsonstore->captcha->label ?>
+            </label>
             <div class="form-group-captcha col-sm-8 px-0 d-flex align-items-start justify-content-start bg-light clearfix">
               <img src="<?php echo $_SESSION['captcha']['image_src'] ?>" style="z-index:500">
-              <input type="text" name="captcha" id="captcha" class="captcha-field align-self-end bg-light border-0" placeholder="code">
+              <input type="text" name="captcha" id="captcha" class="captcha-field align-self-end bg-light border-0" placeholder="<?php echo $jsonstore->captcha->placeholder ?>">
               <button type="submit" name="submit_button" class="btn btn-outline-default ml-auto rounded-0">
                 <span class="spinner-grow spinner-grow-sm d-none" role="status" aria-hidden="true"></span>
                 Register

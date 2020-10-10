@@ -13,7 +13,7 @@ if (is_post_request()) {
 
   if (!$user) redirect_to(url_for('index.php'));
 
-  if ($user->user_type == 'author') {
+  if ($session->isAuthor()) {
     $image = new File($_FILES['about_image']);
     $user->fileInstance($image);
   }

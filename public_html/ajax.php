@@ -2,69 +2,6 @@
 
 require_once '../src/initialize.php';
 
-
-// $path = PUBLIC_PATH . '/staff/site/user-site-data.json';
-
-// $data = json_decode('{
-//   "site": {
-//       "siteName": "Light Kight",
-//       "siteDescription": "Just another project by Gainulla"
-//   },
-//   "sidebarWidget": {
-//       "title": {
-//           "about": "About Me",
-//           "follow": "Follow Me",
-//           "posts": "Recent Posts",
-//           "topics": "Categories",
-//           "contact": "Contact Me"
-//       }
-//   },
-//   "color": {
-//       "lineUnderTitle": "#5aaee2",
-//       "siteName": "#5aaee2"
-//   },
-//   "contactForm": {
-//       "emailPlaceholder": "Email",
-//       "messagePlaceholder": "Message...",
-//       "buttonText": "Send",
-//       "alertSuccess": "Thank you for your message!"
-//   },
-//   "social": {
-//       "facebook": {
-//           "have": true,
-//           "link": "https://www.facebook.com"
-//       },
-//       "twitter": {
-//           "have": true,
-//           "link": "https://www.twitter.com"
-//       },
-//       "googlePlus": {
-//           "have": false,
-//           "link": "https://www.plus.google.com"
-//       },
-//       "youtube": {
-//           "have": true,
-//           "link": "https://www.youtube.com"
-//       },
-//       "instagram": {
-//           "have": true,
-//           "link": "https://www.instagram.com"
-//       },
-//       "github": {
-//           "have": true,
-//           "link": "https://www.github.com"
-//       }
-//   },
-//   "copyright": "&#9400; Light Kite &#124; All rights reserved"
-// }');
-
-// $test = site_setting_removed($data, $path);
-
-// dd($test);
-
-/* ------------------------------------------------------------------------------ */
-
-
 $target = $_POST['target'] ?? '';
 
 switch($target) {
@@ -101,8 +38,15 @@ function user_site_data($data) {
     list ($is_json, $data) = is_json($json);
   
     if ($is_json) {
-      if (site_setting_removed($data, $path)) {
-        exit(json_encode(['error', 'Do not remove any property of site settings!']));
+      $err_code = site_setting_removed($data, $path);
+      $err1_msg = "To remove site settings property is forbidden!\n";
+      $err2_msg = "To add a new settings property is not allowed!";
+      $err_msg = $err_code == 1 ? $err1_msg : "";
+      $err_msg = $err_code == 2 ? $err2_msg : $err_msg;
+      $err_msg = $err_code == 3 ? $err1_msg . ' ' . $err2_msg : $err_msg;
+
+      if ($err_code > 0) {
+        exit(json_encode(['error', $err_msg]));
       
       } else {
         $data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
@@ -280,16 +224,25 @@ function cookie_ids_posts($data) {
 
 function site_setting_removed($data, $origin_path) {
   $origin = json_decode(file_get_contents($origin_path), true);
-  $originKeys = array_keys_multi($origin);
-  $dataKeys = array_keys_multi($data);
-  
-  foreach ($originKeys as $setting) {
-    if (!in_array($setting, $dataKeys)) {
-      return true;
+  $origin_keys = array_keys_multi($origin);
+  $data_keys = array_keys_multi($data);
+  $err_code = 0; 
+
+  foreach ($origin_keys as $setting) {
+    if (!in_array($setting, $data_keys)) {
+      $err_code += 1;
+      break;
     }
   }
 
-  return false;
+  foreach ($data_keys as $setting) {
+    if (!in_array($setting, $origin_keys)) {
+      $err_code += 2;
+      break;
+    }
+  }
+
+  return $err_code;
 }
 
 ?>
