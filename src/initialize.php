@@ -74,5 +74,6 @@ function pass_to_js() {
 $json = file_get_contents(PUBLIC_PATH . '/staff/site/user-site-data.json');
 // Is used globally in pages
 $jsonstore = json_decode($json);
+$jsonarray = json_decode($json, true);
 
 ?>

@@ -374,8 +374,8 @@ $(() => {
 
         if (e.target.name == "reload") {
           $.when(requestServer()).then(() => {
-            formAlert();
-            jsonBorder();
+            formAlert("right", "Your site settings reloaded.");
+            jsonBorder("border-success");
           });
           return;
         }
@@ -611,9 +611,8 @@ function isJson(str) {
   }
 }
 
-function formAlert(type="", text="", title=false) {
-  $(".form-alert")
-    .removeClass("form-alert--error form-alert--right");
+function formAlert(type="", errors, title=false) {
+  $(".form-alert").removeClass("form-alert--error form-alert--right");
   
   if (type == "") {
     $(".form-alert").html("");  
@@ -624,10 +623,17 @@ function formAlert(type="", text="", title=false) {
     title = (type == "right") ? "correct format" : "wrong format";
   }
   
+  let arr = [];
+  if (typeof errors == "string") arr.push(errors)
+  else arr = errors;
+
+  let list = "";
+  arr.forEach(value => list += `<li>${value}</li>`);
+
   $(".form-alert")
     .slideUp()
     .addClass(`form-alert--${type}`)
-    .html( `<ul><h4>${title}</h4><li>${text}</li></ul>`)
+    .html( `<ul><h4>${title}</h4>${list}</ul>`)
     .slideDown();
 }
 

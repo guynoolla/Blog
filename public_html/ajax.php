@@ -39,11 +39,12 @@ function user_site_data($data) {
   
     if ($is_json) {
       $err_code = site_setting_removed($data, $path);
-      $err1_msg = "To remove site settings property is forbidden!\n";
+      $err1_msg = "To remove site settings property is forbidden!";
       $err2_msg = "To add a new settings property is not allowed!";
-      $err_msg = $err_code == 1 ? $err1_msg : "";
-      $err_msg = $err_code == 2 ? $err2_msg : $err_msg;
-      $err_msg = $err_code == 3 ? $err1_msg . ' ' . $err2_msg : $err_msg;
+      $err_msg = [];
+      if ($err_code == 1) $err_msg[] = $err1_msg;
+      if ($err_code == 2) $err_msg[] = $err2_msg;
+      if ($err_code == 3) { $err_msg[] = $err1_msg; $err_msg[] = $err2_msg; }
 
       if ($err_code > 0) {
         exit(json_encode(['error', $err_msg]));
@@ -230,6 +231,14 @@ function site_setting_removed($data, $origin_path) {
 
   foreach ($origin_keys as $setting) {
     if (!in_array($setting, $data_keys)) {
+      $err_code += 1;
+      break;
+    }
+
+    $origin_cnt = array_count_values($origin_keys);
+    $data_cnt = array_count_values($data_keys);
+    
+    if ($data_cnt[$setting] != $origin_cnt[$setting]) {
       $err_code += 1;
       break;
     }

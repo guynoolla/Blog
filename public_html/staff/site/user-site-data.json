@@ -10,26 +10,33 @@
     "sidebarWidget": {
         "about": {
             "show": true,
-            "title": "About Us"
+            "title": "About Me",
+            "priority": 1,
+            "imageRounded": true
         },
         "follow": {
             "show": true,
-            "title": "Follow Us"
+            "title": "Follow Us",
+            "priority": 2
         },
         "posts": {
             "show": true,
-            "title": "Recent Posts"
+            "title": "Recent Posts",
+            "priority": 3
         },
         "search": {
-            "show": true
+            "show": true,
+            "priority": 4
         },
         "topics": {
             "show": true,
-            "title": "Topics"
+            "title": "Topics",
+            "priority": 5
         },
         "contact": {
             "show": false,
-            "title": "Contact Us"
+            "title": "Contact Us",
+            "priority": 6
         }
     },
     "color": {
@@ -76,7 +83,7 @@
         }
     },
     "singlePage": {
-        "fullWidth": true,
+        "fullWidth": false,
         "fullWidthNarrow": true
     },
     "copyright": "&#9400; Light Kite &#124; All rights reserved"
