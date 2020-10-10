@@ -1,10 +1,10 @@
 .sidebar {
   width: 3.6rem;
-  height: 100vh;
+  //height: 100vh;
   position: fixed;
   background-color: $bg-primary;
   transition: width 200ms ease;
-  z-index: 999;
+  z-index: 501;
   padding: 0;
   margin: 0;
 
@@ -68,7 +68,7 @@
 
   &:hover {
     width: 14.2rem !important;
-    z-index: 999;
+    z-index: 501;
     transition: width 200ms linear !important;
     .link-text {
       display: block !important;

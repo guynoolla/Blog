@@ -2,6 +2,69 @@
 
 require_once '../src/initialize.php';
 
+
+// $path = PUBLIC_PATH . '/staff/site/user-site-data.json';
+
+// $data = json_decode('{
+//   "site": {
+//       "siteName": "Light Kight",
+//       "siteDescription": "Just another project by Gainulla"
+//   },
+//   "sidebarWidget": {
+//       "title": {
+//           "about": "About Me",
+//           "follow": "Follow Me",
+//           "posts": "Recent Posts",
+//           "topics": "Categories",
+//           "contact": "Contact Me"
+//       }
+//   },
+//   "color": {
+//       "lineUnderTitle": "#5aaee2",
+//       "siteName": "#5aaee2"
+//   },
+//   "contactForm": {
+//       "emailPlaceholder": "Email",
+//       "messagePlaceholder": "Message...",
+//       "buttonText": "Send",
+//       "alertSuccess": "Thank you for your message!"
+//   },
+//   "social": {
+//       "facebook": {
+//           "have": true,
+//           "link": "https://www.facebook.com"
+//       },
+//       "twitter": {
+//           "have": true,
+//           "link": "https://www.twitter.com"
+//       },
+//       "googlePlus": {
+//           "have": false,
+//           "link": "https://www.plus.google.com"
+//       },
+//       "youtube": {
+//           "have": true,
+//           "link": "https://www.youtube.com"
+//       },
+//       "instagram": {
+//           "have": true,
+//           "link": "https://www.instagram.com"
+//       },
+//       "github": {
+//           "have": true,
+//           "link": "https://www.github.com"
+//       }
+//   },
+//   "copyright": "&#9400; Light Kite &#124; All rights reserved"
+// }');
+
+// $test = site_setting_removed($data, $path);
+
+// dd($test);
+
+/* ------------------------------------------------------------------------------ */
+
+
 $target = $_POST['target'] ?? '';
 
 switch($target) {
@@ -38,12 +101,17 @@ function user_site_data($data) {
     list ($is_json, $data) = is_json($json);
   
     if ($is_json) {
-      $data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-
-      if (file_put_contents($path, $data) !== false) {
-        exit(json_encode(['done', file_get_contents($path)]));
+      if (site_setting_removed($data, $path)) {
+        exit(json_encode(['error', 'Do not remove any property of site settings!']));
+      
       } else {
-        exit(json_encode(['error','Server failed to update json file.']));
+        $data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+
+        if (file_put_contents($path, $data) !== false) {
+          exit(json_encode(['done', file_get_contents($path)]));
+        } else {
+          exit(json_encode(['error','Server failed to update json file.']));
+        }
       }
 
     } else {
@@ -208,6 +276,20 @@ function cookie_ids_posts($data) {
   } else {
     exit(json_encode(['empty']));
   }
+}
+
+function site_setting_removed($data, $origin_path) {
+  $origin = json_decode(file_get_contents($origin_path), true);
+  $originKeys = array_keys_multi($origin);
+  $dataKeys = array_keys_multi($data);
+  
+  foreach ($originKeys as $setting) {
+    if (!in_array($setting, $dataKeys)) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 ?>

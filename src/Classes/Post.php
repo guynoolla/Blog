@@ -59,8 +59,8 @@ class Post extends \App\Classes\DatabaseObject {
     $this->image_obj = $image_obj;
   }
 
-  public function excerpt($content) {
-    return (substr(strip_tags($content), 0, 150) . '...');
+  public function excerpt() {
+    return (substr(strip_tags($this->body), 0, 150) . '...');
   }
 
   protected function beforeValidation($attr) {

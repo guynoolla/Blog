@@ -32,7 +32,7 @@ $topics = Topic::findAll();
 <div class="sidebar-content mt-2 mb-4 py-1">
 
   <section class="widget">
-    <h3 class="title">Follow Us</h3>
+    <h3 class="title"><?php echo $jsonstore->sidebarWidget->title->follow ?></h3>
 
     <div class="social-links-widget more-space-between">
       <?php include '_social_links_list.php' ?>
@@ -41,7 +41,7 @@ $topics = Topic::findAll();
 
   <?php if (url_contain(['/post/','/preview/']) && $user->about_appear): ?>
     <section class="widget mt-5">
-      <h3 class="title mb-3">About Author</h3>
+      <h3 class="title mb-3"><?php echo $jsonstore->sidebarWidget->title->about ?></h3>
 
       <div class="about-widget">
         <div class="about-image d-flex align-items-center justify-content-center">
@@ -55,7 +55,7 @@ $topics = Topic::findAll();
   <?php endif; ?>
 
   <section class="widget mt-4">
-    <h3 class="title">Recent Posts</h3>
+    <h3 class="title"><?php echo $jsonstore->sidebarWidget->title->posts ?></h3>
 
     <div class="recent-posts-widget">
       <?php $i = 1; foreach ($posts as $post): ?>
@@ -90,7 +90,7 @@ $topics = Topic::findAll();
   </section>
 
   <section class="widget">
-    <h3 class="title mb-3">Topics</h3>
+    <h3 class="title mb-3"><?php echo $jsonstore->sidebarWidget->title->topics ?></h3>
     
     <div class="cats-widget">
       <ul>
@@ -108,7 +108,7 @@ $topics = Topic::findAll();
 
   <?php if (is_homepage()): ?>
     <section class="widget my-4" id="widget-contact-form">
-      <h3 class="title"><?php echo $jsonstore->contactForm->title ?></h3>
+      <h3 class="title"><?php echo $jsonstore->sidebarWidget->title->contact ?></h3>
       <div class="widget-contact-form pt-2">
         <form id="contactForm" action="<?php echo url_for('form_post.php') ?>" method="post" name="contactForm">
           <div class="form-group mb-0">

@@ -194,7 +194,7 @@ include SHARED_PATH . '/carousel.php';
                         <?php endif; ?>
                       </div>
 
-                      <div class="entry-content"><?php echo Post::excerpt($post->body) ?></div>
+                      <div class="entry-content"><?php echo $post->excerpt() ?></div>
                       <div class="read-more read-more--dark text-center mt-3">
                         <a href="<?php echo url_for('post/' . u($post->title)) . '?id=' . $post->id ?>">Read More</a>
                       </div>
@@ -247,7 +247,7 @@ include SHARED_PATH . '/carousel.php';
                         <?php endif; ?>
                       </div>
 
-                      <div class="entry-content"><?php echo Post::excerpt($post->body) ?></div>
+                      <div class="entry-content"><?php echo $post->excerpt() ?></div>
                     </div>
                 </div>
               </div>

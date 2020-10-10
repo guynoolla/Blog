@@ -32,7 +32,7 @@ include SHARED_PATH . '/staff_header.php'
       <div class="row justify-content-left h-100">
         <div class="col col-md-12">
 
-          <div class="py-2 my-4 rounded bg-white px-0 px-sm-4 px-lg-5">
+          <div class="py-2 my-1 rounded bg-white px-0 px-sm-4 px-lg-5">
             <form id="jsonEditForm" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
 
               <div class="form-alert"></div>

@@ -136,8 +136,22 @@ function no_gaps_between($str) {
 }
 
 function is_json($string) {
-  $decoded = json_decode($string);
+  $decoded = json_decode($string, true);
   return [(json_last_error() == JSON_ERROR_NONE), $decoded];
+}
+
+function array_keys_multi(array $array) {
+  $keys = array();
+
+  foreach ($array as $key => $value) {
+    $keys[] = $key;
+
+    if (is_array($value)) {
+        $keys = array_merge($keys, array_keys_multi($value));
+    }
+  }
+
+  return $keys;
 }
 
 ?>

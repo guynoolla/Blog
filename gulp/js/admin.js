@@ -374,8 +374,8 @@ $(() => {
 
         let data = jsonForm.find("#json").val();
         if (data == loadedData) {
-          formAlert("right", "Your data have true JSON format!");
-          $("#json").addClass("border-success");
+          formAlert("right", "Your site settings data is okay!");
+          jsonBorder("border-success");
           return;
         }
 
@@ -384,7 +384,8 @@ $(() => {
           requestServer(data);
         } else {
           formAlert("error", "Please correct JSON data in form!");
-          $("#json").addClass("border-danger");
+          jsonBorder("border-danger");
+          return;
         }
 
         return false;
@@ -410,11 +411,12 @@ $(() => {
               loadedData = data[1];
               jsonForm.find("#json").val(data[1]);
               if (data[0] == "done") {
-                formAlert("right", "Your site settings is successfully updated!")
-                $("#json").addClass("border-success");
+                formAlert("right", "Your site settings data is updated!");
+                jsonBorder("border-success");
               }
             } else if (data[0] == "error") {
-              console.log("Err ->", data[1]);
+              formAlert("error", data[1], "Error");
+              jsonBorder("border-danger");
             }
           },
           error: res => console.log('Err', res)
@@ -601,9 +603,20 @@ function isJson(str) {
   }
 }
 
-function formAlert(type, text) {
+function formAlert(type, text, title=false) {
+  if (!title) {
+    title = (type == "right") ? "correct format" : "wrong format";
+  }
   $(".form-alert")
     .removeClass(`form-alert--error form-alert--right`)
+    .hide()
     .addClass(`form-alert--${type}`)
-    .html( `<ul><h4>${type}</h4><li>${text}</li></ul>`);
+    .html( `<ul><h4>${title}</h4><li>${text}</li></ul>`)
+    .fadeIn();
+}
+
+function jsonBorder(currClass) {
+  $("#json")
+    .removeClass("border-success border-danger")
+    .addClass(currClass);
 }

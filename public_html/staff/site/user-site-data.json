@@ -3,12 +3,24 @@
         "siteName": "Light Kight",
         "siteDescription": "Just another project by Gainulla"
     },
+    "sidebarWidget": {
+        "title": {
+            "about": "About Me",
+            "follow": "Follow Me",
+            "posts": "Recent Posts",
+            "topics": "Categories",
+            "contact": "Contact Me"
+        }
+    },
+    "color": {
+        "lineUnderTitle": "#5aaee2",
+        "siteName": "#5aaee2"
+    },
     "contactForm": {
-        "title": "Contact Us",
         "emailPlaceholder": "Email",
         "messagePlaceholder": "Message...",
         "buttonText": "Send",
-        "alertSuccess": "Thanks for your message!"
+        "alertSuccess": "Thank you for your message!"
     },
     "social": {
         "facebook": {

@@ -63,8 +63,9 @@ $(() => {
   const windowHeight = $(window).height();
   
   if (windowHeight > bodyHeight) {
-    $("footer").attr("style", "position:fixed !important; bottom:0");
-    $(".firstTopPaddingJS").attr("style", "padding-top: 0 !important;");
+    $("footer").attr("style", "position:fixed; bottom:0");
+    $(".firstTopPaddingJS").attr("style", "padding-top: 0;");
+    $(".main").attr("style", `height:100vh`);
     
   } else {
     const logoHeight = $("section.logo").height();

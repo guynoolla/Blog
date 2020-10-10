@@ -25,9 +25,32 @@ if (!isset($page_title)) {
   <link rel="icon" type="image/png" sizes="32x32" href="<?php echo url_for('/favicon-32x32.png') ?>">
   <link rel="icon" type="image/png" sizes="16x16" href="<?php echo url_for('/favicon-16x16.png') ?>">
   <link rel="manifest" href="<?php echo url_for('/site.webmanifest') ?>">
+  <style>
+  <?php if ($jsonstore->color->lineUnderTitle != ""): ?>
+    .sidebar .sidebar-content .widget .title::after {
+      border-bottom: 2px solid <?php echo $jsonstore->color->lineUnderTitle; ?>
+    }
+    .category.category--dark::after {
+      border-bottom: 2px solid <?php echo $jsonstore->color->lineUnderTitle; ?>
+    }
+  <?php endif; ?>
+  <?php if ($jsonstore->color->siteName != ""): ?>
+    .logo .logo-content .brand a {
+      color: <?php echo $jsonstore->color->siteName ?>
+    }
+  <?php endif; ?>
+  </style>
   <script src="<?php echo url_for('assets/js/vendor.js') ?>"></script>
 </head>
-<body>
+
+<?php
+if (url_contain(['/pasword/', '/email/', '/staff/login', '/staff/register'])) {
+  $bg = 'bg-other-lk--md';
+} else {
+  $bg = '';
+}
+?>
+<body class="<?php echo $bg ?>">
 
 <header id="page-top">
 

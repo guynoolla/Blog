@@ -3,11 +3,8 @@
 <?php
 	$url = $_SERVER['REQUEST_URI'];
 	
-	if (url_contain(['/pasword/', '/email/'])) {
-		$bg = 'bg-other-lk';
-	} else {
-		$bg = '';
-	}
+	if (url_contain(['/pasword/', '/email/'])) $bg = 'bg-other-lk';
+	else $bg = '';
 
 ?>
 <footer class="<?php echo $bg ?>" role="contentinfo" id="scrollFooter">
