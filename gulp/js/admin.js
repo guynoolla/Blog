@@ -6,7 +6,6 @@ import 'js-video-url-parser/lib/provider/vimeo';
 import 'js-video-url-parser/lib/provider/youtube';
 
 $(() => {
-  console.log("admin.js is running...");
 
   new LikedPosts();
 

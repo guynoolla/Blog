@@ -55,14 +55,23 @@ App\Classes\DatabaseObject::setDatabase($database);
 // Is used globally in pages
 $session = new App\Classes\Session;
 
+$json = file_get_contents(PUBLIC_PATH . '/staff/site/user-site-data.json');
+// Is used globally in pages
+$jsonstore = json_decode($json);
+$jsonarray = json_decode($json, true);
+
+//dd($jsonarray['contentFontSize']);
+
 function pass_to_js() {
   global $session;
+  global $jsonstore;
 
   $server['baseUrl'] = WWW_ROOT;
   $server['isLoggedIn'] = $session->isLoggedIn();
   $server['userId'] = $session->isLoggedIn() ? $session->getUserId() : 0;
-  $server['singlePost'] = (url_contain('post/') && url_contain('?id=')) ? $_GET['id'] : false;
+  $server['singlePost'] = (url_contain('/post/')) ? $_GET['id'] : false;
   $server['dashboardMain'] = (url_contain('staff/index')) ? true : false;
+  $server['breakpoint'] = $jsonstore->breakpoint;
 
   $script = '<script>';
   $script .= 'var server = ' . json_encode($server);
@@ -70,10 +79,5 @@ function pass_to_js() {
 
   return $script;
 }
-
-$json = file_get_contents(PUBLIC_PATH . '/staff/site/user-site-data.json');
-// Is used globally in pages
-$jsonstore = json_decode($json);
-$jsonarray = json_decode($json, true);
 
 ?>

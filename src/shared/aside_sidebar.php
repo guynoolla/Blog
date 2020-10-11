@@ -54,9 +54,11 @@ function widget_about($jsonstore) {
 }
 
 function widget_posts($jsonstore) {
+  $num = (int) $jsonstore->sidebarWidget->posts->postsNum;
+  $num = is_int($num) ? $num : 0;
   $posts = App\Classes\Post::findWhere(
     ['approved' => '1', 'format' => 'image'],
-    'ORDER BY created_at DESC LIMIT 4'
+    "ORDER BY created_at DESC LIMIT {$num}"
   );
 
   if ($jsonstore->sidebarWidget->posts->show): ?>
@@ -91,7 +93,7 @@ function widget_search($jsonstore) {
     <section class="widget mb-3">
 
       <?php if ($jsonstore->sidebarWidget->search->title): ?>
-        <h3><?php echo $jsonstore->sidebarWidget->search->title ?></h3>
+        <h3 class="mb-3"><?php echo $jsonstore->sidebarWidget->search->title ?></h3>
       <?php endif; ?>
 
       <div class="search-widget pt-0 pb-3">

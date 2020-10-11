@@ -3,6 +3,11 @@
         "siteName": "Light Kite",
         "siteDescription": "Just another theme by Gainulla"
     },
+    "color": {
+        "siteName": "#5aaee2",
+        "lineUnderTitle": "#5aaee2",
+        "toTopBtnHover": "#5aaee2"
+    },
     "slider": {
         "slidesToShow": 2,
         "slidesToScroll": 2
@@ -16,17 +21,18 @@
         },
         "follow": {
             "show": true,
-            "title": "",
+            "title": "Follow me",
             "priority": 2
         },
         "posts": {
             "show": true,
             "title": "Recent Posts",
-            "priority": 3
+            "priority": 3,
+            "postsNum": 2
         },
         "search": {
             "show": true,
-            "title": "Search",
+            "title": false,
             "priority": 4
         },
         "categories": {
@@ -35,7 +41,7 @@
             "priority": 5
         },
         "contact": {
-            "show": false,
+            "show": true,
             "title": "Contact Us",
             "priority": 6
         },
@@ -45,11 +51,6 @@
             "body": "Phasellus viverra nulla ut metus varius laoreet. Curabitur ullamcorper ultricies nisi. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi vestibulum volutpat enim. Phasellus tempus.",
             "priority": 7
         }
-    },
-    "color": {
-        "siteName": "#5aaee2",
-        "lineUnderTitle": "#5aaee2",
-        "toTopBtnHover": "#5aaee2"
     },
     "contactForm": {
         "title": "Contact Us",
@@ -62,6 +63,15 @@
     "captcha": {
         "label": "Captcha",
         "placeholder": "code"
+    },
+    "breakpoint": {
+        "postFontSize": {
+            "xs": ".96em",
+            "sm": "1em",
+            "md": "1.06em",
+            "lg": "1.12em",
+            "xl": "1.16em"
+        }
     },
     "social": {
         "facebook": {

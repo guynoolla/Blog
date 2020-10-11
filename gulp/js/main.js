@@ -20,41 +20,35 @@ $(() => {
 
   const like = new Like();
 
-  let rtime;
-  let timeout = false;
-  const delta = 200;
   const er1 = $(".embed-responsive");
   const er2 = $(".embed-responsive");
 
-  deviceMediaEmbedResponsive(er1, er2);
+  deviceMediaEmbedResponsive(er1, er2, server.breakpoint.postFontSize);
 
-  $(window).on("resize", function() {
-    rtime = new Date();
-    if (timeout === false) {
-      timeout = true;
-      setTimeout(resizeend, delta);
-    }
-  });
-  
-  function resizeend() {
-    if (new Date() - rtime < delta) {
-      setTimeout(resizeend, delta);
-    } else {
-      timeout = false;
-      if (er1.length && er2.length) {
-        cleanEmbedResponsive(er1, er2);
-        mediaEmbedResponsive(er1, er2);
-      } else {
-        // code...
-      }
-    }         
+/*
+  -- Change classes on window resize (test) --------------------------------*/
+
+$(window).on('change:breakpoint', function (e, current, previous) {
+  console.log('previous breakpoint was', previous);
+  console.log('current breakpoint is', current);
+
+  cleanEmbedResponsive(er1, er2);
+  mediaEmbedResponsive(er1, er2);
+
+  const fontSize = server.breakpoint.postFontSize;
+
+  if (current == "xs") {
+    $(".postContentJS").attr("style", `font-size:${fontSize.xs} !important`);
+  } else if (current == "sm") {
+    $(".postContentJS").attr("style", `font-size:${fontSize.sm} !important`);
+  } else if (current == "md") {
+    $(".postContentJS").attr("style", `font-size:${fontSize.md} !important`);
+  } else if (current == "lg") {
+    $(".postContentJS").attr("style", `font-size:${fontSize.lg} !important`);
+  } else if (current == "xl") {
+    $(".postContentJS").attr("style", `font-size:${fontSize.xl} !important`);
   }
-
-  const halfWidth = $(".containerJS").width() / 2;
-  $("#scrollToTopJS").css({
-    right: "50%",
-    marginRight: -(halfWidth) + 'px'
-  })
+});
 
 /*
   -- Adapt content height for device screen -------------------------------- */
@@ -86,16 +80,23 @@ $(() => {
   }
 
   /*
-   * Require admin.js in user is logged in ---------------------------*/
+    -- To top Button -------------------------------------------------*/
+
+  const halfWidth = $(".containerJS").width() / 2;
+  $("#scrollToTopJS").css({
+    right: "50%",
+    marginRight: -(halfWidth) + 'px'
+  })
+
+  /*
+   -- Require admin.js if user is logged in ---------------------------*/
 
   if (server.isLoggedIn) {
     require("./admin.js");
-  
-  } else {
-    console.log("require nothing...");
   }
 
-  /* ------------------------------------------------------------------*/
+  /*
+   -- Nav Search Form ---------------------------------------------------*/
 
   $("#navSearchForm, #asideSearchForm").on("submit", e => {
     const form = $(e.target)
@@ -105,6 +106,9 @@ $(() => {
       return false;
     }
   })
+
+  /*
+    -- Contact Form --------------------------------------------------- */
 
   if ($("#contactForm").length) {
     const validate = new FormValidate($("#contactForm"));
@@ -204,33 +208,44 @@ $(() => {
 /*
  * Functions ---------------------------------------------------------*/
 
-function deviceMediaEmbedResponsive(embedResp1, embedResp2) {
-  if (Breakpoint.is("md")) {
+function deviceMediaEmbedResponsive(embedResp1, embedResp2, fontSize) {
+  if (Breakpoint.is("xs")) {
+    $(".postContentJS").attr("style", `font-size:${fontSize.xs} !important`);
+    // Leave default embed-responsive-16by9;
+    
+  } else if (Breakpoint.is("sm")) {
+    $(".postContentJS").attr("style", `font-size:${fontSize.sm} !important`);    
+    // Leave default embed-responsive-16by9;
+
+  } else if (Breakpoint.is("md")) {
+    $(".postContentJS").attr("style", `font-size:${fontSize.md} !important`);
     cleanEmbedResponsive(false, embedResp2);
     mediaEmbedResponsive(false, embedResp2);
-  } else {
+  
+  } else if (Breakpoint.is("lg")) {
+    $(".postContentJS").attr("style", `font-size:${fontSize.lg} !important`);
+    // Leave default embed-responsive-16by9;
+  
+  } else if (Breakpoint.is("xl")) {
+    $(".postContentJS").attr("style", `font-size:${fontSize.xl} !important`);    
     // Leave default embed-responsive-16by9;
   }
 }
 
 function mediaEmbedResponsive(embedResp1=false, embedResp2=false) {
   if (Breakpoint.is("xs")) {
-    //console.log("Breakpoint", "xs");
     if (embedResp1) embedResp1.addClass('embed-responsive-16by9');
     if (embedResp2) embedResp2.addClass('embed-responsive-16by9');
   }
   if (Breakpoint.is("sm")) {
-    //console.log("Breakpoint", "sm");
     if (embedResp1) embedResp1.addClass('embed-responsive-16by9');
     if (embedResp2) embedResp2.addClass("embed-responsive-16by9");
   }
   if (Breakpoint.is("md")) {
-    //console.log("Breakpoint", "md");
     if (embedResp1) embedResp1.addClass('embed-responsive-16by9');
     if (embedResp2) embedResp2.addClass('embed-responsive-4by3');
   }
   if (Breakpoint.is("lg")) {
-    //console.log("Breakpoint", "lg");
     if (embedResp1) embedResp1.addClass('embed-responsive-16by9');
     if (embedResp2) embedResp2.addClass('embed-responsive-16by9');
   }  
