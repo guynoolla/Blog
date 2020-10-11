@@ -36,11 +36,11 @@ $total_count = Post::countAll([
 ]);
 $pagination = new Pagination($current_page, $per_page, $total_count, 'pagination-md');
 
-$sql = "SELECT p.*, t.id AS tid, t.name AS topic,";
+$sql = "SELECT p.*, t.id AS tid, t.name AS category,";
 $sql .= " u.username, u.email AS user_email, u.email_confirmed AS ue_confirmed";
 $sql .= " FROM `posts` AS p";
 $sql .= " LEFT JOIN `users` AS u ON p.user_id = u.id";
-$sql .= " LEFT JOIN `topics` AS t ON p.topic_id = t.id";
+$sql .= " LEFT JOIN `categories` AS t ON p.category_id = t.id";
 $sql .= " WHERE p.published = '0'";
 $sql .= " AND p.user_id != '{$session->getUserId()}'";
 $sql .= " ORDER BY p.updated_at DESC";
@@ -80,7 +80,7 @@ include '../_common-html-render.php';
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Title</th>
-                <th scope="col">Topic</th>
+                <th scope="col">Category</th>
                 <th scope="col">Author</th>
                 <th scope="col">Email</th>
                 <th scope="col">Created</th>
@@ -92,7 +92,7 @@ include '../_common-html-render.php';
                 <tr>
                   <th scope="row"><?php echo $key + 1 ?></th><?php
                   echo td_post_title($post);
-                  echo td_post_topic($post, 'user_post');
+                  echo td_post_category($post, 'user_post');
                   echo td_post_author($post, 'user_post');
                   echo td_post_author_email($post);
                   echo td_post_date($post, 'user_post'); ?>

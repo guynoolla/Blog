@@ -1,5 +1,5 @@
 <?php
-use App\Classes\Topic;
+use App\Classes\Category;
 use App\Classes\Pagination;
 
 require_once('../../../src/initialize.php');
@@ -11,12 +11,12 @@ if (!$session->isAdmin()) redirect_to(url_for('index.php'));
 
 $current_page = $_GET['page'] ?? 1;
 $per_page = DASHBOARD_PER_PAGE;
-$total_count = Topic::countAll();
+$total_count = Category::countAll();
 $pagination = new Pagination($current_page, $per_page, $total_count);
 
-$topics = Topic::find($per_page, $pagination->offset());
+$categories = Category::find($per_page, $pagination->offset());
 
-$page_title = 'Topics';
+$page_title = 'Categories';
 include SHARED_PATH . '/staff_header.php';
 include '../_common-html-render.php';
 
@@ -34,19 +34,19 @@ include '../_common-html-render.php';
         <div class="back-btn-pos"><?php echo page_back_button() ?></div>
         <a
           class="btn btn-outline-primary rounded-0 btn-md"
-          href="<?php echo url_for('staff/topics/create.php') ?>"
+          href="<?php echo url_for('staff/categories/create.php') ?>"
           style="position:absolute;bottom:0;left:0;"
-        >New Topic</a>
+        >New Category</a>
       </h1>
 
       <?php
-      if (empty($topics)):
+      if (empty($categories)):
         echo tableIsEmpty();
         
       else: ?>
         <?php echo tableSearchForm() ?>
 
-        <div class="loadContentJS" data-access="admin_topic">
+        <div class="loadContentJS" data-access="admin_category">
           <table class="table table-striped table-bordered table-hover table-light <?php echo TABLE_SIZE ?>">
             <thead class="bg-muted-lk text-muted">
               <tr>
@@ -58,27 +58,27 @@ include '../_common-html-render.php';
               </tr>
             </thead>
             <tbody>
-              <?php foreach($topics as $key => $topic): ?>
+              <?php foreach($categories as $key => $category): ?>
                 <tr>
                   <th scope="row"><?php echo $key + 1 ?></th>
-                  <td><span class="h5"><?php echo $topic->name ?></span></td>
-                  <td><?php echo $topic->description ?></td>
-                  <td><a href="#ondate" class="click-load h5" data-type="date" data-value="<?php echo $topic->created_at ?>" data-access="admin_topic"><?php echo date('M j, Y', strtotime($topic->created_at)) ?></span></td>
+                  <td><span class="h5"><?php echo $category->name ?></span></td>
+                  <td><?php echo $category->description ?></td>
+                  <td><a href="#ondate" class="click-load h5" data-type="date" data-value="<?php echo $category->created_at ?>" data-access="admin_category"><?php echo date('M j, Y', strtotime($category->created_at)) ?></span></td>
                   <td scope="colgroup" colspan="1">
-                    <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('/staff/topics/edit.php?id=' . $topic->id) ?>">
+                    <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('/staff/categories/edit.php?id=' . $category->id) ?>">
                       Edit
                     </a>
                   </td>
                   <td scope="colgroup" colspan="1">
                     <?php
                       $data = no_gaps_between("
-                        table-topics,
-                        id-{$topic->id},
-                        name-{$topic->name}
+                        table-categories,
+                        id-{$category->id},
+                        name-{$category->name}
                       ")
                     ?>
                     <a data-delete="<?php echo $data ?>" class="btn-lk btn-lk--danger"
-                      href="<?php echo url_for('staff/delete.php?table=topics&id=' . $topic->id)
+                      href="<?php echo url_for('staff/delete.php?table=categories&id=' . $category->id)
                     ?>">Delete</a>
                   </td>
                 </tr>
@@ -87,7 +87,7 @@ include '../_common-html-render.php';
           </table>
 
           <?php
-            $url = url_for('staff/topics/index.php');
+            $url = url_for('staff/categories/index.php');
             echo $pagination->pageLinks($url);
           ?>
         </div>

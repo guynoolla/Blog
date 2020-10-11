@@ -2,23 +2,28 @@
 
 use App\Classes\User;
 use App\Classes\Post;
-use App\Classes\Topic;
+use App\Classes\Category;
 
 function widget_follow($jsonstore) {
   if ($jsonstore->sidebarWidget->follow->show): ?>
-    <section class="widget">
-      <h3 class="title"><?php echo $jsonstore->sidebarWidget->follow->title ?></h3>
+    <section class="widget mb-3">
+
+      <?php if ($jsonstore->sidebarWidget->follow->title): ?>
+        <h3 class="title mb-4"><?php echo $jsonstore->sidebarWidget->follow->title ?></h3>
+      <?php endif; ?>
+      
       <div class="social-links-widget more-space-between">
         <?php echo include '_social_links_list.php' ?>
       </div>
+
     </section><?php
   endif;
 }
 
 function widget_about($jsonstore) {
   global $post;
-  
   $user = false;
+
   if (url_contain(['/post/', '/preview/'])) {
     $user = User::findById($post->user_id);
   } elseif (is_homepage()) {
@@ -27,19 +32,23 @@ function widget_about($jsonstore) {
 
   if ($jsonstore->sidebarWidget->about->show) {
     if ($user && $user->about_appear): ?>
-      <section class="widget">
-        <h3 class="title mt-5 mb-3"><?php echo $jsonstore->sidebarWidget->about->title ?></h3>
-        <div class="about-widget">
-          <div class="about-image d-flex align-items-center justify-content-center">
-            <img class="<?php echo $jsonstore->sidebarWidget->about->imageRounded
-              ? 'rounded-circle' : "" ?> lazyload" data-sizes="auto" data-src="<?php
-            echo url_for('assets/images' . $user->about_image) ?>" alt="About Us">
-          </div>
-          <div class="about-text">
-            <p><?php echo $user->about_text ?></p>
-          </div>
+    <section class="widget mb-3">
+
+      <?php if ($jsonstore->sidebarWidget->about->title): ?>
+        <h3 class="title"><?php echo $jsonstore->sidebarWidget->about->title ?></h3>
+      <?php endif; ?>
+
+      <div class="about-widget">
+        <div class="about-image d-flex align-items-center justify-content-center">
+          <img class="<?php echo $jsonstore->sidebarWidget->about->imageRounded
+            ? 'rounded-circle' : "" ?> lazyload" data-sizes="auto" data-src="<?php
+          echo url_for('assets/images' . $user->about_image) ?>" alt="About Us">
         </div>
-      </section><?php 
+        <div class="about-text">
+          <p><?php echo $user->about_text ?></p>
+        </div>
+      </div>
+    </section><?php 
     endif;
   }
 }
@@ -47,36 +56,45 @@ function widget_about($jsonstore) {
 function widget_posts($jsonstore) {
   $posts = App\Classes\Post::findWhere(
     ['approved' => '1', 'format' => 'image'],
-    'ORDER BY created_at DESC'
+    'ORDER BY created_at DESC LIMIT 4'
   );
 
   if ($jsonstore->sidebarWidget->posts->show): ?>
-    <section class="widget">
-      <h3 class="title"><?php echo $jsonstore->sidebarWidget->posts->title ?></h3>
+    <section class="widget mb-3">
+
+      <?php if ($jsonstore->sidebarWidget->posts->title): ?>
+        <h3 class="title"><?php echo $jsonstore->sidebarWidget->posts->title ?></h3>
+      <?php endif; ?>
+      
       <div class="recent-posts-widget">
-        <?php $i = 1; foreach ($posts as $post): ?>
-          <div class="post">
-            <div class="post-image ">
-              <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
-                <img src="<?php echo url_for('render_img.php?img='. u($post->image) .'&w=420') ?>" style="object-fit:cover" width="150" height="150">
-              </a>
-            </div> 
-            <div class="post-content">
-              <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>"><?php echo $post->title ?></a>
-              <span class="date">- 05 Oct , 2016</span>
-            </div>
+      <?php $i = 1; foreach ($posts as $post): ?>
+        <div class="post">
+          <div class="post-image ">
+            <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
+              <img src="<?php echo url_for('render_img.php?img='. u($post->image) .'&w=420') ?>" style="object-fit:cover" width="150" height="150">
+            </a>
+          </div> 
+          <div class="post-content">
+            <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>"><?php echo $post->title ?></a>
+            <span class="date">- 05 Oct , 2016</span>
           </div>
-          <?php if ($i == 3) break; ?>
-        <?php $i++; endforeach; ?>
+        </div>
+      <?php $i++; endforeach; ?>
       </div>
+
     </section><?php
   endif;
 }
 
 function widget_search($jsonstore) {
   if ($jsonstore->sidebarWidget->search->show): ?>
-    <section class="widget">
-      <div class="search-widget pt-4 pb-3">
+    <section class="widget mb-3">
+
+      <?php if ($jsonstore->sidebarWidget->search->title): ?>
+        <h3><?php echo $jsonstore->sidebarWidget->search->title ?></h3>
+      <?php endif; ?>
+
+      <div class="search-widget pt-0 pb-3">
         <form id="asideSearchForm" role="search" method="get" class="form-search" action="<?php echo url_for('index.php') ?>">
           <div class="input-group">
             <label class="screen-reader-text" for="s">Search for:</label>
@@ -87,28 +105,35 @@ function widget_search($jsonstore) {
           </div>
         </form>
       </div>
+
     </section><?php 
   endif;
 }
 
-function widget_topics($jsonstore) {
-  $topics = Topic::findAll();
+function widget_categories($jsonstore) {
+  $categories = Category::findAll();
 
-  if ($jsonstore->sidebarWidget->topics->show): ?>
-    <section class="widget">
-      <h3 class="title mb-3"><?php echo $jsonstore->sidebarWidget->topics->title ?></h3>
+  if ($jsonstore->sidebarWidget->categories->show): ?>
+    <section class="widget mb-3">
+      
+      <?php if ($jsonstore->sidebarWidget->categories->title): ?>
+        <h3 class="title mb-3"><?php echo $jsonstore->sidebarWidget->categories->title ?></h3>
+      <?php endif; ?>
+      
       <div class="cats-widget">
-        <ul>
-          <?php foreach ($topics as $topic): ?>
-            <li class="cat-item">
-              <a href="<?php echo url_for('topic/') . u($topic->name) . '?tid=' . $topic->id ?>" title="<?php $topic->name ?>"><?php echo $topic->name ?></a>
-              <span><?php echo Post::countAll(
-                ['topic_id' => $topic->id, 'approved' => '1']
-              ) ?></span>
-            </li>
-          <?php endforeach; ?>
-        </ul>
+        <ul><?php foreach ($categories as $category): ?>
+          <li class="cat-item">
+            <a href="<?php
+              echo url_for('category/') . u($category->name) . '?tid=' . $category->id
+              ?>" title="<?php echo $category->name ?>"><?php echo $category->name
+            ?></a>
+            <span><?php echo Post::countAll(
+              ['category_id' => $category->id, 'approved' => '1']
+            ) ?></span>
+          </li>
+        <?php endforeach; ?></ul>
       </div>
+
     </section><?php
   endif;
 }
@@ -130,9 +155,13 @@ function widget_contact($jsonstore) {
   }
 
   if ($jsonstore->sidebarWidget->contact->show && is_homepage()): ?>
-    <section class="widget" id="contact-form">
-      <h3 class="title"><?php echo $jsonstore->sidebarWidget->contact->title ?></h3>
-      <div class="widget-contact-form pt-2">
+    <section class="widget mb-3" id="contact-form">
+      
+      <?php if ($jsonstore->sidebarWidget->contact->title): ?>
+        <h3 class="title"><?php echo $jsonstore->sidebarWidget->contact->title ?></h3>
+      <?php endif; ?>
+
+      <div class="widget-contact-form pt-1">
         <?php
           if ($jsonstore->contactForm->placeholder) {
             $email_ph = 'Your ' . strtolower($jsonstore->contactForm->emailLabel);
@@ -168,6 +197,19 @@ function widget_contact($jsonstore) {
     </section><?php
   endif;
 } 
+
+function widget_text($jsonstore) {
+  if ($jsonstore->sidebarWidget->text->show): ?>
+    <section class="widget mb-3"><?php 
+      if ($jsonstore->sidebarWidget->text->title): ?>
+        <h3 class="title"><?php
+          echo $jsonstore->sidebarWidget->text->title ?>
+        </h3><?php
+      endif; ?>
+      <p><?php echo $jsonstore->sidebarWidget->text->body ?></p>
+    </section><?php 
+  endif;
+}
 
 ?>
 <div class="sidebar-content mt-2 mb-4 py-1"><?php

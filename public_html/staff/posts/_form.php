@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once('../../../src/initialize.php');
 
-$topics = App\Classes\Topic::findAll();
+$categories = App\Classes\Category::findAll();
 
 $auth_user_id = $session->getUserId();
 
@@ -149,20 +149,20 @@ if (!$edit): ?>
   </div>
 
   <div class="form-group mt-4">
-    <label for="topic">Topic</label>
-    <select class="form-control" name="post[topic_id]" id="topic">
+    <label for="category">Category</label>
+    <select class="form-control" name="post[category_id]" id="category">
       <?php if (!$edit): ?>
-        <option value="0">Select topic</option>
+        <option value="0">Select category</option>
       <?php endif; ?>
-      <?php foreach($topics as $topic): ?>
-        <option value="<?php echo $topic->id ?>"
-          <?php echo (($topic->id == $post->topic_id) ? 'selected' : '' ) ?>
+      <?php foreach($categories as $category): ?>
+        <option value="<?php echo $category->id ?>"
+          <?php echo (($category->id == $post->category_id) ? 'selected' : '' ) ?>
         >
-          <?php echo h($topic->name) ?>
+          <?php echo h($category->name) ?>
         </option>
       <?php endforeach; ?>
     </select>
-    <span class="errsum-topic text-danger field-validation-error"></span>
+    <span class="errsum-category text-danger field-validation-error"></span>
   </div>
   <div class="custom-control custom-switch mt-4">
     <input name="post[published]" type="checkbox" class="custom-control-input" id="publishSwitch"<?php echo ($post->published == '1' ? ' checked' : '') ?>>

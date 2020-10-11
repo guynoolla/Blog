@@ -58,10 +58,10 @@ $per_page = DASHBOARD_PER_PAGE;
 $total_count = Post::countAll(['user_id' => $session->getUserId()]);
 $pagination = new Pagination($current_page, $per_page, $total_count);
 
-$sql = "SELECT p.*, u.username, t.id AS tid, t.name AS topic";
+$sql = "SELECT p.*, u.username, t.id AS tid, t.name AS category";
 $sql .= " FROM `posts` AS p";
 $sql .= " LEFT JOIN `users` AS u ON p.user_id = u.id";
-$sql .= " LEFT JOIN `topics` AS t ON p.topic_id = t.id";
+$sql .= " LEFT JOIN `categories` AS t ON p.category_id = t.id";
 $sql .= " WHERE p.user_id='{$session->getUserId()}'";
 $sql .= " ORDER BY p.updated_at DESC";
 $sql .= " LIMIT {$per_page}";
@@ -100,7 +100,7 @@ include '../_common-html-render.php';
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Title</th>
-                <th scope="col">Topic</th>
+                <th scope="col">Category</th>
                 <th scope="col">Status</th>
                 <th scope="col">Created</th>
                 <th scope="colgroup" colspan="3">Action</th>
@@ -111,7 +111,7 @@ include '../_common-html-render.php';
                 <tr>
                   <th scope="row"><?php echo $key + 1 ?></th><?php
                   echo td_post_title($post);
-                  echo td_post_topic($post, 'own_post');
+                  echo td_post_category($post, 'own_post');
                   echo td_post_status($post, 'own_post');
                   echo td_post_date($post, 'own_post');
                   echo td_actions_column_fst($post, $session->isAdmin());

@@ -16,7 +16,7 @@
         },
         "follow": {
             "show": true,
-            "title": "Follow Us",
+            "title": "",
             "priority": 2
         },
         "posts": {
@@ -26,17 +26,24 @@
         },
         "search": {
             "show": true,
+            "title": "Search",
             "priority": 4
         },
-        "topics": {
+        "categories": {
             "show": true,
-            "title": "Topics",
+            "title": "Categories",
             "priority": 5
         },
         "contact": {
-            "show": true,
+            "show": false,
             "title": "Contact Us",
             "priority": 6
+        },
+        "text": {
+            "show": true,
+            "title": "Any text",
+            "body": "Phasellus viverra nulla ut metus varius laoreet. Curabitur ullamcorper ultricies nisi. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi vestibulum volutpat enim. Phasellus tempus.",
+            "priority": 7
         }
     },
     "color": {

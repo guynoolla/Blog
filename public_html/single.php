@@ -3,7 +3,7 @@
 use App\Classes\Post;
 use App\Classes\User;
 use App\Classes\Like;
-use App\Classes\Topic;
+use App\Classes\Category;
 
 require_once '../src/initialize.php';
 
@@ -19,6 +19,7 @@ if (!$post || $_title !== $post->title) {
 }
 
 $username = User::findById($post->user_id)->username;
+$category = Category::findById($post->category_id); 
 
 if (!$post->approved) {
   $access = false;
@@ -51,11 +52,15 @@ if ($session->isLoggedIn()) {
 $page_title = $post->title;
 include(SHARED_PATH . '/public_header.php');
 
-?><div class="container-md">
+?>
+<div class="container-md">
   <div class="row">
 
-    <div class="col-12 text-center border-soft border-top border-bottom px-1">
-      <h3 class="my-3"><?php echo (Topic::findById($post->topic_id))->name ?></h3>
+    <div class="col-12 text-center bg-light border border-soft rounded mt-1 px-1">
+      <h3 class="my-3"><a href="<?php
+        echo url_for('category/') . u($category->name) . '?tid=' . $category->id
+        ?>" title="<?php echo $category->name ?>"><?php echo $category->name
+      ?></a></h3>
     </div>
   
     <?php $colClass = $jsonstore->singlePage->fullWidth ? 'col-lg-12' : 'col-lg-8'; ?>

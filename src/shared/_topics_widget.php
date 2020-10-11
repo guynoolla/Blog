@@ -1,18 +1,18 @@
 <?php
-use App\Classes\Topic;
+use App\Classes\Category;
 
-$sb_topics = Topic::findAll();
+$sb_categories = Category::findAll();
 
 ?>
-<!-- topics -->
-<div class="section topics">
-  <h2>Topics</h2>
+<!-- categories -->
+<div class="section categories">
+  <h2>Categories</h2>
   <ul>
-    <?php foreach($sb_topics as $key => $topic): ?>
-      <a href="<?php echo url_for('topic/' . u($topic->name) . '?id=' . $topic->id) ?>">
-        <li><?php echo $topic->name ?></li>
+    <?php foreach($sb_categories as $key => $category): ?>
+      <a href="<?php echo url_for('category/' . u($category->name) . '?id=' . $category->id) ?>">
+        <li><?php echo $category->name ?></li>
       </a>
     <?php endforeach; ?>
   </ul>
 </div>
-<!-- // topics -->
+<!-- // categories -->

@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace App\Classes;
 
-class Topic extends \App\Classes\DatabaseObject {
+class Category extends \App\Classes\DatabaseObject {
 
-  static protected $table_name = "`topics`";
+  static protected $table_name = "`categories`";
   static protected $db_columns = ['id','name','description','created_at'];
   
   public $id;
@@ -36,27 +36,27 @@ class Topic extends \App\Classes\DatabaseObject {
     $this->errors = [];
 
     if (is_blank($this->name)) {
-      $this->errors[] = 'Topic name cannot be blank.';
+      $this->errors[] = 'Category name cannot be blank.';
     } elseif(!has_length($this->name, ['max' => 50])) {
-      $this->errors[] = 'Topic name can not contain more than 50 characters.';
+      $this->errors[] = 'Category name can not contain more than 50 characters.';
     }
 
     if (!is_blank($this->description)) {
       if (!has_length($this->description, ['min' => 0, 'max' => 255])) {
-        $this->errors[] = 'Topic description can not contain more than 255 characters.';
+        $this->errors[] = 'Category description can not contain more than 255 characters.';
       }
     }
 
     if (!isset($this->id)) {
-      if (self::findByTopic($this->name)) {
-        $this->errors[] = 'This topic already exists.';
+      if (self::findByCategory($this->name)) {
+        $this->errors[] = 'This category already exists.';
       }
     }
 
     return (empty($this->errors) == true);
   }
 
-  static public function findByTopic($name) {
+  static public function findByCategory($name) {
     $obj_array = parent::findWhere(['name' => $name]);
     if (!empty($obj_array)) {
       return array_shift($obj_array);

@@ -327,14 +327,14 @@ class FormValidateRules extends FormValidate {
     }
   }
 
-  async topic(fid) {
+  async category(fid) {
     if (!this.run(fid)) return false;
 
     const elem = this.form.find(`#${fid}`)
     this.errors[fid] = [];
 
     const check = () => new Promise(resolve => {
-      const selected = $("#topic").children("option:selected").val();
+      const selected = $("#category").children("option:selected").val();
       
       if (selected != 0) return resolve(true);
       else return resolve(false);
@@ -343,7 +343,7 @@ class FormValidateRules extends FormValidate {
     const value = await check();
     
     if (value == false) {
-      this.errors[fid].push("The post topic is not selected.");
+      this.errors[fid].push("The post category is not selected.");
       this.showErrors(fid, elem);
       return false;
     } else {

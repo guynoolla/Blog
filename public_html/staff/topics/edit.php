@@ -1,5 +1,5 @@
 <?php
-use App\Classes\Topic;
+use App\Classes\Category;
 
 require_once('../../../src/initialize.php');
 
@@ -7,32 +7,32 @@ require_once('../../../src/initialize.php');
 if (!$session->isAdmin()) redirect_to(url_for('index.php'));
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Check Admin
 
-$topic = false;
+$category = false;
 
 if (is_get_request()) {
 
   // Post ID must be provided
   if(isset($_GET['id'])) {
-    $topic = App\Classes\Topic::findById($_GET['id']);
+    $category = App\Classes\Category::findById($_GET['id']);
   }
-  if($topic === false) {
-    redirect_to(url_for('/staff/topics/index.php'));
+  if($category === false) {
+    redirect_to(url_for('/staff/categories/index.php'));
   }
 
 } elseif (is_post_request()) {
 
-  $id = $_POST['topic']['id'] ?? 0;
-  $topic = Topic::findById($id);
-  $topic->mergeAttributes($_POST['topic']);
+  $id = $_POST['category']['id'] ?? 0;
+  $category = Category::findById($id);
+  $category->mergeAttributes($_POST['category']);
 
-  if($topic->save()) {
-    $session->message("The Topic '" . $topic->name . "' was updated!");
-    redirect_to(url_for('/staff/topics/index.php'));
+  if($category->save()) {
+    $session->message("The Category '" . $category->name . "' was updated!");
+    redirect_to(url_for('/staff/categories/index.php'));
   }
 
 }
 
-$page_title = 'Admin - Edit Topic';
+$page_title = 'Admin - Edit Category';
 include SHARED_PATH . '/staff_header.php'
 
 ?>

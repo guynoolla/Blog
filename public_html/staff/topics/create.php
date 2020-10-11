@@ -1,5 +1,5 @@
 <?php
-use App\Classes\Topic;
+use App\Classes\Category;
 
 require_once('../../../src/initialize.php');
 
@@ -8,19 +8,19 @@ if (!$session->isAdmin()) redirect_to(url_for('index.php'));
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Check Admin
 
 if(is_post_request()) {
-  $topic = new Topic($_POST['topic']);
-  $result = $topic->save();
+  $category = new Category($_POST['category']);
+  $result = $category->save();
 
   if($result === true) {
-    $session->message("The New Topic '" . $topic->name . "' was added!");
-    redirect_to(url_for('/staff/topics/index.php'));
+    $session->message("The New Category '" . $category->name . "' was added!");
+    redirect_to(url_for('/staff/categories/index.php'));
   }
 
 } else {
-  $topic = new Topic;
+  $category = new Category;
 }
 
-$page_title = 'Admin - New Topic';
+$page_title = 'Admin - New Category';
 include SHARED_PATH . '/staff_header.php'
 
 ?>

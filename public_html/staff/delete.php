@@ -1,6 +1,6 @@
 <?php
 
-use App\Classes\Topic;
+use App\Classes\Category;
 use App\Classes\User;
 use App\Classes\Post;
 use App\Classes\File;
@@ -26,12 +26,12 @@ if (is_get_request()) { // GET request
         <p>Are you sure you want to delete the user <strong class="font-weight-bold">$object->username</strong>?<br>
         If user posts exists they also will be permanently deleted!</p>
 EOT;
-    } else if ($table == 'topics') {
-      $page_title = 'Delete Topic';
-      $object = Topic::findById($id);
+    } else if ($table == 'categories') {
+      $page_title = 'Delete Category';
+      $object = Category::findById($id);
       $warning = <<<EOT
-        <p>Are you sure you want to delete the topic <strong class="font-weight-bold">$object->name</strong>?<br>
-        In case topic has post(s) you can't delete it unless you delete those post(s)!</p>
+        <p>Are you sure you want to delete the category <strong class="font-weight-bold">$object->name</strong>?<br>
+        In case category has post(s) you can't delete it unless you delete those post(s)!</p>
 EOT;
     } else if ($table == 'posts') {
       $page_title = 'Delete Post';
@@ -87,25 +87,25 @@ EOT;
         }
       }
 
-    } else if ($table == 'topics') { // topics table
-      $page_title = 'Topics';
-      $topic = Topic::findById($id);
+    } else if ($table == 'categories') { // categories table
+      $page_title = 'Categories';
+      $category = Category::findById($id);
       
       if ($cancel) {
-        $session->message("The topic '" . $topic->name . "' deletion canceled.");
-        redirect_to(url_for('staff/topics/index.php'));
+        $session->message("The category '" . $category->name . "' deletion canceled.");
+        redirect_to(url_for('staff/categories/index.php'));
 
       } else if ($delete) {
-        if ($topic->delete()) {
-          $session->message("The topic '" . $topic->name . "' was deleted.");
-          redirect_to(url_for('staff/topics/index.php'));
+        if ($category->delete()) {
+          $session->message("The category '" . $category->name . "' was deleted.");
+          redirect_to(url_for('staff/categories/index.php'));
         } else {
-          $posts_count = Post::countAll(['topic_id' => $id]);
+          $posts_count = Post::countAll(['category_id' => $id]);
           if ($posts_count > 0) {
             $deps_arr = $posts_count > 1 ? ['are', 'posts'] : ['is', 'post']; 
             $session->store([
               'table' => $table,
-              'warning' => "This topic can not be deleted, because there {$deps_arr[0]} {$posts_count} {$deps_arr[1]} under it."
+              'warning' => "This category can not be deleted, because there {$deps_arr[0]} {$posts_count} {$deps_arr[1]} under it."
             ]);
             redirect_to(url_for('staff/delete.php'));
           }
@@ -149,7 +149,7 @@ include SHARED_PATH . '/staff_header.php';
 
         <div class="back-btn-pos"><?php
           if ($table == 'users') $back_url = 'staff/users/index.php';
-          elseif ($table == 'topics') $back_url = 'staff/topics/index.php';
+          elseif ($table == 'categories') $back_url = 'staff/categories/index.php';
           elseif ($table == 'posts') $back_url = 'staff/posts/index.php';
           ?><a class="btn btn-outline-secondary btn-md rounded-0"
               href="<?php echo url_for($back_url) ?>">Back</a>

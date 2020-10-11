@@ -131,11 +131,11 @@ function td_post_status($post, $access) {
   return $output;
 }
 
-function td_post_topic($post, $access) {
+function td_post_category($post, $access) {
   return "<td scope=\"col\">
-    <span class=\"h5 font-italic\"><a href=\"#{u($post->topic)}\" class=\"click-load\"
-      data-type=\"topic\" data-value=\"{$post->topic_id}\" data-access=\"{$access}\"
-    >{$post->topic}</a></span>
+    <span class=\"h5 font-italic\"><a href=\"#{u($post->category)}\" class=\"click-load\"
+      data-type=\"category\" data-value=\"{$post->category_id}\" data-access=\"{$access}\"
+    >{$post->category}</a></span>
   </td>";
 }
 

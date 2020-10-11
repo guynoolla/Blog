@@ -85,11 +85,11 @@ $published = Post::countAll([
       </a>
     </li>
 
-    <?php $active = (url_contain('staff/topics/index') ? ' active' : ''); ?>
+    <?php $active = (url_contain('staff/categories/index') ? ' active' : ''); ?>
     <li class="nav-item border-bottom" id="themeButton">
-      <a href="<?php echo url_for('staff/topics/index.php') ?>" class="nav-link<?php echo $active ?>">
+      <a href="<?php echo url_for('staff/categories/index.php') ?>" class="nav-link<?php echo $active ?>">
         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sign" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-icon svg-icon--smaller svg-inline--fa fa-sign fa-w-16 fa-5x"><path fill="currentColor" d="M496 64H128V16c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16v48H16C7.2 64 0 71.2 0 80v32c0 8.8 7.2 16 16 16h48v368c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V128h368c8.8 0 16-7.2 16-16V80c0-8.8-7.2-16-16-16zM160 384h320V160H160v224z" class="svg-icon"></path></svg>
-        <span class="link-text">Topics</span>
+        <span class="link-text">Categories</span>
       </a>
     </li>
 

@@ -11,7 +11,7 @@
     li.menu-item {
       position: relative;
       display: inline-block;
-      padding-right: 1.4em !important;
+      padding-right: 1.4em;
 
       a.social-btn {
         position: relative;
@@ -34,7 +34,7 @@
   
   &.more-space-between {
     ul li {
-      padding-right: 1.8em;
+      padding-right: 2em;
     }
   }
 }

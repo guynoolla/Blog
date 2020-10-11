@@ -34,11 +34,11 @@ $(() => {
           You can not delete the user which has posts,<br>
           unless you delete those posts first!</p>`;
       
-        } else if (data.table == "topics") {
-        title = "Delete Topic";
-        body = `<p>Are you sure you want to delete the topic
+        } else if (data.table == "categories") {
+        title = "Delete Category";
+        body = `<p>Are you sure you want to delete the category
           <strong class="font-weight-bold">${data.name}</strong>?<br>
-          If there are posts under this topic you can not delete it,<br>
+          If there are posts under this category you can not delete it,<br>
            unless you delete those posts first!</p>`;
       
       } else if (data.table == "posts") {
@@ -94,11 +94,11 @@ $(() => {
   }
 
   /*
-   -- Topic Edit Form --------------------------------------------------------*/ 
+   -- Category Edit Form --------------------------------------------------------*/ 
 
-  if ($("#topicEditForm").length) {
+  if ($("#categoryEditForm").length) {
     
-    const validate = new FormValidate($("#topicEditForm"));
+    const validate = new FormValidate($("#categoryEditForm"));
     validate.settings.fieldSize["name"] = { min: 0, max: 50 };
     validate.settings.fieldSize["description"] = { min: 0, max: 255 };
     validate.settings.validateOnSubmit = false;
@@ -109,7 +109,7 @@ $(() => {
       const name = await validate.name("name");
       const description = await validate.description("description");
 
-      if (e.type == "submit" && validate.validatedLen() == 1) {
+      if (e.type == "submit" && !validate.hasError()) {
         validate.form.off("submit");
         validate.form.trigger("submit");
       }
@@ -201,7 +201,7 @@ $(() => {
       const body = await validate.body("body");
       const image = await validate.image("image");
       const video = await validate.video("video");
-      const topic = await validate.topic("topic");
+      const category = await validate.category("category");
 
       if (e.type == "submit" && validate.validatedLen() == 5) {
         validate.form.off("submit");
@@ -216,7 +216,7 @@ $(() => {
   }
 
   /*
-   -- XHR Post, User, Topic Search -------------------------------------------*/
+   -- XHR Post, User, Category Search -------------------------------------------*/
 
   if ($(".loadContentJS").length) appendSpinnerToMainContent();
 
@@ -244,7 +244,7 @@ $(() => {
         case 'staff/posts':
               return "xhr_search_post.php";
         case 'staff/users':
-        case 'staff/topics':
+        case 'staff/categories':
               return "xhr_search.php";
         default: 
               return false;

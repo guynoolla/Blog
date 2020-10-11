@@ -1,6 +1,6 @@
 <?php
 use App\Classes\Post;
-use App\Classes\Topic;
+use App\Classes\Category;
 USE App\Classes\User;
 use App\Classes\Pagination;
 
@@ -34,18 +34,18 @@ $type = 'default';
   }
 
 /*
-  GET POSTS BY TOPIC ------------------------------------------------*/
+  GET POSTS BY CATEGORY ------------------------------------------------*/
 
 } elseif (isset($_GET['tid'])) {
-  $type = 'topic';
+  $type = 'category';
 
-  $topic_id = $_GET['tid'] ?? 0;
-  $topic = Topic::findById($topic_id);
+  $category_id = $_GET['tid'] ?? 0;
+  $category = Category::findById($category_id);
 
   $url_parts = url_split_by_slash();
   $_name = urldecode(end($url_parts));
   
-  if (!$topic || $_name !== $topic->name) {
+  if (!$category || $_name !== $category->name) {
     error_404();
   }
 
@@ -53,16 +53,16 @@ $type = 'default';
   $per_page = FRONTEND_PER_PAGE;
   $total_count = Post::countAll([
     'approved' => 1,
-    'topic_id' => $topic_id,
+    'category_id' => $category_id,
   ]);
 
   $pagination = new Pagination($current_page, $per_page, $total_count, 'pagination-lg');
-  $posts = Post::queryPostsByTopic($topic_id, $per_page, $pagination->offset());
+  $posts = Post::queryPostsByCategory($category_id, $per_page, $pagination->offset());
 
   if ($posts) {
-    $headline = "You searched for posts under '<strong>" . $topic->name . "</strong>'";
+    $headline = "Posts in '<strong>" . $category->name . "</strong>'";
   } else {
-    $headline = "Sorry, no posts under '<strong>" . $topic->name . "</strong>' found.";
+    $headline = "No posts in '<strong>" . $category->name . "</strong>' found.";
   }
 
 /*
@@ -86,9 +86,9 @@ $type = 'default';
   $posts = Post::queryPostsByAuthor($user_id, $per_page, $pagination->offset());
 
   if ($posts) {
-    $headline = "You searched for posts by '<strong>" . $user->username . "</strong>'";
+    $headline = "Posts by '<strong>" . $user->username . "</strong>'";
   } else {
-    $headline = "Sorry, no posts by '<strong>" . $user->username . "</strong>' found.";
+    $headline = "Posts by '<strong>" . $user->username . "</strong>' found.";
   }
 
 /*
@@ -138,15 +138,24 @@ include SHARED_PATH . '/carousel.php';
 ?>
 <div class="container-md">
   <div class="row">
-    
+  
+    <?php
+    if ($headline): ?>
+      <div class="col-12 text-center bg-light border border-soft rounded mt-1 px-1">
+        <h3 class="text-center mt-3 mb-2"><?php echo $headline ?></h3>
+        <?php
+        if ($type == 'category' && $category->description): ?>
+          <p class="w-100 lead text-center mb-3 mt-0"><?php
+            echo $category->description ?>
+          </p><?php 
+        endif; ?>
+      </div><?php
+    endif;
+    ?>
+
     <main class="main col-lg-8" role="main" id="homeMain">
       <div class="main-content">
-        <?php if ($headline): ?>
-          <h1 class="text-center"><?php echo $headline ?></h1>
-          <?php if ($type == 'topic' && $topic): ?>
-            <p class="lead text-center"><?php echo $topic->description ?></p>
-          <?php endif;
-        endif;
+      <?php 
 
         $total = count($posts);
         
@@ -167,7 +176,7 @@ include SHARED_PATH . '/carousel.php';
                 <div class="post">
                   <div class="post-item-wrap">
                     <div class="post-item-inner">
-                      <a href="<?php echo url_for('topic/' . u($post->topic) . '?tid=' . $post->topic_id) ?>" class="category category--dark text-center"><?php echo $post->topic ?></a>
+                      <a href="<?php echo url_for('category/' . u($post->category) . '?tid=' . $post->category_id) ?>" class="category category--dark text-center"><?php echo $post->category ?></a>
                       <h2 class="entry-title text-center">
                         <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
                           <?php echo h($post->title) ?>
@@ -224,7 +233,7 @@ include SHARED_PATH . '/carousel.php';
                 <div class="post-item-wrap">
                     <div class="post-item-inner">
                       
-                    <a href="<?php echo url_for('topic/' . u($post->topic) . '?tid=' . $post->topic_id) ?>" class="category category--dark text-center"><?php echo $post->topic ?></a>
+                    <a href="<?php echo url_for('category/' . u($post->category) . '?tid=' . $post->category_id) ?>" class="category category--dark text-center"><?php echo $post->category ?></a>
                       <h2 class="entry-title text-center"><a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>"><?php echo h($post->title) ?></a></h2>
                       
                       <div class="entry-meta">

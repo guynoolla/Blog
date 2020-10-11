@@ -1,6 +1,6 @@
 <?php
 use App\Classes\User;
-use App\Classes\Topic;
+use App\Classes\Category;
 use App\Classes\Pagination;
 
 require_once '../../src/initialize.php';
@@ -18,15 +18,15 @@ switch($target) {
   case 'admin_user_by_date':
         if ($session->isAdmin()) admin_user_data($_POST['data']);
         break;
-  case 'admin_topic_by_search':
-  case 'admin_topic_by_date':
-        if ($session->isAdmin()) admin_topic_data($_POST['data']);
+  case 'admin_category_by_search':
+  case 'admin_category_by_date':
+        if ($session->isAdmin()) admin_category_data($_POST['data']);
         break;
   default:
         exit(json_encode(['target' => 'error']));
 }
 
-function admin_topic_data($data) {
+function admin_category_data($data) {
   parse_str($data, $params);
   $type = $params['type'] ?? "";
   $value = $params['value'] ?? "";
@@ -55,12 +55,12 @@ function admin_topic_data($data) {
 
   }
 
-  $total_count = Topic::countAll($cond_arr);
+  $total_count = Category::countAll($cond_arr);
   $current_page = $params['page'] ?? 1;
   $per_page = DASHBOARD_PER_PAGE;
   $pagination = new Pagination($current_page, $per_page, $total_count);
 
-  $topics = Topic::find(
+  $categories = Category::find(
     $per_page, $pagination->offset(),
     "{$cond_str} ORDER BY name ASC"
   );
@@ -78,27 +78,27 @@ function admin_topic_data($data) {
       </tr>
     </thead>
     <tbody>
-      <?php foreach($topics as $key => $topic): ?>
+      <?php foreach($categories as $key => $category): ?>
         <tr>
           <th scope="row"><?php echo $key + 1 ?></th>
-          <td><span class="h5"><?php echo $topic->name ?></span></td>
-          <td><?php echo $topic->description ?></td>
-          <td><a href="#ondate" class="click-load h5" data-type="date" data-value="<?php echo $topic->created_at ?>" data-access="admin_topic"><?php echo date('M j, Y', strtotime($topic->created_at)) ?></span></td>
+          <td><span class="h5"><?php echo $category->name ?></span></td>
+          <td><?php echo $category->description ?></td>
+          <td><a href="#ondate" class="click-load h5" data-type="date" data-value="<?php echo $category->created_at ?>" data-access="admin_category"><?php echo date('M j, Y', strtotime($category->created_at)) ?></span></td>
           <td scope="colgroup" colspan="1">
-            <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('/staff/topics/edit.php?id=' . $topic->id) ?>">
+            <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('/staff/categories/edit.php?id=' . $category->id) ?>">
               Edit
             </a>
           </td>
           <td scope="colgroup" colspan="1">
             <?php
               $data = no_gaps_between("
-                table-topics,
-                id-{$topic->id},
-                name-{$topic->name}
+                table-categories,
+                id-{$category->id},
+                name-{$category->name}
               ")
             ?>
             <a data-delete="<?php echo $data ?>" class="btn-lk btn-lk--danger"
-              href="<?php echo url_for('staff/delete.php?table=topics&id=' . $topic->id)
+              href="<?php echo url_for('staff/delete.php?table=categories&id=' . $category->id)
             ?>">Delete</a>
           </td>
         </tr>

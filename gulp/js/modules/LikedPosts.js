@@ -154,8 +154,8 @@ class Posts {
                 </div>`;
               }
             output += `</div>
-            <a href="${post.to_topic}" class="category category--dark text-center mt-2">
-              ${post.topic}
+            <a href="${post.to_category}" class="category category--dark text-center mt-2">
+              ${post.category}
             </a>`;
             output += `<div class="entry-content mt-4">${post.excerpt}</div>
           </div></div></div>

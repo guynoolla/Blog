@@ -6,11 +6,11 @@ namespace App\Classes;
 class Post extends \App\Classes\DatabaseObject {
 
   static protected $table_name = "`posts`";
-  static protected $db_columns = ['id','user_id','topic_id','title','meta_desc','format','image','video','body','video_urls','published','approved','created_at','updated_at'];
+  static protected $db_columns = ['id','user_id','category_id','title','meta_desc','format','image','video','body','video_urls','published','approved','created_at','updated_at'];
 
   public $id;
   public $user_id;
-  public $topic_id;
+  public $category_id;
   public $title;
   public $meta_desc;
   public $format;
@@ -39,13 +39,13 @@ class Post extends \App\Classes\DatabaseObject {
 
   // Relational data by foreign key in posts
   public $username = '';      // user->username
-  public $topic = '';         // topic->name
+  public $category = '';         // category->name
   public $user_email = '';    // user->email
   public $ue_confirmed = '';  // user->email_confirmed
 
   public function __construct(array $args=[]) {
     $this->user_id = $args['user_id'] ?? '';
-    $this->topic_id = $args['topic_id'] ?? '';
+    $this->category_id = $args['category_id'] ?? '';
     $this->title = $args['title'] ?? '';
     $this->meta_desc = $args['meta_desc'] ?? '';
     $this->format = $args['format'] ?? '';
@@ -103,8 +103,8 @@ class Post extends \App\Classes\DatabaseObject {
     } elseif (!has_length($this->title, ['max' => 200])) {
       $this->errors[] = 'Title must be less than 200 characters.';
     }
-    if ($this->topic_id == 0) {
-      $this->errors[] = 'Please select a topic.';
+    if ($this->category_id == 0) {
+      $this->errors[] = 'Please select a category.';
     }
     if (!is_blank($this->meta_desc)) {
       if (!has_length($this->meta_desc, ['max' => 160])) {
@@ -286,11 +286,11 @@ SQL;
     return self::findBySql($sql);
   }
 
-  static public function queryPostsByTopic($topic_id, int $per_page, int $offset) {
-    $tid = parent::escape($topic_id);
+  static public function queryPostsByCategory($category_id, int $per_page, int $offset) {
+    $tid = parent::escape($category_id);
     $sql = self::getJoins();
     $sql .= <<<SQL
-            WHERE p.approved = '1' AND p.topic_id = $tid
+            WHERE p.approved = '1' AND p.category_id = $tid
             ORDER BY p.created_at DESC
 SQL;
     $sql .= " LIMIT {$per_page} OFFSET {$offset}";
@@ -347,10 +347,10 @@ SQL;
 
   static protected function getJoins() {
     return <<<SQL
-      SELECT p.*, u.username, t.name as topic
+      SELECT p.*, u.username, t.name as category
       FROM `posts` AS p
       LEFT JOIN `users` AS u ON p.user_id = u.id
-      LEFT JOIN `topics` AS t ON p.topic_id = t.id
+      LEFT JOIN `categories` AS t ON p.category_id = t.id
 SQL;
   }
 

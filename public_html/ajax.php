@@ -203,12 +203,12 @@ function cookie_ids_posts($data) {
         $arr[$j]['format'] = $post->format;
         if ($post->format == 'image') $arr[$j]['image'] = \App\Classes\Post::responsive($post->image);
         else if ($post->format == 'video') $arr[$j]['video'] = $post->getEntryVideo();
-        $arr[$j]['topic'] = htmlspecialchars($post->topic);
+        $arr[$j]['category'] = htmlspecialchars($post->cateogry);
         $arr[$j]['username'] = htmlspecialchars($post->username);
         $arr[$j]['to_single'] = url_for('post/' . urlencode($post->title) . '?id=' . $post->id);
         $arr[$j]['to_author'] = url_for('author/' . urlencode($post->username) . '?uid=' . $post->user_id);
         $arr[$j]['to_on_date'] = url_for('ondate/pub/?ymd=' . urlencode(date('Y-m-d', strtotime($post->created_at))));
-        $arr[$j]['to_topic'] = url_for('topic/' . urlencode($post->topic) . '?tid=' . $post->topic_id);
+        $arr[$j]['to_category'] = url_for('category/' . urlencode($post->category) . '?tid=' . $post->category_id);
         $j++;
       }
       $pag = [
