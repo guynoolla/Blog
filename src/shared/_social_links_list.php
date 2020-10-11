@@ -1,4 +1,8 @@
-<ul>
+<?php
+
+ob_start();
+
+?><ul>
   <?php if ($jsonstore->social->facebook->show): ?>
     <li class="menu-item">
       <a class="svg-social-btn" href="<?php echo $jsonstore->social->facebook->link ?>">
@@ -52,4 +56,8 @@
       </a>
     </li>
   <?php endif; ?>
-</ul>
+</ul><?php
+
+return ob_get_clean();
+
+?>

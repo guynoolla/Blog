@@ -22,7 +22,7 @@ if (!$edit): ?>
 <?php else: ?>
   <h1 class="dashboard-headline">
     Post Update
-    <div class="back-btn-pos"><?php page_back_button() ?></div>  
+    <div class="back-btn-pos"><?php echo page_back_button() ?></div>  
   </h1>
 <?php endif;
 

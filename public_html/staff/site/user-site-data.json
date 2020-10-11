@@ -1,6 +1,6 @@
 {
     "site": {
-        "siteName": "White Color",
+        "siteName": "Light Kite",
         "siteDescription": "Just another theme by Gainulla"
     },
     "slider": {
@@ -34,7 +34,7 @@
             "priority": 5
         },
         "contact": {
-            "show": false,
+            "show": true,
             "title": "Contact Us",
             "priority": 6
         }

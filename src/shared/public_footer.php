@@ -10,7 +10,7 @@
 <footer class="<?php echo $bg ?>" role="contentinfo" id="scrollFooter">
 	<div class="footer-content">
 		<div class="social-links-widget more-space-between">
-			<?php include '_social_links_list.php' ?>
+			<?php echo include '_social_links_list.php' ?>
 		</div>
 		<div class="copyright mt-4"><?php echo $jsonstore->copyright ?></div>
 	</div>

@@ -14,7 +14,9 @@
         <a class="dropdown-item" href="<?php echo url_for('/') ?>">Home</a>
       <?php endif; ?>
       <a class="dropdown-item text-muted" href="<?php echo url_for('staff/users/edit.php?id=' . $session->getUserId()) ?>">User Settings</a>
-      <a class="dropdown-item text-muted" href="<?php echo url_for('staff/site/edit.php') ?>">Site Settings</a>
+      <?php if ($session->isAdmin()): ?>
+        <a class="dropdown-item text-muted" href="<?php echo url_for('staff/site/edit.php') ?>">Site Settings</a>
+      <?php endif; ?>
       <div class="dropdown-divider"></div>
         <a class="dropdown-item text-muted" href="<?php echo url_for('staff/logout.php') ?>">Logout</a>
     </div>

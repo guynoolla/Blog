@@ -4,22 +4,19 @@ use App\Classes\User;
 use App\Classes\Post;
 use App\Classes\Topic;
 
-function widget_follow() {
-  global $jsonstore;
-
+function widget_follow($jsonstore) {
   if ($jsonstore->sidebarWidget->follow->show): ?>
     <section class="widget">
       <h3 class="title"><?php echo $jsonstore->sidebarWidget->follow->title ?></h3>
       <div class="social-links-widget more-space-between">
-        <?php include '_social_links_list.php' ?>
+        <?php echo include '_social_links_list.php' ?>
       </div>
     </section><?php
   endif;
 }
 
-function widget_about() {
+function widget_about($jsonstore) {
   global $post;
-  global $jsonstore;
   
   $user = false;
   if (url_contain(['/post/', '/preview/'])) {
@@ -47,9 +44,7 @@ function widget_about() {
   }
 }
 
-function widget_posts() {
-  global $jsonstore;
-
+function widget_posts($jsonstore) {
   $posts = App\Classes\Post::findWhere(
     ['approved' => '1', 'format' => 'image'],
     'ORDER BY created_at DESC'
@@ -78,9 +73,7 @@ function widget_posts() {
   endif;
 }
 
-function widget_search() {
-  global $jsonstore;
-
+function widget_search($jsonstore) {
   if ($jsonstore->sidebarWidget->search->show): ?>
     <section class="widget">
       <div class="search-widget pt-4 pb-3">
@@ -98,8 +91,7 @@ function widget_search() {
   endif;
 }
 
-function widget_topics() {
-  global $jsonstore;
+function widget_topics($jsonstore) {
   $topics = Topic::findAll();
 
   if ($jsonstore->sidebarWidget->topics->show): ?>
@@ -121,9 +113,8 @@ function widget_topics() {
   endif;
 }
 
-function widget_contact() {
+function widget_contact($jsonstore) {
   global $session;
-  global $jsonstore;
 
   include("./simple-php-captcha.php");
   
@@ -191,7 +182,7 @@ foreach($jsonarray['sidebarWidget'] as $key => $value) {
 ksort($widgets);
 
 foreach ($widgets as $widget) {
-  $widget['callback']();
+  $widget['callback']($jsonstore);
 }
 
 ?></div>
