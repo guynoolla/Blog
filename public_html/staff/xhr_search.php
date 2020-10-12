@@ -15,11 +15,17 @@ if (!$session->isLoggedIn() || $user_id != $session->getUserId()) {
 switch($target) {
   case 'admin_user_by_search':
   case 'admin_user_by_user_type':
+  case 'admin_user_by_approved_order':
+  case 'admin_user_by_username_order':
+  case 'admin_user_by_userType_order':
+  case 'admin_user_by_date_order':
   case 'admin_user_by_date':
         if ($session->isAdmin()) admin_user_data($_POST['data']);
         break;
   case 'admin_category_by_search':
+  case 'admin_category_by_date_order':
   case 'admin_category_by_date':
+  case 'admin_category_by_name_order':
         if ($session->isAdmin()) admin_category_data($_POST['data']);
         break;
   default:
@@ -53,6 +59,10 @@ function admin_category_data($data) {
     ]];
     $cond_str = "WHERE created_at >= '{$created}' AND created_at < '{$nextday}'";
 
+  } else if ($type == 'date_order' || $type == 'name_order') {
+
+    $cond_arr = [];
+    $cond_str = "";
   }
 
   $total_count = Category::countAll($cond_arr);
@@ -60,9 +70,13 @@ function admin_category_data($data) {
   $per_page = DASHBOARD_PER_PAGE;
   $pagination = new Pagination($current_page, $per_page, $total_count);
 
+  if ($type == 'date_order') $order = "ORDER BY created_at {$value}";
+  else if ($type == 'name_order') $order = "ORDER BY name {$value}";
+  else $order = 'ORDER BY name ASC';
+
   $categories = Category::find(
     $per_page, $pagination->offset(),
-    "{$cond_str} ORDER BY name ASC"
+    "{$cond_str} {$order}"
   );
 
   ob_start();
@@ -71,9 +85,9 @@ function admin_category_data($data) {
     <thead class="bg-muted-lk text-muted">
       <tr>
         <th scope="col">#</th>
-        <th scope="col">Name</th>
+        <th scope="col"><a href="#name" class="click-load" data-access="admin_category" data-value="<?php echo ($value == 'asc' ? 'desc' : 'asc') ?>" data-type="name_order">Name</a></th>
         <th scope="col">Description</th>
-        <th scope="col">Created</th>
+        <th scope="col"><a href="#created" class="click-load" data-access="admin_category" data-value="<?php echo ($value == 'asc' ? 'desc' : 'asc') ?>" data-type="date_order">Created</a></th>
         <th scope="colgroup" colspan="2">Actions</th>
       </tr>
     </thead>
@@ -151,6 +165,9 @@ function admin_user_data($data) {
       ["( created_at >= '?' AND created_at < '?' )", $created, $nextday]
     ]);
 
+  } elseif ($type == 'date_order' || $type == 'userType_order' || $type == 'username_order' || $type == 'approved_order') {
+
+    $total_count = User::countAll();
   }
 
   $current_page = $params['page'] ?? 1;
@@ -168,7 +185,17 @@ function admin_user_data($data) {
   } else if ($type == 'date') {
     $sql .= " WHERE u.created_at >= '{$created}' AND u.created_at < '{$nextday}'";
   }
-  $sql .= " GROUP BY u.id ORDER BY u.username";
+  if ($type == 'date_order') {
+    $sql .= " GROUP BY u.id ORDER BY u.created_at {$value}";
+  } else if ($type == 'userType_order') {
+    $sql .= " GROUP BY u.id ORDER BY u.user_type {$value}, u.created_at ASC";
+  } else if ($type == 'username_order') {
+    $sql .= " GROUP BY u.id ORDER BY u.username {$value}";
+  } else if ($type == 'approved_order') {
+    $sql .= " GROUP BY u.id ORDER BY approved {$value}";
+  } else {
+    $sql .= " GROUP BY u.id ORDER BY u.username";
+  }
   $sql .= " LIMIT {$per_page} OFFSET {$pagination->offset()}";
 
   $users = User::findBySql($sql);
@@ -179,11 +206,11 @@ function admin_user_data($data) {
     <thead class="bg-muted-lk text-muted">
       <tr>
         <th scope="col">#</th>
-        <th scope="col">Username</th>
+        <th scope="col"><a href="#username" class="click-load" data-access="admin_user" data-value="<?php echo ($value == 'asc' ? 'desc' : 'asc') ?>" data-type="username_order">Username</a></th>
         <th scope="col">Email</th>
-        <th scope="col">Type</th>
-        <th scope="col">Since</th>
-        <th scope="col">Posted</th>
+        <th scope="col"><a href="#user-type" class="click-load" data-access="admin_user" data-value="<?php echo ($value == 'asc' ? 'desc' : 'asc') ?>" data-type="userType_order">Type</a></th>
+        <th scope="col"><a href="#since" class="click-load" data-access="admin_user" data-value="<?php echo ($value == 'asc' ? 'desc' : 'asc') ?>" data-type="date_order">Since</a></th>
+        <th scope="col"><a href="#posted" class="click-load" data-access="admin_user" data-value="<?php echo ($value == 'asc' ? 'desc' : 'asc') ?>" data-type="approved_order">Posted</a></th>
         <th scope="colgroup" colspan="2">Actions</th>
       </tr>
     </thead>

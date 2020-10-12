@@ -46,11 +46,11 @@ include '../_common-html-render.php';
             <thead class="bg-muted-lk text-muted">
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Username</th>
+                <th scope="col"><a href="#username" class="click-load" data-access="admin_user" data-value="asc" data-type="username_order">Username</a></th>                
                 <th scope="col">Email</th>
-                <th scope="col">Type</th>
-                <th scope="col">Since</th>
-                <th scope="col">Posted</th>
+                <th scope="col"><a href="#user-type" class="click-load" data-access="admin_user" data-value="asc" data-type="userType_order">Type</a></th>
+                <th scope="col"><a href="#since" class="click-load" data-access="admin_user" data-value="asc" data-type="date_order">Since</a></th>
+                <th scope="col"><a href="#posted" class="click-load" data-access="admin_user" data-value="asc" data-type="approved_order">Posted</a></th>
                 <th scope="colgroup" colspan="2">Actions</th>
               </tr>
             </thead>

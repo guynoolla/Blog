@@ -83,11 +83,11 @@ include '../_common-html-render.php';
             <thead class="bg-muted-lk text-muted">
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Title</th>
+                <th scope="col"><a href="#title" class="click-load" data-access="user_post" data-value="asc" data-type="title_order">Title</a></th>
                 <th scope="col">Category</th>
-                <th scope="col">Author</th>
+                <th scope="col"><a href="#author" class="click-load" data-access="user_post" data-value="asc" data-type="author_order">Author</a></th>
                 <th scope="col">Email</th>
-                <th scope="col">Created</th>
+                <th scope="col"><a href="#created" class="click-load" data-access="user_post" data-value="asc" data-type="date_order">Created</a></th>
                 <th scope="colgroup" colspan="1">Action</th>
               </tr>
             </thead>

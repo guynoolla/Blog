@@ -51,9 +51,9 @@ include '../_common-html-render.php';
             <thead class="bg-muted-lk text-muted">
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Name</th>
+                <th scope="col"><a href="#name" class="click-load" data-access="admin_category" data-value="asc" data-type="name_order">Name</a></th>
                 <th scope="col">Description</th>
-                <th scope="col">Created</th>
+                <th scope="col"><a href="#created" class="click-load" data-access="admin_category" data-value="asc" data-type="date_order">Created</a></th>
                 <th scope="colgroup" colspan="2">Actions</th>
               </tr>
             </thead>

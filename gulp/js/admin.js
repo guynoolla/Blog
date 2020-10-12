@@ -311,7 +311,7 @@ $(() => {
           uid: server.userId
         },
         success: res => {
-
+          console.log('RESP', res);
           loading(0);
           const data = JSON.parse(res);
 
