@@ -21,14 +21,13 @@
         },
         "follow": {
             "show": true,
-            "title": "Follow me",
             "priority": 2
         },
         "posts": {
             "show": true,
             "title": "Recent Posts",
             "priority": 3,
-            "postsNum": 2
+            "postsNum": 3
         },
         "search": {
             "show": true,
@@ -41,15 +40,24 @@
             "priority": 5
         },
         "contact": {
-            "show": true,
-            "title": "Contact Us",
+            "show": false,
             "priority": 6
         },
         "text": {
             "show": true,
-            "title": "Any text",
+            "title": "",
             "body": "Phasellus viverra nulla ut metus varius laoreet. Curabitur ullamcorper ultricies nisi. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi vestibulum volutpat enim. Phasellus tempus.",
             "priority": 7
+        }
+    },
+    "followSocial": {
+        "title": "Follow me",
+        "link": {
+            "facebook": "https://www.facebook.com",
+            "twitter": "https://www.twitter.com",
+            "youtube": "https://www.youtube.com",
+            "instagram": "https://www.instagram.com",
+            "github": "https://www.github.com"
         }
     },
     "contactForm": {
@@ -64,6 +72,10 @@
         "label": "Captcha",
         "placeholder": "code"
     },
+    "singlePage": {
+        "fullWidth": false,
+        "fullWidthNarrow": true
+    },
     "breakpoint": {
         "postFontSize": {
             "xs": ".96em",
@@ -72,36 +84,6 @@
             "lg": "1.12em",
             "xl": "1.16em"
         }
-    },
-    "social": {
-        "facebook": {
-            "show": true,
-            "link": "https://www.facebook.com"
-        },
-        "twitter": {
-            "show": true,
-            "link": "https://www.twitter.com"
-        },
-        "googlePlus": {
-            "show": false,
-            "link": "https://www.plus.google.com"
-        },
-        "youtube": {
-            "show": true,
-            "link": "https://www.youtube.com"
-        },
-        "instagram": {
-            "show": true,
-            "link": "https://www.instagram.com"
-        },
-        "github": {
-            "show": true,
-            "link": "https://www.github.com"
-        }
-    },
-    "singlePage": {
-        "fullWidth": false,
-        "fullWidthNarrow": true
     },
     "copyright": "&#9400; Light Kite &#124; All rights reserved"
 }

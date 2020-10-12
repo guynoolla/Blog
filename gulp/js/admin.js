@@ -372,16 +372,20 @@ $(() => {
         e.preventDefault();
 
         if (e.target.name == "reload") {
-          $.when(requestServer()).then(() => {
-            formAlert("right", "Your site settings reloaded.");
+          if (jsonForm.find("#json").val() !== loadedData) {
+            $.when(requestServer()).then(() => {
+              formAlert();
+              jsonBorder("border-success");
+            });
+          } else {
             jsonBorder("border-success");
-          });
+            console.log('The same data submission atempt!');
+          }
           return;
         }
 
         let data = jsonForm.find("#json").val();
         if (data == loadedData) {
-          formAlert("right", "Your site settings data is okay!");
           jsonBorder("border-success");
           return;
         }
@@ -390,7 +394,7 @@ $(() => {
           data = JSON.parse(data);
           requestServer(data);
         } else {
-          formAlert("error", "Please correct JSON data in form!");
+          formAlert("error", "Please correct JSON format or reload data!");
           jsonBorder("border-danger");
           return;
         }
@@ -614,7 +618,7 @@ function formAlert(type="", errors, title=false) {
   $(".form-alert").removeClass("form-alert--error form-alert--right");
   
   if (type == "") {
-    $(".form-alert").html("");  
+    $(".form-alert").slideUp().html("");  
     return;
   }
 
@@ -641,5 +645,8 @@ function jsonBorder(currClass="") {
   
   if (currClass == "") return;
 
-  $("#json").addClass(currClass);
+  let timer = setTimeout(() => {
+    $("#json").addClass(currClass);
+    clearTimeout(timer);
+  }, 1000)
 }

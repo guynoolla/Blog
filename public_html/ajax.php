@@ -39,8 +39,8 @@ function user_site_data($data) {
   
     if ($is_json) {
       $err_code = site_setting_removed($data, $path);
-      $err1_msg = "To remove site settings property is forbidden!";
-      $err2_msg = "To add a new settings property is not allowed!";
+      $err1_msg = "To remove site settings property is forbidden, please reload data!";
+      $err2_msg = "To add a new settings property is not allowed, please reload data!";
       $err_msg = [];
       if ($err_code == 1) $err_msg[] = $err1_msg;
       if ($err_code == 2) $err_msg[] = $err2_msg;
@@ -203,7 +203,7 @@ function cookie_ids_posts($data) {
         $arr[$j]['format'] = $post->format;
         if ($post->format == 'image') $arr[$j]['image'] = \App\Classes\Post::responsive($post->image);
         else if ($post->format == 'video') $arr[$j]['video'] = $post->getEntryVideo();
-        $arr[$j]['category'] = htmlspecialchars($post->cateogry);
+        $arr[$j]['category'] = htmlspecialchars($post->category);
         $arr[$j]['username'] = htmlspecialchars($post->username);
         $arr[$j]['to_single'] = url_for('post/' . urlencode($post->title) . '?id=' . $post->id);
         $arr[$j]['to_author'] = url_for('author/' . urlencode($post->username) . '?uid=' . $post->user_id);

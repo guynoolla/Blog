@@ -8,8 +8,8 @@ function widget_follow($jsonstore) {
   if ($jsonstore->sidebarWidget->follow->show): ?>
     <section class="widget mb-3">
 
-      <?php if ($jsonstore->sidebarWidget->follow->title): ?>
-        <h3 class="title mb-4"><?php echo $jsonstore->sidebarWidget->follow->title ?></h3>
+      <?php if ($jsonstore->followSocial->title): ?>
+        <h3 class="title mb-4"><?php echo $jsonstore->followSocial->title ?></h3>
       <?php endif; ?>
       
       <div class="social-links-widget more-space-between">
@@ -143,9 +143,6 @@ function widget_categories($jsonstore) {
 function widget_contact($jsonstore) {
   global $session;
 
-  include("./simple-php-captcha.php");
-  
-  $_SESSION['captcha'] = simple_php_captcha();
   $email = "";
   $message = "";
   $captcha_err = "";
@@ -159,8 +156,8 @@ function widget_contact($jsonstore) {
   if ($jsonstore->sidebarWidget->contact->show && is_homepage()): ?>
     <section class="widget mb-3" id="contact-form">
       
-      <?php if ($jsonstore->sidebarWidget->contact->title): ?>
-        <h3 class="title"><?php echo $jsonstore->sidebarWidget->contact->title ?></h3>
+      <?php if ($jsonstore->contactForm->title): ?>
+        <h3 class="title"><?php echo $jsonstore->contactForm->title ?></h3>
       <?php endif; ?>
 
       <div class="widget-contact-form pt-1">
@@ -213,8 +210,11 @@ function widget_text($jsonstore) {
   endif;
 }
 
-?>
-<div class="sidebar-content mt-2 mb-4 py-1"><?php
+
+if ($jsonstore->sidebarWidget->contact->show && is_homepage()) {
+  include("./simple-php-captcha.php");
+  $_SESSION['captcha'] = simple_php_captcha();
+}
 
 $widgets = [];
 
@@ -224,6 +224,9 @@ foreach($jsonarray['sidebarWidget'] as $key => $value) {
 }
 
 ksort($widgets);
+
+?>
+<div class="sidebar-content mt-2 mb-4 py-1"><?php
 
 foreach ($widgets as $widget) {
   $widget['callback']($jsonstore);
