@@ -78,13 +78,10 @@
     padding-bottom: 3rem;
     border-right: 1px solid #eee;
   }
-}
 
-.toggle-admin-sidebar {
-  &--toggle-admin-sidebar--clicked {
-    position: absolute;
-    top: 0;
-    left: 0;
+  .collapse-mp-x {
+    margin-left: 3.5rem;
+    padding-right: 2.5rem;
   }
 }
 

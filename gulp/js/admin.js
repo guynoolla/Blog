@@ -4,6 +4,9 @@ import LikedPosts from './modules/LikedPosts';
 import urlParser from 'js-video-url-parser/lib/base';
 import 'js-video-url-parser/lib/provider/vimeo';
 import 'js-video-url-parser/lib/provider/youtube';
+import Cookies from 'js-cookie';
+import { reject } from 'core-js/fn/promise';
+import Breakpoint from 'bootstrap-breakpoints';
 
 $(() => {
 
@@ -12,54 +15,23 @@ $(() => {
   /*
    -- Toggle Admin Sidebar -------------------------------------------- */
 
-  if ($(".page-admin .sidebar").width() < 60) {
-    $(".page-admin .sidebar .doubleArrowJS").on("click", e => {
-      e.preventDefault();
-    })
+  Breakpoint.init();
 
-  } else {
-    $(".page-admin .sidebar .doubleArrowJS").on("click", e => {
-      e.preventDefault();
-  
-      const bar = $(".page-admin .sidebar");
-      const topLink = $(".page-admin .sidebar .nav-item.logo");
-  
-      bar.attr("style", "width:3.6rem !important;")
-          .find(".nav-item").off("mouseenter mouseleave");
-      let topLinkColor = topLink.find(".nav-link").css("color");
-  
-      if ($(".page-admin").hasClass("page-admin--lg")) {
-        bar.on("mouseenter", e => {
-          topLink.find(".nav-link span").css("color", "transparent");
-          topLink.attr("style", "margin-left: -7.2rem;");
-        })
-        $(".logo svg").attr("style", "transform: rotate(0deg)");
-        $(".page-admin .sidebar").removeClass("col-lg-3");
-        $(".page-admin .main")
-          .removeClass("col-lg-9").addClass("ml-4 pr-4")
-          .find(".main-content").addClass("mr-2");
-        $(".page-admin").removeClass("page-admin--lg");
-  
-      } else {
-        bar.off("mouseenter");
-        topLink.attr("style", "margin-left: 0");
-        topLink.find(".nav-link span").attr("style", `color:${topLinkColor}`);
-        $(".logo svg").attr("style", "transform: rotate(-180deg)");
-        $(".page-admin .sidebar").addClass("col-lg-3");
-        $(".page-admin .main")
-          .addClass("col-lg-9").removeClass("ml-4 pr-4")
-          .find(".main-content").removeClass("mr-2");
-        $(".page-admin").addClass("page-admin--lg");
-      }
-
-    })
+  if (!Breakpoint.is("sm")) {
+    adminPanelToggle("cookie");
   }
 
-  const admin = $(".adminContentJS");
+  $(".page-admin .sidebar .doubleArrowJS").on("click", e => {
+    e.preventDefault();
+    
+    if (!Breakpoint.is("sm")) adminPanelToggle("click");
+  })
 
   /*
    -- Delete Modal ------------------------------------------------------- */
-  
+
+  const admin = $(".adminContentJS");
+
   if ($("table a[data-delete]").length || $("a.btn.btn-danger").length) {
     appendModalToBody();
   
@@ -695,4 +667,73 @@ function jsonBorder(currClass="") {
     $("#json").addClass(currClass);
     clearTimeout(timer);
   }, 1000)
+}
+
+async function adminPanelToggle(type, cookie=false) {
+  $(".page-admin").css("opacity", "0");
+
+  let collapse = false;
+
+  if (type == "click") {
+    if ($(".page-admin").hasClass("page-admin--lg")) {
+      collapse = true;
+    }
+  } else if (type == "cookie") {
+    if (Cookies.get("lk_table_wide")) {
+      collapse = true;
+    }
+  }
+
+  console.log("COOKIE", Cookies.get("lk_table_wide"));
+  console.log("COLLAPSE", collapse);
+
+  const bar = $(".page-admin .sidebar");
+  const main = $(".page-admin .main");
+  const topLink = bar.find(".nav-item.logo");
+
+  $(".page-admin").removeClass("page-admin--lg");
+  bar.removeClass("col-lg-3");
+  main.removeClass("col-lg-9");
+  
+  const toggle = () => new Promise(resolve => {
+
+    let topLinkColor = topLink.find(".nav-link").css("color");
+  
+    if (collapse) {
+      $(".logo svg").attr("style", "transform: rotate(0deg)");
+      $("#adminSearchForm").addClass("px-5");
+      
+      bar.attr("style", "width:4.6rem !important; padding: 0 .5rem;")
+         .find(".nav-item")
+         .off("mouseenter mouseleave");
+      main.addClass("collapse-mp-x");
+      topLink.find(".nav-link span").css("color", "transparent");
+      bar.on("mouseenter", e => topLink.attr("style", "margin-left: -7.2rem;"));
+      bar.on("mouseleave", e => topLink.attr("style", "margin-left: 0;"));
+  
+      Cookies.set("lk_table_wide", "1");
+      
+      return resolve(true);
+      
+    } else if (!collapse) {
+      bar.addClass("col-lg-3");
+      main.addClass("col-lg-9").removeClass("collapse-mp-x");
+      $(".page-admin").addClass("page-admin--lg");
+      $(".logo svg").attr("style", "transform: rotate(-180deg)");
+      $("#adminSearchForm").removeClass("px-5");
+
+      bar.attr("style", "width: 18rem !important;").find(".nav-item")
+         .on("mouseenter mouseleave");
+      topLink.attr("style", "margin-left: 0;");
+      topLink.find(".nav-link span").attr("style", `color:${topLinkColor}`);
+  
+      Cookies.remove("lk_table_wide");
+
+      return resolve(true);
+    }
+  });
+
+  const done = await toggle();
+
+  $(".page-admin").animate({ opacity: 1 }, 600);
 }

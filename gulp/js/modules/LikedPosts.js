@@ -81,6 +81,7 @@ class Posts {
         }
       })
       .done(res => {
+
         const data = JSON.parse(res);
         if (data[0] == 'success') {
           const output = this.makeHtml(data[1], data[2])

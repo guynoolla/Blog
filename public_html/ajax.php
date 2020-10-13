@@ -218,9 +218,9 @@ function cookie_ids_posts($data) {
       exit(json_encode(['success', $arr, $pag]));
     }
 
-  } else {
-    exit(json_encode(['empty']));
   }
+  
+  exit(json_encode(['empty']));
 }
 
 function site_setting_removed($data, $origin_path) {
