@@ -17,15 +17,16 @@ $(() => {
 
   Breakpoint.init();
 
-  if (!Breakpoint.is("sm")) {
-    adminPanelToggle("cookie");
-  }
+  adminPanelToggle("cookie", Breakpoint.current());
 
   $(".page-admin .sidebar .doubleArrowJS").on("click", e => {
     e.preventDefault();
-    
-    if (!Breakpoint.is("sm")) adminPanelToggle("click");
+    adminPanelToggle("click", Breakpoint.current());
   })
+
+  $(window).on('change:breakpoint', function (e, current, previous) {
+    window.location.reload();
+  });
 
   /*
    -- Delete Modal ------------------------------------------------------- */
@@ -669,61 +670,57 @@ function jsonBorder(currClass="") {
   }, 1000)
 }
 
-async function adminPanelToggle(type, cookie=false) {
-  $(".page-admin").css("opacity", "0");
+async function adminPanelToggle(type, current) {
+  if (current == "sm" || current == "xs") {
+    return false;
+  }
 
   let collapse = false;
 
   if (type == "click") {
-    if ($(".page-admin").hasClass("page-admin--lg")) {
-      collapse = true;
-    }
+    collapse = ($(".page-admin").hasClass("page-admin--lg"));
   } else if (type == "cookie") {
-    if (Cookies.get("lk_table_wide")) {
-      collapse = true;
-    }
+    collapse = (Cookies.get("lk_table_wide") != "undefined");
   }
 
-  console.log("COOKIE", Cookies.get("lk_table_wide"));
-  console.log("COLLAPSE", collapse);
+  $(".page-admin").css("opacity", "0");
 
   const bar = $(".page-admin .sidebar");
   const main = $(".page-admin .main");
   const topLink = bar.find(".nav-item.logo");
 
-  $(".page-admin").removeClass("page-admin--lg");
   bar.removeClass("col-lg-3");
   main.removeClass("col-lg-9");
+  $(".page-admin").removeClass("page-admin--lg");
   
   const toggle = () => new Promise(resolve => {
 
     let topLinkColor = topLink.find(".nav-link").css("color");
   
     if (collapse) {
-      $(".logo svg").attr("style", "transform: rotate(0deg)");
-      $("#adminSearchForm").addClass("px-5");
-      
+      main.addClass("collapse-mp-x");
       bar.attr("style", "width:4.6rem !important; padding: 0 .5rem;")
          .find(".nav-item")
          .off("mouseenter mouseleave");
-      main.addClass("collapse-mp-x");
-      topLink.find(".nav-link span").css("color", "transparent");
       bar.on("mouseenter", e => topLink.attr("style", "margin-left: -7.2rem;"));
       bar.on("mouseleave", e => topLink.attr("style", "margin-left: 0;"));
-  
+      topLink.find(".nav-link span").css("color", "transparent");
+      $(".logo svg").attr("style", "transform: rotate(0deg)");
+      $("#adminSearchForm").addClass("px-5");
+      
       Cookies.set("lk_table_wide", "1");
       
       return resolve(true);
       
     } else if (!collapse) {
-      bar.addClass("col-lg-3");
       main.addClass("col-lg-9").removeClass("collapse-mp-x");
       $(".page-admin").addClass("page-admin--lg");
       $(".logo svg").attr("style", "transform: rotate(-180deg)");
       $("#adminSearchForm").removeClass("px-5");
-
-      bar.attr("style", "width: 18rem !important;").find(".nav-item")
-         .on("mouseenter mouseleave");
+      bar.addClass("col-lg-3");
+      bar.attr("style", "width: 18rem !important;")
+         .find(".nav-item")
+         .on("mouseenter mouseleave")
       topLink.attr("style", "margin-left: 0;");
       topLink.find(".nav-link span").attr("style", `color:${topLinkColor}`);
   
