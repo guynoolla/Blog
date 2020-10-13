@@ -21,7 +21,7 @@ $published = Post::countAll([
         role="img"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 448 512"
-        class="svg-icon svg-inline--fa fa-angle-double-right fa-w-14 fa-5x"
+        class="doubleArrowJS svg-icon svg-inline--fa fa-angle-double-right fa-w-14 fa-5x"
       >
         <g class="fa-group">
           <path

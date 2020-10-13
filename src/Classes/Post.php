@@ -6,7 +6,7 @@ namespace App\Classes;
 class Post extends \App\Classes\DatabaseObject {
 
   static protected $table_name = "`posts`";
-  static protected $db_columns = ['id','user_id','category_id','title','meta_desc','format','image','video','body','video_urls','published','approved','created_at','updated_at'];
+  static protected $db_columns = ['id','user_id','category_id','title','meta_desc','format','image','video','body','video_urls','published','approved','published_at','created_at','updated_at'];
 
   public $id;
   public $user_id;
@@ -20,6 +20,7 @@ class Post extends \App\Classes\DatabaseObject {
   protected $video_urls;
   public $published;
   public $approved;
+  public $published_at;
   public $created_at;
   public $updated_at;
 
@@ -90,6 +91,17 @@ class Post extends \App\Classes\DatabaseObject {
           $attr[$prop] = $this->video;
         }
 
+      }
+    }
+    return $attr;
+  }
+
+  protected function beforeSave($attr) {
+    foreach ($attr as $prop => $value) {
+      if ($prop == "published" && $value == '1') {
+
+        $attr['published_at'] = is_null($this->published_at)
+        ? date('Y-m-d H:i:s', time()) : $this->published_at; 
       }
     }
     return $attr;

@@ -15,11 +15,11 @@ include SHARED_PATH . '/staff_header.php';
 
 ?>
 <div class="row">
-  <aside class="sidebar col-lg-3">
+  <aside class="sidebar col col-lg-3">
     <?php include SHARED_PATH . '/staff_sidebar.php' ?>
   </aside>
 
-  <main class="main col-lg-9">
+  <main class="main col col-lg-9">
     <div class="main-content">
 
       <h1 class="dashboard-headline mt-0">

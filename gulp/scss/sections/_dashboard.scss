@@ -50,7 +50,7 @@
 }
 
 @media (min-width: 992px) {
-  .page-admin .sidebar {
+  .page-admin.page-admin--lg .sidebar {
     position: relative;
     .sidebar-nav {
       .nav-item {
@@ -73,10 +73,18 @@
     }
   }
   
-  .page-admin .main {
+  .page-admin.page-admin--lg .main {
     padding: 0rem 2rem;
     padding-bottom: 3rem;
     border-right: 1px solid #eee;
+  }
+}
+
+.toggle-admin-sidebar {
+  &--toggle-admin-sidebar--clicked {
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 }
 

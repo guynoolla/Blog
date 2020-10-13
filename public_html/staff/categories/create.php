@@ -25,11 +25,11 @@ include SHARED_PATH . '/staff_header.php'
 
 ?>
 <div class="row">
-  <aside class="sidebar col-lg-3 pt-1">
+  <aside class="sidebar col col-lg-3 pt-1">
     <?php include SHARED_PATH . '/staff_sidebar.php' ?>
   </aside>
   
-  <div class="main col-lg-9">
+  <div class="main col col-lg-9">
     <div class="main-content"><?php include('./_form.php') ?></div>
   </div>
 

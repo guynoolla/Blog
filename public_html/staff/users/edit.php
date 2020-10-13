@@ -54,11 +54,11 @@ include SHARED_PATH . '/staff_header.php';
 
 ?>
 <div class="row">
-  <aside class="sidebar col-lg-3">
+  <aside class="sidebar col col-lg-3">
     <?php include SHARED_PATH . '/staff_sidebar.php' ?>
   </aside>
 
-  <main class="main col-lg-9 bg-light-lk bg-light-lk--md">
+  <main class="main col col-lg-9 bg-light-lk bg-light-lk--md">
     <div class="main-content bg-white">
 
       <h1 class="dashboard-headline mb-4">

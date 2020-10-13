@@ -9,6 +9,52 @@ $(() => {
 
   new LikedPosts();
 
+  /*
+   -- Toggle Admin Sidebar -------------------------------------------- */
+
+  if ($(".page-admin .sidebar").width() < 60) {
+    $(".page-admin .sidebar .doubleArrowJS").on("click", e => {
+      e.preventDefault();
+    })
+
+  } else {
+    $(".page-admin .sidebar .doubleArrowJS").on("click", e => {
+      e.preventDefault();
+  
+      const bar = $(".page-admin .sidebar");
+      const topLink = $(".page-admin .sidebar .nav-item.logo");
+  
+      bar.attr("style", "width:3.6rem !important;")
+          .find(".nav-item").off("mouseenter mouseleave");
+      let topLinkColor = topLink.find(".nav-link").css("color");
+  
+      if ($(".page-admin").hasClass("page-admin--lg")) {
+        bar.on("mouseenter", e => {
+          topLink.find(".nav-link span").css("color", "transparent");
+          topLink.attr("style", "margin-left: -7.2rem;");
+        })
+        $(".logo svg").attr("style", "transform: rotate(0deg)");
+        $(".page-admin .sidebar").removeClass("col-lg-3");
+        $(".page-admin .main")
+          .removeClass("col-lg-9").addClass("ml-4 pr-4")
+          .find(".main-content").addClass("mr-2");
+        $(".page-admin").removeClass("page-admin--lg");
+  
+      } else {
+        bar.off("mouseenter");
+        topLink.attr("style", "margin-left: 0");
+        topLink.find(".nav-link span").attr("style", `color:${topLinkColor}`);
+        $(".logo svg").attr("style", "transform: rotate(-180deg)");
+        $(".page-admin .sidebar").addClass("col-lg-3");
+        $(".page-admin .main")
+          .addClass("col-lg-9").removeClass("ml-4 pr-4")
+          .find(".main-content").removeClass("mr-2");
+        $(".page-admin").addClass("page-admin--lg");
+      }
+
+    })
+  }
+
   const admin = $(".adminContentJS");
 
   /*

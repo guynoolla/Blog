@@ -40,7 +40,7 @@ if (!isset($page_title) || $page_title == '') {
   </header>
 
   <div class="container-xl containerJS">
-    <div class="page-admin">
+    <div class="page-admin page-admin--lg">
 
       <div class="row">
         <div class="topbox col-12 pt-3">

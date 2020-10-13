@@ -23,7 +23,12 @@ class DatabaseObject {
   protected function beforeValidation($attr) {
     // Run Child Class filter here
     // ...
-    $this->errors = [];
+    return $attr;
+  }
+
+  protected function beforeSave($attr) {
+    // Run Child Class beforeSave method
+    // ...
     return $attr;
   }
 
@@ -96,6 +101,8 @@ class DatabaseObject {
 
     if (!$this->validate()) return false;
 
+    $attributes = $this->beforeSave($attributes);
+
     $into = [];
     $values = [];
     foreach ($attributes as $key => $value) {
@@ -121,6 +128,8 @@ class DatabaseObject {
     $attributes = $this->beforeValidation($attributes);
   
     if (!$this->validate()) return false;
+
+    $attributes = $this->beforeSave($attributes);
 
     $attribute_pairs = [];
     foreach ($attributes as $key => $value) {
