@@ -50,8 +50,63 @@
 }
 
 @media (min-width: 992px) {
+  .page-admin .sidebar {
+    .nav-item.logo {
+      .double-arrow-btn svg {
+        cursor: pointer;
+        transform: rotate(180deg);
+        &:hover {
+          transform: rotate(-180deg);
+        }
+      }
+    }
+
+    &--collapse {
+      width: 4.5rem !important;
+
+      .nav-item {
+        .nav-link {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          transition: padding-left 600ms ease-in;
+          &:hover {
+            justify-content: flex-start;
+            padding-left: 1.2rem;
+          }
+        }
+      }
+      .nav-item.logo {
+        &--flex {
+          .nav-link {
+            position: absolute;
+            visibility: none;
+          }
+        }
+      }
+
+      &:hover {
+        width: 4.5rem !important;
+        z-index: 501;
+        .link-text {
+          display: none !important;
+        }
+        .logo {
+          width: 4.5rem;
+        }
+      } 
+      .double-arrow-btn {
+        &:hover svg {
+          transform: rotate(-360deg);
+          transition: transform $transition-speed;         
+        }
+      }  
+    }
+  }
+
   .page-admin.page-admin--lg .sidebar {
     position: relative;
+
     .sidebar-nav {
       .nav-item {
         .nav-link {
@@ -86,7 +141,7 @@
 }
 
 /*
- Heading ---------------------------------- */
+ -- Search Form, Headline ---------------------------------- */
 
 .page-admin {
   .search-widget form {

@@ -83,7 +83,7 @@ include '../_common-html-render.php';
                 <th scope="col">Category</th>
                 <th scope="col"><a href="#author" class="click-load" data-access="user_post" data-value="asc" data-type="author_order">Author</a></th>
                 <th scope="col">Email</th>
-                <th scope="col"><a href="#created" class="click-load" data-access="user_post" data-value="asc" data-type="date_order">Created</a></th>
+                <th scope="col"><a href="#created" class="click-load" data-access="user_post" data-value="asc" data-type="date_order">Updated</a></th>
                 <th scope="col">Action</th>
               </tr>
             </thead>

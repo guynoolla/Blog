@@ -19,7 +19,7 @@ $(() => {
 
   adminPanelToggle("cookie", Breakpoint.current());
 
-  $(".page-admin .sidebar .doubleArrowJS").on("click", e => {
+  $(".page-admin .sidebar .double-arrow-btn").on("click", e => {
     e.preventDefault();
     adminPanelToggle("click", Breakpoint.current());
   })
@@ -671,6 +671,7 @@ function jsonBorder(currClass="") {
 }
 
 async function adminPanelToggle(type, current) {
+  
   if (current == "sm" || current == "xs") {
     return false;
   }
@@ -680,57 +681,50 @@ async function adminPanelToggle(type, current) {
   if (type == "click") {
     collapse = ($(".page-admin").hasClass("page-admin--lg"));
   } else if (type == "cookie") {
-    collapse = (Cookies.get("lk_table_wide") != "undefined");
+    collapse = (typeof Cookies.get("lk_table_wide") !== "undefined");
   }
 
-  $(".page-admin").css("opacity", "0");
+  const admin = $(".page-admin");
+  const bar = admin.find(".sidebar");
+  const main = admin.find(".main");
+  const arrowBtn = bar.find(".nav-item.logo .double-arrow-btn");
 
-  const bar = $(".page-admin .sidebar");
-  const main = $(".page-admin .main");
-  const topLink = bar.find(".nav-item.logo");
-
-  bar.removeClass("col-lg-3");
-  main.removeClass("col-lg-9");
-  $(".page-admin").removeClass("page-admin--lg");
-  
   const toggle = () => new Promise(resolve => {
-
-    let topLinkColor = topLink.find(".nav-link").css("color");
-  
     if (collapse) {
-      main.addClass("collapse-mp-x");
-      bar.attr("style", "width:4.6rem !important; padding: 0 .5rem;")
-         .find(".nav-item")
-         .off("mouseenter mouseleave");
-      bar.on("mouseenter", e => topLink.attr("style", "margin-left: -7.2rem;"));
-      bar.on("mouseleave", e => topLink.attr("style", "margin-left: 0;"));
-      topLink.find(".nav-link span").css("color", "transparent");
-      $(".logo svg").attr("style", "transform: rotate(0deg)");
-      $("#adminSearchForm").addClass("px-5");
-      
-      Cookies.set("lk_table_wide", "1");
+      main.removeClass("col-lg-9").addClass("collapse-mp-x");
+      bar.removeClass("col-lg-3").addClass("sidebar--collapse")
+         .find(".logo.logo--flex").css("justify-content", "center")
+         .off("mouseenter mouseleave hover");
+      arrowBtn.attr("style", "width:3rem !important;")
+              .off("mouseenter mouseleave");
+      admin.removeClass("page-admin--lg");
+      admin.find("#adminSearchForm").addClass("px-5");
       
       return resolve(true);
       
     } else if (!collapse) {
-      main.addClass("col-lg-9").removeClass("collapse-mp-x");
-      $(".page-admin").addClass("page-admin--lg");
-      $(".logo svg").attr("style", "transform: rotate(-180deg)");
-      $("#adminSearchForm").removeClass("px-5");
-      bar.addClass("col-lg-3");
-      bar.attr("style", "width: 18rem !important;")
-         .find(".nav-item")
-         .on("mouseenter mouseleave")
-      topLink.attr("style", "margin-left: 0;");
-      topLink.find(".nav-link span").attr("style", `color:${topLinkColor}`);
-  
-      Cookies.remove("lk_table_wide");
+      main.removeClass("collapse-mp-x").addClass("col-lg-9");
+      bar.removeClass("sidebar--collapse").addClass("col-lg-3")
+         .find(".nav-item.logo .nav-link").css("width", "100%").show()
+         .on("mouseenter mouseleave hover");
+      arrowBtn.attr("style", "width: 2.7rem !important;")
+              .on("mouseenter mouseleave");
+      admin.addClass("page-admin--lg");
+      admin.find("#adminSearchForm").removeClass("px-5");
 
       return resolve(true);
     }
   });
 
+  admin.css("opacity", "0");
   const done = await toggle();
+  admin.animate({ opacity: 1 }, 600);
+  
+  if (collapse) {
+    bar.find(".double-arrow-btn").css("transform", "rotate(-180deg)");
+    Cookies.set("lk_table_wide", "1");
+  } else {
+    Cookies.remove("lk_table_wide");
+  }
 
-  $(".page-admin").animate({ opacity: 1 }, 600);
 }

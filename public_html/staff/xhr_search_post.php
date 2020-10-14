@@ -47,16 +47,19 @@ function user_post_data($data) {
     $status = 'approved';
     $cond_arr = ['approved' => '1'];
     $cond_str = "p.approved = '1'";
+    $date_attr = 'published_at';
 
   } else if (trim($params['pathname'], '/') == 'staff/posts/published.php') {
     $status = 'published';
     $cond_arr = ['published' => '1','approved' => '0'];
     $cond_str = "p.published = '1' AND p.approved = '0'"; 
+    $date_attr = 'published_at';
 
   } else if (trim($params['pathname'], '/') == 'staff/posts/drafts.php') {
     $status = 'draft';
     $cond_arr = ['published' => '0'];
     $cond_str = "p.published = '0'";
+    $date_attr = 'updated_at';
   }
 
   if ($type == 'author') {
@@ -87,13 +90,13 @@ function user_post_data($data) {
     }
 
   } elseif ($type == 'date') {
-    $created = date('Y-m-d', strtotime($value));
+    $valdate = date('Y-m-d', strtotime($value));
     $nextday = date('Y-m-d', strtotime('+ 1 day', strtotime($value)));
     $cond_arr = array_merge(
-      [["(created_at >= '?' AND created_at < '?')", $created, $nextday]],
+      [["({$date_attr} >= '?' AND {$date_attr} < '?')", $valdate, $nextday]],
       $cond_arr
     );
-    $cond_str .= " AND (p.created_at >= '{$created}' AND p.created_at < '{$nextday}')";
+    $cond_str .= " AND (p.{$date_attr} >= '{$valdate}' AND p.{$date_attr} < '{$nextday}')";
 
   } elseif ($type == 'date_order' || $type == 'title_order' || $type == 'author_order') {
 
@@ -114,10 +117,10 @@ function user_post_data($data) {
   $sql .= " LEFT JOIN `users` AS u ON p.user_id = u.id";
   $sql .= " LEFT JOIN `categories` AS t ON p.category_id = t.id";
   $sql .= $cond_str ? " WHERE {$cond_str}" : "";
-  if ($type == 'date_order') $sql .= " ORDER BY p.created_at {$order}"; 
+  if ($type == 'date_order') $sql .= " ORDER BY p.{$date_attr} {$order}"; 
   else if ($type == 'title_order') $sql .= " ORDER BY p.title {$order}";
   else if ($type == 'author_order') $sql .= " ORDER BY u.username {$order}";
-  else $sql .= " ORDER BY p.created_at DESC";
+  else $sql .= " ORDER BY p.published_at DESC";
   $sql .= " LIMIT {$per_page} OFFSET {$pagination->offset()}";
   $posts = Post::findBySql($sql);
   
@@ -136,7 +139,7 @@ function user_post_data($data) {
           <th scope="col">Category</th>
           <th scope="col"><a href="#author" class="click-load" data-access="user_post" data-value="<?php echo $order ?>" data-type="author_order">Author</a></th>
           <th scope="col">Email</th>
-          <th scope="col"><a href="#created" class="click-load" data-access="user_post" data-value="<?php echo $order ?>" data-type="date_order">Created</a></th>
+          <th scope="col"><a href="#created" class="click-load" data-access="user_post" data-value="<?php echo $order ?>" data-type="date_order">Published</a></th>
           <th scope="colgroup" colspan="1">Action</th>
         </tr>
       </thead>
@@ -164,7 +167,7 @@ function user_post_data($data) {
           <th scope="col"><a href="#title" class="click-load" data-access="user_post" data-value="<?php echo $order ?>" data-type="title_order">Title</a></th>
           <th scope="col"><a href="#author" class="click-load" data-access="user_post" data-value="<?php echo $order ?>" data-type="author_order">Author</a></th>
           <th scope="col">Email</th>
-          <th scope="col"><a href="#created" class="click-load" data-access="user_post" data-value="<?php echo $order ?>" data-type="date_order">Created</a></th>
+          <th scope="col"><a href="#created" class="click-load" data-access="user_post" data-value="<?php echo $order ?>" data-type="date_order">Published</a></th>
           <th scope="colgroup" colspan="2">Action</th>
         </tr>
       </thead>
@@ -194,7 +197,7 @@ function user_post_data($data) {
           <th scope="col">Category</th>
           <th scope="col"><a href="#author" class="click-load" data-access="user_post" data-value="<?php echo $order ?>" data-type="author_order">Author</a></th>
           <th scope="col">Email</th>
-          <th scope="col"><a href="#created" class="click-load" data-access="user_post" data-value="<?php echo $order ?>" data-type="date_order">Created</a></th>
+          <th scope="col"><a href="#created" class="click-load" data-access="user_post" data-value="<?php echo $order ?>" data-type="date_order">Updated</a></th>
           <th scope="col">Action</th>
         </tr>
       </thead>
@@ -274,12 +277,12 @@ function own_post_data($data) {
 
   } elseif ($type == 'date') {
 
-    $created = date('Y-m-d', strtotime($value));
+    $updated = date('Y-m-d', strtotime($value));
     $nextday = date('Y-m-d', strtotime('+ 1 day', strtotime($value)));
     $cond_arr = [
-      ["(created_at >= '?' AND created_at < '?')", $created, $nextday]
+      ["(updated_at >= '?' AND updated_at < '?')", $updated, $nextday]
     ];
-    $cond_str = "(p.created_at >= '{$created}' AND p.created_at < '{$nextday}')";
+    $cond_str = "(p.updated_at >= '{$updated}' AND p.updated_at < '{$nextday}')";
 
   } elseif ($type == 'date_order' || $type == 'title_order') {
 
@@ -301,7 +304,7 @@ function own_post_data($data) {
   $sql .= " LEFT JOIN `categories` AS t ON p.category_id = t.id";
   $sql .= " WHERE p.user_id='{$session->getUserId()}'";
   $sql .= $cond_str ? " AND {$cond_str}" : "";
-  if ($type == 'date_order') $sql .= " ORDER BY p.created_at {$order}";
+  if ($type == 'date_order') $sql .= " ORDER BY p.updated_at {$order}";
   else if ($type == 'title_order') $sql .= " ORDER BY p.title {$order}";
   else $sql .= " ORDER BY p.updated_at DESC";
   $sql .= " LIMIT {$per_page} OFFSET {$pagination->offset()}";
@@ -319,7 +322,7 @@ function own_post_data($data) {
         <th scope="col"><a href="#title" class="click-load"  data-access="own_post" data-value="<?php echo $order ?>" data-type="title_order">Title</a></th>
         <th scope="col">Category</th>
         <th scope="col">Status</th>
-        <th scope="col"><a href="#created" class="click-load" data-access="own_post" data-value="<?php echo $order ?>" data-type="date_order">Created</a></th>
+        <th scope="col"><a href="#created" class="click-load" data-access="own_post" data-value="<?php echo $order ?>" data-type="date_order">Updated</a></th>
         <th scope="colgroup" colspan="3">Action</th>
       </tr>
     </thead>

@@ -10,9 +10,11 @@ $published = Post::countAll([
 
 ?>
 <ul class="sidebar-nav">
-  <li class="nav-item logo">
+  <li class="nav-item logo logo--flex">
     <a href="<?php echo url_for('staff/index.php') ?>" class="nav-link">
       <span class="link-text logo-text">Dashboard</span>
+    </a>
+    <span class="double-arrow-btn">
       <svg
         aria-hidden="true"
         focusable="false"
@@ -21,7 +23,7 @@ $published = Post::countAll([
         role="img"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 448 512"
-        class="doubleArrowJS svg-icon svg-inline--fa fa-angle-double-right fa-w-14 fa-5x"
+        class="svg-icon svg-inline--fa fa-angle-double-right fa-w-14 fa-5x"
       >
         <g class="fa-group">
           <path
@@ -36,7 +38,7 @@ $published = Post::countAll([
           ></path>
         </g>
       </svg>
-    </a>
+    </span>
   </li>
 
   <!-- Check Author >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->

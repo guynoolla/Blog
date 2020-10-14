@@ -96,7 +96,7 @@ include '../_common-html-render.php';
                 <th scope="col"><a href="#title" class="click-load" data-access="user_post" data-value="asc" data-type="title_order">Title</a></th>
                 <th scope="col"><a href="#author" class="click-load" data-access="user_post" data-value="asc" data-type="author_order">Author</a></th>
                 <th scope="col">Email</th>
-                <th scope="col"><a href="#created" class="click-load" data-access="user_post" data-value="asc" data-type="date_order">Created</a></th>
+                <th scope="col"><a href="#created" class="click-load" data-access="user_post" data-value="asc" data-type="date_order">Published</a></th>
                 <th scope="colgroup" colspan="2">Action</th>
               </tr>
             </thead>

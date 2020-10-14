@@ -77,6 +77,17 @@
     }
     .logo {
       width: 14.2rem;
+
+      &--flex {
+        .nav-link {
+          display: block !important;
+          width: 100%;
+        }
+        .double-arrow-btn {
+          width: 2.7rem !important;
+          height: 2.3rem !important;
+        }
+      }
     }
   }
 
@@ -91,13 +102,37 @@
     text-align: center;
     color: $text-secondary;
     background-color: $bg-secondary;
-    font-size: 1.1rem;
     text-transform: uppercase;
     letter-spacing: .2ch;
 
     .link-text {
-      margin-right: .5em;
+      max-width: 4.2rem;
+      font-size: 1.3rem;
     }
+
+    /* all bellow fresh added */
+
+    &--flex {
+      display: flex;
+      justify-content: flex-end;
+
+      .double-arrow-btn {
+        display: block;
+        width: 2.3rem;
+        height: 2.3rem;
+        margin: .7rem;
+
+        svg {
+          height: 100%;
+          width: auto;
+          max-width: 100%;
+        }
+      }
+      .nav-link {
+        display: none;
+      }
+    }
+
   }
 
   &:hover .logo svg {
@@ -120,4 +155,5 @@
   .fa-secondary {
     transition: $transition-speed;
   }
+
 }

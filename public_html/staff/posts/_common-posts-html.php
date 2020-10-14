@@ -140,8 +140,18 @@ function td_post_category($post, $access) {
 }
 
 function td_post_date($post, $access) {
+  if ($access == 'user_post') {
+    if ($post->published == '1' || $post->approved == '1') {
+      $date = $post->published_at;
+    } elseif ($post->published == '0') {
+      $date = $post->updated_at;
+    }
+  } elseif ($access == 'own_post') {
+    $date = $post->updated_at;
+  }
+
   return
-    "<td scope=\"col\"><a href=\"#ondate\" data-type=\"date\" data-value=\"{$post->created_at}\" data-access=\"{$access}\" class=\"click-load h5\">" . date('M j, Y', strtotime($post->created_at)) . "</a></td>";
+    "<td scope=\"col\"><a href=\"#ondate\" data-type=\"date\" data-value=\"{$date}\" data-access=\"{$access}\" class=\"click-load h5\">" . date('M j, Y', strtotime($date)) . "</a></td>";
 }
 
 ?>
