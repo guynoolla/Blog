@@ -58,7 +58,7 @@ include '../_common-html-render.php';
               <?php foreach($users as $key => $user): ?>
               <tr data-user="<?php echo $user->id ?>">
                 <th scope="row"><?php echo $key + 1 ?></th>
-                <td><a href="#"><?php echo $user->username ?></a></td>
+                <td><span><?php echo $user->username ?></span></td>
                 <td><a href="mailto: <?php echo $user->email ?>" class="<?php echo ($user->email_confirmed ? 'text-success' : '') ?>"><?php echo $user->email ?></a></td>
                 <td><a href="#user-type" data-type="user_type" data-value="<?php echo $user->user_type ?>" data-access="admin_user" class="click-load"><?php echo $user->user_type ?></a></td>
                 <td><a href="#ondate" data-type="date" data-value="<?php echo $user->created_at ?>" data-access="admin_user" class="click-load"><?php echo date('M j, Y', strtotime($user->created_at)) ?></a></td>

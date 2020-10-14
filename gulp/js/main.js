@@ -91,9 +91,8 @@ $(window).on('change:breakpoint', function (e, current, previous) {
   /*
    -- Require admin.js if user is logged in ---------------------------*/
 
-  if (server.isLoggedIn) {
-    require("./admin.js");
-  }
+  if (server.isLoggedIn) require("./loggedin.js");
+  if (server.isAdmin) require("./admin.js");
 
   /*
    -- Nav Search Form ---------------------------------------------------*/

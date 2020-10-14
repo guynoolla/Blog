@@ -80,7 +80,7 @@ EOT;
             $dep_word = $posts_count > 1 ? 'posts' : 'post'; 
             $session->store([
               'table' => $table,
-              'warning' => "This user can not be deleted because user has {$posts_count} {$dep_word}."
+              'warning' => "<strong>{$user->username}</strong> could not be deleted because this user has {$posts_count} {$dep_word}."
             ]);
             redirect_to(url_for('staff/delete.php'));
           }          

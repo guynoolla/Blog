@@ -61,15 +61,15 @@ function td_actions_column_snd($post, $is_admin, $url="") {
 
     <?php if (!$post->published): ?>
       <a class="btn-lk btn-lk--primary" href="<?php echo url_for($url . '?id=' . $post->id . '&cmd=publish')
-      ?>">publish</a>
+      ?>" data-adm="own" data-cmd="publish" data-pid="<?php echo $post->id ?>">publish</a>
 
     <?php elseif ($post->published && !$post->approved): ?>
       <a class="btn-lk btn-lk--success" href="<?php echo url_for($url . '?id=' . $post->id . '&cmd=approve')
-      ?>">prove</a>
+      ?>" data-adm="own"  data-cmd="approve" data-pid="<?php echo $post->id ?>">approve</a>
     
     <?php elseif ($post->published && $post->approved): ?>
       <a class="btn-lk btn-lk--warning" href="<?php echo url_for($url . '?id=' . $post->id . '&cmd=disprove')
-      ?>">disprove</a>
+      ?>" data-adm="own" data-cmd="disprove" data-pid="<?php echo $post->id ?>">disprove</a>
 
     <?php else: ?>
       <a class="btn btn-sm disabled text-center d-block">&ndash;</a>

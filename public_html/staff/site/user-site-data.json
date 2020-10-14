@@ -3,7 +3,7 @@
     "siteDescription": "Just another theme by Gainulla",
     "perPageNumBackend": "5",
     "perPageNumFrontend": "7",
-    "tableSize": "table-sm",
+    "tableSize": "table-lg",
     "color": {
         "siteName": "#5aaee2",
         "lineUnderTitle": "#5aaee2",
