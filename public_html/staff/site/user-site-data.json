@@ -1,15 +1,16 @@
 {
-    "site": {
-        "siteName": "Light Kite",
-        "siteDescription": "Just another theme by Gainulla"
-    },
+    "siteName": "Light Kite",
+    "siteDescription": "Just another theme by Gainulla",
+    "perPageNumBackend": "5",
+    "perPageNumFrontend": "7",
+    "tableSize": "table-sm",
     "color": {
         "siteName": "#5aaee2",
         "lineUnderTitle": "#5aaee2",
         "toTopBtnHover": "#5aaee2"
     },
     "slider": {
-        "slidesToShow": 3,
+        "slidesToShow": 2,
         "slidesToScroll": 2,
         "dots": true,
         "infinite": true,

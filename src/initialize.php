@@ -35,11 +35,6 @@ define('ADMIN_EMAIL', 'yusupovgz@yandex.ru');
  */
 define("SECRET_KEY", "jaItYP0KmKp6wcWCCkCKrxMEVT0yIdqn");
 
-// Pagination
-define("DASHBOARD_PER_PAGE", 4);
-define("FRONTEND_PER_PAGE", 6);
-define("TABLE_SIZE", 'table-md');
-
 // Functions
 require_once('functions.php');
 require_once('db_credentials.php');
@@ -60,7 +55,10 @@ $json = file_get_contents(PUBLIC_PATH . '/staff/site/user-site-data.json');
 $jsonstore = json_decode($json);
 $jsonarray = json_decode($json, true);
 
-//dd($jsonarray['contentFontSize']);
+// Pagination
+define("DASHBOARD_PER_PAGE", $jsonstore->perPageNumBackend);
+define("FRONTEND_PER_PAGE", $jsonstore->perPageNumFrontend);
+define("TABLE_SIZE", $jsonstore->tableSize);
 
 function pass_to_js() {
   global $session;

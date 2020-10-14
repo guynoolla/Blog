@@ -99,8 +99,8 @@ if (url_contain(['/pasword/', '/email/', '/staff/login', '/staff/register'])) {
 
   <section class="logo first-top-padding<?php echo " {$top_banner_hide}" ?>">
     <div class="logo-content">
-      <h1 class="brand"><a href="/"><?php echo $jsonstore->site->siteName ?></a></h1>
-      <div class="description"><?php echo $jsonstore->site->siteDescription ?></div>
+      <h1 class="brand"><a href="/"><?php echo $jsonstore->siteName ?></a></h1>
+      <div class="description"><?php echo $jsonstore->siteDescription ?></div>
     </div>
   </section>
 

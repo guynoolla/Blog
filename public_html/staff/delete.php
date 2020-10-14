@@ -24,14 +24,14 @@ if (is_get_request()) { // GET request
       $object = User::findById($id);
       $warning = <<<EOT
         <p>Are you sure you want to delete the user <strong class="font-weight-bold">$object->username</strong>?<br>
-        If user posts exists they also will be permanently deleted!</p>
+        You can't delete the user, which has posts unless you delete those posts!</p></p>
 EOT;
     } else if ($table == 'categories') {
       $page_title = 'Delete Category';
       $object = Category::findById($id);
       $warning = <<<EOT
         <p>Are you sure you want to delete the category <strong class="font-weight-bold">$object->name</strong>?<br>
-        In case category has post(s) you can't delete it unless you delete those post(s)!</p>
+        If the category has post(s) you can't delete it unless you delete those post(s)!</p>
 EOT;
     } else if ($table == 'posts') {
       $page_title = 'Delete Post';
