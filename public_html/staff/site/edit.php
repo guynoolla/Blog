@@ -34,7 +34,7 @@ include SHARED_PATH . '/staff_header.php'
 
               <div class="form-group mb-0 mx-0">
                 <label for="json" class="col-form-label pl-0">Site Settings</label>
-                <textarea class="form-control" name="json" value="" id="json" rows="12"><?php
+                <textarea class="form-control" name="json" value="" id="json" rows="16" style="border-width:2px;"><?php
                 ?></textarea>
                 <span class="errsum-json text-danger field-validation-error"></span>
               </div>

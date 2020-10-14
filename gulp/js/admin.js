@@ -705,7 +705,7 @@ async function adminPanelToggle(type, current) {
     } else if (!collapse) {
       main.removeClass("collapse-mp-x").addClass("col-lg-9");
       bar.removeClass("sidebar--collapse").addClass("col-lg-3")
-         .find(".nav-item.logo .nav-link").css("width", "100%").show()
+         .find(".nav-item.logo .nav-link").css("display", "block")
          .on("mouseenter mouseleave hover");
       arrowBtn.attr("style", "width: 2.7rem !important;")
               .on("mouseenter mouseleave");

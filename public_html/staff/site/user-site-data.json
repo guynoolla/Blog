@@ -9,8 +9,30 @@
         "toTopBtnHover": "#5aaee2"
     },
     "slider": {
-        "slidesToShow": 2,
-        "slidesToScroll": 2
+        "slidesToShow": 3,
+        "slidesToScroll": 2,
+        "dots": true,
+        "infinite": true,
+        "autoplay": false,
+        "speed": 600,
+        "lg": {
+            "slidesToShow": 2,
+            "slidesToScroll": 2,
+            "dots": true,
+            "infinite": true
+        },
+        "md": {
+            "slidesToShow": 1,
+            "slidesToScroll": 1,
+            "dots": true,
+            "infinite": true
+        },
+        "sm": {
+            "slidesToShow": 1,
+            "slidesToScroll": 1,
+            "dots": false,
+            "infinite": false
+        }
     },
     "sidebarWidget": {
         "about": {
@@ -76,14 +98,12 @@
         "fullWidth": false,
         "fullWidthNarrow": true
     },
-    "breakpoint": {
-        "postFontSize": {
-            "xs": ".96em",
-            "sm": "1em",
-            "md": "1.06em",
-            "lg": "1.12em",
-            "xl": "1.16em"
-        }
+    "postFontSize": {
+        "xs": ".96em",
+        "sm": "1em",
+        "md": "1.06em",
+        "lg": "1.12em",
+        "xl": "1.16em"
     },
     "copyright": "&#9400; Light Kite &#124; All rights reserved"
 }

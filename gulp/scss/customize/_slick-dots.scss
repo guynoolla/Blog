@@ -1,0 +1,18 @@
+/*
+ -- Slick dots override --------------------------------------*/
+
+.carousel .carousel-content .slider {
+
+  ul.slick-dots {
+    top: 24rem;
+    li {
+      button {
+        &::before {
+          color: #FFF;
+          font-size: 10px;
+        }
+      }
+    }
+  }
+
+}

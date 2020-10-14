@@ -5,7 +5,7 @@ class Posts {
 
   constructor() {
     this.cookieData = (this.getLikesCookie()).reverse();
-    this.perPage = 4;
+    this.perPage = 2;
     this.page = 1;
     this.onload();
     this.events();

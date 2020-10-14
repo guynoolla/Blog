@@ -1,6 +1,6 @@
 <?php $loggedIn = $session->isLoggedIn() ?>
 
-<li class="mt-1 position-relative nav-item<?php $loggedIn ? ' dropdown' : '' ?>">
+<li class="position-relative nav-item<?php $loggedIn ? ' dropdown' : '' ?>">
   <?php if (!$loggedIn): ?>
     <!-- <a class="nav-link" href="<php echo url_for('admin/login.php') ?>">Login</a> -->
   <?php else: ?>

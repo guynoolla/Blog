@@ -71,7 +71,8 @@ function pass_to_js() {
   $server['userId'] = $session->isLoggedIn() ? $session->getUserId() : 0;
   $server['singlePost'] = (url_contain('/post/')) ? $_GET['id'] : false;
   $server['dashboardMain'] = (url_contain('staff/index')) ? true : false;
-  $server['breakpoint'] = $jsonstore->breakpoint;
+  $server['postFontSize'] = $jsonstore->postFontSize;
+  $server['slider'] = $jsonstore->slider;
 
   $script = '<script>';
   $script .= 'var server = ' . json_encode($server);

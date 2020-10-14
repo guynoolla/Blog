@@ -24,6 +24,8 @@ nav {
         border: 2px solid transparent;
         border-radius: 1rem;
         padding: .2rem 1rem;
+        padding-top: .3rem;
+        margin-top: .05rem;
         &--bg {
           background-color: $dark1;
           &:hover, &:focus {

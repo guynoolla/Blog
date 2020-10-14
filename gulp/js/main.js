@@ -14,7 +14,7 @@ $(() => {
 
   Breakpoint.init();
 
-  slickCarousel();
+  slickCarousel(server.slider);
   navbarSearchBehavior();
   homePagePaginationBehavior();
 
@@ -23,7 +23,7 @@ $(() => {
   const er1 = $(".embed-responsive");
   const er2 = $(".embed-responsive");
 
-  deviceMediaEmbedResponsive(er1, er2, server.breakpoint.postFontSize);
+  deviceMediaEmbedResponsive(er1, er2, server.postFontSize);
 
 /*
   -- Change classes on window resize (test) --------------------------------*/
@@ -35,7 +35,7 @@ $(window).on('change:breakpoint', function (e, current, previous) {
   cleanEmbedResponsive(er1, er2);
   mediaEmbedResponsive(er1, er2);
 
-  const fontSize = server.breakpoint.postFontSize;
+  const fontSize = server.postFontSize;
 
   if (current == "xs") {
     $(".postContentJS").attr("style", `font-size:${fontSize.xs} !important`);
@@ -331,7 +331,7 @@ function navbarSearchBehavior() {
   })
 }
 
-function slickCarousel() {
+function slickCarousel(settings) {
   const carousel = $(".carousel")
   const content = carousel.find(".carousel-content");
   const slider = carousel.find(".slider");
@@ -339,41 +339,42 @@ function slickCarousel() {
   if (typeof slider.slick == "function") {
     carousel.find(".carousel-spinner").removeClass("d-none");
 
-    const slidesToShow = slider.data("slides_to_show");
-    const slidesToScroll = slider.data("slides_to_scroll");
-
     slider.slick({
-      autoplay: false,
-      autoplaySpeed: 2000,
-      slidesToShow: slidesToShow,
-      slidesToScroll: slidesToScroll,
+      autoplay: settings.autoplay,
+      dots: settings.dots,
+      infinite: settings.infinite,
+      speed: settings.speed,
+      slidesToShow: settings.slidesToShow,
+      slidesToScroll: settings.slidesToScroll,
       nextArrow: $('.next'),
       prevArrow: $('.prev'),
       cssEase: "linear",
       responsive: [
         {
-          breakpoint: 1201, // 1024,
+          breakpoint: 1200,
           settings: {
-            slidesToShow: slidesToShow,
-            slidesToScroll: slidesToScroll,
-            infinite: true,
-            dots: false
+            slidesToShow: settings.lg.slidesToShow,
+            slidesToScroll: settings.lg.slidesToScroll,
+            infinite: settings.lg.infinite,
+            dots: settings.lg.dots
           }
         },
         {
-          breakpoint: 991, // 880,
+          breakpoint: 992,
           settings: {
-            slidesToShow: slidesToShow,
-            slidesToScroll: slidesToScroll,
-            infinite: true,
-            dots: false
+            slidesToShow: settings.md.slidesToShow,
+            slidesToScroll: settings.md.slidesToScroll,
+            infinite: settings.md.infinite,
+            dots: settings.md.dots
           }
         },
         {
-          breakpoint: 701,
+          breakpoint: 768,
           settings: {
-            slidesToShow: slidesToShow,
-            slidesToScroll: slidesToScroll
+            slidesToShow: settings.sm.slidesToShow,
+            slidesToScroll: settings.sm.slidesToScroll,
+            infinite: settings.sm.infinite,
+            dots: settings.sm.dots
           }
         }
       ]
@@ -383,7 +384,7 @@ function slickCarousel() {
     let started = false;
 
     let interval = setInterval(() => {
-      if (imgLen >= 2) {
+      if (imgLen >= 3) {
         started = true;
         carousel.find(".carousel-spinner").removeClass("d-flex").addClass("d-none");
         content.addClass("carousel-content--fade-in");
