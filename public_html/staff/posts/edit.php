@@ -15,12 +15,15 @@ if (is_post_request()) {
 
   $post = Post::findById($id);
 
-  $image = new File($_FILES['image']);
-  $post->fileInstance($image);
+  if (isset($_FILES['image'])) {
+    $image = new File($_FILES['image']);
+    $post->fileInstance($image);
+  }
 
   if (!isset($_POST['post']['published'])) {
     $_POST['post']['published'] = '0';
-  } 
+  }
+
   $post->mergeAttributes($_POST['post']);
 
   if ($post->save()) {
@@ -30,7 +33,13 @@ if (is_post_request()) {
       if ($post->user_id == $session->getUserId()) {
         redirect_to(url_for('staff/posts/index.php'));
       } else {
-        redirect_to(url_for('staff/posts/drafts.php'));
+        if ($post->approved == '1') {
+          redirect_to(url_for('staff/posts/approved.php'));
+        } else if ($post->published == '1') {
+          redirect_to(url_for('staff/posts/published.php'));
+        } else { // draft
+          redirect_to(url_for('staff/posts/drafts.php'));
+        }
       }
     } else {
       redirect_to(url_for('staff/posts/index.php'));

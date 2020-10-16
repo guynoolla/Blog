@@ -4,22 +4,19 @@ use App\Classes\Pagination;
 
 require_once '../../src/initialize.php';
 
-$target = $_POST['target'] ?? "";
-$user_id = $_POST['uid'] ?? "";
-
-if (!$session->isLoggedIn() || $user_id != $session->getUserId()) {
+if (!$session->isLoggedIn()) {
   exit;
 }
 
-switch($target) {
+switch($_GET['target']) {
   case 'own_post_by_search':
   case 'own_post_by_status':
   case 'own_post_by_category':
   case 'own_post_by_date_order':
   case 'own_post_by_title_order':
   case 'own_post_by_date':
-        own_post_data($_POST['data']);
-        break;
+          $session->isAuthor() ? own_post_data($_GET['data']) : null;
+          break;
   case 'user_post_by_date_order':
   case 'user_post_by_title_order':
   case 'user_post_by_author_order':
@@ -27,10 +24,10 @@ switch($target) {
   case 'user_post_by_category':
   case 'user_post_by_author':
   case 'user_post_by_date':
-        if ($session->isAdmin()) user_post_data($_POST['data']);
-        break;
+          $session->isAdmin() ? user_post_data($_GET['data']) : null;
+          break;
   default:
-        exit(json_encode(['target' => 'error']));
+          exit(json_encode(['target' => 'error']));
 }
 
 /*

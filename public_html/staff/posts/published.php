@@ -86,7 +86,7 @@ include '../_common-html-render.php';
         echo tableIsEmpty();
 
       else: ?>
-        <?php echo tableSearchForm() ?>
+        <?php echo tableSearchForm('Post title') ?>
 
         <div class="loadContentJS" data-access="user_post">
           <table class="table table-bordered table-hover table-light <?php echo TABLE_SIZE ?>">

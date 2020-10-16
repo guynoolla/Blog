@@ -1,6 +1,6 @@
 <?php
 
-function tableSearchForm() {
+function tableSearchForm($ph="Search...") {
   ob_start();
 
   ?><div class="d-flex">
@@ -11,7 +11,7 @@ function tableSearchForm() {
           <div class="input-group-prepend">
             <button type="submit" name="submit" class="btn rounded-left"></button>
           </div>
-          <input id="s" name="s" type="text" class="form-control search-query" placeholder="Search..." value="">
+          <input id="s" name="s" type="text" class="form-control search-query" placeholder="<?php echo $ph ?>" value="">
           <div class="input-group-append">
             <button type="submit" name="submit" class="btn btn-default">Search</button>
           </div>

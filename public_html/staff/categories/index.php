@@ -44,7 +44,7 @@ include '../_common-html-render.php';
         echo tableIsEmpty();
         
       else: ?>
-        <?php echo tableSearchForm() ?>
+        <?php echo tableSearchForm('Category') ?>
 
         <div class="loadContentJS" data-access="admin_category">
           <table class="table table-striped table-bordered table-hover table-light <?php echo TABLE_SIZE ?>">

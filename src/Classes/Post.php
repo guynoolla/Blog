@@ -60,6 +60,26 @@ class Post extends \App\Classes\DatabaseObject {
     $this->image_obj = $image_obj;
   }
 
+  public function setStatus($cmd) {
+    switch($cmd) {
+      case 'approve':
+              $this->approved = '1';
+              return true;
+      case 'disapprove': 
+              $this->approved = '0';
+              return true;
+      case 'publish': ;
+              $this->published = '1';
+              return true;
+      case 'unpublish': ;
+              $this->approved = '0';
+              $this->published = '0';
+              return true;
+      default:
+              return false;
+    }
+  }
+
   public function excerpt() {
     return (substr(strip_tags($this->body), 0, 150) . '...');
   }

@@ -176,7 +176,7 @@ if (!$edit): ?>
 
   <?php
     if ($edit) {
-      if ($session->isAdmin() && (!$post->published && !$post->approved)):
+      if (!$post->published && !$post->approved):
         $data = no_gaps_between("
           table-posts,
           id-{$post->id},

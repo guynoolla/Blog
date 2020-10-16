@@ -17,8 +17,7 @@ a.svg-icon-btn {
 
 }
 
-.svg-social,
-.svg-icon {
+.svg-social, .svg-icon {
   fill:#6d6e72;
   height: 100%;
   width: auto;
@@ -36,9 +35,4 @@ a.svg-icon-btn {
     max-width: 84%;
   }
 
-  &--small {
-    height: 90%;
-    width: auto;
-    max-width: 90%;
-  }
 }

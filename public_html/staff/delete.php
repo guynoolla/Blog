@@ -7,10 +7,6 @@ use App\Classes\File;
 
 require_once('../../src/initialize.php');
 
-// Check Admin >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-if (!$session->isAdmin()) redirect_to(url_for('/index.php'));
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Check Admin
-
 $forbidden = false;
 
 if (is_get_request()) { // GET request
@@ -20,6 +16,11 @@ if (is_get_request()) { // GET request
 
   if ($table && $id) {
     if ($table == 'users') {
+
+    // Only Admin can delete users >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+      if (!$session->isAdmin()) redirect_to(url_for('/index.php'));
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Only Admin can delete users
+
       $page_title = 'Delete User';
       $object = User::findById($id);
       $warning = <<<EOT
@@ -27,6 +28,11 @@ if (is_get_request()) { // GET request
         You can't delete the user, which has posts unless you delete those posts!</p></p>
 EOT;
     } else if ($table == 'categories') {
+
+    // Only Admin can delete categories >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+      if (!$session->isAdmin()) redirect_to(url_for('/index.php'));
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Only Admin can delete categories
+
       $page_title = 'Delete Category';
       $object = Category::findById($id);
       $warning = <<<EOT
@@ -36,6 +42,11 @@ EOT;
     } else if ($table == 'posts') {
       $page_title = 'Delete Post';
       $object = Post::findById($id);
+
+    // User can delete only own post >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+      if ($session->getUserId() != $object->user_id) redirect_to(url_for('/index.php'));
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< User can delete only own Post
+
       $warning = <<<EOT
         <p>Are you sure you want to delete the post <strong class="font-weight-bold">$object->title</strong>?<br>
         This post will be permanently deleted!</p>

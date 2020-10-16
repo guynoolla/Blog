@@ -5,12 +5,12 @@ use App\Classes\Pagination;
 
 require_once '../../src/initialize.php';
 
-$target = $_POST['target'] ?? "";
-$user_id = $_POST['uid'] ?? "";
-
-if (!$session->isLoggedIn() || $user_id != $session->getUserId()) {
+if (!$session->isAdmin()) {
   exit;
 }
+
+$target = $_GET['target'] ?? "";
+$user_id = $_GET['uid'] ?? "";
 
 switch($target) {
   case 'admin_user_by_search':
@@ -20,16 +20,16 @@ switch($target) {
   case 'admin_user_by_userType_order':
   case 'admin_user_by_date_order':
   case 'admin_user_by_date':
-        if ($session->isAdmin()) admin_user_data($_POST['data']);
-        break;
+          admin_user_data($_GET['data']);
+          break;
   case 'admin_category_by_search':
   case 'admin_category_by_date_order':
   case 'admin_category_by_date':
   case 'admin_category_by_name_order':
-        if ($session->isAdmin()) admin_category_data($_POST['data']);
-        break;
+          admin_category_data($_GET['data']);
+          break;
   default:
-        exit(json_encode(['target' => 'error']));
+          exit(json_encode(['target' => 'error']));
 }
 
 function admin_category_data($data) {

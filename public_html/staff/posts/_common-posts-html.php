@@ -14,76 +14,80 @@ function td_actions_column_fst($post, $is_admin=false, $url="") {
 
   ob_start();
 
-  ?><td scope="colgroup">
-    <?php if (!$post->published): ?>
-      <a class="btn-lk btn-lk--secondary" href="<?php echo url_for($url . '?id=' . $post->id . '&cmd=edit')
-        ?>">edit</a>
-    <?php else:
-      if (!$is_admin): ?>
-        <a class="btn-lk btn-lk--light disabled text-center d-block">
-          <small class="text-dark"><?php
-            echo ($post->approved ? '&ndash;' : 'on moderation')
-          ?></small>
-        </a>
-      <?php else: ?>
-        <?php if ($post->approved): ?>
-          <a class="btn btn-sm disabled text-center d-block">&ndash;</a>
-        <?php else: ?>
-          <a class="btn-lk btn-lk--primary" href="<?php echo url_for($url . '?id=' . $post->id . '&cmd=unpublish')
+  ?><td scope="colgroup"><?php 
+    if (!$post->published):
+      
+      ?><a class="btn-lk btn-lk--secondary" href="<?php echo url_for($url . '?id=' . $post->id . '&cmd=edit')
+      ?>" data-key="fst_col" data-cmd="false" data-pid="<?php echo $post->id
+      ?>">edit</a><?php
+    
+    else:
+      if (!$is_admin):
+
+        if ($post->approved): ?>
+          <a class="btn-lk btn-lk--light disabled text-center d-block"
+            data-key="fst_col" data-cmd="false" data-pid="<?php echo $post->id ?>"
+          ><small class="text-dark">&ndash;</small></a><?php
+        else: ?>
+          <a class="btn-lk btn-lk--primary" href="<?php echo url_for($url . '?id=' . $post->id . '&cmd=publish')
+          ?>" data-key="fst_col" data-cmd="unpublish" data-pid="<?php echo $post->id
           ?>">unpublish</a><?php
         endif;
+
+      else:
+
+        if ($post->approved): ?>
+          <a data-key="fst_col" data-cmd="false" data-pid="<?php echo $post->id
+          ?>" class="btn btn-sm disabled text-center d-block">&ndash;</a><?php
+        else: ?>
+          <a class="btn-lk btn-lk--primary" href="<?php echo url_for($url . '?id=' . $post->id . '&cmd=unpublish')
+          ?>" data-key="fst_col" data-cmd="unpublish" data-pid="<?php echo $post->id ?>">unpublish</a><?php
+        endif;
+
       endif;
-    endif; ?>
-  </td><?php
+    endif;
+  ?></td><?php
 
-  $output = ob_get_contents();
-  ob_end_clean();
-
-  return $output;
+  return ob_get_clean();
 }
 
 function td_actions_column_snd($post, $is_admin, $url="") {
-  if ($is_admin) {
 
-    if (!$url) {
-      if (url_contain('staff/posts/index')) {
-        $url = 'staff/posts/index.php';
-      } elseif (url_contain('staff/posts/published')) {
-        $url = 'staff/posts/published.php';
-      } elseif (url_contain('staff/posts/approved')) {
-        $url = 'staff/posts/approved.php';
-      }
+  if (!$url) {
+    if (url_contain('staff/posts/index')) {
+      $url = 'staff/posts/index.php';
+    } elseif (url_contain('staff/posts/published')) {
+      $url = 'staff/posts/published.php';
+    } elseif (url_contain('staff/posts/approved')) {
+      $url = 'staff/posts/approved.php';
     }
-
-    ob_start();
-
-    ?><td scope="colgroup">
-
-    <?php if (!$post->published): ?>
-      <a class="btn-lk btn-lk--primary" href="<?php echo url_for($url . '?id=' . $post->id . '&cmd=publish')
-      ?>" data-adm="own" data-cmd="publish" data-pid="<?php echo $post->id ?>">publish</a>
-
-    <?php elseif ($post->published && !$post->approved): ?>
-      <a class="btn-lk btn-lk--success" href="<?php echo url_for($url . '?id=' . $post->id . '&cmd=approve')
-      ?>" data-adm="own"  data-cmd="approve" data-pid="<?php echo $post->id ?>">approve</a>
-    
-    <?php elseif ($post->published && $post->approved): ?>
-      <a class="btn-lk btn-lk--warning" href="<?php echo url_for($url . '?id=' . $post->id . '&cmd=disprove')
-      ?>" data-adm="own" data-cmd="disprove" data-pid="<?php echo $post->id ?>">disprove</a>
-
-    <?php else: ?>
-      <a class="btn btn-sm disabled text-center d-block">&ndash;</a>
-    <?php endif; ?>
-    
-    </td><?php
-
-    $output = ob_get_contents();
-    ob_end_clean();
-
-    return $output;
   }
 
-  return '';
+  ob_start();
+
+  ?><td scope="colgroup">
+
+  <?php if (!$post->published): ?>
+    <a class="btn-lk btn-lk--primary" href="<?php echo url_for($url . '?id=' . $post->id . '&cmd=publish')
+    ?>" data-key="snd_col" data-cmd="publish" data-pid="<?php echo $post->id ?>">publish</a>
+
+  <?php elseif ($is_admin && $post->published && !$post->approved): ?>
+    <a class="btn-lk btn-lk--success" href="<?php echo url_for($url . '?id=' . $post->id . '&cmd=approve')
+    ?>" data-key="snd_col" data-cmd="approve" data-pid="<?php echo $post->id ?>">approve</a>
+  
+  <?php elseif ($is_admin && $post->published && $post->approved): ?>
+    <a class="btn-lk btn-lk--warning" href="<?php echo url_for($url . '?id=' . $post->id . '&cmd=disapprove')
+    ?>" data-key="snd_col" data-cmd="disapprove" data-pid="<?php echo $post->id ?>">disapprove</a>
+
+  <?php else: ?>
+    <a data-key="snd_col" data-cmd="false" data-pid="<?php echo $post->id ?>" class="btn btn-sm disabled text-center d-block">
+      <?php echo $post->published ? 'awaiting approvement' : '&ndash;' ?>
+    </a>
+  <?php endif; ?>
+  
+  </td><?php
+
+  return ob_get_clean();
 }
 
 function td_post_title($post, $group=false) {
@@ -101,10 +105,7 @@ function td_post_title($post, $group=false) {
     </td><?php
   endif;
 
-  $output = ob_get_contents();
-  ob_end_clean();
-
-  return $output;
+  return ob_get_clean();
 }
 
 function td_post_author($post, $access) {
@@ -121,11 +122,11 @@ function td_post_status($post, $access) {
   $output = '';
 
   if ($post->published == 0) {
-    $output .= "<td class=\"text-secondary\"><a href=\"#draft\" class=\"click-load\" data-type=\"status\" data-value=\"draft\" data-access=\"{$access}\">draft</a></td>";
+    $output .= "<td class=\"text-secondary\" data-pid=\"{$post->id}\"><a href=\"#draft\" class=\"click-load\" data-type=\"status\" data-value=\"draft\" data-access=\"{$access}\">draft</a></td>";
   } elseif ($post->published == 1 && $post->approved == 0) {
-    $output .= "<td class=\"text-primary\"><a href=\"#published\" class=\"click-load\" data-type=\"status\" data-value=\"published\" data-access=\"{$access}\">published</a></td>";
+    $output .= "<td class=\"text-primary\" data-pid=\"{$post->id}\"><a href=\"#published\" class=\"click-load\" data-type=\"status\" data-value=\"published\" data-access=\"{$access}\">published</a></td>";
   } elseif ($post->published == 1 && $post->approved == 1) {
-    $output .= "<td class=\"text-success\"><a href=\"#approved\" class=\"click-load\" data-type=\"status\" data-value=\"approved\" data-access=\"{$access}\">approved</a></td>";
+    $output .= "<td class=\"text-success\" data-pid=\"{$post->id}\"><a href=\"#approved\" class=\"click-load\" data-type=\"status\" data-value=\"approved\" data-access=\"{$access}\">approved</a></td>";
   }
 
   return $output;

@@ -39,7 +39,7 @@ include '../_common-html-render.php';
         echo tableIsEmpty();
 
       else: ?>
-        <?php echo tableSearchForm() ?>
+        <?php echo tableSearchForm('Username') ?>
 
         <div class="loadContentJS" data-access="admin_user">
           <table class="table table-striped table-bordered table-hover table-light <?php echo TABLE_SIZE ?>">

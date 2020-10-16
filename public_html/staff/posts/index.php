@@ -18,36 +18,19 @@ if (isset($_GET['id'])) {
 
   if (!$cmd || !$post) redirect_to(url_for('staff/index.php'));
 
-  if ($session->isAdmin()) {
-    $message = '';
-
-    if ($cmd == 'publish') {
-      $post->published = '1';
-      $message = "The post '" . $post->title . "' was published.";
-
-    } elseif ($cmd == 'unpublish') {
-      $post->published = '0';
-      $post->approved = '0';
-      $message = "The post '" . $post->title . "' was unpublished.";
-    
-    } elseif ($cmd == 'approve') {
-      $post->approved = '1';
-      $message = "The post '" . $post->title . "' was approved.";
-
-    } elseif ($cmd == 'disprove') {
-      $post->published = '0';
-      $post->approved = '0';
-      $message = "The post '" . $post->title . "' was disapproved.";
-    }
-
-    if ($message && $post->save()) {
-      $session->message($message);
-      redirect_to(url_for('staff/posts/index.php'));
-    }
-  }
-
   if ($cmd == 'edit') {
     redirect_to(url_for('staff/posts/edit.php?id=' . $_GET['id']));
+  }
+
+  if ($session->isAdmin()) {
+
+    if ($post->setStatus($cmd)) {
+      if ($post->save()) {
+        $session->message("Action 'post {$cmd}' is complete!");
+
+        redirect_to(url_for('staff/posts/index.php'));
+      }      
+    }
   }
 
 }
@@ -92,7 +75,7 @@ include '../_common-html-render.php';
         echo tableIsEmpty();
 
       else: ?>
-        <?php echo tableSearchForm() ?>
+        <?php echo tableSearchForm('Post title') ?>
 
         <div class="loadContentJS" data-access="own_post">
           <table class="table table-bordered table-hover table-light <?php echo TABLE_SIZE ?>">
