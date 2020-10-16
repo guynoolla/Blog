@@ -50,7 +50,7 @@ include '../_common-html-render.php';
                 <th scope="col">Email</th>
                 <th scope="col"><a href="#user-type" class="click-load" data-access="admin_user" data-value="asc" data-type="userType_order">Type</a></th>
                 <th scope="col"><a href="#since" class="click-load" data-access="admin_user" data-value="asc" data-type="date_order">Since</a></th>
-                <th scope="col"><a href="#posted" class="click-load" data-access="admin_user" data-value="asc" data-type="approved_order">Posted</a></th>
+                <th scope="col"><a href="#posted" class="click-load" data-access="admin_user" data-value="asc" data-type="approved_order">Posts</a></th>
                 <th scope="colgroup" colspan="2">Actions</th>
               </tr>
             </thead>
@@ -62,8 +62,9 @@ include '../_common-html-render.php';
                 <td><a href="mailto: <?php echo $user->email ?>" class="<?php echo ($user->email_confirmed ? 'text-success' : '') ?>"><?php echo $user->email ?></a></td>
                 <td><a href="#user-type" data-type="user_type" data-value="<?php echo $user->user_type ?>" data-access="admin_user" class="click-load"><?php echo $user->user_type ?></a></td>
                 <td><a href="#ondate" data-type="date" data-value="<?php echo $user->created_at ?>" data-access="admin_user" class="click-load"><?php echo date('M j, Y', strtotime($user->created_at)) ?></a></td>
-                <td><?php echo $user->posted ?> - <span class="text-success font-weight-bold">
-                  <?php echo $user->approved ?></span>
+                <td><?php echo $user->posted ?> 
+                  - <span class="text-primary font-weight-bold"><?php echo $user->published ?></span>
+                  - <span class="text-success font-weight-bold"><?php echo $user->approved ?></span>
                 </td>
                 <td scope="colgroup" colspan="1">
                   <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('/staff/users/edit.php?id=' . $user->id) ?>">

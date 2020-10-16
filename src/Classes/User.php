@@ -37,6 +37,7 @@ class User extends \App\Classes\DatabaseObject {
   // Relational data by foreign key in posts
   public $posted = "";
   public $approved = "";
+  public $published = "";
 
   public function __construct(array $args=[]) {
     $this->username = $args['username'] ?? "";
@@ -330,6 +331,7 @@ class User extends \App\Classes\DatabaseObject {
   static public function queryUsersWithPostsNum(int $per_page, int $offset) {
     $sql = <<<SQL
           SELECT u.*, COUNT(p.user_id) AS posted,
+          SUM(if (p.published = '1', 1, 0)) AS published,
           SUM(if (p.approved = '1', 1, 0)) AS approved
           FROM `users` AS u LEFT JOIN `posts` AS p
           ON u.id = p.user_id

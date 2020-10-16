@@ -25,19 +25,17 @@ $(() => {
         title = "Delete User";
         body = `<p>Are you sure you want to delete the user
           <strong class="font-weight-bold">${data.username}</strong>?<br>
-          You can not delete the user which has posts,<br>
-          unless you delete those posts first!</p>`;
+          It is unable to delete the user, which has existing posts.</p>`;
       
         } else if (data.table == "categories") {
         title = "Delete Category";
         body = `<p>Are you sure you want to delete the category
           <strong class="font-weight-bold">${data.name}</strong>?<br>
-          If there are posts under this category you can not delete it,<br>
-           unless you delete those posts first!</p>`;
+          It is unable to delete the category which has existing posts.</p>`;
       
       } else if (data.table == "posts") {
         title = "Delete Post";
-        body = `<p>Are you sure you want to delete the post <strong class="font-weight-bold">${data.title}</strong>?<br>
+        body = `<p>Are you sure you want to delete the post<br> <strong class="font-weight-bold">${data.title}</strong> ?<br>
         This post will be permanently deleted!</p>`;
       }
     
@@ -159,7 +157,6 @@ function currentModal(type, title, body, data=false, urlToPost=false) {
     modal.find(".modal-title").text(title);
     modal.find(".modal-body").html(body);
     modal.find(".modal-body").addClass(`alert-${type}`);
-    modal.find(".modal-title").addClass(`text-${type}`);
     
     if (data !== false && urlToPost !== false) {
       modal.find("form").attr("action", urlToPost);

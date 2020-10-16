@@ -86,7 +86,7 @@ include '../_common-html-render.php';
                 <th scope="col">Category</th>
                 <th scope="col">Status</th>
                 <th scope="col"><a href="#created" class="click-load" data-access="own_post" data-value="asc" data-type="date_order">Updated</a></th>
-                <th scope="colgroup" colspan="3">Action</th>
+                <th scope="colgroup" colspan="3">Actions</th>
               </tr>
             </thead>
             <tbody>

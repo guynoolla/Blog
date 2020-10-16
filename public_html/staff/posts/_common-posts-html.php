@@ -80,8 +80,8 @@ function td_actions_column_snd($post, $is_admin, $url="") {
     ?>" data-key="snd_col" data-cmd="disapprove" data-pid="<?php echo $post->id ?>">disapprove</a>
 
   <?php else: ?>
-    <a data-key="snd_col" data-cmd="false" data-pid="<?php echo $post->id ?>" class="btn btn-sm disabled text-center d-block">
-      <?php echo $post->published ? 'awaiting approvement' : '&ndash;' ?>
+    <a data-key="snd_col" data-cmd="false" data-pid="<?php echo $post->id ?>" class="btn btn-sm btn--text disabled">
+      <?php echo $post->published ? 'awaiting <br>approval' : '&ndash;' ?>
     </a>
   <?php endif; ?>
   

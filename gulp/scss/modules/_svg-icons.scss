@@ -30,9 +30,14 @@ a.svg-icon-btn {
   }
 
   &--middle {
+    height: 75%;
+    width: auto;
+    max-width: 75%;
+  }
+
+  &--large {
     height: 84%;
     widht: auto;
     max-width: 84%;
   }
-
 }

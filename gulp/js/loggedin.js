@@ -12,7 +12,7 @@ import Cookies from 'js-cookie';
 $(() => {
 
   new LikedPosts();
-  new PostStatus();
+  const postStatus = new PostStatus();
 
   /*
    -- Toggle Admin Sidebar -------------------------------------------- */
@@ -235,6 +235,8 @@ $(() => {
  
          loadPostBox(data);
          pagData.params(type, value, access, data[2].total_count);
+
+         postStatus.actionsClickHandler();
        },
        error: err => console.log(err)
      })
@@ -273,7 +275,7 @@ $(() => {
             loadPostBox(data);
             pagData.params(type, value, access, data[2].total_count);
 
-            console.log('pagData.total', pagData.total);
+            postStatus.actionsClickHandler();
           },
           error: err => console.log(err)
        })
@@ -305,6 +307,8 @@ $(() => {
            loadPostBox(data);
            pagData.pageNum(page);
            $('#item-' + page).addClass("active");
+
+           postStatus.actionsClickHandler();
            
            //clearTimeout(timer);
          //}, 1200)
