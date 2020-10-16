@@ -28,7 +28,7 @@ if (is_post_request()) {
       $mailer->send($email, 'Password reset', $text, $html);
 
     } catch(Exception $e) {
-      exit('Fail to mail...');
+      exit('Swiftmailer fail to mail. Something wrong with SMTP.');
     }
    
     redirect_to(url_for('password/forgot.php?r=reset'));

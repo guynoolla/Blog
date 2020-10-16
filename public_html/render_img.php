@@ -4,7 +4,7 @@ $width = $_GET['w'] ?? 0;
 $image = $_GET['img'] ?? '';
 $image = $image ? urldecode($image) : '';
 $dir = './assets/images';
-$valid_widths = [420, 640, 800, 1025];
+$valid_widths = [400, 640, 800, 1025];
 
 if (!file_exists($dir.$image) || !in_array($width, $valid_widths)) {
   exit('Wrong parameters.');

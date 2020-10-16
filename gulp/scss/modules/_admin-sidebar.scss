@@ -144,11 +144,11 @@
   Icons ---------------------------------- */ 
 
   .fa-primary {
-    color: #AC73C6;
+    color: darken($light-dark-read-blue, 5); //#AC73C6;
   }
 
   .fa-secondary {
-    color: #B785CE;
+    color: $light-dark-read-blue; //#B785CE;
   }
 
   .fa-primary,

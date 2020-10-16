@@ -228,7 +228,7 @@ function formAlert(type="", errors, title=false) {
   }
 
   if (!title) {
-    title = (type == "right") ? "correct format" : "wrong format";
+    title = (type == "right") ? "correct" : "wrong";
   }
   
   let arr = [];

@@ -13,10 +13,15 @@ if (is_post_request()) {
       $mailer = new \App\Contracts\Mailer;
       $text = strip_tags($message);
       
-      $mailer->send(ADMIN_EMAIL, $jsonstore->site->siteName, $text, $message);
-      $session->message('Thank you for your message!');
-      redirect_to(url_for('index.php'));
-    
+      try {
+        $mailer->send(ADMIN_EMAIL, $jsonstore->site->siteName, $text, $message);
+        $session->message('Thank you for your message!');
+        redirect_to(url_for('index.php'));
+
+      } catch(Exception $e) {
+        $alert = 'Sorry, server error occured. Please try again later.';
+      }
+
     } else {
       $session->store([
         'fp_captcha_err' => 'Captcha validation failed, try again.',

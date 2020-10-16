@@ -2,7 +2,7 @@
     "siteName": "Light Kite",
     "siteDescription": "Just another theme by Gainulla",
     "perPageNumBackend": "5",
-    "perPageNumFrontend": "7",
+    "perPageNumFrontend": "6",
     "tableSize": "table-sm",
     "color": {
         "siteName": "#5aaee2",

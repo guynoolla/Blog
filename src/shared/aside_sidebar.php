@@ -73,7 +73,7 @@ function widget_posts($jsonstore) {
         <div class="post">
           <div class="post-image ">
             <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
-              <img src="<?php echo url_for('render_img.php?img='. u($post->image) .'&w=420') ?>" style="object-fit:cover" width="150" height="150">
+              <img src="<?php echo url_for('render_img.php?img='. u($post->image) .'&w=400') ?>" style="object-fit:cover" width="150" height="150">
             </a>
           </div> 
           <div class="post-content">

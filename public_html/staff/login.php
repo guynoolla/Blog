@@ -1,6 +1,7 @@
 <?php
 require_once '../../src/initialize.php';
 
+$user = false;
 $username = '';
 $password = '';
 $errors = [];
@@ -17,8 +18,11 @@ if (is_post_request()) {
     $errors[] = 'Password cannot be blank.';
   }
 
-  $user = App\Classes\User::findByUsername($username);
-  $user = !$user ? App\Classes\User::findByEmail($username) : $user;
+  if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
+    $user = App\Classes\User::findByEmail($username);
+  } else {
+    $user = App\Classes\User::findByUsername($username);
+  }
 
   if (empty($errors)) {
     if ($user && $user->verifyPassword($password)) {

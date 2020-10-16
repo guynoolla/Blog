@@ -25,8 +25,12 @@ if ($email) {
     $html .= "click here to confirm your email address.";
     $html .= "</a></p>";
     
-    $mailer = new Mailer;
-    $mailer->send($email, 'Email confirmation', $text, $html);
+    try {
+      $mailer = new Mailer;
+      $mailer->send($email, 'Email confirmation', $text, $html);
+    } catch(Exception $e) {
+      exit('Swiftmailer fail to mail. Something wrong with SMTP.');
+    }
 
     redirect_to(url_for('email/user_mailed.php'));
   }

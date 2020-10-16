@@ -32,7 +32,7 @@ class Post extends \App\Classes\DatabaseObject {
   protected $image_aspect_ratio = ['min'=>1.4, 'max'=>1.8];
 
   static public $resize_dimensions = [
-              ['width' => 420, 'height' => 240],
+              ['width' => 400, 'height' => 230],
               ['width' => 640, 'height' => 365],
               ['width' => 800, 'height' => 450],
               ['width' => 1025, 'height' => 580]
@@ -300,7 +300,7 @@ class Post extends \App\Classes\DatabaseObject {
     $sql = self::getJoins();
     $sql .= <<<SQL
             WHERE p.approved = '1'
-            ORDER BY p.created_at DESC
+            ORDER BY p.published_at DESC
 SQL;
     $sql .= " LIMIT {$per_page} OFFSET {$offset}";
     return self::findBySql($sql);
@@ -312,7 +312,7 @@ SQL;
     $sql .= <<<SQL
             WHERE p.approved = 1
               AND ( p.title LIKE '%$term%' OR p.body LIKE '%$term%' )
-            ORDER BY p.created_at DESC
+            ORDER BY p.published_at DESC
 SQL;
     $sql .= " LIMIT {$per_page} OFFSET {$offset}";
     return self::findBySql($sql);
@@ -323,7 +323,7 @@ SQL;
     $sql = self::getJoins();
     $sql .= <<<SQL
             WHERE p.approved = '1' AND p.category_id = $tid
-            ORDER BY p.created_at DESC
+            ORDER BY p.published_at DESC
 SQL;
     $sql .= " LIMIT {$per_page} OFFSET {$offset}";
     return self::findBySql($sql);
@@ -334,7 +334,7 @@ SQL;
     $sql = self::getJoins();
     $sql .= <<<SQL
             WHERE p.approved = 1 AND p.user_id = $uid
-            ORDER BY p.created_at DESC
+            ORDER BY p.published_at DESC
 SQL;
     $sql .= " LIMIT {$per_page} OFFSET {$offset}";
     return self::findBySql($sql);
@@ -344,8 +344,8 @@ SQL;
     $sql = self::getJoins();
     $sql .= <<<SQL
             WHERE p.approved = '1'
-            AND ( p.created_at >= '{$dates['date_min']}'
-            AND p.created_at < '{$dates['date_max']}' )
+            AND ( p.published_at >= '{$dates['date_min']}'
+            AND p.published_at < '{$dates['date_max']}' )
 SQL;
     $sql .= " LIMIT {$per_page} OFFSET {$offset}";
     return self::findBySql($sql);
@@ -361,7 +361,7 @@ SQL;
     $sql = self::getJoins();
     $sql .= <<<SQL
           WHERE p.id in ($ids_str) AND p.approved = '1'
-          ORDER BY p.created_at DESC
+          ORDER BY p.published_at DESC
 SQL;
     $sql .= " LIMIT {$per_page} OFFSET {$offset}";
     return self::findBySql($sql);
@@ -371,7 +371,7 @@ SQL;
     $sql = self::getJoins();
     $sql .= <<<SQL
             WHERE p.approved = '1' AND format = 'image'
-            ORDER BY p.created_at DESC
+            ORDER BY p.published_at DESC
             LIMIT {$count};
 SQL;
     return self::findBySql($sql);
