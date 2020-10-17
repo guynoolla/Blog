@@ -1,6 +1,7 @@
 {
     "siteName": "Light Kite",
     "siteDescription": "Just another theme by Gainulla",
+    "showCategoryDescription": true,
     "perPageNumBackend": "5",
     "perPageNumFrontend": "6",
     "tableSize": "table-sm",

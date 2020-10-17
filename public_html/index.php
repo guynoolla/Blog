@@ -141,17 +141,19 @@ include SHARED_PATH . '/carousel.php';
   
     <?php
     if ($headline): ?>
-      <div class="col-12 text-center border-top border-bottom border-soft rounded">
-        <h3 class="text-center my-4"><?php echo $headline ?></h3>
+      <div class="col-12 py-4 text-center border-top border-bottom border-soft rounded">
+        <h3 class="text-center my-0"><?php echo $headline ?></h3><?php
+        if ($type == 'category') {
+          if ($category->description && $jsonstore->showCategoryDescription): ?>
+            <p class="w-100 text-center mt-0"><?php
+              echo $category->description ?>
+            </p><?php 
+          endif;
+        } ?>
       </div><?php
-      if ($type == 'category' && $category->description): ?>
-        <p class="w-100 text-center my-3"><?php
-          echo $category->description ?>
-        </p><?php 
-      endif;
     endif;
-    ?>
 
+    ?>
     <main class="main col-lg-8" role="main" id="homeMain">
       <div class="main-content">
       <?php 
