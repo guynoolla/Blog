@@ -141,15 +141,14 @@ include SHARED_PATH . '/carousel.php';
   
     <?php
     if ($headline): ?>
-      <div class="col-12 text-center bg-light border border-soft rounded mt-1 px-1">
-        <h3 class="text-center mt-3 mb-2"><?php echo $headline ?></h3>
-        <?php
-        if ($type == 'category' && $category->description): ?>
-          <p class="w-100 lead text-center mb-3 mt-0"><?php
-            echo $category->description ?>
-          </p><?php 
-        endif; ?>
+      <div class="col-12 text-center border-top border-bottom border-soft rounded">
+        <h3 class="text-center my-4"><?php echo $headline ?></h3>
       </div><?php
+      if ($type == 'category' && $category->description): ?>
+        <p class="w-100 text-center my-3"><?php
+          echo $category->description ?>
+        </p><?php 
+      endif;
     endif;
     ?>
 

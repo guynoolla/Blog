@@ -56,8 +56,8 @@ include(SHARED_PATH . '/public_header.php');
 <div class="container-md">
   <div class="row">
 
-    <div class="col-12 text-center bg-light border border-soft rounded mt-1 px-1">
-      <h3 class="my-3"><a href="<?php
+    <div class="col-12 text-center border-top border-bottom border-soft rounded mt-0">
+      <h3 class="my-4"><a href="<?php
         echo url_for('category/') . u($category->name) . '?tid=' . $category->id
         ?>" title="<?php echo $category->name ?>"><?php echo $category->name
       ?></a></h3>

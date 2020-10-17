@@ -2,14 +2,13 @@
  Section Logo */
 
 .first-top-padding {
-  padding-top: 5.5rem;
+  padding-top: 4.9rem;
 }
 
 .logo {
   position: relative;
-  padding-bottom: 3.5rem;
-  background-color: #f8f9fa;
-  font-size: 1rem;
+  padding-bottom: 3.3rem;
+  background-color: #fdfeff; //#f8f9fa;
 
   .logo-content {
     width: 100%;
@@ -17,18 +16,20 @@
 
     .brand {
       display: block;
-      font-size: 1.8em;
-      font-weight: 400;
-      letter-spacing: .05em;
+      font-family: "Open Sans", sans-serif;
+      font-size: 2.4em;
+      font-weight: 300;
+      letter-spacing: .07em;
       text-transform: uppercase;
-      margin-bottom: .5em;
+      margin-bottom: .3em;
       a {
         color: $blue;
       }
     }
 
     .description {
-      font-size: 1em;
+      font-family: "Montserrat", sans-serif;
+      font-size: .9em;
       line-height: 1;
       letter-spacing: .05em;
       color: $dark1;

@@ -59,7 +59,7 @@ if (url_contain(['/pasword/', '/email/', '/staff/login', '/staff/register'])) {
 
 <header id="page-top">
 
-  <nav class="nav-ini-hide navbar navbar-expand-md navbar-light fixed-top bg-light" id="hideByScroll">
+  <nav class="nav-ini-hide navbar navbar-expand-md navbar-light fixed-top" id="hideByScroll">
     <div class="container">
       <!-- <a class="navbar-brand d-sm-none" href="#">Kite</a> -->
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
