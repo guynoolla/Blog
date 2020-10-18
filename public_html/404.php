@@ -14,7 +14,7 @@ include(SHARED_PATH . '/public_header.php');
 
         <div class="row pt-5 firstTopPaddingJS">
           <div class="col">
-            <h2 class="my-2 d-block text-center"><?php echo $jsonstore->site->siteName ?></h2>
+            <h2 class="my-2 d-block text-center"><?php echo $jsonstore->siteName ?></h2>
           </div>
         </div>
 

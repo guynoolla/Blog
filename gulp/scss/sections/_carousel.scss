@@ -55,8 +55,8 @@
           background-color: rgba(0, 0, 0, .6);
           transition: background-color 600ms ease-in;
           height: 27.5em;
-          padding: 6em 4em;
-          padding-bottom: 4em;
+          padding: 4em 4em;
+          padding-bottom: 6em;
           z-index: 801;
           text-align: center;
           display: flex;
@@ -69,7 +69,6 @@
           }
 
           h2 {
-            width: 100%;
             font-size: 1.6em;
             letter-spacing: .02em;
             font-weight: 300;
@@ -93,6 +92,7 @@
       margin-top: -27.5em;
       margin-left: auto;
       margin-right: auto;
+      text-align: center;
       
       a.slider-btn {
         position: absolute;
@@ -148,6 +148,14 @@
       width: 2.5rem;
       border-bottom: 2px solid $kite-color;
       padding-top: .7em;
+    }
+  }
+}
+
+@media (min-width: 1600px) {
+  .carousel .carousel-content{
+    .slider {
+      max-width: 2560px;
     }
   }
 }

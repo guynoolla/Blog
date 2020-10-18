@@ -26,22 +26,18 @@ if (!isset($page_title)) {
   <link rel="icon" type="image/png" sizes="16x16" href="<?php echo url_for('/favicon-16x16.png') ?>">
   <link rel="manifest" href="<?php echo url_for('/site.webmanifest') ?>">
   <style>
-  <?php if ($jsonstore->color->lineUnderTitle != ""): ?>
+  <?php if ($jsonstore->siteMainColor): ?>
     .sidebar .sidebar-content .widget .title::after {
-      border-bottom: 2px solid <?php echo $jsonstore->color->lineUnderTitle; ?> !important;
+      border-bottom: 2px solid <?php echo $jsonstore->siteMainColor; ?> !important;
     }
     .category.category--dark::after {
-      border-bottom: 2px solid <?php echo $jsonstore->color->lineUnderTitle; ?> !important;
+      border-bottom: 2px solid <?php echo $jsonstore->siteMainColor; ?> !important;
     }
-  <?php endif; ?>
-  <?php if ($jsonstore->color->siteName != ""): ?>
     .logo .logo-content .brand a {
-      color: <?php echo $jsonstore->color->siteName ?> !important;
+      color: <?php echo $jsonstore->siteMainColor ?> !important;
     }
-  <?php endif; ?>
-  <?php if ($jsonstore->color->toTopBtnHover != ""): ?>
     .scroll-to-top:hover, .scroll-to-top:focus {
-      background-color: <?php echo $jsonstore->color->toTopBtnHover ?> !important;
+      background-color: <?php echo $jsonstore->siteMainColor ?> !important;
     }
   <?php endif ?>
   </style>

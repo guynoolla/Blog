@@ -6,7 +6,7 @@ import { preventExtensions } from 'core-js/fn/object';
 import Breakpoint from 'bootstrap-breakpoints';
 import Like from './modules/Like';
 import FormValidate from './modules/FormValidateRules';
-import { forEach } from 'core-js/fn/array';
+import { find, forEach } from 'core-js/fn/array';
 
 window.jQuery = $;
 
@@ -14,7 +14,7 @@ $(() => {
 
   Breakpoint.init();
 
-  slickCarousel(server.slider);
+  slickCarousel(server.slider, Breakpoint.current());
   navbarSearchBehavior();
   homePagePaginationBehavior();
 
@@ -330,7 +330,7 @@ function navbarSearchBehavior() {
   })
 }
 
-function slickCarousel(settings) {
+function slickCarousel(settings, current) {
   const carousel = $(".carousel")
   const content = carousel.find(".carousel-content");
   const slider = carousel.find(".slider");
@@ -338,42 +338,88 @@ function slickCarousel(settings) {
   if (typeof slider.slick == "function") {
     carousel.find(".carousel-spinner").removeClass("d-none");
 
+    if (settings.centerModeChevronsNone && (current != 'xs')) {
+      console.log("Sure!!");
+      $(".carousel .slider-nav .slider-btn svg")
+         .attr("style", "display: none !important;");
+      $(".carousel .slider .slider-post-text").on("mouseenter", (e) => {
+        $(".carousel .slider .slick-slide").removeClass("cursor-point");
+        if ($(e.target).closest(".slick-slide").hasClass("slick-current")) {
+          return false;
+        } else {
+          $(e.target).closest(".slick-slide").addClass("cursor-point");
+        }
+      })
+    }
+
     slider.slick({
       autoplay: settings.autoplay,
+      autoplaySpeed: settings.autoplaySpeed,
+      speed: settings.speed,
       dots: settings.dots,
       infinite: settings.infinite,
-      speed: settings.speed,
       slidesToShow: settings.slidesToShow,
       slidesToScroll: settings.slidesToScroll,
+      centerPadding: settings.centerPadding,
+      centerMode: settings.centerMode,
       nextArrow: $('.next'),
       prevArrow: $('.prev'),
       cssEase: "linear",
+      focusOnSelect: settings.focusOnSelect,
       responsive: [
+        {
+          breakpoint: 2000,
+          settings: {
+            dots: settings.less2000w.dots,
+            infinite: settings.less2000w.infinite,
+            slidesToShow: settings.less2000w.slidesToShow,
+            slidesToScroll: settings.less2000w.slidesToScroll,
+            centerPadding: settings.less2000w.centerPadding,
+            centerMode: settings.less2000w.centerMode,
+          }
+        },
+        {
+          breakpoint: 1600,
+          settings: {
+            dots: settings.less1600w.dots,
+            infinite: settings.less1600w.infinite,
+            slidesToShow: settings.less1600w.slidesToShow,
+            slidesToScroll: settings.less1600w.slidesToScroll,
+            centerPadding: settings.less1600w.centerPadding,
+            centerMode: settings.less1600w.centerMode,
+          }
+        },
         {
           breakpoint: 1200,
           settings: {
-            slidesToShow: settings.lg.slidesToShow,
-            slidesToScroll: settings.lg.slidesToScroll,
-            infinite: settings.lg.infinite,
-            dots: settings.lg.dots
+            dots: settings.less2000w.dots,
+            infinite: settings.less2000w.infinite,
+            slidesToShow: settings.less2000w.slidesToShow,
+            slidesToScroll: settings.less2000w.slidesToScroll,
+            centerPadding: settings.less2000w.centerPadding,
+            centerMode: settings.less2000w.centerMode
           }
         },
         {
           breakpoint: 992,
           settings: {
-            slidesToShow: settings.md.slidesToShow,
-            slidesToScroll: settings.md.slidesToScroll,
-            infinite: settings.md.infinite,
-            dots: settings.md.dots
+            autoplay: settings.less992w.autoplay,
+            dots: settings.less992w.dots,
+            infinite: settings.less992w.infinite,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            centerMode: settings.less992w.centerMode,
+            centerPadding: settings.less992w.centerPadding,
           }
         },
         {
           breakpoint: 768,
           settings: {
-            slidesToShow: settings.sm.slidesToShow,
-            slidesToScroll: settings.sm.slidesToScroll,
-            infinite: settings.sm.infinite,
-            dots: settings.sm.dots
+            autoplay: settings.less768w.autoplay,
+            dots: settings.less768w.dots,
+            infinite: settings.less768w.infinite,
+            slidesToShow: 1,
+            slidesToScroll: 1
           }
         }
       ]

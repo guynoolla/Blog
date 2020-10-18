@@ -16,7 +16,7 @@
           foreach ($carousel_posts as $post): ?>
             <div>
               <div class="ard ard--square">
-                <img srcset="<?php echo \App\Classes\Post::responsive($post->image, 4) ?>" alt="<?php echo $post->title ?>">
+                <img srcset="<?php echo \App\Classes\Post::responsive($post->image, 3) ?>" alt="<?php echo $post->title ?>">
               </div>
               <div class="slider-post-text">
                 <a href="<?php echo url_for('category/' . u($post->category) . '?tid=' . $post->category_id) ?>" class="category"><?php echo $post->category ?></a>
