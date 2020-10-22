@@ -107,7 +107,7 @@ function contact_form_submit($data) {
       $mailer = new \App\Contracts\Mailer;
       $text = strip_tags($message);
       try {
-        $mailer->send(ADMIN_EMAIL, $jsonstore->site->siteName, $text, $message);
+        $mailer->send(ADMIN_EMAIL, $jsonstore->siteName, $text, $message);
         $status = 'success';
         $alert = $jsonstore->contactForm->alertSuccess;
       

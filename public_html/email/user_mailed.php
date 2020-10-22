@@ -10,7 +10,7 @@ require_once '../../src/initialize.php';
   include(SHARED_PATH . '/public_header.php');
 
 ?>
-<div class="container-fluid">
+<div class="container-fluid bg-other-lk--md">
   <div class="row justify-content-center h-100">
     <div class="col col-md-10 col-lg-8 col-xl-6 my-auto">
 

@@ -14,7 +14,7 @@ if (is_post_request()) {
       $text = strip_tags($message);
       
       try {
-        $mailer->send(ADMIN_EMAIL, $jsonstore->site->siteName, $text, $message);
+        $mailer->send(ADMIN_EMAIL, $jsonstore->siteName, $text, $message);
         $session->message('Thank you for your message!');
         redirect_to(url_for('index.php'));
 

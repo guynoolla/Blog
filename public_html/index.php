@@ -280,7 +280,7 @@ include SHARED_PATH . '/carousel.php';
         ?>
 
         <div class="row justify-content-center mt-4"><?php
-          $url = url_for($_SERVER['REQUEST_URI']);
+          $url = $_SERVER['REQUEST_URI'];
           echo $pagination->pageLinks($url);
         ?></div>
 

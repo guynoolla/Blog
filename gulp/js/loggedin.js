@@ -174,37 +174,44 @@ $(() => {
 
    if ($(".loadContentJS").length) appendSpinnerToMainContent();
 
-   const pagData = {
-     pathname: window.location.pathname,
-     type: "search",
-     value: "",
-     access: $(".loadContentJS").data("access"),
-     total: 0,
-     page: 1,
-     params(type, value, access, total) {
-       pagData.type = type;
-       pagData.value = value;
-       pagData.access = access;
-       pagData.total = total;
-     },
-     pageNum(page=false) {
-       if (page) pagData.page = page;
-       else return pagData.page;
-     },
-     script() {
-       const pathitems = pagData.pathname.split("/");
-       const path = `${pathitems[1]}/${pathitems[2]}`;
-       switch (path) {
-         case 'staff/posts':
-               return "xhr_search_post.php";
-         case 'staff/users':
-         case 'staff/categories':
-               return "xhr_search.php";
-         default: 
-               return false;
-       }
-     }
-   };
+    const pagData = {
+      pathname: window.location.pathname,
+      type: "search",
+      value: "",
+      access: $(".loadContentJS").data("access"),
+      total: 0,
+      page: 1,
+      params(type, value, access, total) {
+        pagData.type = type;
+        pagData.value = value;
+        pagData.access = access;
+        pagData.total = total;
+      },
+      pageNum(page=false) {
+        if (page) pagData.page = page;
+        else return pagData.page;
+      },
+      path(filename = true) {
+        const pathitems = pagData.pathname.split("/");
+        const last = pathitems.length - 1;
+        if (!filename) {
+          return `${pathitems[last-2]}/${pathitems[last-1]}`;
+        } else {
+          return `${pathitems[last-2]}/${pathitems[last-1]}/${pathitems[last]}`;        
+        }
+      },
+      script() {
+        switch (pagData.path(false)) {
+          case 'staff/posts':
+                return "xhr_search_post.php";
+          case 'staff/users':
+          case 'staff/categories':
+                return "xhr_search.php";
+          default: 
+                return false;
+        }
+      }
+    };
  
    $("#adminSearchForm").on("submit", e => {
      e.preventDefault();
@@ -225,7 +232,7 @@ $(() => {
        type: "GET",
        data: {
          target: access + '_by_' + type,
-         data: `type=${type}&value=${value}&access=${access}&pathname=${pagData.pathname}`,
+         data: `type=${type}&value=${value}&access=${access}&pathname=${pagData.path()}`,
          uid: server.userId
        },
        success: res => {
@@ -256,7 +263,7 @@ $(() => {
        console.log("The same value ajax cl forbidden!");
        return;
      }
- 
+
      if (type && value && access) {
        loading(1);
        $.ajax({
@@ -264,7 +271,7 @@ $(() => {
           type: 'GET',
           data: {
             target: access + '_by_' + type,
-            data: `type=${type}&value=${value}&access=${access}&pathname=${pagData.pathname}`,
+            data: `type=${type}&value=${value}&access=${access}&pathname=${pagData.path()}`,
             uid: server.userId
           },
           success: res => {
@@ -289,14 +296,14 @@ $(() => {
  
      const page = getPageNum($(e.target));
      if (!page) return false;
- 
+
      loading(1);
      $.ajax({
        url: server.baseUrl + '/staff/' + pagData.script(),
        type: 'GET',
        data: {
          target: pagData.access + '_by_' + pagData.type,
-         data: `type=${pagData.type}&value=${pagData.value}&access=${pagData.access}&page=${page}&pathname=${pagData.pathname}`,
+         data: `type=${pagData.type}&value=${pagData.value}&access=${pagData.access}&page=${page}&pathname=${pagData.path()}`,
          uid: server.userId
        },
        success: res => {
