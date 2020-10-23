@@ -198,7 +198,7 @@ function cookie_ids_posts($data) {
     if ($posts) {
       foreach ($posts as $key => $post) {
         $arr[$j]['title'] = $post->title;
-        $arr[$j]['excerpt'] = $post->excerpt($post->body);
+        $arr[$j]['excerpt'] = $post->excerpt();
         $arr[$j]['created_at'] = date('F j, Y', strtotime($post->created_at));
         $arr[$j]['format'] = $post->format;
         if ($post->format == 'image') $arr[$j]['image'] = \App\Classes\Post::responsive($post->image);

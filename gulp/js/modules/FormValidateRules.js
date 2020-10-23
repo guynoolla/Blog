@@ -47,11 +47,11 @@ class FormValidateRules extends FormValidate {
       const size = this.getFieldSize(fid)
 
       if (mess.val().length == 0) {
-        this.errors[fid].push("Message cannot be blank.")
+        this.errors[fid].push("Message can not be blank.")
       } else if (mess.val().length < size.min) {
         this.errors[fid].push(`Message must contain at least ${size.min} characters.`)
       } else if (mess.val().length > size.max) {
-        this.errors[fid].push(`Username cannot contain more than ${size.max}. characters.`)
+        this.errors[fid].push(`Username can not contain more than ${size.max}. characters.`)
       } else {
         return resolve(mess.val())
       }
@@ -74,7 +74,7 @@ class FormValidateRules extends FormValidate {
 
     const check = () => new Promise(resolve => {
       if (email.val().length == 0) {
-        this.errors[fid].push("Email cannot be blank.")
+        this.errors[fid].push("Email can not be blank.")
       } else if (!validator.validate(email.val())) {
         this.errors[fid].push("Email is incorrect.")
       } else {
@@ -106,11 +106,11 @@ class FormValidateRules extends FormValidate {
       const size = this.getFieldSize(fid)
 
       if (username.val().length == 0) {
-        this.errors[fid].push("Username cannot be blank.")
+        this.errors[fid].push("Username can not be blank.")
       } else if (username.val().length < size.min) {
         this.errors[fid].push(`Username must contain at least ${size.min} characters.`)
       } else if (username.val().length > size.max) {
-        this.errors[fid].push(`Username cannot contain more than ${size.max}. characters.`)
+        this.errors[fid].push(`Username can not contain more than ${size.max}. characters.`)
       } else if (!pattern.test(username.val())) {
         this.errors[fid].push("Username must contain only letters and numbers.")
       } else {
@@ -142,11 +142,11 @@ class FormValidateRules extends FormValidate {
       const size = this.getFieldSize(fid)
 
       if (pass.val().length == 0) {
-        this.errors[fid].push("Password cannot be blank.")
+        this.errors[fid].push("Password can not be blank.")
       } else if (pass.val().length < size.min) {
         this.errors[fid].push(`Password must contain at least ${size.min} characters.`)
       } else if (pass.val().length > size.max) {
-        this.errors[fid].push(`Password cannot contain more than ${size.max} characters.`)
+        this.errors[fid].push(`Password can not contain more than ${size.max} characters.`)
       } else if (!pattern.test(pass.val())) {
         this.errors[fid].push(`Password must be at least 8 characters long and contain at least 1 number 1 lowercase and 1 uppercase letter.`)
       } else {
@@ -250,7 +250,7 @@ class FormValidateRules extends FormValidate {
         if (about.val().length < size.min) {
           this.errors[fid].push(`About text must contain at least ${size.min} characters.`)
         } else if (about.val().length > size.max) {
-          this.errors[fid].push(`About text cannot contain more than ${size.max}. characters.`)
+          this.errors[fid].push(`About text can not contain more than ${size.max}. characters.`)
         } else {
           return resolve(about.val())
         }
@@ -400,11 +400,11 @@ class FormValidateRules extends FormValidate {
       const field = fid == 'body' ? 'content' : fid;
 
       if (text.val().length == 0) {
-        this.errors[fid].push(`The ${field} cannot be blank.`)
+        this.errors[fid].push(`The ${field} can not be blank.`)
       } else if (text.val().length < size.min) {
         this.errors[fid].push(`The ${field} must contain at least ${size.min} characters.`)
       } else if (text.val().length > size.max) {
-        this.errors[fid].push(`The ${field} cannot contain more than ${size.max}. characters.`)
+        this.errors[fid].push(`The ${field} can not contain more than ${size.max}. characters.`)
       } else {
         return resolve(text.val())
       }

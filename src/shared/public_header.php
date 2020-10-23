@@ -53,7 +53,7 @@ if (url_contain(['/pasword/', '/email/', '/staff/login', '/staff/register'])) {
 ?>
 <body class="<?php echo $bg ?>">
 
-<header id="page-top">
+<header id="page">
 
   <nav class="nav-ini-hide navbar navbar-expand-md navbar-light fixed-top" id="hideByScroll">
     <div class="container">

@@ -5,6 +5,14 @@ namespace App\Classes;
 
 use App\Classes\Token;
 
+/**
+ * Class User
+ * 
+ * User can be one of the three types 'simple', 'author' or 'admin',
+ * Simple user must confirm email address to become an author type
+ * Author can add posts, uplaod 'about image' and add 'about text' 
+ * Admin has author privileges and posts administration rights
+ */
 class User extends \App\Classes\DatabaseObject {
 
   static protected $table_name = "`users`";
@@ -39,6 +47,12 @@ class User extends \App\Classes\DatabaseObject {
   public $approved = "";
   public $published = "";
 
+  /**
+   * Class constructor
+   * Initializes new User object attributes
+   * 
+   * @param array $args
+   */
   public function __construct(array $args=[]) {
     $this->username = $args['username'] ?? "";
     $this->email = $args['email'] ?? "";
@@ -46,23 +60,52 @@ class User extends \App\Classes\DatabaseObject {
     $this->confirm_password = $args['confirm_password'] ?? "";
   }
 
+  /**
+   * Set File object to handle image upload and remove
+   *
+   * @param File $image_obj
+   * @return void
+   */
   public function fileInstance(File $image_obj) {
     $this->image_obj = $image_obj;
   }
 
+  /**
+   * Set hashed version for user password
+   *
+   * @return void
+   */
   protected function setHashedPassword() {
     $this->hashed_password = password_hash($this->password, PASSWORD_BCRYPT);
   }
 
+  /**
+   * Verify User password
+   *
+   * @param string $password
+   * @return string
+   */
   public function verifyPassword($password) {
     return password_verify($password, $this->hashed_password);
   }
 
+  /**
+   * Overrides parent create method
+   * to set hashed password before its execution
+   *
+   * @return boolean
+   */
   protected function create() {
     $this->setHashedPassword();
     return parent::create();
   }
 
+  /**
+   * Overrides parent update method
+   * to set hashed password before its execution
+   *
+   * @return boolean
+   */
   protected function update() {
     if ($this->password != '') {
       $this->setHashedPassword();
@@ -74,27 +117,48 @@ class User extends \App\Classes\DatabaseObject {
     return parent::update();
   }
 
-  public function beforeValidation($attr) {
+  /**
+   * Overrides the parent's beforeValidation method
+   * to manipulate or modify some User attributes
+   *
+   * @param array $attr
+   * @return array
+   */
+  public function beforeValidation(array $attr) {
     foreach($attr as $prop => $value) {
       if ($prop === 'about_appear') {
         $this->filterCheckboxValue($prop);
         $attr[$prop] = $this->about_appear;
       }
     }
-    return $attr;
+    return parent::beforeValidation($attr);
   }
 
+  /**
+   * Convert checkbox value to number
+   *
+   * @param [type] $property
+   * @return void
+   */
   protected function filterCheckboxValue($property) {
     if (in_array($this->$property, ['on','1','checked'])) {
       $this->$property = '1';
+    } else {
+      $this->$property = '0';
     }
   }
 
+  /**
+   * Validate the User attributes that come from User Form
+   * Errors if they exists gather parent's errors property
+   *
+   * @return boolean
+   */
   protected function validate() {
     $this->errors = [];
 
     if (is_blank($this->username)) {
-      $this->errors[] = "Username cannot be blank"; // ru Нужно ввести имя пользователя
+      $this->errors[] = "Username can not be blank"; // ru Нужно ввести имя пользователя
     } elseif (!has_length($this->username, array('min' => 4, 'max' => 20))) {
       $this->errors[] = "Username must be between 2 and 20 characters."; // ru Имя пользователя должно включать в себя от 4 до 20 символов.
     } elseif(!has_unique_username($this->username, $this->id ?? 0)) {
@@ -102,7 +166,7 @@ class User extends \App\Classes\DatabaseObject {
     }
 
     if (is_blank($this->email)) {
-      $this->errors[] = "Email cannot be blank."; // ru Нужно ввести эл.адрес.
+      $this->errors[] = "Email can not be blank."; // ru Нужно ввести эл.адрес.
     } elseif(!has_length($this->email, array('max' => 50))) {
       $this->errors[] = "Email must be less than 50 characters."; // ru Длина эл.адреса не должна превышать 50 символов.
     } elseif(!has_valid_email_format($this->email)) {
@@ -112,12 +176,12 @@ class User extends \App\Classes\DatabaseObject {
     }
 
     if (has_length_greater_than($this->about_text, 10000)) {
-      $this->errors[] = "About text cannot contain more than 10000 characters.";
+      $this->errors[] = "About text can not contain more than 10000 characters.";
     }
 
     if ($this->password_required) {
       if(is_blank($this->password)) {
-        $this->errors[] = "Password cannot be blank."; // ruНужно ввести пароль.
+        $this->errors[] = "Password can not be blank."; // ruНужно ввести пароль.
       } elseif(!has_length($this->password, ['min' => 8, 'max' => 20 ])) {
         $this->errors[] = "Password must contain at least 8 characters"; // ru Пароль должен включать в себя не менее 8 символов.
       } elseif(!preg_match('/[A-Z]/', $this->password)) {
@@ -130,7 +194,7 @@ class User extends \App\Classes\DatabaseObject {
         $this->empty_password_field = false;
       }
       if (is_blank($this->confirm_password)) {
-        $this->errors[] = "Confirm password cannot be blank."; // ru Пароль нужно ввести повторно.
+        $this->errors[] = "Confirm password can not be blank."; // ru Пароль нужно ввести повторно.
         $this->empty_password_field = true;
       } elseif($this->password !== $this->confirm_password) {
         $this->errors[] = "Password and confirm password must match."; // ru Пароли не совпадают.
@@ -150,6 +214,13 @@ class User extends \App\Classes\DatabaseObject {
     return (empty($this->errors) == true);
   }
 
+  /**
+   * The save method overides parent save method
+   * Before 'User Save' it cares the file Upload
+   * which is handled by $image_obj File instance
+   *
+   * @return void
+   */
   public function save() {
     if (!isset($this->image_obj)) {
       return parent::save();
@@ -180,10 +251,20 @@ class User extends \App\Classes\DatabaseObject {
     }
   }
 
+  /**
+   * Overrides the parent's mergeAttributes method
+   * If user changes confirmed email new one will require confirmation
+   * If user edited optional 'about author' section of the form 
+   * reassign that array elements so they will be merged
+   * into object attributes in parent method call
+   * 
+   * @param array $args
+   * @return array
+   */
   public function mergeAttributes(array $args=[]) {
     if (isset($args['email'])) {
       if ($args['email'] != $this->email) {
-        $this->email_confirmed = '0';
+        $args['email_confirmed'] = '0';
       }
     }
     if (isset($args['about'])) {
@@ -197,16 +278,32 @@ class User extends \App\Classes\DatabaseObject {
     parent::mergeAttributes($args);
   }
 
+  /**
+   * Check if user is admin
+   *
+   * @return boolean
+   */
   public function isAdmin() {
     return $this->user_type === 'admin';
   }
 
+  /**
+   * Get User type
+   *
+   * @return string
+   */
   public function getUserType() {
     if ($this->user_type == '') return 'logged_in';
     else return $this->user_type;
   }
 
-  static public function findByUsername($username) {
+  /**
+   * Find User by username
+   *
+   * @param string $username
+   * @return object | error
+   */
+  static public function findByUsername(string $username) {
     $sql = "SELECT * FROM " . self::$table_name;
     $sql .= " WHERE username='" . self::$database->escape_string($username) . "'";
     $obj_array = static::findBySql($sql);
@@ -217,7 +314,13 @@ class User extends \App\Classes\DatabaseObject {
     }
   }
 
-  static public function findByEmail($email) {
+  /**
+   * Find User by email
+   *
+   * @param string $email
+   * @return object | error
+   */
+  static public function findByEmail(string $email) {
   $sql = "SELECT * FROM " . self::$table_name;
     $sql .= " WHERE email='" . self::$database->escape_string($email) . "'";
     $obj_array = static::findBySql($sql);
@@ -228,12 +331,45 @@ class User extends \App\Classes\DatabaseObject {
     }
   }
 
-  static protected function token($token=false) {
+  /**
+   * Thsi is a join query to get numbers of
+   * all user posts, published and approved
+   *
+   * @param integer $per_page
+   * @param integer $offset
+   * @return object
+   */
+  static public function queryUsersWithPostsNum(int $per_page, int $offset) {
+    $sql = <<<SQL
+          SELECT u.*, COUNT(p.user_id) AS posted,
+          SUM(if (p.published = '1', 1, 0)) AS published,
+          SUM(if (p.approved = '1', 1, 0)) AS approved
+          FROM `users` AS u LEFT JOIN `posts` AS p
+          ON u.id = p.user_id
+          GROUP BY u.id ORDER BY u.username
+          LIMIT $per_page OFFSET $offset
+SQL;
+    return self::findBySql($sql);
+  }
+
+  /**
+   * create User token
+   *
+   * @param string $token
+   * @return object
+   */
+  static protected function token(string $token="") {
     if (!$token) return new Token;
     else return new Token($token);
   }
 
-  static public function createPasswordResetToken($email) {
+  /**
+   * Create password reset token
+   *
+   * @param string $email
+   * @return string | error
+   */
+  static public function createPasswordResetToken(string $email) {
     $token = User::token();
     $user = self::findByEmail($email);
 
@@ -243,14 +379,18 @@ class User extends \App\Classes\DatabaseObject {
       $user->password_reset_expires_at = date('Y-m-d H:i:s', $two_hours);
       
       if ($user->save()) return $token->getValue();
-      else {
-        dd($user->errors);
-      }
     }
+
     return false;
   }
 
-  static public function getByPasswordResetToken($user_token) {
+  /**
+   * Get password reset token
+   *
+   * @param string $user_token
+   * @return object | error
+   */
+  static public function getByPasswordResetToken(string $user_token) {
     $token = User::token($user_token);
   
     $sql = "SELECT * FROM " . self::$table_name;
@@ -267,7 +407,13 @@ class User extends \App\Classes\DatabaseObject {
     }
   }
 
-  public function resetPassword($data) {
+  /**
+   * Reset User password
+   *
+   * @param array $data
+   * @return boolean
+   */
+  public function resetPassword(array $data) {
     $this->mergeAttributes([
       'password' => $data['password'],
       'confirm_password' => $data['confirm_password'],
@@ -277,11 +423,22 @@ class User extends \App\Classes\DatabaseObject {
     return $this->save();
   }
 
+  /**
+   * Check if User email confirmed
+   *
+   * @return boolean
+   */
   public function isEmailConfirmed() {
     return ($this->email_confirmed == '1');
   }
 
-  static public function createEmailConfirmToken($email) {
+  /**
+   * Create email confirmation token
+   *
+   * @param string $email
+   * @return string | error
+   */
+  static public function createEmailConfirmToken(string $email) {
     $token = User::token();
 
     $user = self::findByEmail($email);
@@ -298,7 +455,13 @@ class User extends \App\Classes\DatabaseObject {
     return false;
   }
 
-  static public function getByEmailConfirmToken($user_token) {
+  /**
+   * Get User by email confirmation token
+   *
+   * @param string $user_token
+   * @return object | error
+   */
+  static public function getByEmailConfirmToken(string $user_token) {
     $token = User::token($user_token);
     
     $sql = "SELECT * FROM " . self::$table_name;
@@ -307,6 +470,7 @@ class User extends \App\Classes\DatabaseObject {
 
     if (!empty($obj_array)) {
       $user = array_shift($obj_array);
+      
       if (strtotime($user->email_confirm_expires_at) > time()) {
         return $user;
       } else {
@@ -315,6 +479,11 @@ class User extends \App\Classes\DatabaseObject {
     }
   }
 
+  /**
+   * Set User email is confirmed 
+   *
+   * @return boolean
+   */
   public function confirmEmail() {
     $user_type = $this->user_type == 'simple'
                 ? 'author' : $this->user_type;
@@ -325,20 +494,8 @@ class User extends \App\Classes\DatabaseObject {
       'email_confirm_hash' => 'NULL',
       'email_confirm_expires_at' => 'NULL'
     ]);
-    return $this->save();
-  }
 
-  static public function queryUsersWithPostsNum(int $per_page, int $offset) {
-    $sql = <<<SQL
-          SELECT u.*, COUNT(p.user_id) AS posted,
-          SUM(if (p.published = '1', 1, 0)) AS published,
-          SUM(if (p.approved = '1', 1, 0)) AS approved
-          FROM `users` AS u LEFT JOIN `posts` AS p
-          ON u.id = p.user_id
-          GROUP BY u.id ORDER BY u.username
-          LIMIT $per_page OFFSET $offset
-SQL;
-    return self::findBySql($sql);
+    return $this->save();
   }
 
 }

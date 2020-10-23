@@ -74,9 +74,9 @@ function admin_category_data($data) {
   else if ($type == 'name_order') $order = "ORDER BY name {$value}";
   else $order = 'ORDER BY name ASC';
 
-  $categories = Category::find(
-    $per_page, $pagination->offset(),
-    "{$cond_str} {$order}"
+  $categories = Category::findBySql(
+    "SELECT * FROM `categories` {$cond_str} {$order}
+    LIMIT {$per_page} OFFSET {$pagination->offset()}"
   );
 
   ob_start();

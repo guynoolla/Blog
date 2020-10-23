@@ -12,10 +12,10 @@ if (is_post_request()) {
   $password = $_POST['password'] ?? '';
 
   if (is_blank($username)) {
-    $errors[] = 'Username cannot be blank.';
+    $errors[] = 'Username can not be blank.';
   }
   if (is_blank($password)) {
-    $errors[] = 'Password cannot be blank.';
+    $errors[] = 'Password can not be blank.';
   }
 
   if (filter_var($username, FILTER_VALIDATE_EMAIL)) {

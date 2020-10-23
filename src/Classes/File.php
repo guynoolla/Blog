@@ -3,6 +3,12 @@ declare(strict_types=1);
 
 namespace App\Classes;
 
+/**
+ * Class File for Image upload
+ * 
+ * Class main method moveFile returns an array of uploaded
+ * file information or error if for some reason it occures 
+ */
 class File {
 
 	public $file;
@@ -12,20 +18,43 @@ class File {
 	protected $default = 'default.png';
 	public $error = "";
 
+	/**
+	 * Class constructor
+	 * 
+	 * Constructor becomes global $_FILES[filename] as argument
+	 * It initializes images_path and max_file_size properties
+	 *
+	 * @param [type] $file
+	 */
 	public function __construct($file=null) {
 		$this->file = $file;
 		$this->images_path = IMAGES_PATH;
 		$this->max_file_size = MAX_FILE_SIZE;
 	}
 
+	/**
+	 * Return uploaded file information
+	 *
+	 * @return array
+	 */
 	public function getFileInfo() {
 		return $this->file_info;
 	}
 
+	/**
+	 * Detect if user selected a file for upload
+	 *
+	 * @return boolean
+	 */
 	public function isFileSelected() {
 		return (!empty($this->file['name']));
 	}
 
+	/**
+	 * Check if file was uploaded
+	 *
+	 * @return boolean
+	 */
 	public function isFileUploaded() {
 		return (
 			is_uploaded_file($this->file['tmp_name'])
@@ -33,6 +62,11 @@ class File {
 		);
 	}
 
+	/**
+	 * Check if an error occured by file upload
+	 *
+	 * @return string
+	 */
 	public function getUploadError() {
 		switch($this->file['error']) {
 			case 1:
@@ -55,7 +89,14 @@ class File {
 		return $this->error;
 	}
 
-	public function handleUpload($field_name, array $ratio=[]) {
+	/**
+	 * Handle file upload
+	 *
+	 * @param string $field_name
+	 * @param array $ratio
+	 * @return void
+	 */
+	public function handleUpload(string $field_name, array $ratio=[]) {
     if (!$this->isFileUploaded()) {
 			return $this->getUploadError();
     } else {
@@ -63,7 +104,17 @@ class File {
     }
 	}
 
-	public function moveFile($attr, $ratio) {
+	/**
+	 * Move file to its final destination
+	 * 
+	 * Check for image size and image ratio
+	 * Gather all information into an array
+	 *
+	 * @param string $attr
+	 * @param array $ratio
+	 * @return void
+	 */
+	public function moveFile(string $attr, array $ratio) {
 		list ($w, $h) = getimagesize($this->file['tmp_name']);
 		$img_ratio = $w/$h;
 
@@ -104,18 +155,24 @@ class File {
 
 			} else {
 				$this->error .= 'The file could not be moved.';
-				@unlink( $this->file['tmp_name'] );
+				@unlink($this->file['tmp_name']);
 			}
 		}
 
 		return $this->error;
 	}
 
-	public function remove($attr_value) {
+	/**
+	 * Remove file from its location
+	 *
+	 * @param string $attr_value
+	 * @return void
+	 */
+	public function remove(string $attr_value) {
 		$filename = $this->images_path . '/' . $attr_value;
 
 		if (file_exists($filename) && is_file($filename)) {
-			unlink($filename);
+			@unlink($filename);
 		}
 	}
 

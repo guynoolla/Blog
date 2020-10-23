@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace App\Classes;
 
+/**
+ * Session Class
+ */
 class Session {
 
   protected $user_id;
@@ -13,11 +16,23 @@ class Session {
 
   public const MAX_LOGIN_AGE = 60*60*24; // 1 day
 
+  /**
+   * Start session
+   * Check if the User is logged in
+   */
   public function __construct() {
     session_start();
+
     $this->checkStoredLogin();
   }
 
+  /**
+   * Login the User
+   * Put User data into SESSION and set Session object properties
+   *
+   * @param User $user
+   * @return boolean
+   */
   public function login(User $user) {
     if ($user) {
       // prevent session fixation attacks
@@ -25,44 +40,68 @@ class Session {
 
       $this->user_id = $_SESSION['user_id'] = $user->id;
       $this->username = $_SESSION['username'] = $user->username;
+      $this->email = $_SESSION['email'] = $user->email_confirmed ? $user->email : false;
       $this->last_login = $_SESSION['last_login'] = time();
       $this->user_type = $_SESSION['user_type'] = $user->user_type;
-      $this->email = $_SESSION['email'] = $user->email_confirmed ? $user->email : false;
     }
+
     return true;
   }
 
+  /**
+   * Checks if the User is logged in
+   *
+   * @return boolean
+   */
   public function isLoggedIn() {
     return isset($this->user_id) && $this->lastLoginIsRecent();
   }
 
+  /**
+   * Logout the User
+   * Remove User data from SESSION and Session object
+   *
+   * @return boolean
+   */
   public function logout() {
     unset($_SESSION['user_id']);
     unset($_SESSION['username']);
+    unset($_SESSION['email']);
     unset($_SESSION['last_login']);
     unset($_SESSION['user_type']);
-    unset($_SESSION['email']);
     unset($this->user_id);
     unset($this->username);
+    unset($this->email);
     unset($this->last_login);
     unset($this->user_type);
-    unset($this->email);
 
     unset($_SESSION['store']);
 
     return true;
   }
 
+  /**
+   * Set Session object properties from SESSION
+   * if the User is logged in
+   *
+   * @return void
+   */
   private function checkStoredLogin() {
     if (isset($_SESSION['user_id'])) {
       $this->user_id = $_SESSION['user_id'];
       $this->username = $_SESSION['username'];
+      $this->email = $_SESSION['email'];
       $this->last_login = $_SESSION['last_login'];
       $this->user_type = $_SESSION['user_type'];
-      $this->email = $_SESSION['email'];
     }
   }
 
+  /**
+   * Check if the User Session is outdated
+   * relative to the User's last activity
+   *
+   * @return boolean
+   */
   private function lastLoginIsRecent() {
     if (!isset($this->last_login)) {
       return false;
@@ -73,7 +112,15 @@ class Session {
     }
   }
 
-  public function message($msg="", $msg_type="success") {
+  /**
+   * Put message and its type into user SESSION
+   * As type it accepts Bootsrap4 alert classes
+   *
+   * @param string $msg
+   * @param string $msg_type
+   * @return string[]
+   */
+  public function message(string $msg="", $msg_type="success") {
     if (!empty($msg)) {
       // Then this is a "set" message
       $_SESSION['message'] = $msg;
@@ -89,15 +136,30 @@ class Session {
     }
   }
 
+  /**
+   * Remove message from the SESSION
+   *
+   * @return void
+   */
   public function clearMessage() {
     unset($_SESSION['message']);
     unset($_SESSION['message_type']);
   }
 
+  /**
+   * Returns user ID
+   *
+   * @return integer
+   */
   public function getUserId() {
     return $this->user_id;
   }
 
+  /**
+   * Check if user is admin
+   *
+   * @return boolean
+   */
   public function isAdmin() {
     if (!$this->isLoggedIn()) {
       return false;
@@ -106,6 +168,11 @@ class Session {
     }
   }
 
+  /**
+   * Check if user is author
+   *
+   * @return boolean
+   */
   public function isAuthor() {
     if (!$this->isLoggedIn()) return false;
       // admin also has author capability!
@@ -115,19 +182,42 @@ class Session {
     );
   }
 
+  /**
+   * If the user changes email
+   * it must be set to false
+   *
+   * @return void
+   */
   public function emailFalse() {
     $_SESSION['email'] = false;
     $this->email = false;
   }
 
+  /**
+   * Get the User email
+   *
+   * @return string
+   */
   public function userEmail() {
     return $this->email;
   }
 
+  /**
+   * Get the User username
+   *
+   * @return string
+   */
   public function username() {
     return $this->username;
   }
 
+  /**
+   * Retrieve data stored in SESSION
+   * Provide data to store in SESSION
+   *
+   * @param array $data
+   * @return void | boolean
+   */
   public function store(array $data=[]) {
     if (empty($data) && isset($_SESSION['store'])) {
       return $_SESSION['store'];
@@ -146,7 +236,15 @@ class Session {
     }
   }
 
-  public function store_of($value, $store=true) {
+  /**
+   * Retrieve value stored in SESSION
+   * Provide value to store in SESSION
+   *
+   * @param string $value
+   * @param boolean $store
+   * @return void | boolean
+   */
+  public function store_of(string $value, bool $store=true) {
     if (isset($_SESSION['store'][$value])) {
       if ($store == false) {
         $item = $_SESSION['store'][$value];

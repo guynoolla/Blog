@@ -3,6 +3,12 @@ declare(strict_types=1);
 
 namespace App\Classes;
 
+/**
+ * Pagination Class
+ * 
+ * Class pageLinks method creates html ouput for pagination
+ * It uses some Bootstrap 4 and custom classes for styling
+ */
 class Pagination {
 
   public $current_page;
@@ -12,7 +18,17 @@ class Pagination {
   protected $numbers_scope;
   protected $delimiter;
 
-  public function __construct($page=1, $per_page=4, $total_count=0, $css_class='pagination-md') {
+  /**
+   * Class constructor
+   * 
+   * Constructor initializes pagination properties
+   *
+   * @param integer $page
+   * @param integer $per_page
+   * @param integer $total_count
+   * @param string $css_class
+   */
+  public function __construct(int $page=1, int $per_page=4, int $total_count=0, string $css_class='pagination-md') {
     $this->current_page = (int) $page;
     $this->per_page = (int) $per_page;
     $this->total_count = (int) $total_count;
@@ -21,25 +37,51 @@ class Pagination {
     $this->numbers_scope = 4;
   }
 
+  /**
+   * Returns offset for database rows
+   *
+   * @return number
+   */
   public function offset() {
     return $this->per_page * ($this->current_page - 1);
   }
 
+  /**
+   * Calculate the total number of pages
+   *
+   * @return number
+   */
   public function totalPages() {
     return ceil($this->total_count / $this->per_page);
   }
 
+  /**
+   * Returns previous page number
+   *
+   * @return number | boolean
+   */
   public function previousPage() {
     $prev = $this->current_page - 1;
     return ($prev > 0) ? $prev : false;
   }
 
+  /**
+   * Returns next page number
+   *
+   * @return number | boolean
+   */
   public function nextPage() {
     $next = $this->current_page + 1;
     return ($next <= $this->totalPages()) ? $next : false;
   }
 
-  public function previousLink($url="") {
+  /**
+   * Returns previous link ul list
+   *
+   * @param string $url
+   * @return string
+   */
+  public function previousLink(string $url="") {
     $link = "";
     $text = (strpos($this->css_class, 'pagination-lg') !== false) ?
     '&laquo; Previous' : '&laquo;';
@@ -52,7 +94,13 @@ class Pagination {
     return $link;
   }
 
-  public function nextLink($url="") {
+  /**
+   * Returns next link ul list
+   *
+   * @param string $url
+   * @return string
+   */
+  public function nextLink(string $url="") {
     $link = "";
     $text = (strpos($this->css_class, 'pagination-lg') !== false) ?
             'Next &raquo;' : '&raquo;';
@@ -66,7 +114,13 @@ class Pagination {
     return $link;
   }
 
-  public function numberLinks($url="") {
+  /**
+   * Returns buttons with page numbers inside ul list
+   *
+   * @param string $url
+   * @return string
+   */
+  public function numberLinks(string $url="") {
     $output = "";
     $numbers_to_show = $this->getNumbersToShow(); 
     for ($i = 1; $i <= $this->totalPages(); $i++) {
@@ -85,7 +139,13 @@ class Pagination {
     return $output;
   }
 
-  public function pageLinks($url) {
+  /**
+   * Returns page links ul lists inside nav element
+   *
+   * @param string $url
+   * @return string
+   */
+  public function pageLinks(string $url) {
     $url = $this->prepareUrl($url);
 
     $output = "";
@@ -101,6 +161,11 @@ class Pagination {
     return $output;
   }
 
+  /**
+   * Return numbers in array for buttons with page numbers
+   *
+   * @return array
+   */
   public function getNumbersToShow() {
     $scope_depth = ceil($this->current_page / $this->numbers_scope);
     $scope_max = $scope_depth * $this->numbers_scope;
@@ -115,6 +180,15 @@ class Pagination {
     return $numbers;
   }
 
+  /**
+   * Prepare base url for pagination link
+   * 
+   * Prepare the pagination url to work also
+   * in the localhost for app location path
+   *
+   * @param [type] $url
+   * @return void
+   */
   protected function prepareUrl($url) {
     if (strpos($url, '?') === false) {
       $this->delimiter = '?';
@@ -142,9 +216,11 @@ class Pagination {
     if (count($params) == 0) {
       $this->delimiter = '?';
       return $base;
+    
     } elseif (count($params) == 1) {
       $this->delimiter = '&';
       return $base . '?' . $params[0];
+    
     } elseif (count($params) > 1) {
       $this->delimiter = '&';
       $first = array_shift($params);

@@ -14,7 +14,11 @@ $per_page = DASHBOARD_PER_PAGE;
 $total_count = Category::countAll();
 $pagination = new Pagination($current_page, $per_page, $total_count);
 
-$categories = Category::find($per_page, $pagination->offset());
+$categories = Category::findBySql(
+  "SELECT * FROM `categories`
+   LIMIT {$per_page}
+   OFFSET {$pagination->offset()}"
+);
 
 $page_title = 'Categories';
 include SHARED_PATH . '/staff_header.php';

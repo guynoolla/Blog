@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace App\Classes;
 
+/**
+ * Class Category
+ * Category description property is optional
+ */
 class Category extends \App\Classes\DatabaseObject {
 
   static protected $table_name = "`categories`";
@@ -13,6 +17,12 @@ class Category extends \App\Classes\DatabaseObject {
   public $description;
   public $created_at;
 
+  /**
+   * Class constructor
+   * Initializes properties of new Category object
+   *
+   * @param array $args
+   */
   public function __construct(array $args=[]) {
     foreach($args as $key => $value) {
       $args[$key] = strip_tags(trim($value));
@@ -21,7 +31,14 @@ class Category extends \App\Classes\DatabaseObject {
     $this->description = $args['description'] ?? '';
   }
 
-  protected function beforeValidation($attr) {
+  /**
+   * Overrides the parent's beforeValidation method
+   *  to manipulate or modify some Category attributes
+   *
+   * @param array $attr
+   * @return array
+   */
+  protected function beforeValidation(array $attr) {
     foreach($attr as $key => $value) {
       $value = trim(strip_tags($value));
       if ($key == 'description' && $value == "") {
@@ -32,11 +49,17 @@ class Category extends \App\Classes\DatabaseObject {
     return parent::beforeValidation($attr);
   }
 
+  /**
+   * Validate the Category attributes that come from Category Form
+   * Errors if they exists gather parent's errors property
+   *
+   * @return boolean
+   */
   protected function validate() {
     $this->errors = [];
 
     if (is_blank($this->name)) {
-      $this->errors[] = 'Category name cannot be blank.';
+      $this->errors[] = 'Category name can not be blank.';
     } elseif(!has_length($this->name, ['max' => 50])) {
       $this->errors[] = 'Category name can not contain more than 50 characters.';
     }
@@ -56,7 +79,13 @@ class Category extends \App\Classes\DatabaseObject {
     return (empty($this->errors) == true);
   }
 
-  static public function findByCategory($name) {
+  /**
+   * Retrieve category by its name
+   *
+   * @param string $name
+   * @return object | error
+   */
+  static public function findByCategory(string $name) {
     $obj_array = parent::findWhere(['name' => $name]);
     if (!empty($obj_array)) {
       return array_shift($obj_array);

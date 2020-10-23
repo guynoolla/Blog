@@ -3,6 +3,13 @@ declare(strict_types=1);
 
 namespace App\Classes;
 
+/**
+ * Class Post
+ * 
+ * Post formats are image and video, allowed youtube and vimeo links
+ * Post object set as property instance of File Class for image upload
+ * Post object executes queries joined to users and categories tables
+ */
 class Post extends \App\Classes\DatabaseObject {
 
   static protected $table_name = "`posts`";
@@ -17,12 +24,12 @@ class Post extends \App\Classes\DatabaseObject {
   public $image;
   public $video;
   public $body;
-  protected $video_urls;
   public $published;
   public $approved;
   public $published_at;
   public $created_at;
   public $updated_at;
+  protected $video_urls;
 
   protected $image_obj; // File class instance
   
@@ -39,11 +46,18 @@ class Post extends \App\Classes\DatabaseObject {
             ];
 
   // Relational data by foreign key in posts
+  public $category = '';      // category->name
   public $username = '';      // user->username
-  public $category = '';         // category->name
   public $user_email = '';    // user->email
   public $ue_confirmed = '';  // user->email_confirmed
 
+  /**
+   * Class constructor
+   * 
+   * Initializes propertiec by creation a new Post Object
+   *
+   * @param array $args
+   */
   public function __construct(array $args=[]) {
     $this->user_id = $args['user_id'] ?? '';
     $this->category_id = $args['category_id'] ?? '';
@@ -56,11 +70,23 @@ class Post extends \App\Classes\DatabaseObject {
     $this->published = $args['published'] ?? '';
   }
 
+  /**
+   * Set File object to handle image upload and remove
+   *
+   * @param File $image_obj
+   * @return void
+   */
   public function fileInstance(File $image_obj) {
     $this->image_obj = $image_obj;
   }
 
-  public function setStatus($cmd) {
+  /**
+   * Set status of the Post
+   *
+   * @param string $cmd
+   * @return boolean
+   */
+  public function setStatus(string $cmd) {
     switch($cmd) {
       case 'approve':
               $this->approved = '1';
@@ -80,11 +106,23 @@ class Post extends \App\Classes\DatabaseObject {
     }
   }
 
-  public function excerpt() {
-    return (substr(strip_tags($this->body), 0, 150) . '...');
+  /**
+   * Make post's excerpt of particular length
+   *
+   * @return string
+   */
+  public function excerpt(int $length=150) {
+    return (substr(strip_tags($this->body), 0, $length) . '...');
   }
 
-  protected function beforeValidation($attr) {
+  /**
+   * Overrides the parent's beforeValidation method
+   * to manipulate or modify some Post attributes
+   *
+   * @param array $attr
+   * @return array
+   */
+  protected function beforeValidation(array $attr) {
     foreach ($attr as $prop => $value) {
       if ($prop !== 'body') {
         if (!is_null($value)) {
@@ -113,10 +151,17 @@ class Post extends \App\Classes\DatabaseObject {
 
       }
     }
-    return $attr;
+    return parent::beforeValidation($attr);
   }
 
-  protected function beforeSave($attr) {
+  /**
+   * Overrides the parent's beforeSave method
+   *  to manipulate or modify some attributes
+   *
+   * @param array $attr
+   * @return array
+   */
+  protected function beforeSave(array $attr) {
     foreach ($attr as $prop => $value) {
       if ($prop == "published" && $value == '1') {
 
@@ -124,14 +169,20 @@ class Post extends \App\Classes\DatabaseObject {
         ? date('Y-m-d H:i:s', time()) : $this->published_at; 
       }
     }
-    return $attr;
+    return parent::beforeSave($attr);
   }
 
+  /**
+   * Validate the Post attributes that come from Post Form
+   * Errors if they exists gather parent's errors property
+   *
+   * @return boolean
+   */
   protected function validate() {
     $this->errors = [];
 
     if (is_blank($this->title)) {
-      $this->errors[] = 'Title cannot be blank.';
+      $this->errors[] = 'Title can not be blank.';
     } elseif (!has_length($this->title, ['max' => 200])) {
       $this->errors[] = 'Title must be less than 200 characters.';
     }
@@ -145,16 +196,16 @@ class Post extends \App\Classes\DatabaseObject {
     }
     
     if (is_blank($this->body)) {
-      $this->errors[] = 'Post content cannot be blank.';
+      $this->errors[] = 'Post content can not be blank.';
     }
     if (has_unallowed_tag($this->body, $this->allowable_tags)) {
       $this->errors[] = 'Post has not allowed html tag(s).';
     }
     if (has_external_link($this->body, $this->allowable_hosts)) {
-      $this->errors[] = 'Post cannot contain external links except YouTube and Vimeo.';
+      $this->errors[] = 'Post can not contain external links except YouTube and Vimeo.';
     }
     if (has_length_greater_than($this->body, 65000)) {
-      $this->errors[] = 'Post cannot contain more than 65000 characters.';
+      $this->errors[] = 'Post can not contain more than 65000 characters.';
     }
 
     if (!in_array($this->format, ['image', 'video'])) {
@@ -174,12 +225,17 @@ class Post extends \App\Classes\DatabaseObject {
     }
 
     if (($count = $this->videoUrlsCount()) > 3) {
-      $this->errors[] = 'Post cannot have more than 3 videos.';
+      $this->errors[] = 'Post can not have more than 3 videos.';
     }
 
     return (empty($this->errors) == true);
   }
 
+  /**
+   * Returns number of video urls
+   *
+   * @return number
+   */
   protected function videoUrlsCount() {
     if (isset($this->video_urls)) {
       return count( (array) json_decode($this->video_urls));
@@ -188,7 +244,13 @@ class Post extends \App\Classes\DatabaseObject {
     }
   }
 
-  protected function filterCheckboxValue($property) {
+  /**
+   * Convert checkbox value to number
+   *
+   * @param string $property
+   * @return void
+   */
+  protected function filterCheckboxValue(string $property) {
     if (in_array($this->{$property}, ['on','1','checked'])) {
       $this->$property = '1';
     } else {
@@ -196,6 +258,14 @@ class Post extends \App\Classes\DatabaseObject {
     }
   }
 
+  /**
+   * Find all links from the Post content
+   * Parse them for youtube and vimeo video urls
+   * The found video urls convert into embed urls
+   * Keep data in json string as object property
+   *
+   * @return void
+   */
   protected function getBodyVideoUrls() {
     $links = has_links($this->body, true);
     $data = [];
@@ -214,6 +284,11 @@ class Post extends \App\Classes\DatabaseObject {
     }
   }
 
+  /**
+   * Get embed video url for post entry
+   * 
+   * @return void
+   */
   protected function getEntryVideoUrl() {
     $host = parse_url($this->video)['host'];
     if ($host === 'www.youtube.com' || $host === 'youtu.be') {
@@ -224,6 +299,13 @@ class Post extends \App\Classes\DatabaseObject {
     $this->video = json_encode([$this->video => $embed_url]);
   }
 
+  /**
+   * The save method overides parent save method
+   * Before 'Post Save' it cares the file Upload
+   * which is handled by $image_obj File instance
+   * 
+   * @return boolean
+   */
   public function save() {
     if (is_null($this->format) || $this->format == 'video') {
       return parent::save();
@@ -262,6 +344,11 @@ class Post extends \App\Classes\DatabaseObject {
     }
   }
 
+  /**
+   * Deletes object of type Post
+   *
+   * @return boolean
+   */
   public function delete() {
     if ($this->image) {
       $this->deleteImages($this->image);
@@ -269,7 +356,13 @@ class Post extends \App\Classes\DatabaseObject {
     return parent::delete();
   }
 
-  protected function deleteImages($image) {
+  /**
+   * Delete images of the Post
+   *
+   * @param string $image
+   * @return boolean
+   */
+  protected function deleteImages(string $image) {
     $images_path = $this->image_obj->images_path;
     $filename = $images_path . '/' . $image;
     list($noextimg, $ext) = explode('.', $image);
@@ -282,7 +375,15 @@ class Post extends \App\Classes\DatabaseObject {
     return true;
   }
 
-  protected function resizeImage($file) {
+  /**
+   * Resizes Image using Imagine\GD\Imagine PHP Library
+   * Resizes them according to the widths and heights,
+   * which given in $resize_dimensions Class property
+   *
+   * @param array $file
+   * @return boolean
+   */
+  protected function resizeImage(array $file) {
     list($w, $h) = getimagesize($file['filename']);
 
     foreach (self::$resize_dimensions as $d) {
@@ -296,6 +397,14 @@ class Post extends \App\Classes\DatabaseObject {
     return true;
   }
 
+  /**
+   * Query the Approved Posts
+   * Supports pagination
+   *
+   * @param integer $per_page
+   * @param integer $offset
+   * @return object[]
+   */
   static public function queryApprovedPosts(int $per_page, int $offset) {
     $sql = self::getJoins();
     $sql .= <<<SQL
@@ -306,7 +415,16 @@ SQL;
     return self::findBySql($sql);
   }
 
-  static public function querySearchPosts($term, int $per_page, int $offset) {
+  /**
+   * Query the Search Posts
+   * Supports pagination
+   *
+   * @param string $term
+   * @param integer $per_page
+   * @param integer $offset
+   * @return object[]
+   */
+  static public function querySearchPosts(string $term, int $per_page, int $offset) {
     $term = self::$database->escape_string($term);
     $sql = self::getJoins();
     $sql .= <<<SQL
@@ -318,7 +436,16 @@ SQL;
     return self::findBySql($sql);
   }
 
-  static public function queryPostsByCategory($category_id, int $per_page, int $offset) {
+  /**
+   * Query the Category Posts
+   * Supports pagination
+   *
+   * @param integer $category_id
+   * @param integer $per_page
+   * @param integer $offset
+   * @return object[]
+   */
+  static public function queryPostsByCategory(int $category_id, int $per_page, int $offset) {
     $tid = parent::escape($category_id);
     $sql = self::getJoins();
     $sql .= <<<SQL
@@ -329,7 +456,16 @@ SQL;
     return self::findBySql($sql);
   }
 
-  static public function queryPostsByAuthor($user_id, int $per_page, int $offset) {
+  /**
+   * Query The Author Posts
+   * Supports pagination
+   *
+   * @param integer $user_id
+   * @param integer $per_page
+   * @param integer $offset
+   * @return object[]
+   */
+  static public function queryPostsByAuthor(int $user_id, int $per_page, int $offset) {
     $uid = parent::escape($user_id);
     $sql = self::getJoins();
     $sql .= <<<SQL
@@ -340,6 +476,15 @@ SQL;
     return self::findBySql($sql);
   }
 
+  /**
+   * Query the Posts by date published
+   * Supports pagination
+   *
+   * @param array $dates
+   * @param integer $per_page
+   * @param integer $offset
+   * @return object[]
+   */
   static public function queryPostsByDatePub(array $dates, int $per_page, int $offset) {
     $sql = self::getJoins();
     $sql .= <<<SQL
@@ -351,6 +496,15 @@ SQL;
     return self::findBySql($sql);
   }
 
+  /**
+   * Query Post by particular ids
+   * Supports pagination
+   *
+   * @param [type] $ids
+   * @param integer $per_page
+   * @param integer $offset
+   * @return object[]
+   */
   static public function queryAllWhere($ids, int $per_page, int $offset) {
     foreach ($ids as $key => $pid) {
       $pid = strval($pid);
@@ -367,6 +521,12 @@ SQL;
     return self::findBySql($sql);
   }
 
+  /**
+   * Query Posts which have image format
+   * 
+   * @param integer $count
+   * @return object[]
+   */
   static public function queryImageFormatPosts(int $count=6) {
     $sql = self::getJoins();
     $sql .= <<<SQL
@@ -377,6 +537,12 @@ SQL;
     return self::findBySql($sql);
   } 
 
+  /**
+   * Returns the common join part of sql query 
+   * Join to the `users` and `categories` table
+   * 
+   * @return string
+   */
   static protected function getJoins() {
     return <<<SQL
       SELECT p.*, u.username, t.name as category
@@ -386,8 +552,15 @@ SQL;
 SQL;
   }
 
+  /**
+   * Create iframe for embed video url
+   * Youtube/Vimeo
+   *
+   * @return string
+   */
   public function getEntryVideo() {
     $this->videoSplitter();
+
     $url = $this->video['url'];
     $embed_url = $this->video['embed'];
 
@@ -408,6 +581,12 @@ SQL;
     }
   }
 
+  /**
+   * Replace video urls in the Post content with video iframes
+   * Youtube/Vimeo
+   *
+   * @return string
+   */
   public function getBodyWithVideo() {
     if (!isset($this->video_urls)) return $this->body;
 
@@ -434,9 +613,13 @@ SQL;
     return $this->body;
   }
 
-  function getYoutubeEmbedUrl($url) {
-    //$short_url_regex = '/youtu.be\/([a-zA-Z0-9_]+)\??/i';
-    //$long_url_regex = '/youtube.com\/((?:embed)|(?:watch))((?:\?v\=)|(?:\/))(\w+)/i';
+  /**
+   * Converts youtube url into youtube embed url
+   *
+   * @param string $url
+   * @return string | error
+   */
+  function getYoutubeEmbedUrl(string $url) {
     $both_urls_regex = "#(?<=v=|v\/|vi=|vi\/|youtu.be\/)[a-zA-Z0-9_-]{11}#";
 
     if (preg_match($both_urls_regex, $url, $matches)) {
@@ -447,7 +630,13 @@ SQL;
     }
   }
 
-  function getVimeoEmbedUrl($url) {
+  /**
+   * Converts vimeo url into youtube embed url
+   *
+   * @param string $url
+   * @return string | error
+   */
+  function getVimeoEmbedUrl(string $url) {
     $vimeo_id = substr(parse_url($url, PHP_URL_PATH), 1);
     if ($vimeo_id) {
       return 'https://player.vimeo.com/video/' . $vimeo_id;
@@ -457,11 +646,11 @@ SQL;
   }
 
   /**
-   * Video embed URL examples:
-   * https://www.youtube.com/watch?v=GDeJtgjvXTk
-   * https://youtu.be/GDeJtgjvXTk
-   * https://vimeo.com/440413540
-  */
+   * Converts $video attribute's json string value into array
+   * which will contain url, embed url and provider of video
+   *
+   * @return void
+   */
   function videoSplitter() {
     if (isset($this->id) && isset($this->video)) {
       $arr = (array) json_decode($this->video);
@@ -482,6 +671,12 @@ SQL;
     }
   }
 
+  /**
+   * Converts $video attribute array value into json string
+   * where array key is video url, value is video embed url
+   * 
+   * @return string
+   */
   function videoMerger() {
     if (is_array($this->video)) {
       $this->video = json_encode([
@@ -491,7 +686,15 @@ SQL;
     }
   }
   
-  static public function responsive(string $image, $depth = 0) {
+  /**
+   * Creates img srcset attribute value with different sizes
+   * It gets proper sizes from $resize_dimensions property 
+   *
+   * @param string $image
+   * @param integer $depth
+   * @return string
+   */
+  static public function responsive(string $image, int $depth = 0) {
     $src_value = '';
     $depth = ($depth == 0) ? count(self::$resize_dimensions) : $depth;
     $arr_max = $depth - 1;
@@ -503,6 +706,12 @@ SQL;
     return $src_value;
   }
 
+  /**
+   * Filter image format posts from array with posts
+   *
+   * @param array $posts
+   * @return array
+   */
   static public function filterImageFormat(array $posts) {
     $arr = [];
     foreach ($posts as $post) {

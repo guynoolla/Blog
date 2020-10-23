@@ -392,12 +392,12 @@ function slickCarousel(settings, current) {
         {
           breakpoint: 1200,
           settings: {
-            dots: settings.less2000w.dots,
-            infinite: settings.less2000w.infinite,
-            slidesToShow: settings.less2000w.slidesToShow,
-            slidesToScroll: settings.less2000w.slidesToScroll,
-            centerPadding: settings.less2000w.centerPadding,
-            centerMode: settings.less2000w.centerMode
+            dots: settings.less1200w.dots,
+            infinite: settings.less1200w.infinite,
+            slidesToShow: settings.less1200w.slidesToShow,
+            slidesToScroll: settings.less1200w.slidesToScroll,
+            centerPadding: settings.less1200w.centerPadding,
+            centerMode: settings.less1200w.centerMode
           }
         },
         {
