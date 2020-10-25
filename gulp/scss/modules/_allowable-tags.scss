@@ -1,0 +1,55 @@
+.post {
+
+  blockquote {
+    font-size: 1em;
+    width: 76%;
+    margin: 1.5rem auto;
+    font-family: var(--cursive-font);
+    color: $text-secondary;
+    padding: 1.2em 20px 1.2em 60px;
+    border-left: 5px solid #78C0A8;
+    line-height: 1.6;
+    position: relative;
+    background:#EDEDED;
+  
+    &::before {
+      font-family: Arial, sans-serif;
+      content: "\201C";
+      color:#78C0A8;
+      font-size: 5em;
+      font-style: italic;
+      position: absolute;
+      left: 7px;
+      top: 7px;
+    }
+  
+    &::after {
+      content: '';
+    }
+  
+    strong {
+      display: block;
+      color: $text-secondary;
+      font-style: normal;
+      font-weight: bold;
+      margin-top: 1em;
+    }
+  }
+  
+  ul {
+    li {
+      padding-left: .5em;
+      font-style: var(font-heading);
+    }
+  }
+  
+  em {
+    font-family: var(--cursive-font);
+    font-size: 96%;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--body-font);
+  }
+
+}

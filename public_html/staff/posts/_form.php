@@ -60,7 +60,7 @@ if (!$edit): ?>
           $tags = implode('> <', $tags);
         ?>
         <span class="d-inline text-muted"><?php echo h($tags) ?></span>
-        <small id="bodyHelp" class="d-inline form-text text-muted">External links are not allowed excerpt YouTube and Vimeo video links.</small>
+        <small id="bodyHelp" class="d-block form-text text-muted">External links are not allowed excerpt YouTube and Vimeo video links.</small>
       </li>
       <li class="list-group-item bg-muted-lk flex-grow-1 d-none d-md-block">
         <div class="d-flex align-items-center"><span class="h4 text-muted">YouTube</span></div>
