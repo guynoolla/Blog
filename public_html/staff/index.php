@@ -37,7 +37,7 @@ include SHARED_PATH . '/staff_header.php';
       </h1>
 
       <?php if (!$user->isEmailConfirmed()): ?>
-        <p class="text-lk">
+        <p class="text-lk h4">
           You are logged in <strong><?php echo $user->username ?></strong>.<br>
           <?php echo ($user->user_type == 'admin' ? 'To administrate you should' : 'To add a Post you should') ?>
           <a class="underlined" href="<?php echo url_for('email/confirm_mail.php?email=' . $user->email) ?>" class="link-underlined"><u>confirm</u></a> your email address.

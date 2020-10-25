@@ -44,6 +44,7 @@ class User extends \App\Classes\DatabaseObject {
 
   // Relational data by foreign key in posts
   public $posted = "";
+  public $draft = "";
   public $approved = "";
   public $published = "";
 
@@ -342,7 +343,8 @@ class User extends \App\Classes\DatabaseObject {
   static public function queryUsersWithPostsNum(int $per_page, int $offset) {
     $sql = <<<SQL
           SELECT u.*, COUNT(p.user_id) AS posted,
-          SUM(if (p.published = '1', 1, 0)) AS published,
+          SUM(if (p.published = '0', 1, 0)) AS draft,
+          SUM(if (p.published = '1' AND p.approved = '0', 1, 0)) AS published,
           SUM(if (p.approved = '1', 1, 0)) AS approved
           FROM `users` AS u LEFT JOIN `posts` AS p
           ON u.id = p.user_id

@@ -94,7 +94,7 @@ function td_post_title($post, $group=false) {
   ob_start();
   
   ?><td scope="colgroup">
-    <span class="h5">
+    <span class="post-title">
       <a href="<?php echo url_for('preview/' . u($post->title) . '?id=' . $post->id)
       ?>"><?php echo h($post->title) ?></a>
     </span>
@@ -110,23 +110,23 @@ function td_post_title($post, $group=false) {
 
 function td_post_author($post, $access) {
   return
-    "<td><a href=\"#{$post->username}\" class=\"click-load\" data-type=\"author\" data-value=\"{$post->user_id}\" data-access=\"{$access}\">{$post->username}</a></td>";
+    "<td><a href=\"#{$post->username}\" class=\"click-load h5\" data-type=\"author\" data-value=\"{$post->user_id}\" data-access=\"{$access}\">{$post->username}</a></td>";
 }
 
 function td_post_author_email($post) {
   return
-    "<td><a href=\"mailto:{$post->user_email}\" class=\"" . ($post->ue_confirmed ? 'text-success' : '') . "\">{$post->user_email}</a></td>";
+    "<td><a href=\"mailto:{$post->user_email}\" class=\"h5 " . ($post->ue_confirmed ? 'text-success' : '') . "\">{$post->user_email}</a></td>";
 }
 
 function td_post_status($post, $access) {
   $output = '';
 
   if ($post->published == 0) {
-    $output .= "<td class=\"text-secondary\" data-pid=\"{$post->id}\"><a href=\"#draft\" class=\"click-load\" data-type=\"status\" data-value=\"draft\" data-access=\"{$access}\">draft</a></td>";
+    $output .= "<td class=\"text-secondary\" data-pid=\"{$post->id}\"><a href=\"#draft\" class=\"click-load h5 my-0\" data-type=\"status\" data-value=\"draft\" data-access=\"{$access}\">draft</a></td>";
   } elseif ($post->published == 1 && $post->approved == 0) {
-    $output .= "<td class=\"text-primary\" data-pid=\"{$post->id}\"><a href=\"#published\" class=\"click-load\" data-type=\"status\" data-value=\"published\" data-access=\"{$access}\">published</a></td>";
+    $output .= "<td class=\"text-primary\" data-pid=\"{$post->id}\"><a href=\"#published\" class=\"click-load h5 my-0\" data-type=\"status\" data-value=\"published\" data-access=\"{$access}\">published</a></td>";
   } elseif ($post->published == 1 && $post->approved == 1) {
-    $output .= "<td class=\"text-success\" data-pid=\"{$post->id}\"><a href=\"#approved\" class=\"click-load\" data-type=\"status\" data-value=\"approved\" data-access=\"{$access}\">approved</a></td>";
+    $output .= "<td class=\"text-success\" data-pid=\"{$post->id}\"><a href=\"#approved\" class=\"click-load h5 my-0\" data-type=\"status\" data-value=\"approved\" data-access=\"{$access}\">approved</a></td>";
   }
 
   return $output;
@@ -134,7 +134,7 @@ function td_post_status($post, $access) {
 
 function td_post_category($post, $access) {
   return "<td scope=\"col\">
-    <span class=\"h5 font-italic\"><a href=\"#{u($post->category)}\" class=\"click-load\"
+    <span class=\"category-headline\"><a href=\"#{u($post->category)}\" class=\"click-load\"
       data-type=\"category\" data-value=\"{$post->category_id}\" data-access=\"{$access}\"
     >{$post->category}</a></span>
   </td>";
@@ -152,7 +152,7 @@ function td_post_date($post, $access) {
   }
 
   return
-    "<td scope=\"col\"><a href=\"#ondate\" data-type=\"date\" data-value=\"{$date}\" data-access=\"{$access}\" class=\"click-load h5\">" . date('M j, Y', strtotime($date)) . "</a></td>";
+    "<td scope=\"col\"><a href=\"#ondate\" data-type=\"date\" data-value=\"{$date}\" data-access=\"{$access}\" class=\"click-load h6\">" . date('M j, Y', strtotime($date)) . "</a></td>";
 }
 
 ?>

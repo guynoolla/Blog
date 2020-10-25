@@ -7,20 +7,24 @@
 
 .logo {
   position: relative;
-  padding-bottom: 3.3rem;
-  background-color: #fdfeff; //#f8f9fa;
+  background-color: #fdfeff;
 
   .logo-content {
     width: 100%;
-    text-align: center;
+    height: 10rem;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
 
     .brand {
       display: block;
-      font-family: "Open Sans", sans-serif;
+      font-family: var(--logo-font);
+      font-weight: var(--logo-font-weight);
       font-size: 2.4em;
-      font-weight: 300;
       letter-spacing: .07em;
       text-transform: uppercase;
+      margin-top: 0em;
       margin-bottom: .3em;
       a {
         color: $blue;
@@ -28,7 +32,8 @@
     }
 
     .description {
-      font-family: "Montserrat", sans-serif;
+      font-family: var(--logo-font);
+      font-weight: var(--logo-font-weight);
       font-size: .9em;
       line-height: 1;
       letter-spacing: .05em;

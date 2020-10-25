@@ -5,7 +5,8 @@ button, input[type=submit],
   border-color: transparent;
   color: #696969;
   display: inline-block;
-  font-family: "Montserrat", sans-serif;
+  font-family: var(--form-label-font);
+  font-family: var(--form-label-font-weight);
   font-size: 12px;
   text-transform: uppercase;
   -webkit-transition: background-color 0.3s linear;
@@ -23,7 +24,6 @@ button, input[type=submit],
 #image-navigation .nav-previous a:focus,
 #image-navigation .nav-next a:hover,
 #image-navigation .nav-next a:focus,
-
 button:hover,
 button:focus,
 .input-group-btn:last-child>.btn:hover,
@@ -34,6 +34,7 @@ input[type=submit]:focus {
   border-color: transparent;
   color: #fff;
 }
+
 .input-group-btn:last-child>.btn {
   font-size: 12px;
   opacity: 1;
@@ -62,11 +63,12 @@ button.btn.btn-outline-default {
     text-transform: uppercase;
     font-size: .9em;
     letter-spacing: .15em;
-    font-weight: 500;
+    font-family: var(--button-font);
+    font-weight: 600;
     &::before {
       content: "";
       clear: both;
-      height: 1.2em;
+      height: 1em;
       margin-bottom: -.1em;
       display: inline-block;
       border-left: 2px solid #DDD;
@@ -75,7 +77,7 @@ button.btn.btn-outline-default {
     &::after {
       content: "";
       clear: both;
-      height: 1.2em;
+      height: 1em;
       margin-bottom: -.1em;
       display: inline-block;
       border-right: 2px solid #DDD;
@@ -86,21 +88,24 @@ button.btn.btn-outline-default {
     a {
       color: #696969;
       font-weight: bold;
-      font-size: 1em;
+      font-size: .9em;
       letter-spacing: .1em;
       &::before {
         border-color: #6c5b4e;
-        margin-bottom: -.25em;
+        margin-bottom: -.1em;
       }
       &::after {
         border-color: #6c5b4e;
-        margin-bottom: -.25em;
+        margin-bottom: -.1em;
       }
     }
   }
 }
 
 .btn-outline-secondary {
+  font-family: var(--button-font);
+  font-weight: var(--button-font-weight);
+  text-transform: uppercase;
   &:hover {
     color: #fff !important;
   }

@@ -9,14 +9,25 @@ if (!isset($page_title) || $page_title == '') {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   <title><?php echo $page_title ?></title>
+
   <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
   <link rel="stylesheet" href="<?php echo url_for('assets/css/style.css') ?>">
   <link rel="stylesheet" href="<?php echo url_for('assets/css/admin.css') ?>">
+  
   <link rel="apple-touch-icon" sizes="180x180" href="<?php echo url_for('/apple-touch-icon.png') ?>">
   <link rel="icon" type="image/png" sizes="32x32" href="<?php echo url_for('/favicon-32x32.png') ?>">
   <link rel="icon" type="image/png" sizes="16x16" href="<?php echo url_for('/favicon-16x16.png') ?>">
   <link rel="manifest" href="<?php echo url_for('/site.webmanifest') ?>">
+
+  <style>
+    <?php include '_header_set_style.html'; ?>
+    .page-admin .main .post .entry-title {
+      transform: skewX(10deg);
+    }  
+  </style>
+
   <script src="<?php echo url_for('assets/js/vendor.js') ?>"></script>
 </head>
 <body>

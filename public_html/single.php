@@ -56,8 +56,8 @@ include(SHARED_PATH . '/public_header.php');
 <div class="container-md">
   <div class="row">
 
-    <div class="col-12 text-center border-top border-bottom border-soft rounded mt-0">
-      <h3 class="my-4"><a href="<?php
+    <div class="col-12 pt-0 text-center category-headline-wrap">
+      <h3 class="category-headline my-4"><a href="<?php
         echo url_for('category/') . u($category->name) . '?tid=' . $category->id
         ?>" title="<?php echo $category->name ?>"><?php echo $category->name
       ?></a></h3>
@@ -101,7 +101,7 @@ include(SHARED_PATH . '/public_header.php');
               <div class="post-item-wrap">
                 <div class="post-item-inner border-bottom-0">
 
-                  <h2 class="entry-title text-center mt-0"><?php echo h($post->title) ?></h2>
+                  <h2 class="post-title text-center mt-0"><?php echo h($post->title) ?></h2>
 
                   <div class="entry-meta">
                     <span class="posted-on">Posted on <a href="<?php echo url_for('ondate/pub/?ymd=' . u(date('Y-m-d', strtotime($post->created_at)))) ?>" rel="bookmark">

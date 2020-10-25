@@ -85,12 +85,13 @@ class Posts {
 
         const data = JSON.parse(res);
         if (data[0] == 'success') {
-          const output = this.makeHtml(data[1], data[2])
+          const output = this.makeHtml(data[1]);
+          const pag = '<div class="mt-4">' + data[2].html + '</div>';
           let timer = setTimeout(() => {
 
             $(".loading").addClass("d-none");
             $(".loadPostsJS").html(output).fadeIn();
-            $(".paginationJS").html(data[2].html).fadeIn();
+            $(".paginationJS").html(pag).fadeIn();
             this.setHeadlineChevrons(data[2].total_count);
             $(".pagination-nav").show();
             
@@ -132,15 +133,15 @@ class Posts {
         output += `
         <article>
           <div class="post"><div class="post-item-wrap"><div class="post-item-inner">
-            <h3 class="entry-title text-center mt-0 mb-1">
+            <h2 class="post-title text-center mt-0 mb-1">
               <a href="${post.to_single}">${post.title}</a>
-            </h3>
+            </h2>
             <div class="entry-meta">
               <span class="posted-on">Posted on <a href="${post.to_on_date}">
               <time class="entry-date published" datetime="${post.created_at}">
                 ${post.created_at}
               </time></a></span>by
-              <span><a href="${post.to_author}">${post.username}</a></span>
+              <span class="posted-by"><a href="${post.to_author}">${post.username}</a></span>
             </div>
             <div class="post-format ${post.format == 'video' ? 'post-format--video' : ''}">`;
               if (post.format == 'image') {
@@ -155,11 +156,11 @@ class Posts {
                   ${post.video}<a class="overlay" href="${post.to_single}"></a>
                 </div>`;
               }
-            output += `</div>
-            <a href="${post.to_category}" class="category category--dark text-center mt-2">
-              ${post.category}
-            </a>`;
+            output += `</div>`;
             output += `<div class="entry-content mt-4">${post.excerpt}</div>
+              <a href="${post.to_category}" class="category category--dark-line-top text-center mt-3">
+                ${post.category}
+              </a>
           </div></div></div>
         </article>`;
       

@@ -1,24 +1,33 @@
 /**
   Post meta */
 
-.entry-title {
+.entry-title, .post-title {
+  font-family: var(--post-title-font);
+  font-weight: var(--post-title-font-weight);
+  font-style: italic;
   margin-bottom: 1.25rem;
 }
 
 .entry-meta {
   text-align: center;
+  font-size: .9em;
+  font-family: var(--post-meta-font);
 
   margin-bottom: 1.25em;
   a {
-    font-size: 13px;
     color: #6B6B6B;
   }
-  .fa {
-    font-size: .9em;
-    margin-right: 3px;
+  span.posted-on {
+    margin-right: .5em;
   }
-  span {
-    margin-right: .62em;
+  span.posted-by {
+    font-family: var(--post-meta-font);
   }
 
+  .posted-on time, .posted-by {
+    font-family: var(--post-meta-font);
+    font-weight: 500;
+    font-size: .8em;
+    text-transform: uppercase;
+  }
 }

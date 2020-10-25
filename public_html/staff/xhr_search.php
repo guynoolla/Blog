@@ -95,9 +95,9 @@ function admin_category_data($data) {
       <?php foreach($categories as $key => $category): ?>
         <tr>
           <th scope="row"><?php echo $key + 1 ?></th>
-          <td><span class="h5"><?php echo $category->name ?></span></td>
-          <td><?php echo $category->description ?></td>
-          <td><a href="#ondate" class="click-load h5" data-type="date" data-value="<?php echo $category->created_at ?>" data-access="admin_category"><?php echo date('M j, Y', strtotime($category->created_at)) ?></span></td>
+          <td><span class="category-headline"><?php echo $category->name ?></span></td>
+          <td><span class="h5"><?php echo $category->description ?></span></td>
+          <td><a href="#ondate" class="click-load h6" data-type="date" data-value="<?php echo $category->created_at ?>" data-access="admin_category"><?php echo date('M j, Y', strtotime($category->created_at)) ?></span></td>
           <td scope="colgroup" colspan="1">
             <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('/staff/categories/edit.php?id=' . $category->id) ?>">
               Edit
@@ -175,6 +175,8 @@ function admin_user_data($data) {
   $pagination = new Pagination($current_page, $per_page, $total_count);
   
   $sql = "SELECT u.*, COUNT(p.user_id) AS posted,";
+  $sql .= " SUM(if (p.published = '0', 1, 0)) AS draft,";
+  $sql .= " SUM(if (p.published = '1' AND p.approved = '0', 1, 0)) AS published,";
   $sql .= " SUM(if (p.approved = '1', 1, 0)) AS approved";
   $sql .= " FROM `users` AS u LEFT JOIN `posts` AS p";
   $sql .= " ON u.id = p.user_id";
@@ -218,12 +220,13 @@ function admin_user_data($data) {
       <?php foreach($users as $key => $user): ?>
       <tr data-user="<?php echo $user->id ?>">
         <th scope="row"><?php echo $key + 1 ?></th>
-        <td><span><?php echo $user->username ?></span></td>
+        <td><span class="h5"><?php echo $user->username ?></span></td>
         <td><a href="mailto: <?php echo $user->email ?>" class="<?php echo ($user->email_confirmed ? 'text-success' : '') ?>"><?php echo $user->email ?></a></td>
-        <td><a href="#user-type" data-type="user_type" data-value="<?php echo $user->user_type ?>" data-access="admin_user" class="click-load"><?php echo $user->user_type ?></a></td>
-        <td><a href="#ondate" data-type="date" data-value="<?php echo $user->created_at ?>" data-access="admin_user" class="click-load"><?php echo date('M j, Y', strtotime($user->created_at)) ?></a></td>
-        <td><?php echo $user->posted ?> - <span class="text-success font-weight-bold">
-          <?php echo $user->approved ?></span>
+        <td><a href="#user-type" data-type="user_type" data-value="<?php echo $user->user_type ?>" data-access="admin_user" class="click-load h5"><?php echo $user->user_type ?></a></td>
+        <td><a href="#ondate" data-type="date" data-value="<?php echo $user->created_at ?>" data-access="admin_user" class="click-load h5"><?php echo date('M j, Y', strtotime($user->created_at)) ?></a></td>
+        <td><span class="text-secondary font-weight-bold h5"><?php echo $user->draft ?></span>
+          - <span class="text-primary font-weight-bold h5"><?php echo $user->published ?></span>
+          - <span class="text-success font-weight-bold h5"><?php echo $user->approved ?></span>
         </td>
         <td scope="colgroup" colspan="1">
           <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('/staff/users/edit.php?id=' . $user->id) ?>">

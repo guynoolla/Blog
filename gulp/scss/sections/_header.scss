@@ -12,10 +12,11 @@ header {
   nav {
     transition: padding .2s linear, opacity .2s ease-in;
     background-color: #FFF;
-    font-family: "Montserrat", sans-serif;
-    font-weight: bold !important;
-    font-size: .84rem !important;
-
+    font-family: var(--nav-font);
+    font-weight: var(--nav-font-weight);
+    font-size: .9em;
+    border-bottom: 1px solid #F5F5F5;
+    
     &.scroll {
       padding: 0;
       opacity: 0;
@@ -27,5 +28,4 @@ header {
       }
     }
   }
-
 }

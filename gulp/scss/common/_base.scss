@@ -10,8 +10,8 @@ body {
 
   margin:0;
   padding:0;
-  font-family: 'Open Sans', sans-serif;
-  font-weight:300;
+  font-family: var(--body-font);
+  font-weight: var(--body-font-weight);
   overflow-x: hidden;
 }
 
@@ -37,8 +37,8 @@ a:focus {
 
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   color: #696969;
-  font-weight: 400;
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--heading-font);
+  font-weight: var(--heading-font-weight);
   margin: 30px 0;
 }
 
@@ -108,7 +108,6 @@ img {
 }
 
 button, input, select, textarea {
-  font-family: 'Montserrat', sans-serif;
   font-size: 100%;
   /* Corrects font size not being inherited in all browsers */
   margin: 0;

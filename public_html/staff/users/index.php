@@ -58,13 +58,13 @@ include '../_common-html-render.php';
               <?php foreach($users as $key => $user): ?>
               <tr data-user="<?php echo $user->id ?>">
                 <th scope="row"><?php echo $key + 1 ?></th>
-                <td><span><?php echo $user->username ?></span></td>
-                <td><a href="mailto: <?php echo $user->email ?>" class="<?php echo ($user->email_confirmed ? 'text-success' : '') ?>"><?php echo $user->email ?></a></td>
-                <td><a href="#user-type" data-type="user_type" data-value="<?php echo $user->user_type ?>" data-access="admin_user" class="click-load"><?php echo $user->user_type ?></a></td>
-                <td><a href="#ondate" data-type="date" data-value="<?php echo $user->created_at ?>" data-access="admin_user" class="click-load"><?php echo date('M j, Y', strtotime($user->created_at)) ?></a></td>
-                <td><span class="text-secondary font-weight-bold"><?php echo $user->posted ?></span>
-                  - <span class="text-primary font-weight-bold"><?php echo $user->published ?></span>
-                  - <span class="text-success font-weight-bold"><?php echo $user->approved ?></span>
+                <td><span class="h5"><?php echo $user->username ?></span></td>
+                <td><a href="mailto: <?php echo $user->email ?>" class="h5 <?php echo ($user->email_confirmed ? 'text-success' : '') ?>"><?php echo $user->email ?></a></td>
+                <td><a href="#user-type" data-type="user_type" data-value="<?php echo $user->user_type ?>" data-access="admin_user" class="click-load h5"><?php echo $user->user_type ?></a></td>
+                <td><a href="#ondate" data-type="date" data-value="<?php echo $user->created_at ?>" data-access="admin_user" class="click-load h5"><?php echo date('M j, Y', strtotime($user->created_at)) ?></a></td>
+                <td><span class="text-secondary font-weight-bold h5"><?php echo $user->draft ?></span>
+                  - <span class="text-primary font-weight-bold h5"><?php echo $user->published ?></span>
+                  - <span class="text-success font-weight-bold h5"><?php echo $user->approved ?></span>
                 </td>
                 <td scope="colgroup" colspan="1">
                   <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('/staff/users/edit.php?id=' . $user->id) ?>">

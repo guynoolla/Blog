@@ -5,8 +5,10 @@
   ul {
     list-style: none;
     padding: 0;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1em;
+    font-family: var(--widget-categories-font);
+    font-size: .82em;
+    font-weight: 400;
+    text-transform: uppercase;
     li {
       border-bottom: 1px solid #EEE;
       padding: .5em 0;

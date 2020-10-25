@@ -15,7 +15,11 @@
       }
 
       .title {
-        font-weight: 300;
+        font-family: var(--widgets-section-title-font);
+        font-weight: var(--widgets-section-title-font-weight);
+        font-size: 1.1em;
+        text-transform: uppercase;
+
         &::after {
           content: "";
           clear: both;

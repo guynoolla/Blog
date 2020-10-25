@@ -65,9 +65,9 @@ include '../_common-html-render.php';
               <?php foreach($categories as $key => $category): ?>
                 <tr>
                   <th scope="row"><?php echo $key + 1 ?></th>
-                  <td><span class="h5"><?php echo $category->name ?></span></td>
-                  <td><?php echo $category->description ?></td>
-                  <td><a href="#ondate" class="click-load h5" data-type="date" data-value="<?php echo $category->created_at ?>" data-access="admin_category"><?php echo date('M j, Y', strtotime($category->created_at)) ?></span></td>
+                  <td><span class="category-headline"><?php echo $category->name ?></span></td>
+                  <td><span class="h5"><?php echo $category->description ?></span></td>
+                  <td><a href="#ondate" class="click-load h6" data-type="date" data-value="<?php echo $category->created_at ?>" data-access="admin_category"><?php echo date('M j, Y', strtotime($category->created_at)) ?></span></td>
                   <td scope="colgroup" colspan="1">
                     <a class="btn-lk btn-lk--secondary" href="<?php echo url_for('/staff/categories/edit.php?id=' . $category->id) ?>">
                       Edit

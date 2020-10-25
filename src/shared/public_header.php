@@ -9,38 +9,46 @@ if (!isset($page_title)) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   <title><?php echo $page_title ?></title>
+  
   <?php if (url_contain(['/post/','/preview/'])):
     ?><meta name="description" content="<?php echo $post->meta_desc ?>">
   <?php endif; ?>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
-  <!-- Awesome fonts replaced with awesome svg -->
+
   <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
-  <!-- Add the slick-theme.css if you want default styling -->
+  
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.css"/>
-  <!-- Add the slick-theme.css if you want default styling -->
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick-theme.css"/>
+
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="<?php echo url_for('assets/css/style.css') ?>">
+  
   <link rel="apple-touch-icon" sizes="180x180" href="<?php echo url_for('/apple-touch-icon.png') ?>">
   <link rel="icon" type="image/png" sizes="32x32" href="<?php echo url_for('/favicon-32x32.png') ?>">
   <link rel="icon" type="image/png" sizes="16x16" href="<?php echo url_for('/favicon-16x16.png') ?>">
   <link rel="manifest" href="<?php echo url_for('/site.webmanifest') ?>">
-  <style>
-  <?php if ($jsonstore->siteMainColor): ?>
-    .sidebar .sidebar-content .widget .title::after {
-      border-bottom: 2px solid <?php echo $jsonstore->siteMainColor; ?> !important;
-    }
-    .category.category--dark::after {
-      border-bottom: 2px solid <?php echo $jsonstore->siteMainColor; ?> !important;
-    }
-    .logo .logo-content .brand a {
-      color: <?php echo $jsonstore->siteMainColor ?> !important;
-    }
-    .scroll-to-top:hover, .scroll-to-top:focus {
-      background-color: <?php echo $jsonstore->siteMainColor ?> !important;
-    }
-  <?php endif ?>
+  
+  <style><?php
+    include '_header_set_style.html';
+
+    if ($jsonstore->siteMainColor):
+    ?>
+      .sidebar .sidebar-content .widget .title::after {
+        border-bottom: 2px solid <?php echo $jsonstore->siteMainColor; ?> !important;
+      }
+      .category.category--dark::after {
+        border-bottom: 2px solid <?php echo $jsonstore->siteMainColor; ?> !important;
+      }
+      .logo .logo-content .brand a {
+        color: <?php echo $jsonstore->siteMainColor ?> !important;
+      }
+      .scroll-to-top:hover, .scroll-to-top:focus {
+        background-color: <?php echo $jsonstore->siteMainColor ?> !important;
+      }
+    <?php endif ?>
   </style>
+
   <script src="<?php echo url_for('assets/js/vendor.js') ?>"></script>
 </head>
 
@@ -55,7 +63,7 @@ if (url_contain(['/pasword/', '/email/', '/staff/login', '/staff/register'])) {
 
 <header id="page">
 
-  <nav class="nav-ini-hide navbar navbar-expand-md navbar-light fixed-top" id="hideByScroll">
+  <nav class="navbar navbar-expand-md navbar-light fixed-top py-3" id="hideByScroll">
     <div class="container">
       <!-- <a class="navbar-brand d-sm-none" href="#">Kite</a> -->
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">

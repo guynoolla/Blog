@@ -59,11 +59,8 @@ $type = 'default';
   $pagination = new Pagination($current_page, $per_page, $total_count, 'pagination-lg');
   $posts = Post::queryPostsByCategory($category_id, $per_page, $pagination->offset());
 
-  if ($posts) {
-    $headline = "Posts in '<strong>" . $category->name . "</strong>'";
-  } else {
-    $headline = "No posts in '<strong>" . $category->name . "</strong>' found.";
-  }
+  if ($posts) $headline = $category->name;
+  else $headline = $category->name;
 
 /*
  GET POSTS BY AUTHOR ------------------------------------------------*/
@@ -141,8 +138,8 @@ include SHARED_PATH . '/carousel.php';
   
     <?php
     if ($headline): ?>
-      <div class="col-12 py-4 text-center border-top border-bottom border-soft rounded">
-        <h3 class="text-center my-0"><?php echo $headline ?></h3><?php
+      <div class="col-12 py-4 text-center category-headline-wrap">
+        <h3 class="category-headline my-0"><?php echo $headline ?></h3><?php
         if ($type == 'category') {
           if ($category->description && $jsonstore->showCategoryDescription): ?>
             <p class="w-100 text-center mt-0"><?php
@@ -189,7 +186,7 @@ include SHARED_PATH . '/carousel.php';
                           <time class="entry-date published" datetime="<?php echo $post->created_at ?>">
                             <?php echo date('M j, Y', strtotime($post->created_at)) ?>
                           </time>
-                        </a></span>by <span class="author vcard">
+                        </a></span>by <span class="posted-by">
                           <a class="url fn n" href="<?php echo url_for('author/' . u($post->username) . '?uid=' . $post->user_id) ?>">
                             <?php echo h($post->username) ?>
                           </a></span>

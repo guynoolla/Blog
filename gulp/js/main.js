@@ -202,6 +202,15 @@ $(window).on('change:breakpoint', function (e, current, previous) {
     }
   })
 
+  $(".navbar .navbar-toggler")
+    .on("mouseenter", e => {
+      e.preventDefault();
+      $(e.target).addClass("pulse");
+      setTimeout(() => {
+        $(e.target).removeClass("pulse");
+      }, 400)
+    })
+    
 }); // $ function
 
 /*

@@ -1,5 +1,43 @@
-/**
- * Vars */
+
+/*
+ Fonts, overridable in _header_set_style.html in shared folder ------------ */
+
+:root {
+  --body-font: 'Lora', serif;
+  --body-font-weight: 300;
+
+  --nav-font: 'Montserrat', sans-serif;
+  --nav-font-weight: 400; 
+
+  --logo-font: 'Lora', serif;
+  --logo-font-weight: 300; 
+
+  --heading-font: 'Montserrat', sans-serif;
+  --heading-font-weight: 400;
+
+  --category-headline-font: 'Montserrat', sans-serif;
+  --category-headline-font-weight: 300;
+
+  --post-meta-font: 'Montserrat', sans-serif;
+
+  --post-title-font: 'Lora', serif;
+  --post-title-font-weight: 400; 
+
+  --form-label-font: 'Montserrat', sans-serif;
+  --form-label-font-weight: 400;
+  --form-input-font: 'Lora', serif;
+
+  --widgets-section-title-font: 'Montserrat', sans-serif;
+  --widgets-section-title-font-weight: 300;
+  --widgets-section-body-font-weight: 300;
+
+  --widget-about-font: 'Lora', serif;
+  --widget-recent-posts-font: 'Lora', serif;
+  --widget-categories-font: 'Lora', serif;
+  --widget-text-font: 'Montserrat', sans-serif;
+
+  --button-font: 'Montserrat', sans-serif;
+}
 
 /*
  Colors ------------------------------------------- */

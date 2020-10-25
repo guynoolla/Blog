@@ -71,10 +71,12 @@
           h2 {
             font-size: 1.6em;
             letter-spacing: .02em;
+            font-family: var(--post-title-font);
+            font-style: italic;
             font-weight: 300;
             line-height: 1.4em;
             z-index: 801;
-            color: white;
+            color: #FFF;
             cursor: pointer;
             margin-bottom: 1.2em;
             a {
@@ -126,7 +128,8 @@
   display: block;
   color: #FFF;
   font-size: .8em;
-  font-weight: 300;
+  font-family: var(--category-headline-font);
+  font-weight: var(--category-headline-font-weight);
   letter-spacing: .1em;
   text-transform: uppercase;
 
@@ -142,12 +145,32 @@
   }
 
   &--dark {
-    color: #444 !important;
-    margin-bottom: 2.8em;
+    color: $text-secondary !important;
+    padding-bottom: .5em;
     &::after {
       width: 2.5rem;
       border-bottom: 2px solid $kite-color;
       padding-top: .7em;
+    }
+  }
+
+  &--dark-line-top {
+    color: $text-secondary;
+    padding-top: 1em;
+    &::before {
+      content: "";
+      clear: both;
+      display: flex;
+      margin: 0 auto;
+      padding-bottom: 1em;
+      margin-top: -1.8em;
+      border-top: 2px solid #DDD;
+      width: 2.5rem;
+      border-top: 2px solid $kite-color;
+      padding-bottom: .7em;
+    }
+    &::after {
+      border-bottom: none !important;
     }
   }
 }

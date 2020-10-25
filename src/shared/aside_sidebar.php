@@ -205,7 +205,7 @@ function widget_text($jsonstore) {
           echo $jsonstore->sidebarWidget->text->title ?>
         </h3><?php
       endif; ?>
-      <p><?php echo $jsonstore->sidebarWidget->text->body ?></p>
+      <p class="widget-text"><?php echo $jsonstore->sidebarWidget->text->body ?></p>
     </section><?php 
   endif;
 }

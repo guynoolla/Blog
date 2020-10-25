@@ -1,6 +1,19 @@
 form {
   position: relative;
 
+  label {
+    font-family: var(--form-label-font);
+    font-weight: var(--form-label-font-weight);
+  }
+  
+  input, select, textarea {
+    font-family: var(--form-input-font);
+  }
+
+  button {
+    font-family: var(--form-label-font);
+  }
+
   .form-alert {
     width: 100%;
 
@@ -68,8 +81,6 @@ form {
   }
 
   .response {
-    font-family: 'Montserrat';
-    font-weight: 500;
     color: $dark;
     
     &--shade {

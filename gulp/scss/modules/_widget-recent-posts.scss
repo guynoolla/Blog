@@ -2,6 +2,7 @@
   Recent Posts Widget -------------------------------- */
 
 .recent-posts-widget {
+
   .post {
     margin-bottom: 1em;
     .post-image {
@@ -21,10 +22,13 @@
       justify-content: center;
       span, a {
         display: block;
+        font-family: var(--widget-recent-posts-font);
+        font-style: italic;
       }
       span {
-        font-size: .9em;
+        font-size: .8em;
       }
     }
   }
+
 }

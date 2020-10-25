@@ -48,7 +48,7 @@ var css = {
 	watch 	:		dir.src + '/scss/**/**/*',
 	build 	:		dir.build + '/assets/css',
 	sassOpts: {
-		outputStyle		: 'nested',
+		outputStyle		: 'expanded', // nested
 		imagePath 		: img.build,
 		precision 		: 3,
 		errLogToConsole : true
