@@ -7,6 +7,7 @@ import 'js-video-url-parser/lib/provider/youtube';
 import { reject } from 'core-js/fn/promise';
 import Breakpoint from 'bootstrap-breakpoints';
 import PostStatus from './modules/PostStatus';
+import UploadImage from './modules/UploadImage';
 import Cookies from 'js-cookie';
 
 $(() => {
@@ -323,6 +324,10 @@ $(() => {
        error: err => console.log(err)
      })
    })
+
+  if (server.isAuthor && $("#postEditForm").length) {
+    new UploadImage;
+  }
 
 })
 

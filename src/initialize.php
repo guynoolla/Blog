@@ -66,6 +66,7 @@ function pass_to_js() {
 
   $server['baseUrl'] = WWW_ROOT;
   $server['isLoggedIn'] = $session->isLoggedIn();
+  $server['isAuthor'] = $session->isAuthor();
   $server['isAdmin'] = $session->isAdmin();
   $server['userId'] = $session->isLoggedIn() ? $session->getUserId() : 0;
   $server['singlePost'] = (url_contain('/post/')) ? $_GET['id'] : false;

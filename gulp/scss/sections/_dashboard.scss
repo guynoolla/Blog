@@ -12,7 +12,7 @@
  Adapt sidebar to Bootsrap Layout ----------------------*/
 
 .page-admin .main {
-  padding-left: 4.6rem;
+  padding-left: 3.8rem;
   padding-bottom: 2rem;
   background-color: #f7f7f7;
 
@@ -46,6 +46,12 @@
     .nav-item.logo {
       width: 16rem;
     }
+  }
+}
+
+@media (min-width: 576px) {
+  .page-admin .main {
+    padding-left: 4.6rem;
   }
 }
 

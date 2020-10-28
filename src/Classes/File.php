@@ -16,7 +16,15 @@ class File {
 	protected $max_file_size;
 	protected $file_info = [];
 	protected $default = 'default.png';
+	protected $subfolder = false;
 	public $error = "";
+
+	protected $max_side_size = [
+		['size' => 400],
+		['size' => 640],
+		['size' => 800],
+		['size' => 1025]
+	];
 
 	/**
 	 * Class constructor
@@ -94,7 +102,7 @@ class File {
 	 *
 	 * @param string $field_name
 	 * @param array $ratio
-	 * @return void
+	 * @return array | string
 	 */
 	public function handleUpload(string $field_name, array $ratio=[]) {
     if (!$this->isFileUploaded()) {
@@ -112,7 +120,7 @@ class File {
 	 *
 	 * @param string $attr
 	 * @param array $ratio
-	 * @return void
+	 * @return array | string
 	 */
 	public function moveFile(string $attr, array $ratio) {
 		list ($w, $h) = getimagesize($this->file['tmp_name']);
@@ -135,12 +143,15 @@ class File {
 			$id = time().rand(1000, 9999);
 			$img = $id . '.' . $ext;
 			$date_path = date('Y') . '/' . date('m') . '/' . date('d');
-			$dir_path = $this->images_path . '/' . $date_path;
+			$dir_path = "{$this->images_path}/{$date_path}";
+
+			if ($this->subfolder) $dir_path .= "/{$this->subfolder}";
+
 			if (!is_dir( $dir_path)) {
 				mkdir( $dir_path, 0777, true );
-				$filename = $dir_path . '/' . $img;
+				$filename = "{$dir_path}/{$img}";
 			} else {
-				$filename = $dir_path . '/' . $img;
+				$filename = "{$dir_path}/{$img}";
 			}
 
 			if (move_uploaded_file($this->file['tmp_name'], $filename)) {
@@ -151,7 +162,7 @@ class File {
 				$this->file_info['img'] = $img;
 				$this->file_info['ext'] = $ext;
 				$this->file_info['size'] = $size;
-				$this->file_info[$attr] = "/$date_path/$img";
+				$this->file_info[$attr] = "/{$date_path}/{$img}";
 
 			} else {
 				$this->error .= 'The file could not be moved.';
@@ -161,6 +172,28 @@ class File {
 
 		return $this->error;
 	}
+
+  /**
+   * Resizes Image using Imagine\GD\Imagine PHP Library
+   * Resizes them according to the widths and heights,
+   * which given in $resize_dimensions Class property
+   *
+   * @param array $file
+   * @return boolean
+   */
+  public function resizeImage() {
+    list($w, $h) = getimagesize($this->file_info['filename']);
+
+    foreach ($this->max_side_size as $d) {
+      if ($w > $d['size']) {
+        $imagine = new \Imagine\Gd\Imagine();
+        $imagine->open($this->file_info['filename'])
+          ->thumbnail(new \Imagine\Image\Box($d['size'], $d['size']))
+          ->save("{$this->file_info['dir_path']}/{$this->file_info['id']}_{$d['size']}.{$this->file_info['ext']}");
+      }
+    }
+    return true;
+  }
 
 	/**
 	 * Remove file from its location
@@ -174,6 +207,16 @@ class File {
 		if (file_exists($filename) && is_file($filename)) {
 			@unlink($filename);
 		}
+	}
+
+	/**
+	 * Create subfolder
+	 *
+	 * @param integer $subfolder
+	 * @return void
+	 */
+	public function subfolder(int $subfolder) {
+		$this->subfolder = $subfolder;
 	}
 
 }

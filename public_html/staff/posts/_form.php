@@ -52,24 +52,25 @@ if (!$edit): ?>
   </div>
   <div class="form-group">
     <label for="postBody">Content</label>
-    <ul class="list-group list-group-horizontal-md" style="margin-bottom:1px">
-      <li class="list-group-item bg-muted-lk">
-        <span class="h4 tex-muted">HTML</span>
+    <ul class="post-edit-panel" style="margin-bottom:1px">
+      <li class="panel-item allowable">
         <?php
           $tags = explode('><', $post->allowable_tags);
-          $tags = implode('> <', $tags);
+          $tags = str_replace('<', '', str_replace('>', '', $tags));
+          $tags = implode(', ', $tags);
         ?>
-        <span class="d-inline text-muted"><?php echo h($tags) ?></span>
-        <small id="bodyHelp" class="d-block form-text text-muted">External links are not allowed excerpt YouTube and Vimeo video links.</small>
+        <span><span><?php echo h($tags) ?></span></span>
       </li>
-      <li class="list-group-item bg-muted-lk flex-grow-1 d-none d-md-block">
-        <div class="d-flex align-items-center"><span class="h4 text-muted">YouTube</span></div>
+      <li class="panel-item image dropzoneBtnJS">
+        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="image" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-icon svg-inline--fa fa-image fa-w-16 fa-5x"><path fill="currentColor" d="M464 448H48c-26.51 0-48-21.49-48-48V112c0-26.51 21.49-48 48-48h416c26.51 0 48 21.49 48 48v288c0 26.51-21.49 48-48 48zM112 120c-30.928 0-56 25.072-56 56s25.072 56 56 56 56-25.072 56-56-25.072-56-56-56zM64 384h384V272l-87.515-87.515c-4.686-4.686-12.284-4.686-16.971 0L208 320l-55.515-55.515c-4.686-4.686-12.284-4.686-16.971 0L64 336v48z" class="svg-icon"></path></svg>
       </li>
-      <li class="list-group-item bg-muted-lk flex-grow-1 d-none d-md-block">
-        <div class="d-flex align-items-center"><span class="h4 text-muted">Vimeo</span></div>
+      <li class="panel-item video"><span>YouTube <span class="pipe">|</span> Vimeo</span></li>
+      <li class="panel-item dropzone-area">
+        <span class="dropzone-area-hint">Drop files here or click to upload<span>
       </li>
     </ul>
     <textarea name="post[body]" value="<?php $post->body ?>" class="form-control" id="body" rows="10"><?php echo $post->body ?></textarea>
+    <small>External links are not allowed excerpt YouTube and Vimeo video links.</small>
     <span class="errsum-body text-danger field-validation-error"></span>
   </div>
 
