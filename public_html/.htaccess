@@ -5,7 +5,7 @@ RewriteEngine on
 
 RewriteRule ^(home)/?$ index.php [L]
 RewriteRule ^post/(.*)/?$ single.php?id=$1 [QSA] [L] 
-RewriteRule ^category/(.*)/?$ index.php?tid=$1 [QSA] [L]
+RewriteRule ^category/(.*)/?$ index.php?cid=$1 [QSA] [L]
 RewriteRule ^author/(.*)/?$ index.php?uid=$1 [QSA] [L]
 RewriteRule ^ondate/(.*)/?$ index.php?ymd=$1 [QSA] [L]
 RewriteRule ^preview/(.*)/?$ single.php?id=$1 [QSA] [L]

@@ -208,7 +208,7 @@ function cookie_ids_posts($data) {
         $arr[$j]['to_single'] = url_for('post/' . urlencode($post->title) . '?id=' . $post->id);
         $arr[$j]['to_author'] = url_for('author/' . urlencode($post->username) . '?uid=' . $post->user_id);
         $arr[$j]['to_on_date'] = url_for('ondate/pub/?ymd=' . urlencode(date('Y-m-d', strtotime($post->created_at))));
-        $arr[$j]['to_category'] = url_for('category/' . urlencode($post->category) . '?tid=' . $post->category_id);
+        $arr[$j]['to_category'] = url_for('category/' . urlencode($post->category) . '?cid=' . $post->category_id);
         $j++;
       }
       $pag = [

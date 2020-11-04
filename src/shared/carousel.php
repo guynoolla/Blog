@@ -19,7 +19,7 @@
                 <img srcset="<?php echo \App\Classes\Post::responsive($post->image, 3) ?>" alt="<?php echo $post->title ?>">
               </div>
               <div class="slider-post-text">
-                <a href="<?php echo url_for('category/' . u($post->category) . '?tid=' . $post->category_id) ?>" class="category"><?php echo $post->category ?></a>
+                <a href="<?php echo url_for('category/' . u($post->category) . '?cid=' . $post->category_id) ?>" class="category"><?php echo $post->category ?></a>
                 <h2><a href="<?php echo url_for('post/' . u($post->title)) . '?id=' . $post->id ?>"><?php echo $post->title ?></a></h2>
                 <div class="read-more"><a href="<?php echo url_for('post/' . u($post->title)) . '?id=' . $post->id ?>">Read More</a></div>
               </div>

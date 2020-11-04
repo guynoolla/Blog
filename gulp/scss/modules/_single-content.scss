@@ -1,21 +1,22 @@
-.post {
+.single .post {
 
   blockquote {
-    font-size: 1em;
+    font-size: 1.2em;
     width: 76%;
     margin: 1.5rem auto;
     font-family: var(--cursive-font);
-    color: $text-secondary;
+    font-weight: var(--cursive-font-weight);
+    color: darken($bg-secondary, 44);
     padding: 1.2em 20px 1.2em 60px;
-    border-left: 5px solid #78C0A8;
+    border-left: 5px solid darken($bg-secondary, 5);
     line-height: 1.6;
     position: relative;
-    background:#EDEDED;
+    background: #EDEDED;
   
     &::before {
       font-family: Arial, sans-serif;
       content: "\201C";
-      color:#78C0A8;
+      color: darken($bg-secondary, 10);
       font-size: 5em;
       font-style: italic;
       position: absolute;
@@ -29,7 +30,7 @@
   
     strong {
       display: block;
-      color: $text-secondary;
+      color: darken($bg-secondary, 36);
       font-style: normal;
       font-weight: bold;
       margin-top: 1em;
@@ -45,7 +46,8 @@
   
   em {
     font-family: var(--cursive-font);
-    font-size: 96%;
+    font-size: 1.05em;
+    font-weight: var(--cursive-font-weight);
   }
 
   h1, h2, h3 {

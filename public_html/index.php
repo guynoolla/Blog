@@ -36,10 +36,10 @@ $type = 'default';
 /*
   GET POSTS BY CATEGORY ------------------------------------------------*/
 
-} elseif (isset($_GET['tid'])) {
+} elseif (isset($_GET['cid'])) {
   $type = 'category';
 
-  $category_id = $_GET['tid'] ?? 0;
+  $category_id = (int) $_GET['cid'] ?? 0;
   $category = Category::findById($category_id);
 
   $url_parts = url_split_by_slash();
@@ -174,7 +174,7 @@ include SHARED_PATH . '/carousel.php';
                 <div class="post">
                   <div class="post-item-wrap">
                     <div class="post-item-inner">
-                      <a href="<?php echo url_for('category/' . u($post->category) . '?tid=' . $post->category_id) ?>" class="category category--dark text-center"><?php echo $post->category ?></a>
+                      <a href="<?php echo url_for('category/' . u($post->category) . '?cid=' . $post->category_id) ?>" class="category category--dark text-center"><?php echo $post->category ?></a>
                       <h2 class="entry-title text-center">
                         <a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>">
                           <?php echo h($post->title) ?>
@@ -231,7 +231,7 @@ include SHARED_PATH . '/carousel.php';
                 <div class="post-item-wrap">
                     <div class="post-item-inner">
                       
-                    <a href="<?php echo url_for('category/' . u($post->category) . '?tid=' . $post->category_id) ?>" class="category category--dark text-center"><?php echo $post->category ?></a>
+                    <a href="<?php echo url_for('category/' . u($post->category) . '?cid=' . $post->category_id) ?>" class="category category--dark text-center"><?php echo $post->category ?></a>
                       <h2 class="entry-title text-center"><a href="<?php echo url_for('post/' . u($post->title) . '?id=' . $post->id) ?>"><?php echo h($post->title) ?></a></h2>
                       
                       <div class="entry-meta">

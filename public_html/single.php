@@ -58,7 +58,7 @@ include(SHARED_PATH . '/public_header.php');
 
     <div class="col-12 pt-0 text-center category-headline-wrap">
       <h3 class="category-headline my-4"><a href="<?php
-        echo url_for('category/') . u($category->name) . '?tid=' . $category->id
+        echo url_for('category/') . u($category->name) . '?cid=' . $category->id
         ?>" title="<?php echo $category->name ?>"><?php echo $category->name
       ?></a></h3>
     </div>

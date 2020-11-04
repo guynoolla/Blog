@@ -126,7 +126,7 @@ function widget_categories($jsonstore) {
         <ul><?php foreach ($categories as $category): ?>
           <li class="cat-item">
             <a href="<?php
-              echo url_for('category/') . u($category->name) . '?tid=' . $category->id
+              echo url_for('category/') . u($category->name) . '?cid=' . $category->id
               ?>" title="<?php echo $category->name ?>"><?php echo $category->name
             ?></a>
             <span><?php echo Post::countAll(

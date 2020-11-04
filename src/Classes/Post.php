@@ -503,10 +503,10 @@ SQL;
    * @return object[]
    */
   static public function queryPostsByCategory(int $category_id, int $per_page, int $offset) {
-    $tid = parent::escape($category_id);
+    $cid = parent::escape($category_id);
     $sql = self::getJoins();
     $sql .= <<<SQL
-            WHERE p.approved = '1' AND p.category_id = $tid
+            WHERE p.approved = '1' AND p.category_id = $cid
             ORDER BY p.published_at DESC
 SQL;
     $sql .= " LIMIT {$per_page} OFFSET {$offset}";
