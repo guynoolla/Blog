@@ -1,6 +1,7 @@
 .post-edit-panel {
   padding: .25rem;
-  padding-bottom: .05rem;
+  padding-top: .5rem;
+  padding-bottom: 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-arond;
@@ -17,7 +18,7 @@
     
     span {
       font-size: 1em;
-      font-family: var(--label-font);
+      font-family: var(--form-label-font);
       font-weight: 400;
       display: block;
     }
@@ -53,7 +54,7 @@
       span {
         padding: 0 .5rem;
         text-align: center;
-        font-family: var(--cursive-font);
+        font-family: var(--form-label-font);
         text-transform: uppercase;
         .pipe {
           display: inline;
@@ -78,7 +79,7 @@
       position: relative;
       opacity: 1;
       visibility: visible;
-      height: 170px;
+      height: 180px;
       padding: .5em;
     }
 

@@ -19,7 +19,8 @@ if ($_SERVER['SERVER_NAME'] == 'localhost') {
 define("WWW_ROOT", $doc_root);
 
 // Image
-define("MAX_FILE_SIZE", 614400); // 600 KB
+define("MAX_FILE_SIZE", 614400); // 600 KB, 0.6 MB
+define("POST_IMG_MAX_NUM", 10);
 define("IMAGES_PATH", PUBLIC_PATH . '/assets/images' );
 // SMTP
 define("SMTP_HOST", "localhost");
@@ -73,6 +74,8 @@ function pass_to_js() {
   $server['dashboardMain'] = (url_contain('staff/index')) ? true : false;
   $server['postFontSize'] = $jsonstore->postFontSize;
   $server['slider'] = $jsonstore->slider;
+  $server['maxFileSize'] = MAX_FILE_SIZE;
+  $server['postImgMaxNum'] = POST_IMG_MAX_NUM;
 
   $script = '<script>';
   $script .= 'var server = ' . json_encode($server);

@@ -177,16 +177,16 @@ function appendModalToBody() {
   const modal = `<div class="modal fade" id="dashboardModal" tabindex="-1" role="dialog" aria-labelledby="dashboardModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header border-0">
           <h3 class="modal-title" id="dashboardModalTitle"></h3>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="padding:.7rem 1rem;">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body alert text-center mb-0 py-4 border-0"></div>
-        <div class="modal-footer">
-          <button id="modalOkBtn" type="button" class="btn btn-primary my-3 d-none" data-dismiss="modal">Ok</button>
-          <button id="modalCancelBtn" type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+        <div class="modal-body alert text-center mx-1 mx-sm-2 mx-md-3 mb-0 py-4"></div>
+        <div class="modal-footer border-0">
+          <button id="modalOkBtn" type="button" class="btn btn-primary btn-md my-3 d-none" data-dismiss="modal">Ok</button>
+          <button id="modalCancelBtn" type="button" class="btn btn-primary btn-md" data-dismiss="modal">Cancel</button>
           <form action="" method="post" class="my-3">
             <input type="hidden" name="table" value="">
             <button class="btn btn-danger btn-md delete" name="delete" value="">Delete</button>

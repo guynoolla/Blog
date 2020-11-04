@@ -32,6 +32,7 @@ class Post extends \App\Classes\DatabaseObject {
   protected $video_urls;
 
   protected $image_obj; // File class instance
+  protected $form_edit_scenario = [];
   
   public $allowable_tags = '<h2><h3><h4><p><br><img><a><strong><em><ul><li><blockquote>';
   public $allowable_hosts = ['www.youtube.com','youtube.com','youtu.be','vimeo.com'];
@@ -78,6 +79,21 @@ class Post extends \App\Classes\DatabaseObject {
    */
   public function fileInstance(File $image_obj) {
     $this->image_obj = $image_obj;
+  }
+
+  /**
+   * Set Post form edit scenario
+   * it can be 'create' or 'update'
+   *
+   * @param string $scenario
+   * @param string $sess_user_id
+   * @return void
+   */
+  public function formEditScenario(string $scenario, string $sess_user_id) {
+    $scenarios = ['create','update'];
+    if (in_array($scenario, $scenarios)) {
+      $this->form_edit_scenario = [$scenario, $sess_user_id];
+    }
   }
 
   /**
@@ -206,6 +222,9 @@ class Post extends \App\Classes\DatabaseObject {
     }
     if (has_length_greater_than($this->body, 65000)) {
       $this->errors[] = 'Post can not contain more than 65000 characters.';
+    }
+    if (count(self::bodyShortcodeImage($this->body)) > POST_IMG_MAX_NUM) {
+      $this->errors[] = 'Post can not contain more than ' . POST_IMG_MAX_NUM . ' images.';
     }
 
     if (!in_array($this->format, ['image', 'video'])) {
@@ -345,14 +364,50 @@ class Post extends \App\Classes\DatabaseObject {
   }
 
   /**
+   * Overrides parent's afterSave method
+   *
+   * @param int $id
+   * @return void
+   */
+  protected function afterSave(int $id) {
+    if (!empty($this->form_edit_scenario)) {
+      $this->fill($id);
+      if (!isset($this->image_obj)) $this->fileInstance(new File);
+      
+      $this->image_obj->temporaryDir($this->form_edit_scenario[1]);
+      $this->image_obj->setResizeDimensions(self::$resize_dimensions);
+      $images = self::bodyShortcodeImage($this->body);
+      $dest = $this->bodyImagesDir();
+      
+      if ($this->form_edit_scenario[0] == 'create') {
+        $this->image_obj->permanentDir($images, $dest, 'dir');
+      } else if ($this->form_edit_scenario[0] == 'update') {
+        $this->image_obj->permanentDir($images, $dest, 'file');
+        $this->image_obj->dirInventory($images, $dest);
+      }
+    }
+  }
+
+  /**
+   * Post body images destination
+   * relative to images directory
+   *
+   * @return string
+   */
+  protected function bodyImagesDir() {
+    $d = date('Y-m-d', strtotime($this->created_at));
+    return str_replace('-', '/', $d) . '/' . $this->id;
+  }
+
+  /**
    * Deletes object of type Post
    *
    * @return boolean
    */
   public function delete() {
-    if ($this->image) {
-      $this->deleteImages($this->image);
-    }
+    if ($this->image) $this->deleteImages($this->image);
+    $this->deleteImages($this->bodyImagesDir(), true);
+
     return parent::delete();
   }
 
@@ -360,19 +415,21 @@ class Post extends \App\Classes\DatabaseObject {
    * Delete images of the Post
    *
    * @param string $image
-   * @return boolean
+   * @return void
    */
-  protected function deleteImages(string $image) {
-    $images_path = $this->image_obj->images_path;
-    $filename = $images_path . '/' . $image;
-    list($noextimg, $ext) = explode('.', $image);
-    $this->image_obj->remove($image);
+  protected function deleteImages(string $image, $is_dir=false) {
+    if ($is_dir == false) {
+      $this->image_obj->remove($image);
+      list($noextimg, $ext) = explode('.', $image);
 
-    foreach (self::$resize_dimensions as $d) {
-      $resized = "/{$noextimg}_{$d['width']}.{$ext}";
-      $this->image_obj->remove($resized);
+      foreach (self::$resize_dimensions as $d) {
+        $resized = "/{$noextimg}_{$d['width']}.{$ext}";
+        $this->image_obj->remove($resized);
+      }
+
+    } else {
+      $this->image_obj->remove($image, true);
     }
-    return true;
   }
 
   /**
@@ -582,12 +639,46 @@ SQL;
   }
 
   /**
+   * Prepare post's images and video to render
+   *
+   * @return string
+   */
+  public function renderPostContent() {
+    $this->shortcodeToHtml();
+    $this->videoUrlsToHtml();
+    
+    return $this->body;
+  }
+
+  /**
+   * Convert image shortcode to image tag
+   *
+   * @return string
+   */
+  public function shortcodeToHtml() {
+    $matches = self::bodyShortcodeImage($this->body, true)[1];
+    $dir = $this->bodyImagesDir();
+
+    foreach ($matches[1] as $i => $image) {
+      $src = "/{$dir}/{$image}";
+      $img = $matches[0][$i];
+      $img = str_replace("[", "<", $img);
+      $img = str_replace("]", ">", $img);
+      $img = str_replace("src", "srcset", $img);
+      $img = str_replace($image, self::responsive($src), $img);
+      $this->body = str_replace($matches[0][$i], $img, $this->body);
+    }
+
+    return $this->body;
+  }
+
+  /**
    * Replace video urls in the Post content with video iframes
    * Youtube/Vimeo
    *
    * @return string
    */
-  public function getBodyWithVideo() {
+  public function videoUrlsToHtml() {
     if (!isset($this->video_urls)) return $this->body;
 
     $video_urls = json_decode($this->video_urls);
@@ -610,6 +701,7 @@ SQL;
         $this->body = sprintf($this->body, $embed_url);
       }
     }
+
     return $this->body;
   }
 
@@ -652,7 +744,7 @@ SQL;
    * @return void
    */
   function videoSplitter() {
-    if (isset($this->id) && isset($this->video)) {
+    if (isset($this->video) && !empty($this->video)) {
       $arr = (array) json_decode($this->video);
       $url = key($arr);
       $this->video = [];
@@ -722,5 +814,37 @@ SQL;
     return $arr;
   }
 
+  /**
+   * Create Post body image shortcode
+   *
+   * @param string $image
+   * @return string
+   */
+  static public function shortcode(string $image) {
+    return "[img src=\"{$image}\" alt=\"\"]";
+  }
+
+  /**
+   * Parse for images shortcodes in Post content
+   *
+   * @param string $body
+   * @param boolean $m
+   * @return void
+   */
+  static public function bodyShortcodeImage(string $body, bool $m=false) {
+		$matches = [];
+    preg_match_all('/\[img src=\"([^"]+).*?\]/', $body, $matches);
+		$images = [];
+
+		foreach($matches[1] as $match) {
+			$arr = explode('.', $match);
+			if (is_numeric($arr[0]) && strlen($arr[0]) == 14) {
+				$images[] = implode('.', $arr);
+			}
+    }
+    
+    return ($m == false) ? $images : [$images, $matches];
+  }
+  
 }
 ?>

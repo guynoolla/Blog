@@ -13,18 +13,14 @@ class File {
 
 	public $file;
 	public $images_path;
+	public $allowed_img_ext = ['gif', 'jpg', 'jpeg', 'png'];
+	public $error = "";
+
+	protected $resize_dimensions;
+	protected $upload_to_temp = false;
 	protected $max_file_size;
 	protected $file_info = [];
 	protected $default = 'default.png';
-	protected $subfolder = false;
-	public $error = "";
-
-	protected $max_side_size = [
-		['size' => 400],
-		['size' => 640],
-		['size' => 800],
-		['size' => 1025]
-	];
 
 	/**
 	 * Class constructor
@@ -38,6 +34,10 @@ class File {
 		$this->file = $file;
 		$this->images_path = IMAGES_PATH;
 		$this->max_file_size = MAX_FILE_SIZE;
+	}
+
+	public function setResizeDimensions($dimensions) {
+		$this->resize_dimensions = $dimensions;
 	}
 
 	/**
@@ -138,14 +138,23 @@ class File {
 			$this->error .= 'The uploaded file must not be larger than ' . $limit . 'KB. ';
 		}
 
-		if (!$this->error) {
-			$ext = substr(strrchr($this->file['name'], '.'), 1);
-			$id = time().rand(1000, 9999);
-			$img = $id . '.' . $ext;
-			$date_path = date('Y') . '/' . date('m') . '/' . date('d');
-			$dir_path = "{$this->images_path}/{$date_path}";
+		$ext = substr(strrchr($this->file['name'], '.'), 1);
+		$id = time().rand(1000, 9999);
+		
+		if (!in_array($ext, $this->allowed_img_ext)) {
+			$this->error .= 'This file extension is not allowed!';
+		}
 
-			if ($this->subfolder) $dir_path .= "/{$this->subfolder}";
+		if (!$this->error) {
+			$img = "{$id}.{$ext}";
+
+			if ($this->upload_to_temp == true) {
+				$dir_path = "{$this->images_path}/{$_SESSION['file_temporary_dir']}";
+				$date_path = "";
+			} else {
+				$date_path = date('Y') . '/' . date('m') . '/' . date('d');
+				$dir_path = "{$this->images_path}/{$date_path}";
+			}
 
 			if (!is_dir( $dir_path)) {
 				mkdir( $dir_path, 0777, true );
@@ -176,47 +185,184 @@ class File {
   /**
    * Resizes Image using Imagine\GD\Imagine PHP Library
    * Resizes them according to the widths and heights,
-   * which given in $resize_dimensions Class property
+   * which given in resize_dimensions method argument
    *
-   * @param array $file
+   * @param array resize_dimensions
    * @return boolean
    */
-  public function resizeImage() {
-    list($w, $h) = getimagesize($this->file_info['filename']);
-
-    foreach ($this->max_side_size as $d) {
-      if ($w > $d['size']) {
-        $imagine = new \Imagine\Gd\Imagine();
-        $imagine->open($this->file_info['filename'])
-          ->thumbnail(new \Imagine\Image\Box($d['size'], $d['size']))
-          ->save("{$this->file_info['dir_path']}/{$this->file_info['id']}_{$d['size']}.{$this->file_info['ext']}");
-      }
-    }
-    return true;
+  public function resizeImage($image, $dest) {
+		$filename = "{$dest}/{$image}";
+		
+		if (file_exists($filename)) {
+			list($w, $h) = getimagesize($filename);
+			$arr = explode('.', $image);
+			$fid = $arr[0];
+			$ext = $arr[1];
+	
+			foreach ($this->resize_dimensions as $d) {
+				$max_height = $d['width'];
+	
+				if ($w > $d['width'] || $h > $max_height) {
+					$imagine = new \Imagine\Gd\Imagine();
+					$imagine->open($filename)
+						->thumbnail(new \Imagine\Image\Box($d['width'], $max_height))
+						->save("{$dest}/{$fid}_{$d['width']}.{$ext}");
+				}
+			}
+			
+			return true;
+		}
   }
 
 	/**
-	 * Remove file from its location
+	 * Create user temporary upload dir path
 	 *
-	 * @param string $attr_value
+	 * @param string $unique
 	 * @return void
 	 */
-	public function remove(string $attr_value) {
-		$filename = $this->images_path . '/' . $attr_value;
+	public function temporaryDir(string $unique) {
+		$this->upload_to_temp = true;
+		$_SESSION['file_temporary_dir'] = 'temp/' . $unique;
+	}	
 
-		if (file_exists($filename) && is_file($filename)) {
-			@unlink($filename);
+	/**
+	 * Move images from temporary dir to permanent dir
+	 * if file id (fid) is not in images array remove it
+	 * The 3rd $rename argument can be 'dir' or 'file'
+	 *
+	 * @param array $images
+	 * @param string $dest
+	 * @param string $rename
+	 * @return void
+	 */
+	public function permanentDir(array $images, string $dest, string $rename='dir') {
+		$temp = "{$this->images_path}/{$_SESSION['file_temporary_dir']}";
+		$dest = "{$this->images_path}/{$dest}";
+		$files = [];
+
+		if (is_dir($temp) && !empty($images)) {
+			$files = glob("{$temp}/*");
+
+			foreach ($files as $file) {
+				$arr = explode('/', $file);
+				$fid = $arr[count($arr) - 1];
+				
+				if (!in_array($fid, $images)) {
+					$this->remove("{$_SESSION['file_temporary_dir']}/{$fid}");
+				} else {
+					if ($rename == 'file') {
+						rename("{$temp}/{$fid}", "{$dest}/{$fid}");
+					}
+				}
+			}
+
+			if ($rename == 'dir') rename($temp, $dest);
+
+			foreach ($images as $image) {
+				$this->resizeImage($image, $dest);
+			}
+
+			if ($rename == 'file') @rmdir($temp);
+		}
+
+		unset($_SESSION['file_temporary_dir']);
+	}
+
+	/**
+	 * Check for images inside permanent directory
+	 * if file id is not in images array remove it
+	 *
+	 * @param array $images
+	 * @param string $dest
+	 * @return void
+	 */
+	public function dirInventory(array $images, string $dest) {
+		$filename = "{$this->images_path}/{$dest}";
+
+		if (is_dir($filename)) {
+			$files = glob("{$filename}/*");
+
+			foreach ($files as $file) {
+				$arr = explode('/', $file);
+				$fid = $arr[count($arr) - 1];
+				$w = "";
+				
+				if (strpos($fid, "_") !== false) {
+					list($noextimg, $ext) = explode('.', $fid);
+					list($numbers, $w) = explode("_", $noextimg);
+					$fid = "{$numbers}.{$ext}";
+				}
+
+				if (!in_array($fid, $images)) {
+					if ($w) {
+						$fid = "{$numbers}_{$w}.{$ext}";
+						$this->remove("{$dest}/{$fid}");
+					} else {
+						$this->remove("{$dest}/{$fid}");
+					}
+				}
+			}
 		}
 	}
 
 	/**
-	 * Create subfolder
+	 * Removes file or directory with files
+	 * if 2nd argument is true removes directory
 	 *
-	 * @param integer $subfolder
+	 * @param string $image
+	 * @param bool $is_dir
 	 * @return void
 	 */
-	public function subfolder(int $subfolder) {
-		$this->subfolder = $subfolder;
+	public function remove(string $image, $is_dir=false) {
+		$filename = $this->images_path . '/' . $image;
+
+		if ($is_dir == false) {
+			if (file_exists($filename) && is_file($filename)) {
+				@unlink($filename);
+				return true;
+			}
+		} else {
+			if (is_dir($filename)) {
+				foreach (glob("{$filename}/*") as $file) {
+					if (is_file($file)) @unlink($file);
+				}
+				@rmdir($filename);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get SESSION temporary directory
+	 *
+	 * @return string | error
+	 */
+	public function getTemporaryDir() {
+		if (isset($_SESSION['file_temporary_dir'])) {
+			return $_SESSION['file_temporary_dir'];
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Check if directory is empty
+	 *
+	 * @param string $dir
+	 * @return void
+	 */
+	protected function dir_is_empty(string $dir) {
+		$handle = opendir($dir);
+		while (false !== ($entry = readdir($handle))) {
+			if ($entry != "." && $entry != "..") {
+				closedir($handle);
+				return FALSE;
+			}
+		}
+		closedir($handle);
+		return TRUE;
 	}
 
 }

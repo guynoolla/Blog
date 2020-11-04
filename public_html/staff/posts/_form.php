@@ -66,7 +66,7 @@ if (!$edit): ?>
       </li>
       <li class="panel-item video"><span>YouTube <span class="pipe">|</span> Vimeo</span></li>
       <li class="panel-item dropzone-area">
-        <span class="dropzone-area-hint">Drop files here or click to upload<span>
+        <span class="dropzone-area-hint">Drop file here or click to upload<span>
       </li>
     </ul>
     <textarea name="post[body]" value="<?php $post->body ?>" class="form-control" id="body" rows="10"><?php echo $post->body ?></textarea>

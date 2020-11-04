@@ -238,7 +238,6 @@ class Session {
 
   /**
    * Retrieve value stored in SESSION
-   * Provide value to store in SESSION
    *
    * @param string $value
    * @param boolean $store

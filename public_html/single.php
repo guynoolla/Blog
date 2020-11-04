@@ -128,7 +128,7 @@ include(SHARED_PATH . '/public_header.php');
                     <?php endif; ?>
                   </div>
 
-                  <div class="postContentJS mt-4"><?php echo $post->getBodyWithVideo() ?></div>
+                  <div class="postContentJS mt-4"><?php echo $post->renderPostContent() ?></div>
 
                 </div>
               </div>

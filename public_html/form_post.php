@@ -1,32 +1,44 @@
 <?php
+use App\Classes\Post;
 use App\Classes\File;
+use App\Contracts\Mailer;
 
 require_once '../src/initialize.php';
 
 if (is_post_request()) {
 
-  if (isset($_FILES['file']) && $session->isAuthor()) {
-    $pid = $_POST['pid'] ?? 0;
-    if (!is_int((int) $pid)) exit('param error');
+  if (isset($_POST['dropzone'])) {
+    // Check is Author >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    if (!$session->isAuthor()) exit;
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Check is Author
 
-    $image = new File($_FILES['file']);
-    $image->subfolder("post-{$pid}");
-    
-    if ($image->isFileSelected() == true) {
+    if ($_POST['dropzone'] == 'upload' && isset($_FILES['file'])) {
+      $image = new File($_FILES['file']);
+      $image->temporaryDir($session->getUserId());
+      
       $image->handleUpload('file');
-
+  
       if ($image->error) {
-        exit (json_encode(['error', $image->error]));
+        exit (json_encode(['error', $image->error]));   
       } else {
-        $image->resizeImage();
-        $file = $image->getFileInfo();
-        $img = '<img srcset="' . \App\Classes\Post::responsive("/{$file['date_path']}/{$file['img']}") . '" alt="" class="my-3">';
-        exit (json_encode(['success', $img]));
+        $image = Post::shortcode($image->getFileInfo()['img']);
+        exit (json_encode(['success', $image]));
+      }
+
+    } else if ($_POST['dropzone'] == 'remove' && isset($_POST['image'])) {
+      $file = new File;
+      $temp = $file->getTemporaryDir();
+      $image = Post::bodyShortcodeImage($_POST['image'])[0];
+      $image = "{$temp}/{$image}";
+      
+      if ($file->remove($image)) {
+        exit(json_encode(['success', $_POST['image']]));
+      } else {
+        exit(json_encode(['error', 'image remove failed']));
       }
     }
 
   } else {
-
     $email = $_POST['email'] ?? '';
     $message = $_POST['message'] ?? '';
     $captcha = $_POST['captcha'] ?? '';
@@ -34,7 +46,7 @@ if (is_post_request()) {
     if ($email && $message && $captcha) {
       
       if (strtoupper($captcha) == strtoupper($_SESSION['captcha']['code'])) {
-        $mailer = new \App\Contracts\Mailer;
+        $mailer = new Mailer;
         $text = strip_tags($message);
         
         try {

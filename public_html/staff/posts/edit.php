@@ -14,6 +14,7 @@ if (is_post_request()) {
   $id = $_POST['post']['id'] ?? 0;
 
   $post = Post::findById($id);
+  $post->formEditScenario('update', $session->getUserId());
 
   if (isset($_FILES['image'])) {
     $image = new File($_FILES['image']);

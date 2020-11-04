@@ -27,6 +27,7 @@ if (is_post_request()) {
   posts_creation_limit();
 
   $post = new Post($_POST['post']);
+  $post->formEditScenario('create', $session->getUserId());
 
   if (isset($_FILES['image'])) {
     $image = new File($_FILES['image']);

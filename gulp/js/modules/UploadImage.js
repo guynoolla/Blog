@@ -7,7 +7,8 @@ class UploadImage {
     this.uploadBtn = $(".dropzoneBtnJS");
     this.dropzoneArea = $(".dropzone-area");
     this.active = false;
-
+    this.formTextarea = $("#body");
+    this.maxFileSize = server.maxFileSize/1024/1000;
     this.dropzone();
     this.events();
   }
@@ -20,14 +21,33 @@ class UploadImage {
       { url: server.baseUrl + '/form_post.php' }
     );
 
+    this.dropzone.options.maxFiles = this.postImgMaxNum;
+    this.dropzone.options.maxFilesize = this.maxFileSize;
+    this.dropzone.options.acceptedFiles = '.gif, .jpg, .jpeg, .png';
+    this.dropzone.options.addRemoveLinks = true;
+    this.dropzone.options.dictRemoveFile = 'Delete';
+
     this.dropzone.on("sending", (file, xhr, formData) => {
+      formData.append("dropzone", "upload");
       this.uploadBtn.closest("form").off("submit");
-      const postId = this.getUrlParameter('id');
-      formData.append("pid", postId);
     });
 
-    this.dropzone.on("complete", complete => {
-      this.responseHandler(complete);
+    this.dropzone.on("error", error => {
+      console.log("Error ->", error)
+    })
+
+    this.dropzone.on("complete", data => {
+      if (typeof data.xhr != "undefined") {
+        const res = JSON.parse(data.xhr.response);
+        if (res[0] == "success") {
+          this.successHandler(res[1]);
+        }
+      } else {
+        this.dropzone.on("thumbnail", () => {
+          this.dataDzRemove("")
+        })
+      }
+
       this.uploadBtn.closest("form").on("submit");
     });
   }
@@ -40,10 +60,42 @@ class UploadImage {
     })
   }
 
+  remove(e) {
+    const image = $(e.target).attr("data-dz-remove");
+    this.requestServer('remove', image);
+  }
+
+  requestServer(action, image) {
+    $.ajax({
+      url: server.baseUrl + '/form_post.php',
+      type: "POST",
+      data: {
+        image: image,
+        dropzone: action
+      },
+      success: res => {
+        const data = JSON.parse(res);
+        console.log("DATA ui", data);
+        if (data[0] == 'success') {
+          if (action == "remove") {
+            this.formContentRemove(image);
+          }
+        }
+      }
+    })
+  }
+
+  formContentRemove(image) {
+    let postBody = this.formTextarea.val();
+    postBody = postBody.replace(image, "", postBody);
+    this.formTextarea.val(postBody);
+    console.log("Inside function!");
+  }
+
   uploadClickHandler(e) {
     if (this.active == false) {
       this.dropzoneArea.animate({
-        height: "170px" 
+        height: "180px" 
       }, 300)
       let timer = setTimeout(() => {
         this.dropzoneArea.addClass("dropzone-area--open dropzone");
@@ -59,11 +111,17 @@ class UploadImage {
     }
   }
 
-  responseHandler(data) {
-    const res = JSON.parse(data.xhr.response);
+  successHandler(data) {
+    this.dataDzRemove(data);
+    this.insertAtCaret("body", data);
+  }
 
-    if (res[0] == "success") {
-      this.insertAtCaret("body", res[1]);
+  dataDzRemove(image) {
+    if (image != "") {
+      this.dropzoneArea.find('a[data-dz-remove=""]').attr('data-dz-remove', image);
+      this.dropzoneArea.find(".dz-remove").on("click", this.remove.bind(this));
+    } else {
+      this.dropzoneArea.find('a[data-dz-remove=""]').text("");
     }
   }
 
@@ -104,23 +162,6 @@ class UploadImage {
     }
   
     txtarea.scrollTop = scrollPos;
-  }
-
-  getUrlParameter(sParam) {
-    let sPageURL = window.location.search.substring(1),
-    sURLVariables = sPageURL.split('&'),
-    sParameterName,
-    i;
-
-    for (i = 0; i < sURLVariables.length; i++) {
-      sParameterName = sURLVariables[i].split('=');
-
-      if (sParameterName[0] === sParam) {
-        return sParameterName[1] === undefined
-                ? true
-                : decodeURIComponent(sParameterName[1]);
-      }
-    }
   }
 
 }

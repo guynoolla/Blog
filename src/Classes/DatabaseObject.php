@@ -63,6 +63,35 @@ class DatabaseObject {
   }
 
   /**
+   * Runs after object was saved
+   *
+   * @param int $id
+   * @return void
+   */
+  protected function afterSave(int $id) {
+    # run custom afterSave method
+    # ...
+  }
+
+  /**
+   * Fill ojbect properties
+   *
+   * @param int $id
+   * @return void
+   */
+  protected function fill(int $id) {
+    $sql = "SELECT * FROM " . static::$table_name;
+    $sql .= " WHERE id='" . self::escape($id) . "'";
+    $record = self::$database->query($sql)->fetch_assoc();
+
+    foreach ($record as $property => $value) {
+      if (property_exists($this, $property)) {
+        $this->{$property} = $value;
+      }
+    }
+  }
+
+  /**
    * Execute the sql and get rows of Class attributes
    * Instantiate Class object for every row of data 
    *
@@ -174,7 +203,10 @@ class DatabaseObject {
     $sql .= "')";
     $result = self::$database->query($sql);
 
-    if ($result) $this->id = self::$database->insert_id;
+    if ($result) {
+      $this->id = self::$database->insert_id;
+      $this->afterSave((int) $this->id);
+    }
 
     return $result;
   }
@@ -207,6 +239,8 @@ class DatabaseObject {
     $sql .= " WHERE id='" . self::escape($this->id) . "'";
     $sql .= " LIMIT 1";
     $result = self::$database->query($sql);
+
+    if ($result) $this->afterSave((int) $this->id);
 
     return $result;
   }

@@ -10,8 +10,11 @@ form {
     font-family: var(--form-input-font);
   }
 
-  button {
-    font-family: var(--form-label-font);
+  .btn {
+    font-family: var(--button-font);
+    font-weight: var(--button-font-weight);
+    text-transform: capitalize;
+    font-size: 1.2em;
   }
 
   .form-alert {
