@@ -31,7 +31,7 @@ include '../_common-html-render.php';
 
       <h1 class="dashboard-headline">
         <?php echo $page_title ?>
-        <div class="back-btn-pos"><?php echo page_back_button() ?></div>
+        <div class="nav-btn back-btn-pos"><?php echo page_back_button() ?></div>
       </h1>
 
       <?php

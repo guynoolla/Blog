@@ -4,7 +4,7 @@
         
 <h1 class="dashboard-headline mb-4">
   <?php echo $title ?>
-  <div class="back-btn-pos"><?php echo page_back_button() ?></div>
+  <div class="nav-btn back-btn-pos"><?php echo page_back_button() ?></div>
 </h1>
 
 <div class="row justify-content-left h-100">

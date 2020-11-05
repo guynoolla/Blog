@@ -63,7 +63,7 @@ include SHARED_PATH . '/staff_header.php';
 
       <h1 class="dashboard-headline mb-4">
         <?php echo $page_title ?>
-        <div class="back-btn-pos"><?php echo page_back_button() ?></div>
+        <div class="nav-btn back-btn-pos"><?php echo page_back_button() ?></div>
       </h1>
 
       <div class="row justify-content-left h-100">

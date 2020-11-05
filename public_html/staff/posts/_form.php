@@ -17,12 +17,12 @@ $edit = isset($post->id) ? true : false;
 if (!$edit): ?>
   <h1 class="dashboard-headline">
     New Post
-    <div class="back-btn-pos"><?php echo page_back_button() ?></div>  
+    <div class="nav-btn back-btn-pos"><?php echo page_back_button() ?></div>  
   </h1>
 <?php else: ?>
   <h1 class="dashboard-headline">
     Post Update
-    <div class="back-btn-pos"><?php echo page_back_button() ?></div>  
+    <div class="nav-btn back-btn-pos"><?php echo page_back_button() ?></div>  
   </h1>
 <?php endif;
 

@@ -23,7 +23,7 @@ if (!isset($page_title) || $page_title == '') {
 
   <style>
     <?php include '_header_set_style.html'; ?>
-    .page-admin .main .post .entry-title {
+    .page-admin .main .post .post-title {
       transform: skewX(10deg);
     }  
   </style>

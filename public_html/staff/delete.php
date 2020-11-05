@@ -158,7 +158,7 @@ include SHARED_PATH . '/staff_header.php';
       <h1 class="dashboard-headline">
         <?php echo $page_title ?>
 
-        <div class="back-btn-pos"><?php
+        <div class="nav-btn back-btn-pos"><?php
           if ($table == 'users') $back_url = 'staff/users/index.php';
           elseif ($table == 'categories') $back_url = 'staff/categories/index.php';
           elseif ($table == 'posts') $back_url = 'staff/posts/index.php';

@@ -222,6 +222,18 @@
       right: 0;
       padding-left: 1px;
       padding-bottom: 1px;
+      border: 0 !important;
+    }
+
+    a.nav-btn.btn {
+      border: 0;
+      text-decoration: underline;
+      text-transform: uppercase;
+      &:hover {
+        background-color: transparent;
+        color: $plum-color !important;
+        text-decoration: underline !important;
+      }
     }
   }
 

@@ -23,7 +23,7 @@
         "centerModeChevronsNone": true,
         "less2000w": {
             "slidesToShow": 2,
-            "slidesToScroll": 1,     
+            "slidesToScroll": 1,
             "centerMode": false,
             "centerPadding": "27%"
         },
@@ -31,7 +31,7 @@
             "slidesToShow": 1,
             "slidesToScroll": 1,
             "centerMode": true,
-            "centerPadding": "15%" 
+            "centerPadding": "15%"
         },
         "less1200w": {
             "slidesToShow": 1,
@@ -113,7 +113,7 @@
         "placeholder": "code"
     },
     "singlePage": {
-        "fullWidth": false,
+        "fullWidth": true,
         "fullWidthNarrow": true
     },
     "postFontSize": {
