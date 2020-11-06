@@ -1,6 +1,6 @@
 {
     "siteName": "Light Kite",
-    "siteDescription": "Just another theme by Gainulla",
+    "siteDescription": "Just another project by Gainulla",
     "showCategoryDescription": false,
     "perPageNumBackend": "5",
     "perPageNumFrontend": "6",
@@ -101,7 +101,7 @@
         }
     },
     "contactForm": {
-        "title": "Contact Us",
+        "title": "Contact us",
         "emailLabel": "Email",
         "messageLabel": "Message",
         "placeholder": true,

@@ -151,7 +151,7 @@ class User extends \App\Classes\DatabaseObject {
 
   /**
    * Validate the User attributes that come from User Form
-   * Errors if they exists gather parent's errors property
+   * Errors if they exists go into parent's errors property
    *
    * @return boolean
    */
@@ -159,21 +159,21 @@ class User extends \App\Classes\DatabaseObject {
     $this->errors = [];
 
     if (is_blank($this->username)) {
-      $this->errors[] = "Username can not be blank"; // ru Нужно ввести имя пользователя
+      $this->errors[] = "Username can not be blank";
     } elseif (!has_length($this->username, array('min' => 4, 'max' => 20))) {
-      $this->errors[] = "Username must be between 2 and 20 characters."; // ru Имя пользователя должно включать в себя от 4 до 20 символов.
+      $this->errors[] = "Username must be between 2 and 20 characters.";
     } elseif(!has_unique_username($this->username, $this->id ?? 0)) {
-      $this->errors[] = "Username not allowed. Try another."; // ru Это имя пользователя недоступно. Попробуйте другое.
+      $this->errors[] = "Username not allowed. Try another.";
     }
 
     if (is_blank($this->email)) {
-      $this->errors[] = "Email can not be blank."; // ru Нужно ввести эл.адрес.
+      $this->errors[] = "Email can not be blank.";
     } elseif(!has_length($this->email, array('max' => 50))) {
-      $this->errors[] = "Email must be less than 50 characters."; // ru Длина эл.адреса не должна превышать 50 символов.
+      $this->errors[] = "Email must be less than 50 characters.";
     } elseif(!has_valid_email_format($this->email)) {
-      $this->errors[] = "Email must be a valid format."; // ru Эл.адрес должен иметь соответствующий формат.
+      $this->errors[] = "Email must be a valid format.";
     } elseif(!has_unique_email($this->email, $this->id ?? 0)) {
-      $this->errors[] = "Email already exists."; // ru Пользователь с данным эл.адресом зарегестрирован.
+      $this->errors[] = "Email already exists.";
     }
 
     if (has_length_greater_than($this->about_text, 10000)) {

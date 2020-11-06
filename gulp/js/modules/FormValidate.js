@@ -127,7 +127,6 @@ class FormValidate {
   }
 
   errorsSummary() {
-    console.log("errors", this.errors)
     this.form.find(".form-control, .form-control-file")
              .removeClass("alert-valid")
              .removeClass("alert-error");

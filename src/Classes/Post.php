@@ -190,7 +190,7 @@ class Post extends \App\Classes\DatabaseObject {
 
   /**
    * Validate the Post attributes that come from Post Form
-   * Errors if they exists gather parent's errors property
+   * Errors if they exists go into parent's errors property
    *
    * @return boolean
    */
