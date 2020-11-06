@@ -21,7 +21,7 @@ if (is_get_request()) { // GET request
       if (!$session->isAdmin()) redirect_to(url_for('/index.php'));
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Only Admin can delete users
 
-      $page_title = 'Delete User';
+      $page_title = 'Delete user';
       $object = User::findById($id);
       $warning = <<<EOT
         <p>Are you sure you want to delete the user <strong class="font-weight-bold">$object->username</strong>?<br>
@@ -33,14 +33,14 @@ EOT;
       if (!$session->isAdmin()) redirect_to(url_for('/index.php'));
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Only Admin can delete categories
 
-      $page_title = 'Delete Category';
+      $page_title = 'Delete category';
       $object = Category::findById($id);
       $warning = <<<EOT
         <p>Are you sure you want to delete the category <strong class="font-weight-bold">$object->name</strong>?<br>
         If the category has post(s) you can't delete it unless you delete those post(s)!</p>
 EOT;
     } else if ($table == 'posts') {
-      $page_title = 'Delete Post';
+      $page_title = 'Delete post';
       $object = Post::findById($id);
 
     // User can delete only own post >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -74,7 +74,7 @@ EOT;
   if ($table && $id) {
 
     if ($table == 'users') { // users table
-      $page_title = "Users";
+      $page_title = 'Delete user';
       $user = User::findById($id);
       
       if ($cancel) {
@@ -99,7 +99,7 @@ EOT;
       }
 
     } else if ($table == 'categories') { // categories table
-      $page_title = 'Categories';
+      $page_title = 'Delete category';
       $category = Category::findById($id);
       
       if ($cancel) {
@@ -124,7 +124,7 @@ EOT;
       }
 
     } else if ($table == 'posts') { // posts table
-      $page_title = 'Posts';
+      $page_title = 'Delete post';
       $post = Post::findById($id);
       $post->fileInstance(new File);
 

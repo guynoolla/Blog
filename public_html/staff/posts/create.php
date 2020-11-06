@@ -52,7 +52,7 @@ if (is_post_request()) {
   $post = new Post;
 }
 
-$page_title = 'New Post';
+$page_title = 'New post';
 include SHARED_PATH . '/staff_header.php';
 
 ?>

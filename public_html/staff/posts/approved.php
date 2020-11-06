@@ -52,7 +52,7 @@ $sql .= " LIMIT {$per_page}";
 $sql .= " OFFSET {$pagination->offset()}";
 $posts = Post::findBySql($sql);
 
-$page_title = 'Author\'s Published Approved Posts';
+$page_title = 'Users approved posts';
 include SHARED_PATH . '/staff_header.php';
 include '_common-posts-html.php';
 include '../_common-html-render.php';
@@ -67,7 +67,7 @@ include '../_common-html-render.php';
     <div class="main-content">
 
       <h1 class="dashboard-headline">
-        <span class="text-success">Approved</span>
+        <span class="text-success"><?php echo $page_title ?></span>
         <div class="nav-btn back-btn-pos"><?php echo page_back_button() ?></div>
       </h1>
 

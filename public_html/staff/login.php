@@ -39,7 +39,7 @@ if ($session->isLoggedIn()) {
   redirect_to(url_for('index.php'));
 }
 
-$page_title = 'User Login';
+$page_title = 'User login';
 include(SHARED_PATH . '/public_header.php');
 
 ?>

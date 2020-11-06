@@ -227,13 +227,21 @@
 
     a.nav-btn.btn {
       border: 0;
-      text-decoration: underline;
+      text-decoration: underline !important;
       text-transform: uppercase;
       &:hover {
         background-color: transparent;
         color: $plum-color !important;
-        text-decoration: underline !important;
       }
+    }
+    a.nav-btn.nav-btn--left.btn {
+      position: absolute;
+      left: 2px;
+      bottom: 2px;
+      padding-top: .6em;
+      text-decoration: none !important;
+      font-weight: 500;
+      background-color: $bg-primary;
     }
   }
 

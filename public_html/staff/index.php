@@ -9,8 +9,8 @@ require_login();
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Check LoggedIn
 
 $user = User::findById($session->getUserId());
-$page_title = ($session->isAdmin() ? 'Admin Posts' : 'User Posts');
 
+$page_title = 'Dashboard';
 include SHARED_PATH . '/staff_header.php';
 
 ?>

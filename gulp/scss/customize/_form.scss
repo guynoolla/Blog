@@ -7,7 +7,10 @@ form {
   }
   
   input, select, textarea {
-    font-family: var(--form-input-font);
+    &.form-control {
+      font-family: var(--form-input-font);
+      font-size: 1.1rem;
+    }
   }
 
   .btn {

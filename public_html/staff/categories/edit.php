@@ -32,7 +32,7 @@ if (is_get_request()) {
 
 }
 
-$page_title = 'Admin - Edit Category';
+$page_title = 'Category edit';
 include SHARED_PATH . '/staff_header.php'
 
 ?>

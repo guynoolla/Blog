@@ -7,7 +7,7 @@ if (!$session->isAdmin()) redirect_to(url_for('index.php'));
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Check Admin
 
 
-$page_title = 'Site';
+$page_title = 'Site Settings';
 include SHARED_PATH . '/staff_header.php'
 
 ?>
@@ -33,7 +33,7 @@ include SHARED_PATH . '/staff_header.php'
               <div class="form-alert"></div>
 
               <div class="form-group mb-0 mx-0">
-                <label for="json" class="col-form-label pl-0">Site Settings</label>
+                <label for="json" class="col-form-label pl-0">Settings</label>
                 <textarea class="form-control" name="json" value="" id="json" rows="16" style="border-width:2px;"><?php
                 ?></textarea>
                 <span class="errsum-json text-danger field-validation-error"></span>

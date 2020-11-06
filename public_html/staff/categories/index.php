@@ -37,10 +37,9 @@ include '../_common-html-render.php';
         <?php echo $page_title ?>
         <div class="back-btn-pos"><?php echo page_back_button() ?></div>
         <a
-          class="nav-btn btn btn-outline-primary rounded-0 btn-md"
+          class="nav-btn nav-btn--left btn btn-outline-primary rounded-0 btn-md"
           href="<?php echo url_for('staff/categories/create.php') ?>"
-          style="position:absolute;bottom:0;left:0;"
-        >New Category</a>
+        >Add New</a>
       </h1>
 
       <?php

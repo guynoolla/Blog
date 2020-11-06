@@ -35,7 +35,7 @@ if (is_post_request()) {
   $user = !$user ? new User() : $user;
 }
 
-$page_title = 'User Registration';
+$page_title = 'User registration';
 include SHARED_PATH . '/public_header.php';
 
 ?>

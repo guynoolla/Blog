@@ -63,7 +63,7 @@ if (is_post_request()) {
   }
 }
 
-$page_title = 'Edit Post';
+$page_title = 'Post edit';
 include SHARED_PATH . '/staff_header.php';
 
 ?>

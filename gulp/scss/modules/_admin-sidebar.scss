@@ -44,7 +44,7 @@
         }
         .link-text {
           font-family: var(--button-font);
-          font-weight: var(--button-font-weight);
+          font-weight: 400;
           display: none;
           margin-left: 1rem;
           white-space: nowrap;
@@ -110,6 +110,7 @@
     .link-text {
       max-width: 4.2rem;
       font-size: 1.3rem;
+      font-weight: 500;
     }
 
     /* all bellow fresh added */

@@ -10,7 +10,6 @@ require_once('../../../src/initialize.php');
 if (require_login()) redirect_to(url_for('staff/login.php'));
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Check Logged In
 
-// Check Admin >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 if (isset($_GET['id'])) {
 
   $cmd = $_GET['cmd'] ?? false;
@@ -22,6 +21,7 @@ if (isset($_GET['id'])) {
     redirect_to(url_for('staff/posts/edit.php?id=' . $_GET['id']));
   }
 
+  // Check Admin >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   if ($session->isAdmin()) {
 
     if ($post->setStatus($cmd)) {
@@ -32,9 +32,9 @@ if (isset($_GET['id'])) {
       }      
     }
   }
+  // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Check Admin
 
 }
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Check Admin
 
 $current_page = $_GET['page'] ?? 1;
 $per_page = DASHBOARD_PER_PAGE;
@@ -51,8 +51,9 @@ $sql .= " LIMIT {$per_page}";
 $sql .= " OFFSET {$pagination->offset()}";
 $posts = Post::findBySql($sql);
 
-$page_title = ($session->isAdmin() ? 'Admin Posts' : 'User Posts');
+$page_title = $session->isAdmin() ? 'Admin posts' : 'User posts';
 include SHARED_PATH . '/staff_header.php';
+
 include '_common-posts-html.php';
 include '../_common-html-render.php';
 

@@ -33,6 +33,8 @@ $type = 'default';
     $headline = "Nothing found for '<strong>" . $term . "</strong>'";
   }
 
+  $page_title = 'Home - Search';
+
 /*
   GET POSTS BY CATEGORY ------------------------------------------------*/
 
@@ -62,6 +64,8 @@ $type = 'default';
   if ($posts) $headline = $category->name;
   else $headline = $category->name;
 
+  $page_title = 'Home - ' . $category->name;
+
 /*
  GET POSTS BY AUTHOR ------------------------------------------------*/
 
@@ -88,6 +92,8 @@ $type = 'default';
     $headline = "Posts by '<strong>" . $user->username . "</strong>' found.";
   }
 
+  $page_title = 'Home - ' . $user->username;
+
 /*
   GET POSTS ON DATE ------------------------------------------------ */
   
@@ -112,6 +118,8 @@ $type = 'default';
     $pagination->offset()
   );
 
+  $page_title = 'Home - ' . date('M j, Y', strtotime($created_at));
+
 /*
   GET FRONTEND RECENT POSTS ----------------------------------------*/
 
@@ -126,9 +134,9 @@ $type = 'default';
   $pagination = new Pagination($current_page, $per_page, $total_count, 'pagination-lg');
 
   $posts = Post::queryApprovedPosts($per_page, $pagination->offset());
-  $page_title = 'Recent Posts';
 }
 
+$page_title = isset($page_title) ? $page_title : 'Home';
 include SHARED_PATH . '/public_header.php';
 include SHARED_PATH . '/carousel.php';
 

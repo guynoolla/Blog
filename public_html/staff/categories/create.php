@@ -20,7 +20,7 @@ if(is_post_request()) {
   $category = new Category;
 }
 
-$page_title = 'Admin - New Category';
+$page_title = 'New category';
 include SHARED_PATH . '/staff_header.php'
 
 ?>

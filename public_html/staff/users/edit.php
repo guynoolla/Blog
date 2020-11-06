@@ -49,7 +49,7 @@ if ($session->isAdmin() || $session->getUserId() == $user->id) {
   redirect_to(url_for('index.php'));
 }
 
-$page_title = 'Settings';
+$page_title = 'User settings';
 include SHARED_PATH . '/staff_header.php';
 
 ?>

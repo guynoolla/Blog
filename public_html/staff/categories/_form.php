@@ -1,9 +1,7 @@
 <?php if (!isset($_SESSION['user_id'])) exit('Silent is golden!') ?>
-
-<?php $title = (!(isset($category->id)) ? 'New Category' : 'Update Category')  ?>
         
 <h1 class="dashboard-headline mb-4">
-  <?php echo $title ?>
+  <?php echo $page_title ?>
   <div class="nav-btn back-btn-pos"><?php echo page_back_button() ?></div>
 </h1>
 
@@ -11,7 +9,7 @@
   <div class="col col-md-10">
 
     <div class="py-2 my-4 rounded bg-white px-0 px-sm-4 px-lg-5">
-      <form id="categoryEditForm" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
+      <form id="categoryEditForm" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" class="form">
 
         <?php echo display_errors($category->errors); ?>
         

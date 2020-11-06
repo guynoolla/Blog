@@ -4,7 +4,7 @@ use App\Classes\Post;
 require_once '../../src/initialize.php';
 
 if (!$session->isAuthor()) {
-  exit("forbidden!");
+  exit;
 }
 
 $pathname = $_GET['pathname'] ?? "";
@@ -14,7 +14,7 @@ $pid = $_GET['pid'] ?? "";
 $target = $key . '_' . $cmd;
 $is_admin = $session->isAdmin();
 $is_author = $session->isAuthor();
-$access = accessType($pathname, $is_admin, $is_author);
+$access = accessType($pathname, $is_author, $is_admin);
 
 switch($target) {
   case 'fst_col_unpublish':
@@ -71,7 +71,7 @@ function actions_column_snd($data, $is_admin, $access) {
   exit(json_encode(['failed']));
 }
 
-function accessType($pathname, $is_admin, $is_author) {
+function accessType($pathname, $is_author, $is_admin) {
   if ($is_author && trim($pathname) == 'staff/posts/index.php') {
     return 'own_post';
   } elseif ( $is_admin && (

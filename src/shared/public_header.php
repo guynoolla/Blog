@@ -21,8 +21,7 @@ if (!isset($page_title)) {
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.css"/>
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick-theme.css"/>
 
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital@0;1&family=Montserrat:wght@300;400;500;600&family=Zilla+Slab:ital,wght@1,300;1,400&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital@0;1&family=Montserrat:wght@300;400;500;600&family=Zilla+Slab:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">  
   <link rel="stylesheet" href="<?php echo url_for('assets/css/style.css') ?>">
   
   <link rel="apple-touch-icon" sizes="180x180" href="<?php echo url_for('/apple-touch-icon.png') ?>">
