@@ -88,12 +88,13 @@ form {
 
   .response {
     color: $dark;
-    
+
     &--shade {
       position: absolute;
       top: 0; left: 0; bottom: 0; right: 0;
       display: inline-block;
       text-align: center;
+      font-size: 1.4em;
       padding: 4rem 1rem;
       border-radius: .3rem;
       margin-bottom: .3rem;
@@ -140,6 +141,8 @@ form {
     position:absolute;
     width:5rem;
     left:10.8rem;
+    padding-left: .5em;
+    padding-right: .5em;
   }
 
   .captcha-success {

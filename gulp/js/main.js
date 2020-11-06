@@ -89,9 +89,10 @@ $(window).on('change:breakpoint', function (e, current, previous) {
   })
 
   /*
-   -- Require admin.js if user is logged in ---------------------------*/
+   -- Require modules according the user type ---------------------------*/
 
   if (server.isLoggedIn) require("./loggedin.js");
+  if (server.isAuthor) require("./author.js");
   if (server.isAdmin) require("./admin.js");
 
   /*
@@ -158,6 +159,9 @@ $(window).on('change:breakpoint', function (e, current, previous) {
     });
   } // <-- Contact Form
 
+  /*
+    -- Register Form --------------------------------------------------- */
+
   if ($("#registerForm").length) {
     const validate = new FormValidate($("#registerForm"));
     validate.settings.fieldSize["username"] = { min: 4, max: 20 };
@@ -184,6 +188,9 @@ $(window).on('change:breakpoint', function (e, current, previous) {
     })
   } // <-- Register Form
 
+  /*
+   -- Scroll ---------------------------------------------------------- */
+
   $(window).on("scroll", function() {
     checkScrollPosition();    
   });
@@ -202,6 +209,9 @@ $(window).on('change:breakpoint', function (e, current, previous) {
     }
   })
 
+  /*
+   -- Navbar toggler animation ----------------------------------------- */
+
   $(".navbar .navbar-toggler")
     .on("mouseenter", e => {
       e.preventDefault();
@@ -210,8 +220,8 @@ $(window).on('change:breakpoint', function (e, current, previous) {
         $(e.target).removeClass("pulse");
       }, 400)
     })
-    
-}); // $ function
+  
+}); // $ jquery
 
 /*
  * Functions ---------------------------------------------------------*/
@@ -340,6 +350,7 @@ function navbarSearchBehavior() {
 }
 
 function slickCarousel(settings, current) {
+
   const carousel = $(".carousel")
   const content = carousel.find(".carousel-content");
   const slider = carousel.find(".slider");
@@ -457,7 +468,6 @@ function slickCarousel(settings, current) {
   } else {
     content.css("display", "none");
     carousel.find(".carousel-spinner").removeClass("d-flex").addClass("d-none");
-    console.log("Failed to load Slick Carousel?!");
   }
 
 }

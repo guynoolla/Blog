@@ -57,6 +57,11 @@ if (is_post_request()) {
       redirect_to(url_for('index.php'));
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Check Access
     
+    if ($post->published == '1') {
+      $session->message("You can not edit approved Post, please disapprove it first!");
+      redirect_to(url_for('staff/posts/index.php'));
+    }
+
     if ($post === false) {
       redirect_to(url_for('staff/posts/index.php'));
     }
