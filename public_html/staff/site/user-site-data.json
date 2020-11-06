@@ -123,5 +123,6 @@
         "lg": "1.12em",
         "xl": "1.16em"
     },
+    "fontAwesome": "font",
     "copyright": "&#9400; Light Kite &#124; All rights reserved"
 }

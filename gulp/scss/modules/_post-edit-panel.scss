@@ -34,6 +34,12 @@
       margin-left: .2rem;
       margin-top: -.3rem;
       border: 0;
+
+      i.fa {
+        margin-top: .3rem;
+        font-size: 3.3rem;
+        color: lighten($body-color, 10);
+      }
     }
 
     &.allowable {

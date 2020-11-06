@@ -59,7 +59,8 @@
   .page-admin .sidebar {
     .nav-item.logo {
 
-      .double-arrow-btn svg {
+      .double-arrow-btn svg,
+      .double-arrow-btn i.fa {
         cursor: pointer;
         transform: rotate(180deg);
         &:hover {
@@ -103,7 +104,8 @@
         }
       } 
       .double-arrow-btn {
-        &:hover svg {
+        &:hover svg,
+        &:hover i.fa {
           transform: rotate(-360deg);
           transition: transform $transition-speed;         
         }

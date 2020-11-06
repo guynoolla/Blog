@@ -12,7 +12,10 @@ if (!isset($page_title) || $page_title == '') {
   
   <title><?php echo $page_title ?></title>
 
-  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+  <?php if ($jsonstore->fontAwesome != 'svg'): ?>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <?php endif; ?>
+
   <link rel="stylesheet" href="<?php echo url_for('assets/css/style.css') ?>">
   <link rel="stylesheet" href="<?php echo url_for('assets/css/admin.css') ?>">
   

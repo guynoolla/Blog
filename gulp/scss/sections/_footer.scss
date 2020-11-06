@@ -34,11 +34,18 @@ footer {
     transition: background-color 0.3s linear;
   }
   
+  .fa {
+    font-size: 2.2rem;
+  }
+
   .scroll-to-top:hover,
   .scroll-to-top:focus {
     background-color: #a161bf;
     opacity: .8;
     svg {
+      color: #FFF !important;
+    }
+    i.fa {
       color: #FFF !important;
     }
   }
