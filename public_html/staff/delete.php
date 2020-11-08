@@ -24,7 +24,7 @@ if (is_get_request()) { // GET request
       $page_title = 'Delete user';
       $object = User::findById($id);
       $warning = <<<EOT
-        <p>Are you sure you want to delete the user <strong class="font-weight-bold">$object->username</strong>?<br>
+        <p class="lead">Are you sure you want to delete the user <strong class="font-weight-bold">$object->username</strong>?<br>
         You can't delete the user, which has posts unless you delete those posts!</p></p>
 EOT;
     } else if ($table == 'categories') {
@@ -36,7 +36,7 @@ EOT;
       $page_title = 'Delete category';
       $object = Category::findById($id);
       $warning = <<<EOT
-        <p>Are you sure you want to delete the category <strong class="font-weight-bold">$object->name</strong>?<br>
+        <p class="lead">Are you sure you want to delete the category <strong class="font-weight-bold">$object->name</strong>?<br>
         If the category has post(s) you can't delete it unless you delete those post(s)!</p>
 EOT;
     } else if ($table == 'posts') {
@@ -48,7 +48,7 @@ EOT;
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< User can delete only own Post
 
       $warning = <<<EOT
-        <p>Are you sure you want to delete the post <strong class="font-weight-bold">$object->title</strong>?<br>
+        <p class="lead">Are you sure you want to delete the post <strong class="font-weight-bold">$object->title</strong>?<br>
         This post will be permanently deleted!</p>
 EOT;
     }

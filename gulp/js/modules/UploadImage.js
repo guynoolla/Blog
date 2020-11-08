@@ -9,6 +9,8 @@ class UploadImage {
     this.active = false;
     this.formTextarea = $("#body");
     this.maxFileSize = server.maxFileSize/1024/1000;
+    this.postImgMaxNum = server.postImgMaxNum;
+    this.dropzoneHeight = 0;
     this.dropzone();
     this.events();
   }
@@ -23,7 +25,7 @@ class UploadImage {
 
     this.dropzone.options.maxFiles = this.postImgMaxNum;
     this.dropzone.options.maxFilesize = this.maxFileSize;
-    this.dropzone.options.acceptedFiles = '.gif, .jpg, .jpeg, .png';
+    this.dropzone.options.acceptedFiles = ".gif, .jpg, .jpeg, .png";
     this.dropzone.options.addRemoveLinks = true;
     this.dropzone.options.dictRemoveFile = 'Delete';
 
@@ -50,10 +52,19 @@ class UploadImage {
 
       this.uploadBtn.closest("form").on("submit");
     });
+
+    this.dropzone.on("addedfile", file => this.setDropzoneHeight());
+    this.dropzone.on("removedfile", () => this.setDropzoneHeight());
+
+    this.dropzone.on("maxfilesexceeded", () => {
+      this.dropzone.on("thumbnail", (file, dataUrl) => {
+        setTimeout(() => this.dropzone.removeFile(file), 5000);
+      })
+    })
   }
 
   events() {
-    this.uploadBtn.on("click", this.uploadClickHandler.bind(this));
+    this.uploadBtn.on("click", this.openDropboxArea.bind(this));
 
     this.dropzoneArea.find(".dropzone-area-hint").on("click", e => {
       $(e.target).closest(".dropzone-area").trigger("click");
@@ -75,7 +86,7 @@ class UploadImage {
       },
       success: res => {
         const data = JSON.parse(res);
-        console.log("DATA ui", data);
+
         if (data[0] == 'success') {
           if (action == "remove") {
             this.formContentRemove(image);
@@ -89,25 +100,23 @@ class UploadImage {
     let postBody = this.formTextarea.val();
     postBody = postBody.replace(image, "", postBody);
     this.formTextarea.val(postBody);
-    console.log("Inside function!");
   }
 
-  uploadClickHandler(e) {
+  openDropboxArea(e) {
     if (this.active == false) {
-      this.dropzoneArea.animate({
-        height: "180px" 
-      }, 300)
-      let timer = setTimeout(() => {
-        this.dropzoneArea.addClass("dropzone-area--open dropzone");
-        this.active = true;
-        clearTimeout(timer);
-      }, 300)
+      this.active = true;
+
+      this.dropzoneArea.addClass("dropzone-area--open");
+      const height = $(".dropzone-area--open")[0].scrollHeight;
+      this.dropzoneArea.animate({height: height}, 300);
+
+      setTimeout(() => this.dropzoneArea.addClass("dropzone"), 300);
+    
     } else {
-      this.dropzoneArea.animate({
-        height: "0" 
-      }, 300)
-      this.dropzoneArea.removeClass("dropzone-area--open dropzone");
       this.active = false;
+
+      this.dropzoneArea.animate({ height: "0" }, 300)
+      this.dropzoneArea.removeClass("dropzone-area--open dropzone");
     }
   }
 
@@ -123,6 +132,26 @@ class UploadImage {
     } else {
       this.dropzoneArea.find('a[data-dz-remove=""]').text("");
     }
+  }
+
+  setDropzoneHeight() {
+    $(".dropzone-area--open").css("height", "auto");
+    const scrollHeight = $(".dropzone-area--open")[0].scrollHeight;
+
+    console.log("scroll Height", scrollHeight)
+    console.log("dropzone Height", this.dropzoneHeight)
+
+    let height = scrollHeight - this.dropzoneHeight;
+    height = height < 0 ? -(height) : height;
+
+    if (scrollHeight != this.dropzoneHeight) {
+      console.log("Height changed!");
+      this.dropzoneArea.animate({
+        height: scrollHeight + 'px'
+      }, 300)
+    }
+
+    this.dropzoneHeight = scrollHeight;
   }
 
   insertAtCaret(areaId, text) {
