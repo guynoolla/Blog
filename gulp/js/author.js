@@ -6,6 +6,7 @@ import 'js-video-url-parser/lib/provider/youtube';
 import { reject } from 'core-js/fn/promise';
 import PostStatus from './modules/PostStatus';
 import UploadImage from './modules/UploadImage';
+import DeleteModal from './modules/DeleteModal';
 
 $(() => {
 
@@ -14,6 +15,10 @@ $(() => {
   }
 
   const postStatus = new PostStatus();
+  const deleteModal = new DeleteModal();
+
+  /*
+  -- Delete Modal ------------------------------------------------------- */
 
   /*
    -- Edit Post Form ------------------------------------------------------- */
@@ -157,20 +162,20 @@ $(() => {
     };
  
    $("#adminSearchForm").on("submit", e => {
-     e.preventDefault();
- 
-     const form = $(e.target);
-     const type = form.attr("data-type");
-     const value = form.find("#s").val();
-     const access = $(".loadContentJS").data("access");
- 
-     if (value == pagData.value) {
-       console.log("The same value ajax sf forbidden!");
-       return;
-     }
- 
-     loading(1);
-     $.ajax({
+      e.preventDefault();
+
+      const form = $(e.target);
+      const type = form.attr("data-type");
+      const value = form.find("#s").val();
+      const access = $(".loadContentJS").data("access");
+
+      if (value == pagData.value) {
+        console.log("The same value ajax sf forbidden!");
+        return;
+      }
+
+      loading(1);
+      $.ajax({
        url: server.baseUrl + '/staff/' + pagData.script(),
        type: "GET",
        data: {
@@ -187,9 +192,10 @@ $(() => {
          pagData.params(type, value, access, data[2].total_count);
 
          postStatus.actionsClickHandler();
-       },
-       error: err => console.log(err)
-     })
+         deleteModal.deleteModalHandler();
+      },
+      error: err => console.log(err)
+    })
  
      return false;
    }) // <-- Admin Search Form
@@ -226,6 +232,7 @@ $(() => {
             pagData.params(type, value, access, data[2].total_count);
 
             postStatus.actionsClickHandler();
+            deleteModal.deleteModalHandler();
           },
           error: err => console.log(err)
        })
@@ -242,28 +249,29 @@ $(() => {
 
      loading(1);
      $.ajax({
-       url: server.baseUrl + '/staff/' + pagData.script(),
-       type: 'GET',
-       data: {
-         target: pagData.access + '_by_' + pagData.type,
-         data: `type=${pagData.type}&value=${pagData.value}&access=${pagData.access}&page=${page}&pathname=${pagData.path()}`,
-         uid: server.userId
-       },
-       success: res => {
-         //let timer = setTimeout(() => {
-           loading(0);
-           const data = JSON.parse(res);
- 
-           loadPostBox(data);
-           pagData.pageNum(page);
-           $('#item-' + page).addClass("active");
+        url: server.baseUrl + '/staff/' + pagData.script(),
+        type: 'GET',
+        data: {
+          target: pagData.access + '_by_' + pagData.type,
+          data: `type=${pagData.type}&value=${pagData.value}&access=${pagData.access}&page=${page}&pathname=${pagData.path()}`,
+          uid: server.userId
+        },
+        success: res => {
+          //let timer = setTimeout(() => {
+          loading(0);
+          const data = JSON.parse(res);
 
-           postStatus.actionsClickHandler();
-           
-           //clearTimeout(timer);
-         //}, 1200)
-       },
-       error: err => console.log(err)
+          loadPostBox(data);
+          pagData.pageNum(page);
+          $('#item-' + page).addClass("active");
+
+          postStatus.actionsClickHandler();
+          deleteModal.deleteModalHandler();
+            
+            //clearTimeout(timer);
+          //}, 1200)
+        },
+        error: err => console.log(err)
      })
    })
 

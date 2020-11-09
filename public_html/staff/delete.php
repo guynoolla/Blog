@@ -25,7 +25,7 @@ if (is_get_request()) { // GET request
       $object = User::findById($id);
       $warning = <<<EOT
         <p class="lead">Are you sure you want to delete the user <strong class="font-weight-bold">$object->username</strong>?<br>
-        You can't delete the user, which has posts unless you delete those posts!</p></p>
+        If the user has posts you should delete those posts first.</p>
 EOT;
     } else if ($table == 'categories') {
 

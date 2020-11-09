@@ -8,11 +8,12 @@ class PostStatus {
     this.postId;
     this.actions = ['approve', 'disapprove', 'publish', 'unpublish'];
     this.action;
+    this.events();
+
     this.actionsClickHandler = () => {
       this.table = $(".loadContentJS table");
       this.events();
     }
-    this.events();
   }
 
   events() {

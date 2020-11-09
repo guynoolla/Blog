@@ -2,7 +2,7 @@
     "siteName": "Light Kite",
     "siteDescription": "Just another project by Gainulla",
     "showCategoryDescription": false,
-    "perPageNumBackend": "5",
+    "perPageNumBackend": "4",
     "perPageNumFrontend": "6",
     "tableSize": "table-sm",
     "siteMainColor": "#5aaee2",
@@ -123,6 +123,6 @@
         "lg": "1.12em",
         "xl": "1.16em"
     },
-    "fontAwesome": "font",
+    "fontAwesome": "svg",
     "copyright": "&#9400; Light Kite &#124; All rights reserved"
 }
