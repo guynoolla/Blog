@@ -1,0 +1,12 @@
+.signal {
+  animation: signal 6s linear;
+}
+
+@keyframes signal {
+  0%,17%,31%,45%, 56%,70%,85%,100% {
+    transform: scale(1);
+  }
+  10%,24%,38%, 63%,77%,93% {
+    transform: scale(1.2);
+  }
+}

@@ -106,7 +106,7 @@ include(SHARED_PATH . '/public_header.php');
               <div class="post-item-wrap">
                 <div class="post-item-inner border-bottom-0">
 
-                  <h2 class="post-title text-center mt-0"><?php echo h($post->title) ?></h2>
+                  <h1 class="post-title text-center mt-0"><?php echo h($post->title) ?></h1>
 
                   <div class="entry-meta">
                     <span class="posted-on">Posted on <a href="<?php echo url_for('ondate/pub/?ymd=' . u(date('Y-m-d', strtotime($post->created_at)))) ?>" rel="bookmark">

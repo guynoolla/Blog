@@ -251,6 +251,9 @@ class File {
 					$this->remove("{$_SESSION['file_temporary_dir']}/{$fid}");
 				} else {
 					if ($rename == 'file') {
+						if (!is_dir( $dest)) {
+							mkdir( $dest, 0777, true );
+						}
 						rename("{$temp}/{$fid}", "{$dest}/{$fid}");
 					}
 				}

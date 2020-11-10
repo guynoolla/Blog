@@ -81,7 +81,10 @@ function td_actions_column_snd($post, $is_admin, $url="") {
 
   <?php else: ?>
     <a data-key="snd_col" data-cmd="false" data-pid="<?php echo $post->id ?>" class="btn btn-sm btn--text disabled">
-      <?php echo $post->published ? 'awaiting <br>approval' : '&ndash;' ?>
+      <?php
+        if ($post->approved) echo '<span class="text-success font-weight-bold d-block pt-2">approved</span>';
+        else echo ($post->published ? 'awaiting<br>approval' : '&ndash;');
+      ?>
     </a>
   <?php endif; ?>
   

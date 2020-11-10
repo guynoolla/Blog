@@ -27,7 +27,8 @@ function widget_about($jsonstore) {
   if (url_contain(['/post/', '/preview/'])) {
     $user = User::findById($post->user_id);
   } elseif (is_homepage()) {
-    $user = User::findWhere(["user_type" => "admin"], 'LIMIT 1')[0];
+    $rec = User::findWhere(["user_type" => "admin"], 'LIMIT 1');
+    $user = $rec ? $rec[0] : null;
   }
 
   if ($jsonstore->sidebarWidget->about->show) {

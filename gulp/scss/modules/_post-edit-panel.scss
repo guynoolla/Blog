@@ -92,7 +92,7 @@
       color: #B3B3B3;
       text-align: center;
       cursor: pointer;
-      transition: height 300ms ease;
+      transition: all 300ms linear;
     }
 
     &.dropzone-area--open {

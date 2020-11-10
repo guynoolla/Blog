@@ -135,7 +135,7 @@ EOT;
       } else if ($delete) {
         if ($post->delete()) {
           $session->message("The post '" . $post->title . "' was deleted.");
-          redirect_to(url_for('staff/posts/index.php'));
+          redirect_to(url_for('staff/index.php'));
         }
       }
     }

@@ -16,6 +16,7 @@ $pagination = new Pagination($current_page, $per_page, $total_count);
 
 $categories = Category::findBySql(
   "SELECT * FROM `categories`
+   ORDER BY name ASC
    LIMIT {$per_page}
    OFFSET {$pagination->offset()}"
 );

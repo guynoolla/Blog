@@ -28,11 +28,11 @@ if (is_post_request()) {
   $post->mergeAttributes($_POST['post']);
 
   if ($post->save()) {
-    $session->message("Post was updated. View it by clicking on its title!");
+    $session->message("The Post '{$post->title}' was updated!");
     
     if ($session->isAdmin()) {
       if ($post->user_id == $session->getUserId()) {
-        redirect_to(url_for('staff/posts/index.php'));
+        redirect_to(url_for("staff/posts/edit.php?id={$post->id}"));
       } else {
         if ($post->approved == '1') {
           redirect_to(url_for('staff/posts/approved.php'));
@@ -43,7 +43,7 @@ if (is_post_request()) {
         }
       }
     } else {
-      redirect_to(url_for('staff/posts/index.php'));
+      redirect_to(url_for("staff/posts/edit.php?id={$post->id}"));
     }
   }
 
@@ -57,7 +57,7 @@ if (is_post_request()) {
       redirect_to(url_for('index.php'));
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Check Access
     
-    if ($post->published == '1') {
+    if ($post->approved == '1') {
       $session->message("You can not edit approved Post, please disapprove it first!");
       redirect_to(url_for('staff/posts/index.php'));
     }

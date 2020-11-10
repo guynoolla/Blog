@@ -11,6 +11,7 @@ class UploadImage {
     this.maxFileSize = server.maxFileSize/1024/1000;
     this.postImgMaxNum = server.postImgMaxNum;
     this.dropzoneHeight = 0;
+    this.files = [];
     this.dropzone();
     this.events();
   }
@@ -34,10 +35,6 @@ class UploadImage {
       this.uploadBtn.closest("form").off("submit");
     });
 
-    this.dropzone.on("error", error => {
-      console.log("Error ->", error)
-    })
-
     this.dropzone.on("complete", data => {
       if (typeof data.xhr != "undefined") {
         const res = JSON.parse(data.xhr.response);
@@ -53,13 +50,26 @@ class UploadImage {
       this.uploadBtn.closest("form").on("submit");
     });
 
-    this.dropzone.on("addedfile", file => this.setDropzoneHeight());
+    this.dropzone.on("addedfile", file => {
+      this.files.push(file);
+      this.setDropzoneHeight();
+    });
     this.dropzone.on("removedfile", () => this.setDropzoneHeight());
 
-    this.dropzone.on("maxfilesexceeded", () => {
-      this.dropzone.on("thumbnail", (file, dataUrl) => {
-        setTimeout(() => this.dropzone.removeFile(file), 5000);
-      })
+    this.dropzone.on("error", (error, errorMessage) => {
+      $(".dz-error-mark:last svg").addClass("signal");
+      setTimeout(() => {
+        $(".signal").closest(".dz-preview")
+                    .fadeOut(600, () => $(this).remove());
+      }, 9400);
+      setTimeout(() => {
+        this.dropzone.removeFile(this.files[this.files.length-1]);
+        console.log("File Removed!");
+      }, 10000);
+    })
+
+    this.dropzone.on("reset", () => {
+      console.log("Dropzone reseted!");
     })
   }
 
@@ -138,14 +148,10 @@ class UploadImage {
     $(".dropzone-area--open").css("height", "auto");
     const scrollHeight = $(".dropzone-area--open")[0].scrollHeight;
 
-    console.log("scroll Height", scrollHeight)
-    console.log("dropzone Height", this.dropzoneHeight)
-
     let height = scrollHeight - this.dropzoneHeight;
     height = height < 0 ? -(height) : height;
 
     if (scrollHeight != this.dropzoneHeight) {
-      console.log("Height changed!");
       this.dropzoneArea.animate({
         height: scrollHeight + 'px'
       }, 300)

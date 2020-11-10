@@ -7,7 +7,8 @@ $dir = './assets/images';
 $valid_widths = [400, 640, 800, 1025];
 
 if (!file_exists($dir.$image) || !in_array($width, $valid_widths)) {
-  exit('Wrong parameters.');
+  header("Content-Type: image/png");
+  exit(readfile($dir.'/default.png'));
 } else {
   $ext = substr(strrchr( $image, '.'), 1);
 }

@@ -34,7 +34,7 @@ class Post extends \App\Classes\DatabaseObject {
   protected $image_obj; // File class instance
   protected $form_edit_scenario = [];
   
-  public $allowable_tags = '<h2><h3><h4><p><br><img><a><strong><em><ul><li><blockquote>';
+  public $allowable_tags = '<h2><h3><h4><p><br><img><a><strong><em><ul><li><blockquote><span><div>';
   public $allowable_hosts = ['www.youtube.com','youtube.com','youtu.be','vimeo.com'];
 
   protected $image_aspect_ratio = ['min'=>1.4, 'max'=>1.8];

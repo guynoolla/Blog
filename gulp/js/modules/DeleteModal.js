@@ -37,14 +37,15 @@ class DeleteModal {
         
           } else if (data.table == "categories") {
           title = "Delete Category";
-          body = `<p>Are you sure you want to delete the category
+          body = `<p>Are you sure you want to delete the category<br>
             <strong class="font-weight-bold">${data.name}</strong>?<br>
-            It is unable to delete the category which has existing posts.</p>`;
+            If the category has posts you should delete them first.</p>`;
         
         } else if (data.table == "posts") {
           title = "Delete Post";
-          body = `<p>Are you sure you want to delete the post<br> <strong class="font-weight-bold">${data.title}</strong> ?<br>
-          This post will be permanently deleted!</p>`;
+          body = `<p>Are you sure you want to delete the post<br>
+            <strong class="font-weight-bold">${data.title}</strong> ?<br>
+            This post will be permanently deleted!</p>`;
         }
       
         this.currentModal("danger", title, body, data, urlToPost);
