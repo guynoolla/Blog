@@ -219,7 +219,7 @@ function cookie_ids_posts($data) {
     }
 
   }
-  
+
   exit(json_encode(['empty']));
 }
 
@@ -227,7 +227,7 @@ function site_setting_removed($data, $origin_path) {
   $origin = json_decode(file_get_contents($origin_path), true);
   $origin_keys = array_keys_multi($origin);
   $data_keys = array_keys_multi($data);
-  $err_code = 0; 
+  $err_code = 0;
 
   foreach ($origin_keys as $setting) {
     if (!in_array($setting, $data_keys)) {
@@ -237,7 +237,7 @@ function site_setting_removed($data, $origin_path) {
 
     $origin_cnt = array_count_values($origin_keys);
     $data_cnt = array_count_values($data_keys);
-    
+
     if ($data_cnt[$setting] != $origin_cnt[$setting]) {
       $err_code += 1;
       break;

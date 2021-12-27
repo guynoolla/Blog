@@ -6,7 +6,7 @@ const
 		src 			: './gulp',
 		build 			: './public_html',
 	},
-	
+
 	// Gulp and plugins
 	gulp 					  = require('gulp'),
 	gutil 					= require('gulp-util'),
@@ -48,7 +48,7 @@ var css = {
 	watch 	:		dir.src + '/scss/**/**/*',
 	build 	:		dir.build + '/assets/css',
 	sassOpts: {
-		outputStyle		: 'expanded', // nested
+		outputStyle		: 'compressed', // expanded, nested
 		imagePath 		: img.build,
 		precision 		: 3,
 		errLogToConsole : true
@@ -94,7 +94,7 @@ gulp.task( 'js', () => {
 			.pipe(source(js.filenames[idx]))
 			.pipe(buffer())
 			//.pipe(sourcemaps.init({ loadMaps: true }))
-			//.pipe(stripdebug())
+			.pipe(stripdebug())
 			.pipe(terser())
 			.pipe(gulp.dest(js.build))
 			.pipe(browsersync.stream({ match: [dir.src, entry] }))

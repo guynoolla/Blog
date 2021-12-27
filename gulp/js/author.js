@@ -38,7 +38,7 @@ $(() => {
         const video = urlParser.parse(targetUrl);
         let videoUrl = "";
         let iframe = "";
-  
+
         if (video.provider == 'youtube') {
           videoUrl = `//www.youtube.com/embed/${video.id}`;
           iframe = `<iframe id="previewVideo" class="embed-responsive-item"
@@ -51,9 +51,9 @@ $(() => {
                       mozallowfullscreen' allowfullscreen>
                     </iframe>`;
         }
-  
+
         iframe = `<div class="embed-responsive embed-responsive-16by9">${iframe}</div>`;
-        
+
         if (videoUrl) {
           postForm.find(".preview.preview-video").html(iframe);
           postForm.find(".preview.preview-video").attr("data-value", "true");
