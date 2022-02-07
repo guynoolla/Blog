@@ -86,6 +86,9 @@ if (url_contain(['/pasword/', '/email/', '/staff/login', '/staff/register'])) {
             ?>
             <a class="nav-link" href="<?php echo $contact_url ?>">Contact</a>
           </li>
+          <li>
+            <a class="nav-link" href="<?php echo '/staff/login.php' ?>">Login</a>
+          </li>
           <?php $header_type = 'public'; include '_navbar_dropdown.php'; ?>
         </ul>
         <form id="navSearchForm" action="<?php echo url_for('index.php') ?>" method="get" class="form-inline mt-2 mt-md-0">
