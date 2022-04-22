@@ -5,7 +5,7 @@ class FormValidate {
 
   constructor(form) {
     this.form = form;
-    
+
     this.settings = {
       fieldSize: {},
       uniqueVal: {},

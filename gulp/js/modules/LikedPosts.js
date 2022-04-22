@@ -25,7 +25,7 @@ class Posts {
         target = target.closest(".page-link");
       } else if (target.hasClass("svg-icon") || target.is("path")) {
         target = target.closest(".chevron");
-      } 
+      }
 
       let url = target.attr("href");
 
