@@ -1,6 +1,7 @@
 node_modules/
 vendor/
 public_html/staff/site/user-site-data.json
+---HOPCOURSE BACKUP---/
 
 .babelrc
 composer.json
