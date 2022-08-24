@@ -136,7 +136,7 @@ $edit = isset($post->id) ? true : false;
     <div class="col-sm-6">
       <label for="image">Image</label>
       <input type="file" name="image" class="form-control-file rounded p-1" id="image" <?php echo ($post->format == 'video' ? 'disabled' : '') ?>>
-      <small id="fileHelp" class="form-text small-nicer-lk">Image aspect ratio must be between 7x5 9x5)</small>
+      <small id="fileHelp" class="form-text small-nicer-lk">Recomended image aspect ratio is between 7x5 - 9x5)</small>
       <span class="errsum-image text-danger field-validation-error"></span>
     </div>
     <div class="col-sm-6">
