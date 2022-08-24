@@ -1,0 +1,20 @@
+{
+    "name": "admin/blog",
+    "description": "Blog, OOP project",
+    "authors": [
+        {
+            "name": "Gainulla",
+            "email": "yusupovgz@yandex.ru"
+        }
+    ],
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "require": {
+        "swiftmailer/swiftmailer": "6.0",
+        "imagine/imagine": "^1.2"
+    }
+}

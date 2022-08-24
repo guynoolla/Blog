@@ -108,13 +108,13 @@ $edit = isset($post->id) ? true : false;
 
         <?php if ($video_v != 'false'): ?>
         <div class="embed-responsive embed-responsive-16by9">
-          
+
           <?php if ($post->video['provider'] == 'youtube'): ?>
 
           <iframe id="previewVideo" class="embed-responsive-item" src="<?php
             echo $post->video['embed'] ?>" frameborder="0" allowfullscreen>
           </iframe>
-        
+
           <?php elseif ($post->video['provider'] == 'vimeo'): ?>
 
           <iframe id="previewVideo" class="embed-responsive-item" src="<?php
@@ -123,7 +123,7 @@ $edit = isset($post->id) ? true : false;
           </iframe>
 
           <?php endif; ?>
-          
+
         </div><!-- embed-responsive -->
         <?php endif; ?>
 

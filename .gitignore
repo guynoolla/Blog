@@ -3,9 +3,3 @@ vendor/
 
 HOPCOURSE_BACKUP/
 .vscode/
-
-.babelrc
-composer.json
-composer.lock
-package.json
-package-lock.json
