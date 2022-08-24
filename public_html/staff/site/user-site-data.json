@@ -1,0 +1,130 @@
+{
+    "siteName": "Light Kite",
+    "siteDescription": "Just another theme by Gainulla",
+    "showCategoryDescription": false,
+    "perPageNumBackend": "5",
+    "perPageNumFrontend": "6",
+    "tableSize": "table-sm",
+    "siteMainColor": "#5aaee2",
+    "slider": {
+        "autoplay": true,
+        "autoplaySpeed": 5000,
+        "speed": 400,
+        "pauseOnFocus": true,
+        "pauseOnHover": true,
+        "pauseOnDotsHover": false,
+        "dots": true,
+        "infinite": true,
+        "centerMode": false,
+        "centerPadding": "25%",
+        "slidesToShow": 3,
+        "slidesToScroll": 2,
+        "focusOnSelect": true,
+        "centerModeChevronsNone": true,
+        "less2000w": {
+            "slidesToShow": 2,
+            "slidesToScroll": 1,     
+            "centerMode": false,
+            "centerPadding": "27%"
+        },
+        "less1600w": {
+            "slidesToShow": 1,
+            "slidesToScroll": 1,
+            "centerMode": true,
+            "centerPadding": "15%" 
+        },
+        "less1200w": {
+            "slidesToShow": 1,
+            "slidesToScroll": 1,
+            "centerMode": true,
+            "centerPadding": "10%"
+        },
+        "less992w": {
+            "infinite": true,
+            "slidesToShow": 1,
+            "slidesToScroll": 1,
+            "centerMode": true,
+            "centerPadding": "6%"
+        },
+        "less768w": {
+            "autoplay": false,
+            "dots": false,
+            "infinite": false
+        }
+    },
+    "sidebarWidget": {
+        "about": {
+            "show": true,
+            "title": "About Me",
+            "priority": 1,
+            "imageRounded": true
+        },
+        "follow": {
+            "show": true,
+            "priority": 2
+        },
+        "posts": {
+            "show": true,
+            "title": "Recent Posts",
+            "priority": 3,
+            "postsNum": 3
+        },
+        "search": {
+            "show": true,
+            "title": false,
+            "priority": 4
+        },
+        "categories": {
+            "show": true,
+            "title": "Categories",
+            "priority": 5
+        },
+        "contact": {
+            "show": false,
+            "priority": 6
+        },
+        "text": {
+            "show": true,
+            "title": "",
+            "body": "Phasellus viverra nulla ut metus varius laoreet. Curabitur ullamcorper ultricies nisi. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi vestibulum volutpat enim. Phasellus tempus.",
+            "priority": 7
+        }
+    },
+    "followSocial": {
+        "title": "Follow me",
+        "link": {
+            "facebook": "https://www.facebook.com",
+            "twitter": "https://www.twitter.com",
+            "youtube": "https://www.youtube.com",
+            "instagram": "https://www.instagram.com",
+            "github": "https://www.github.com"
+        }
+    },
+    "contactForm": {
+        "title": "Contact Us",
+        "emailLabel": "Email",
+        "messageLabel": "Message",
+        "placeholder": true,
+        "buttonText": "Submit",
+        "alertSuccess": "Thank you for your message!"
+    },
+    "captcha": {
+        "label": "Captcha",
+        "placeholder": "code"
+    },
+    "singlePage": {
+        "fullWidth": false,
+        "fullWidthNarrow": true
+    },
+    "postFontSize": {
+        "xs": ".96em",
+        "sm": "1em",
+        "md": "1.06em",
+        "lg": "1.12em",
+        "xl": "1.16em"
+    },
+    "copyright": "&#9400; Light Kite &#124; All rights reserved",
+    "fontAwesome": {
+        "svg": true
+    }
+}
